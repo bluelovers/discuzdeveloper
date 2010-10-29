@@ -1,0 +1,25 @@
+<!--{block writedata}-->
+<!--{if $recommendmagic}-->
+<style type="text/css">
+<!--
+	.textinfolist { clear: both; }
+	.requestmsg { }
+		.requestmsg h6 { font-weight: 700; *margin-top: -15px; }
+		.requestmsg img { float: left; margin-right: 6px; width: 74px; height: 74px; }
+		.side li.requestmsg a { float: left; width: 47px; height: 22px; line-height: 22px; background: url({IMGDIR}/requestbtn.gif) no-repeat; color: #EEE; text-align: center; }
+		.requestmsg p { margin:0 0 6px 80px; line-height: 1.3em; }
+-->
+</style>
+	<div class="sidebox">
+	<h4>ÍÆ¼öµÀ¾ß</h4>
+	<ul class="textinfolist">
+		<li class="requestmsg">
+		<img src="images/magics/$recommendmagic[identifier]" alt="$recommendmagic[name]" />
+		<h6>$recommendmagic[name]</h6>
+		<p>$recommendmagic[description]</p>
+		<p><a href="magic.php?action=shop&operation=buy&magicid=$recommendmagic[magicid]&amp;from=indexmagic" onclick="showWindow('magics', this.href);">¹ºÂò</a>&nbsp;&nbsp;</p>
+		</li>
+	</ul>
+	</div>
+<!--{/if}-->
+<!--{/block}-->

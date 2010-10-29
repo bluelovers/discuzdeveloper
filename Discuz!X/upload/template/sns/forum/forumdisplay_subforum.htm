@@ -1,0 +1,49 @@
+<div class="sfl mtm fl{if $_G['forum']['forumcolumns']} flg{/if}">
+	<div class="h cl">
+		<span class="o"><img id="subforum_{$_G[forum][fid]}_img" src="{IMGDIR}/$collapseimg[subforum]" title="{lang spread}" alt="{lang spread}" onclick="toggle_collapse('subforum_$_G['forum'][fid]');" /></span>
+		<h2>{lang forum_subforums}</h2>
+	</div>
+	<div id="subforum_{$_G[forum][fid]}" class="c cl" style="$collapse[subforum]">
+		<!--{loop $sublist $sub}-->
+		<!--{if !$_G['forum']['forumcolumns'] || $sub['orderid'] % $_G['forum']['forumcolumns'] == 0}-->
+			<hr class="da" {if $sub['orderid'] == 0 }style="display: none;"{/if} />
+		<!--{/if}-->
+		<div class="flc"{if $_G['forum']['forumcolumns']} style="width: {$_G[forum][forumcolwidth]}{/if}">
+			<div class="icn"{if !empty($sub[extra][iconwidth])} style="width: {echo $sub[extra][iconwidth]}px;"{/if}>
+			<!--{if $sub[icon]}-->
+				$sub[icon]
+			<!--{else}-->
+				<img src="{IMGDIR}/forum{if $sub[folder]}_new{/if}.gif" alt="" />
+			<!--{/if}-->
+			</div>
+			<dl{if !empty($sub[extra][iconwidth])} style="margin-left: {echo $sub[extra][iconwidth] + 10}px;"{/if}>
+				<dt><a href="forum.php?mod=forumdisplay&fid=$sub[fid]" {if !empty($sub[redirect])}target="_blank"{/if} style="{if !empty($sub[extra][namecolor])}color: {$sub[extra][namecolor]};{/if}">$sub[name]</a><!--{if $sub[todayposts] && !$sub['redirect']}--><em> ({lang index_today}: <strong>$sub[todayposts]</strong>)</em><!--{/if}--></dt>
+				<!--{if !$sub['redirect']}-->
+				<dd class="i">
+					<em>{lang forum_threads}: $sub[threads]</em>
+					<em>{lang forum_posts}: $sub[posts]</em>
+				</dd>
+				<!--{/if}-->
+				<!--{if $sub[description] && !$_G['forum']['forumcolumns']}--><dd>$sub[description]</dd><!--{/if}-->
+				<dd>
+				<!--{if $sub['permission'] == 1}-->
+					{lang private_forum}
+				<!--{else}-->
+					<!--{if $sub['redirect']}-->
+						<a href="forum.php?mod=forumdisplay&fid=$sub[fid]">{lang url_link}</a>
+					<!--{elseif is_array($sub['lastpost'])}-->
+						<!--{if $_G['forum']['forumcolumns'] < 3}-->
+							<a href="forum.php?mod=redirect&tid=$sub[lastpost][tid]&amp;goto=lastpost#lastpost">{echo cutstr($sub[lastpost][subject], 30)}</a> $sub[lastpost][dateline] <!--{if $sub['lastpost']['author']}-->$sub['lastpost']['author']<!--{else}-->{lang anonymous}<!--{/if}-->
+						<!--{else}-->
+							<a href="forum.php?mod=redirect&tid=$sub[lastpost][tid]&amp;goto=lastpost#lastpost">{lang forum_lastpost}: $sub[lastpost][dateline]</a>
+						<!--{/if}-->
+					<!--{else}-->
+						{lang never}
+					<!--{/if}-->
+				<!--{/if}-->
+				</dd>
+			</dl>
+		</div>
+		<!--{/loop}-->
+	</div>
+</div>

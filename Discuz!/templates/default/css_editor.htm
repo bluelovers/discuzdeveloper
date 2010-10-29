@@ -1,0 +1,216 @@
+/*
+Editor Official Style for Discuz!(R)
+URL: http://www.discuz.net
+(C) 2001-2009 Comsenz Inc.
+*/
+.floatboxswf { margin: 15px auto; width:470px; height: 268px; text-align: center; border: 1px solid #CCC; }
+
+.float_postinfo {}
+	.float_postinfo em { float: left; margin-right: 5px; padding-left: 3px; height: 20px; border: 1px solid; border-color: {INPUTBORDERDARKCOLOR} {INPUTBORDER} {INPUTBORDER} {INPUTBORDERDARKCOLOR}; background-color: {INPUTBG}; cursor: pointer; }
+		.float_postinfo em img { margin-top: 2px; }
+	.float_postinfo input { float: left; }
+	.float_postinfo #subject { width: 358px; }
+	.float_postinfo .float_typeid { display: inline; margin-right: 0; margin-left: 6px; }
+	.viewpoint { margin: 9px 0; }
+.specialpost { overflow: hidden; margin: 15px 0;  }
+.specialinfo { float: left; padding-right: 14px; width: 400px; border-right: 1px dashed #CCC; }
+	.specialpost p { padding: 2px 0; height: 30px; line-height: 30px; }
+	.specialinfo textarea { width: 360px; height: 80px; }
+	.optionnum, .optioninfo { float:left; width: 16px; margin-right: 6px; }
+	.optioninfo { width: 300px; }
+	.specialinfo dl, .specialaddons dl { margin: 5px 0; }
+		.specialinfo dl dt, .specialaddons dl dt { float: left; width: 62px; font-weight: 700; clear: left; }
+		.specialaddons dl dt{ font-weight: 400; }
+		.specialinfo dl dd, .specialaddons dl dd { margin: 5px 0 15px 65px; display: inherit; }
+		.specialinfo dl dd strong { padding: 0 8px; }
+	.specialinfo .float_postinfo { height: 22px; }
+	.specialinfo .float_typeid { margin-right: 6px; margin-left: 0; }
+.specialaddons { float: left; margin-left: 10px; width: 170px; overflow: hidden; }
+	.spaoptlist p { height: 20px; line-height: 20px; }
+	.spaoptlist input[type=radio] { margin: 0 3px 0 0; }
+.spslonginput { width: 280px; }
+.splonginput { width: 150px; }
+.spmediuminput { width: 90px; }
+	.specialaddons select.spmediuminput { width: 96px; }
+.spshortinput{ width: 30px; }
+
+/* poll */
+.sppoll p{ clear: both; *padding: 1px 0 2px; height: auto; line-height: auto !important; }
+
+/* trade */
+.goodsimg { margin: 0 10px 0 0; width: 120px; height: 120px; border: 1px solid #AAA; }
+
+/* classifieds */
+.classifieds { margin: 10px 0; }
+	.classifieds .formtable th { vertical-align: top; width: 70px; }
+	.classifieds .txt { width: 600px; }
+	.classifieds .txtarea { width: 600px; height: 58px; }
+	.classifieds .inlinelist { float: left; width: 610px; }
+		.classifieds .inlinelist li { float: left; margin-bottom: 5px; width: 33%; }
+
+.uploadfile { width: 500px; }
+*+html .uploadfile { width: 520px; }
+	.post_tablelist { height: auto; line-height: 160%; border-bottom: none; }
+		.post_tablelist table { *table-layout: fixed; }
+			.post_tablelist table td { height: 28px; line-height: 28px; border-bottom: 1px solid #F5F5F5; }
+				.attachnum { width: 16px; }
+				.attachctrl { width: 40px; }
+				.attachname {}
+					.attachname p img, .attachname_swf p img { vertical-align: middle; height: 16px; }
+					.attachname .lighttxt, .attachname_swf .lighttxt { color: {LIGHTTEXT} !important; }
+				.attachview, .attachpr { width: 40px; text-align: center; }
+					.attachview .txt, .attachpr .txt { width: 25px; }
+				.attachdel { width: 20px; }
+				*+html .attachdel { width: 40px; }
+				.attachdesc { width: 80px; text-align: center; }
+					.attachdesc .txt { width: 74px; }
+		.upfilelist { height: auto !important; height: 165px; max-height: 300px; overflow: auto; overflow-x: hidden; }
+			.upfilelist a, #attachimglist a, #uch_albums a { color: {HIGHLIGHTLINK}; }
+
+	.uploadinfo { white-space: normal; }
+	.uploadbtn { text-align: center; }
+	.filedata { margin: 10px 0; }
+
+	.popupmenu_popup .float_ctrl { position: absolute; right: 10px; top: 18px; *top: 13px; }
+
+.imglist { margin-bottom: 5px; width: 100%; }
+	.imglist td { padding: 8px 0; }
+	.imglist img { border: 1px solid {COMMONBORDER}; }
+	.imginfo { margin-right: 8px; }
+		.imginfo .deloption { margin-top: 10px; }
+		.imginfo .txt { width: 85px; }
+	.imgdeleted { opacity: 0.3; filter:alpha(opacity=30); }
+
+.extcreditbox { height: 350px; width: 100%; overflow: auto; }
+	.extname { width: 100px; }
+	.extcredits { width: 80px; }
+
+* html .columntype * { font-family: Tahoma, sans-serif; }
+	.posttags strong, .columntype strong { font-weight: 700; }
+	.posttags p, .columntype p { margin-bottom: 5px; }
+	.columntype .txt { vertical-align: middle; width: 40px; }
+	.posttags { width: 360px; }
+		.posttags .txt { margin-right: 8px; width: 250px; }
+	.columntype table { margin: 5px 0 0 -10px; width: 85%; }
+		.columntype td { padding: 0 10px; vertical-align: top; border-left: 1px dashed #CCC; }
+		.firstlist { border: none !important; }
+
+/*PostForm & Editor*/
+.editortoolbar table { width: auto; }
+.editortoolbar a, .editortoolbar .a { display: block; cursor: pointer; }
+	.editortoolbar a.hover, .editortoolbar a:hover, .editortoolbar .a1 { background-color: {ALTBG2}; text-decoration: none; }
+#wysiwyg { background: {INPUTBG} !important; font: {MSGFONTSIZE}/1.6em {FONT} !important; }
+	#wysiwyg * { line-height: normal; }
+	#wysiwyg a { text-decoration:underline; color: {HIGHLIGHTLINK} !important; color: {HIGHLIGHTLINK}; }
+	#wysiwyg li { margin-left: 2em; }
+		#wysiwyg ul li { list-style-type: disc; }
+		#wysiwyg ul.litype_1 li { list-style-type: decimal; }
+		#wysiwyg ul.litype_2 li { list-style-type: lower-alpha; }
+		#wysiwyg ul.litype_3 li { list-style-type: upper-alpha; }
+	#wysiwyg strong, #wysiwyg b { font-weight: bold; }
+	#wysiwyg em, #wysiwyg i { font-style: italic; }
+	#wysiwyg p { margin: 0 !important; }
+	#wysiwyg table td { padding: 4px; border: 1px solid {BORDERCOLOR}; }
+.fontname_menu { width: 97px; }
+.fontsize_menu { width: 27px; line-height: normal; }
+.fontsize_menu ul li{ line-height: normal; }
+.fontname_menu li, .fontsize_menu li, .simple_menu li { cursor: pointer; }
+.editor_colornormal, .editor_colorhover { border: none !important; padding: 2px !important; }
+	.editor_colornormal div { width: 10px; height: 10px; overflow: hidden; cursor: pointer; border: 1px solid {WRAPBG}; }
+		.editor_colorhover div { width: 10px; height: 10px; overflow: hidden; cursor: pointer; border: 1px solid {TABLETEXT}; }
+
+.swfwin { border: 3px solid #7FCAE2; }
+
+#e_iframe { width: 100%; border: none; margin: 0; padding: 0; }
+#e_textarea { width: 100%; padding: 0; }
+
+.editorrow { margin-top:5px; padding: 3px 2px; height:48px; overflow: hidden; line-height:18px; border:1px solid; border-color: {INPUTBORDERDARKCOLOR} {INPUTBORDER} {INPUTBORDER} {INPUTBORDERDARKCOLOR}; clear:both; background: {COMMONBG}; }
+	.editor { text-align: left; }
+		.editorbtn { margin-right: 50px; }
+			.editor em { margin: 0 5px; float: left; display: block; height: 20px; width: 3px; background:url(../../images/common/editor.gif) no-repeat 0 -701px; border: 1px solid {COMMONBG}; }
+			.editor a { margin: 1px 0; float: left; text-align: left; text-decoration: none; display: block; height: 21px; width: 20px; background:url(../../images/common/editor.gif) no-repeat 0 30px; text-indent: -9999px; overflow: hidden; border: 1px solid {COMMONBG};  }
+				a.oneditor, .editor a:hover { background: {DROPMENUBGCOLOR} url(../../images/common/editor.gif) no-repeat 0 21px; border: 1px solid {DROPMENUBORDER}; }
+				a.editormode { float: right; right: 20px; width: 50px; background: {COMMONBG}; text-align: right; text-decoration: none !important; }
+				*html a.editormode {right: 50px; }
+				a.editormode:hover { background: {DROPMENUBGCOLOR}; border-color: {DROPMENUBORDER}; }
+				a.plugeditor { text-indent: 0; background-position: 0 40px; }
+
+			.minibtn { float: left; height: 44px; padding-right: 6px; border-left: 3px solid #EEE; }
+				.minibtn p { clear: left; }
+
+				#e_popup_simple { background-position: 0 0; }
+				#e_cmd_bold { font-weight: 700; text-decoration: none; }
+				#e_cmd_italic { font-style: italic; text-decoration: none; }
+				#e_cmd_underline { text-decoration: underline; }
+				#e_cmd_strikethrough { text-decoration: line-through; }
+				#e_popup_fontname { background-position: 0 -21px;}
+				#e_popup_fontsize { background-position: 0 -41px;}
+				#e_cmd_forecolor { background-position: 0 -81px;}
+				#e_cmd_createlink { background-position: 0 -121px;}
+				#e_popup_paragraph { background-position: 0 -783px;}
+				#e_cmd_table { background-position: 0 -381px;}
+				#e_popup_list { background-position: 0 -261px;}
+				#e_cmd_hide { background-position: 0 -421px;}
+				#e_cmd_free { background-position: 0 -401px;}
+
+				#e_cmd_unlink { background-position: 0 -201px; }
+				#e_cmd_removeformat { background-position: 0 -181px; }
+				#e_cmd_undo { background-position: 0 -221px; }
+				#e_cmd_redo { background-position: 0 -241px; }
+				#e_cmd_savedata { background-position: 0 -581px; }
+				#e_cmd_loaddata { background-position: 0 -601px; }
+				#e_cmd_clearcontent { background-position: 0 -101px; }
+				#e_cmd_checklength { background-position: 0 -161px; }
+
+				.tblbtn_disabled { background-position: 0 -842px !important; }
+				.hidebtn_disabled { background-position: 0 -863px !important; }
+					.tblbtn_disabled:hover, .hidebtn_disabled { border-color: {COMMONBG} !important; background-color: {COMMONBG} !important; cursor: default; }
+
+			.maxbtn { float: left; height: 44px; padding: 2px; border-left: 3px solid #EEE; }
+				.maxbtn a { width: 40px; padding-top: 26px; height: 18px; text-indent: 0; font-size: 12px; text-align: center; background: url(../../images/common/bigeditor.gif) no-repeat; }
+				.maxbtn a.oneditor, .maxbtn a:hover { background: {DROPMENUBGCOLOR} url(../../images/common/bigeditor.gif) no-repeat; }
+
+				#e_cmd_paste { background-position: 4px -315px; }
+
+				#e_popup_smilies { background-position: 4px 0px; }
+				#e_popup_image { background-position: 4px -45px; }
+				#e_popup_attach { background-position: 4px -360px; }
+				#e_cmd_audio { background-position: 4px -90px; }
+				#e_cmd_video { background-position: 4px -135px; }
+				#e_cmd_flash { background-position: 4px -180px; }
+				#e_cmd_code { background-position: 4px -225px; }
+				#e_cmd_quote { background-position: 4px -270px; }
+
+.newediter { border-style: solid; border-color: {INPUTBORDERDARKCOLOR} {INPUTBORDER} {INPUTBORDER} {INPUTBORDERDARKCOLOR}; border-width: 0 1px 1px; padding: 0px 0px 0px 4px; background: {INPUTBG}; }
+	.newediter .autosave { padding: 0 2px; width: 562px; height: 87px; border-width: 1px; border: none; background: {INPUTBG}; }
+	.newediter .max { height: 230px; }
+a.customedit { text-indent: 0 !important; }
+.popupfix { white-space: nowrap; }
+
+* html #e_popup_image_menu { width: 480px; }
+
+#uch_photoes { margin: 5px;}
+	#uch_photoes table { border-collapse: separate; }
+	#uch_photoes table td { padding: 2px; width: 82px; height: 82px; border: 1px solid {CONTENTSEPARATE}; vertical-align: middle; text-align: center; }
+	 #uch_photoes table td img { padding: 3px; max-width: 80px; max-height: 80px; }
+		* html #uch_photoes table td img { width: expression(this.width > 80 && this.height < this.width ? 80 : true); height: expression(this.height > 80 ? 80 : true); }
+
+.smilieslist { text-align: center; padding: 10px; border: 1px solid {DROPMENUBORDER}; {DROPMENUBGCODE}; }
+	.smilieslist td { padding: 8px; border: none; cursor: pointer; }
+	.smilieslist_page { text-align: right; }
+		.pags_act { float: left; }
+			.pags_act a { display: inline !important; }
+	.smilieslist_page a { display: inline; margin: 0 4px; color: {HIGHLIGHTLINK}; text-decoration: underline; }
+	.smilieslist_table { position: absolute; left: -100px; top: 0; *top: -1px; width: 100px !important; height: 100px; border: 1px solid {COMMONBORDER}; background: {WRAPBG}; }
+	.smilieslist_preview { text-align: center; vertical-align: middle; }
+
+	.smiliesgroup { height: 33px; *height:34px; overflow: hidden; width: expression(this.parentNode.offsetWidth); }
+	.smiliesgroup ul, .imguptype { margin: 6px 0; padding: 0 0 26px 8px; border-bottom: 1px solid {CONTENTSEPARATE}; }
+		.smiliesgroup li, .imguptype li { display: inline; }
+		* html .smiliesgroup li, * html .imguptype li { line-height: 18px; }
+			.smiliesgroup li a, .imguptype li a { float: left; margin: 2px 6px 0 0; padding: 2px 10px; height: 19px; border: 1px solid {CONTENTSEPARATE}; color: {HIGHLIGHTLINK}; text-decoration: none; }
+				.smiliesgroup li a:focus, .imguptype li a:focus { outline: none; }
+				.smiliesgroup li a.current, .imguptype li a.current { border-bottom-color: {DROPMENUBGCOLOR}; font-weight: 700; color: {TABLETEXT}; }
+
+.colorbox input { margin: 2px; padding: 0px; float:left; cursor: pointer; width: 10px; height: 10px; border: 0; }
+.popupmenu_option .txt, .popupmenu_option .txtarea { margin: 5px 0; }

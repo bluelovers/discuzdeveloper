@@ -1,0 +1,47 @@
+<div id="mood_mystatus" class="mtm">
+	<!--{if $space[spacenote]}--><a href="home.php?mod=space&uid=$space[uid]&do=doing&view=me" title="{lang view_all_my_doings}">$space[spacenote] &rsaquo;</a><!--{/if}-->
+</div>
+<script type="text/javascript">
+	var msgstr = '{lang doing_you_can}';
+	function handlePrompt(type) {
+		var msgObj = $('mood_message');
+		if(type) {
+			if(msgObj.value == msgstr) {
+				msgObj.value = '';
+				msgObj.className = 'xg2';
+			}
+		} else {
+			if(msgObj.value == ''){
+				msgObj.value = msgstr;
+				msgObj.className = 'xg1';
+			}
+		}
+	}
+	function reloadMood(showid) {
+		var x = new Ajax();
+		x.get('home.php?mod=spacecp&ac=doing&op=spacenote&inajax=1', function(s){
+			$('mood_mystatus').innerHTML = s;
+		});
+		$('mood_message').value = '';
+		handlePrompt(0);
+	}
+</script>
+<div class="mifm">
+	<em></em>
+	<form method="post" autocomplete="off" id="mood_addform" action="home.php?mod=spacecp&ac=doing&handlekey=doing" class="brm" onsubmit="if($('mood_message').value != msgstr) {ajaxpost(this.id, 'return_doing');} else {return false;}">
+		<div id="mood_statusinput" style="position:relative;padding:5px;">
+			<textarea name="message" id="mood_message" class="xg1" onclick="handlePrompt(1);" onblur="handlePrompt(0);" onkeydown="if(ctrlEnter(event, 'addsubmit_btn')){if(event.keyCode == 13 ){ doane(event);}}" onkeyup="textCounter(this, 'maxlimit', 200);">{lang doing_you_can}</textarea>
+			<input type="submit" name="addsubmit_btn" id="addsubmit_btn" value="{lang publish}" class="brm" />
+			<input type="hidden" name="addsubmit" value="true" />
+			<input type="hidden" name="spacenote" value="true" />
+			<input type="hidden" name="referer" value="home.php" />
+			<input type="hidden" name="formhash" value="{FORMHASH}" />
+		</div>
+	</form>
+	<div id="return_doing" style="position: absolute;"></div>
+	<script type="text/javascript">
+		function succeedhandle_doing(url, msg, values) {
+			reloadMood(values['doid']);
+		}
+	</script>
+</div>

@@ -1,0 +1,38 @@
+/*
+
+Extend CSS file for SNS mode template
+(C) Comsenz Inc.
+http://www.comsenz.com
+Created & Modified by Lushnis.
+
+*/
+
+/** forum::viewthread,group::viewthread **/
+.pls { width: 150px !important; border-right: none !important; background: transparent !important; }
+.plt { background: url({STYLEIMGDIR}/bg.png) no-repeat 0 0 !important; }
+.ad .pls { background-color: #E2E2E2 !important; }
+.bui, .fo .bui { padding-top: 15px; padding-left: 15px; }
+.pls .avatar, .fo .pls .avatar, #f_pst .avatar { margin: 10px; }
+.pls p, .pls .pil { margin-left: 10px; }
+/** end **/
+
+/** portal::index,portal::topic **/
+#ft { background-image: none !important; }
+.pg_topic .sd { background-image: none; }
+/** end **/
+
+/** portal::portalcp **/
+	.sd .bn { display: block !important; }
+/** end **/
+
+/** group::index **/
+.flt .flc { width: 385px; }
+/** end **/
+
+/** home::space **/
+.rwdl li { width: 284px; }
+/** end **/
+
+/** userapp::userapp **/
+.mgapp { width: 379px; }
+/** end **/

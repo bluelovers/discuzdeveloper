@@ -1,0 +1,24 @@
+<!--{block writedata}-->
+<style type="text/css">
+<!--
+	.side .textinfolist li a.getsofa { color: #EE1B2E; }
+-->
+</style>
+
+<div class="sidebox">
+<h4><img src="images/default/sofa.gif" border="0" align="absmiddle" />抢沙发</h4>
+<ul class="textinfolist">
+<!--{if $sofathreads}-->
+	<!--{loop $sofathreads $thread}-->
+		<li>
+			<img src="images/common/slisticon.gif" border="0" align="absmiddle" />
+			<a href="viewthread.php?tid=$thread[tid]&amp;from=sofa" target="_blank" title="$thread[subject]">$thread[cutsubject]</a>&nbsp;&nbsp;
+			<a class="getsofa" href="post.php?action=reply&fid=$thread[fid]&tid=$thread[tid]&amp;from=sofa" title="我要抢沙发">[抢]</a>
+		</li>
+	<!--{/loop}-->
+<!--{else}-->
+	<li>没有沙发可抢了</li>
+<!--{/if}-->
+</ul>
+</div>
+<!--{/block}-->

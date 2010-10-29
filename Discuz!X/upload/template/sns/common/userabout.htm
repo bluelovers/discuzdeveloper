@@ -1,0 +1,162 @@
+<!--{if $_G['uid']}-->
+<div id="ppc_menu">
+	{hook/global_userabout_top $_G['basescript'].'::'.CURMODULE}
+	{eval getpanelapp();}
+	<div class="appl cl">
+		<ul>
+			<li onmouseover="this.className='hvr'" onmouseout="this.className=''">
+				<a href="home.php?mod=space&amp;do=doing&amp;fchannel=xmenum"><img src="{STATICURL}image/feed/doing.gif" alt="" />{lang doing}</a>
+				<span><a href="home.php?mod=space&amp;do=doing&amp;fchannel=xmenum">+{lang publish}</a></span>
+			</li>
+			<li onmouseover="this.className='hvr'" onmouseout="this.className=''">
+				<a href="home.php?mod=space&amp;do=album&amp;fchannel=xmenua"><img src="{STATICURL}image/feed/album.gif" alt="" />{lang album}</a>
+				<span><a href="home.php?mod=spacecp&amp;ac=upload&amp;fchannel=xmenua">+{lang upload}</a></span>
+			</li>
+			<li onmouseover="this.className='hvr'" onmouseout="this.className=''">
+				<a href="home.php?mod=space&amp;do=blog&amp;fchannel=xmenub"><img src="{STATICURL}image/feed/blog.gif" alt="" />{lang blog}</a>
+				<span><a href="home.php?mod=spacecp&amp;ac=blog&amp;fchannel=xmenub">+{lang publish}</a></span>
+			</li>
+			<li onmouseover="this.className='hvr'" onmouseout="this.className=''">
+				<a href="home.php?mod=space&amp;do=share&amp;fchannel=xmenus"><img src="{STATICURL}image/feed/share.gif" alt="" />{lang share}</a>
+				<span><a id="k_share" onclick="showWindow(this.id, this.href, 'get', 0);" href="home.php?mod=spacecp&amp;ac=share&amp;fchannel=xmenus">+{lang add}</a></span>
+			</li>
+			<li onmouseover="this.className='hvr'" onmouseout="this.className=''">
+				<a href="home.php?mod=space&amp;do=thread&amp;&from=home&amp;fchannel=xmenut"><img src="{STATICURL}image/feed/thread.gif" alt="" />{lang userabout_thread}</a>
+				<span><a onclick="showWindow('nav', this.href)" href="forum.php?mod=misc&action=nav&special=0&amp;&from=home&amp;fchannel=xmenut">+{lang publish}</a></span>
+			</li>
+			<!--{if $_G['setting']['groupstatus']}-->
+			<li onmouseover="this.className='hvr'" onmouseout="this.className=''">
+				<a href="home.php?mod=space&amp;do=group&amp;fchannel=xmenug"><img src="{STATICURL}image/feed/group.gif" alt="" />{lang group}</a>
+				<span><a href="forum.php?mod=group&action=create&amp;fchannel=xmenug">+{lang create}</a></span>
+			</li>
+			<!--{/if}-->
+			<li onmouseover="this.className='hvr'" onmouseout="this.className=''">
+				<a href="home.php?mod=space&amp;do=activity&amp;fchannel=xmenuhd"><img src="{IMGDIR}/activitysmall.gif" alt="" />{lang activity}</a>
+				<span>
+					<!--{if $_G[setting][activityforumid]}-->
+					<a href="forum.php?mod=post&action=newthread&fid=$_G[setting][activityforumid]&special=4&from=home&amp;fchannel=xmenuhd">+{lang launch}</a>
+					<!--{else}-->
+					<a onclick="showWindow('nav', this.href)" href="forum.php?mod=misc&action=nav&special=4&from=home&amp;fchannel=xmenuhd">+{lang launch}</a>
+					<!--{/if}-->
+				</span>
+			</li>
+			<li onmouseover="this.className='hvr'" onmouseout="this.className=''">
+				<a href="home.php?mod=space&amp;do=poll&amp;fchannel=xmenup"><img src="{IMGDIR}/pollsmall.gif" alt="" />{lang poll}</a>
+				<span>
+					<!--{if $_G[setting][pollforumid]}-->
+					<a href="forum.php?mod=post&action=newthread&fid=$_G[setting][pollforumid]&special=1&from=home&amp;fchannel=xmenup">+{lang launch}</a>
+					<!--{else}-->
+					<a onclick="showWindow('nav', this.href)" href="forum.php?mod=misc&action=nav&special=1&from=home&amp;fchannel=xmenup">+{lang launch}</a>
+					<!--{/if}-->
+				</span>
+			</li>
+			<li onmouseover="this.className='hvr'" onmouseout="this.className=''">
+				<a href="home.php?mod=space&amp;do=reward&amp;fchannel=xmenur"><img src="{IMGDIR}/rewardsmall.gif" alt="" />{lang reward}</a>
+				<span>
+					<!--{if $_G[setting][rewardforumid]}-->
+					<a href="forum.php?mod=post&action=newthread&fid=$_G[setting][rewardforumid]&special=3&from=home&amp;fchannel=xmenur">+{lang publish}</a>
+					<!--{else}-->
+					<a onclick="showWindow('nav', this.href)" href="forum.php?mod=misc&action=nav&special=3&from=home&amp;fchannel=xmenur">+{lang publish}</a>
+					<!--{/if}-->
+				</span>
+			</li>
+			<li onmouseover="this.className='hvr'" onmouseout="this.className=''">
+				<a href="home.php?mod=space&amp;do=debate&amp;fchannel=xmenud"><img src="{IMGDIR}/debatesmall.gif" alt="" />{lang debate}</a>
+				<span>
+					<!--{if $_G[setting][debateforumid]}-->
+					<a href="forum.php?mod=post&action=newthread&fid=$_G[setting][debateforumid]&special=5&from=home&amp;fchannel=xmenud">+{lang launch}</a>
+					<!--{else}-->
+					<a onclick="showWindow('nav', this.href)" href="forum.php?mod=misc&action=nav&special=5&from=home&amp;fchannel=xmenud">+{lang launch}</a>
+					<!--{/if}-->
+				</span>
+			</li>
+			<li onmouseover="this.className='hvr'" onmouseout="this.className=''">
+				<a href="home.php?mod=space&amp;do=trade&amp;fchannel=xmenugood"><img src="{IMGDIR}/tradesmall.gif" alt="" />{lang trade}</a>
+				<span>
+					<!--{if $_G[setting][tradeforumid]}-->
+					<a href="forum.php?mod=post&action=newthread&fid=$_G[setting][tradeforumid]&special=2&from=home&amp;fchannel=xmenugood">+{lang sale}</a>
+					<!--{else}-->
+					<a onclick="showWindow('nav', this.href)" href="forum.php?mod=misc&action=nav&special=2&from=home&amp;fchannel=xmenugood">+{lang sale}</a>
+					<!--{/if}-->
+				</span>
+			</li>
+			<li onmouseover="this.className='hvr'" onmouseout="this.className=''">
+				<a href="home.php?mod=space&amp;do=favorite&amp;fchannel=xmenus"><img src="{STATICURL}image/feed/favorite.gif" alt="" />{lang favorite}</a>
+			</li>
+			<!--{eval $apparea = false;}-->
+			<!--{if !empty($_G[my_panelapp])}-->
+				<!--{loop $_G[my_panelapp] $appid $app}-->
+					<!--{if $app[userpanelarea]==1}-->
+						<li onmouseover="this.className='hvr'" onmouseout="this.className=''">
+							<img class="appicn" src="http://appicon.manyou.com/icons/$appid" name="$appid" alt="$app[appname]" /><a href="userapp.php?mod=app&id=$app[appid]" title="$app[appname]">$app[appname]</a>
+						</li>
+						<!--{eval unset($_G[my_panelapp][$appid]);}-->
+					<!--{elseif !$apparea && $app[userpanelarea]==3}-->
+						<!--{eval $apparea = true;}-->
+					<!--{/if}-->
+				<!--{/loop}-->
+			<!--{/if}-->
+			{hook/global_userabout_appmenu1 $_G['basescript'].'::'.CURMODULE}
+		</ul>
+	</div>
+	
+	<hr class="da" />
+	<div class="appl cl">
+		<ul>
+			<li onmouseover="this.className='hvr'" onmouseout="this.className=''">
+				<a href="home.php?mod=space&amp;do=friend&amp;fchannel=xmenuf"><img src="{STATICURL}image/feed/friend.gif" alt="" />{lang friends}</a>
+				<span><a href="home.php?mod=spacecp&ac=invite&amp;fchannel=xmenuf">+{lang invite}</a></span>
+			</li>
+			<li><a href="home.php?mod=task&amp;fchannel=xmenuf"><img src="{STATICURL}image/feed/task.gif" alt="" />{lang task}</a></li>
+			<!--{if $_G['setting']['magicstatus']}--><li><a href="home.php?mod=magic&amp;fchannel=xmenuf"><img src="{STATICURL}image/feed/magic.gif" alt="" />{lang magic}</a></li><!--{/if}-->
+			<li><img src="{STATICURL}image/feed/medal.gif" alt="" /><a href="home.php?mod=medal&amp;fchannel=xmenuf">{lang medals}</a></li>
+			<!--{if !empty($_G[my_panelapp])}-->
+				<!--{loop $_G[my_panelapp] $appid $app}-->
+					<!--{if $app[userpanelarea]==2}-->
+						<li onmouseover="this.className='hvr'" onmouseout="this.className=''">
+							<img class="appicn" src="http://appicon.manyou.com/icons/$appid" name="$appid" alt="$app[appname]" /><a href="userapp.php?mod=app&id=$app[appid]" title="$app[appname]">$app[appname]</a>
+						</li>
+						<!--{eval unset($_G[my_panelapp][$appid]);}-->
+					<!--{elseif !$apparea && $app[userpanelarea]==3}-->
+						<!--{eval $apparea = true;}-->
+					<!--{/if}-->
+				<!--{/loop}-->
+			<!--{/if}-->
+			{hook/global_userabout_appmenu2 $_G['basescript'].'::'.CURMODULE}
+		</ul>
+	</div>
+	<!--{if $apparea}-->
+	<hr class="da" />
+	<div class="appl cl">
+		<ul>
+		<!--{loop $_G[my_panelapp] $appid $app}-->
+			<!--{if $app[userpanelarea]==3}-->
+				<li onmouseover="this.className='hvr'" onmouseout="this.className=''">
+					<img class="appicn" src="http://appicon.manyou.com/icons/$appid" name="$appid" alt="$app[appname]" /><a href="userapp.php?mod=app&id=$app[appid]" title="$app[appname]">$app[appname]</a>
+				</li>
+			<!--{/if}-->
+		<!--{/loop}-->
+		</ul>
+	</div>
+	<!--{/if}-->
+	{hook/global_userabout_bottom $_G['basescript'].'::'.CURMODULE}
+</div>
+<script type="text/javascript">inituserabout();</script>
+<!--{else}-->
+<div class="ch">
+	<label class="wx">{lang no_login}</label>
+</div>
+<div class="ptw hm">
+	<p>{lang no_login}</p>
+	<p>
+	<!--{if !empty($_G['cookie']['loginuser'])}-->
+		<strong><a id="loginuser" class="noborder">$_G['cookie']['loginuser']</a></strong>
+		<span class="pipe">|</span><a href="member.php?mod=logging&action=login" onclick="showWindow('login', this.href);hideWindow('register');">{lang activation}</a>
+		<span class="pipe">|</span><a href="member.php?mod=logging&action=logout&formhash={FORMHASH}">{lang logout}</a>
+	<!--{else}-->
+		<a href="member.php?mod=register" onclick="showWindow('register', this.href);hideWindow('login');" class="noborder">$_G['setting']['reglinkname']</a>
+		<span class="pipe">|</span><a href="member.php?mod=logging&action=login" onclick="showWindow('login', this.href);hideWindow('register');">{lang login}</a>
+	<!--{/if}-->
+	</p>
+</div>
+<!--{/if}-->

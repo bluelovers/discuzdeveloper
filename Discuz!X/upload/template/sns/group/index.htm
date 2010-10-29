@@ -1,0 +1,163 @@
+{subtemplate common/header}
+	<div id="pt" class="wp"><a href="index.php" class="nvhm">$_G[setting][bbname]</a> &rsaquo; <a href="group.php">$_G[setting][navs][3][navname]</a> $groupnav </div>
+
+	{ad/text/wp a_t}
+	<style id="diy_style" type="text/css"></style>
+	<div class="wp">
+		<!--[diy=diy1]--><div id="diy1" class="area"></div><!--[/diy]-->
+	</div>
+	<div id="ct" class="wp cl">
+	<!--{if empty($gid) && empty($sgid)}-->
+		<div class="mn">
+			<div class="ch">
+				<label class="wx"><a href="$_G[setting][navs][3][filename]">$_G[setting][navs][3][navname]</a></label>
+			</div>
+			<!--{if $_G['setting']['search']['group']['status'] && ($_G['adminid'] == 1 || ($_G['group']['allowsearch'] & 16)) }-->
+			<div class="bm">
+				<div class="pbw gsh">
+					<h1>{lang group_search_groups}</h1>
+					<form method="post" action="search.php?mod=group&searchsubmit=1">
+						<p>
+						<input type="text" name="srchtxt" id="groupsearch" class="px vm" value="{lang group_search_prompt_groupname}" onclick="$('groupsearch').value=''" />
+						&nbsp;<button type="submit" class="pn vm"><strong>{lang search}</strong></button>
+						</p>
+					</form>
+				</div>
+			</div>
+			<hr class="da" />
+			<!--{/if}-->
+			{hook/group_index_header}
+			<div class="bm">
+				<h2>{lang group_view_others}</h2>
+				<ul class="ml mls cl">
+					<!--{loop $randgroup $fid $group}-->
+						<li>
+							<a href="forum.php?mod=group&fid=$group[fid]" title="$group[name]" class="avt"><img src="$group[icon]" alt="$group[name]" /></a>
+							<p><a href="forum.php?mod=group&fid=$group[fid]" title="$group[name]">$group[name]</a></p>
+							<span>($group[membernum])</span>
+						</li>
+					<!--{/loop}-->
+				</ul>
+			</div>
+			<hr class="da" />
+			<!--{if $topgrouplist}-->
+				<div class="bn">
+					<h2>{lang group_hot}</h2>
+					<ul class="ml mls cl">
+						<!--{loop $topgrouplist $fid $group}-->
+							<li>
+								<a href="forum.php?mod=group&fid=$group[fid]" title="$group[name]" class="avt"><img src="$group[icon]" alt="$group[name]" /></a>
+								<p><a href="forum.php?mod=group&fid=$group[fid]" title="$group[name]">$group[name]</a></p>
+								<span>$group[membernum]</span>
+							</li>
+						<!--{/loop}-->
+					</ul>
+				</div>
+				<hr class="da" />
+			<!--{/if}-->
+			<div class="bm">
+				<!--[diy=diy3]--><div id="diy3" class="area"></div><!--[/diy]-->
+			</div>
+			{hook/index_top}
+			<div class="flg flt bm cl">
+				<h2>{lang group_categories}</h2>
+				<!--{loop $first $groupid $group}-->
+					<!--{if $group['secondlist']}-->
+						<dl class="flc{echo swapclass('',' gcop')}">
+							<dt><a href="group.php?gid=$groupid">$group[name]</a><!--{if $group[groupnum]}--><span>($group[groupnum])</span><!--{/if}--></dt>
+							<dd>
+								<!--{loop $group['secondlist'] $fid}-->
+								<em><a href="group.php?sgid=$fid">$second[$fid][name]</a><!--{if $second[$fid][groupnum]}--><span>($second[$fid][groupnum])</span><!--{/if}--></em>
+								<!--{/loop}-->
+							</dd>
+						</dl>
+					<!--{/if}-->
+				<!--{/loop}-->
+			</div>
+			{hook/index_bottom}
+		</div>		
+	<!--{else}-->
+		<div id="gm" class="mn">
+			<div class="ch">
+				<label class="wx"><a href="$_G[setting][navs][3][filename]">$_G[setting][navs][3][navname]</a></label>
+			</div>
+			<div class="bm flg">
+				<dl class="mtm ghfl cl">
+					<dt><a href="group.php">{lang group}</a> $groupnav<!--{if $curtype[groupnum]}--><!--{/if}--></dt>
+					<!--{if $typelist}-->
+						<dd>
+						<!--{loop $typelist $fid $type}-->
+							<em><a href="group.php?sgid=$fid">$type[name]</a><span><!--{if $type[groupnum]}-->($type[groupnum])<!--{/if}--></span></em>
+						<!--{/loop}-->
+						</dd>
+					<!--{/if}-->
+				</dl>
+			</div>
+			<hr class="da" />
+			{hook/index_top}
+			<!--{if $list}-->
+			<div class="bm cl">
+				<select class="y" title="{lang orderby}" onchange="location.href=this.value">
+					<option value="$url" $selectorder[default]>{lang orderby_default}</option>
+					<option value="$url&amp;orderby=thread" $selectorder[thread]>{lang stats_main_threads_count}</option>
+					<option value="$url&amp;orderby=membernum" $selectorder[membernum]>{lang group_member_count}</option>
+					<option value="$url&amp;orderby=dateline" $selectorder[dateline]>{lang group_create_time}</option>
+					<option value="$url&amp;orderby=activity" $selectorder[activity]>{lang group_activities}</option>
+				</select>
+				<span>{lang group_total_numbers}</span>
+			</div>
+			<div class="fl{if $curtype['forumcolumns'] > 1} flg{/if} gl cl">
+				<!--{if $curtype['forumcolumns'] > 1}-->
+					<!--{loop $list $fid $val}-->
+						<div class="flc" {if $curtype['forumcolumns']} style="width: $curtype[forumcolwidth]"{/if}>
+							<div class="icn">
+								<a href="forum.php?mod=group&amp;fid=$fid" title="$val[name]"><img width="48" height="48" src="$val[icon]" alt="$val[name]" /></a>
+							</div>
+							<dl>
+								<dt><a href="forum.php?mod=group&amp;fid=$fid" title="$val[name]">$val[name]</a></dt>
+								<dd class="fli">{lang group_total_members_threads}</dd>
+								<dd><a href=""><a href="forum.php?mod=group&amp;fid=$fid">{lang group_founded_in}: $val[dateline]</a></dd>
+							</dl>
+						</div>
+						<!--{if ($val['orderid'] + 1) % $curtype['forumcolumns'] === 0}-->
+							<div class="ln"></div>
+						<!--{/if}-->
+					<!--{/loop}-->
+				<!--{else}-->
+					<!--{loop $list $fid $val}-->
+						<div class="flc cl">
+							<div class="icn avt">
+								<a href="forum.php?mod=group&amp;fid=$fid" title="$val[name]"><img width="48" height="48" src="$val[icon]" alt="$val[name]" /></a>
+							</div>
+							<dl>
+								<dt><a href="forum.php?mod=group&amp;fid=$fid" title="$val[name]">$val[name]</a></dt>
+								<dd class="i"><span><p>$val[membernum]</p>{lang group_member}</span><em><p>$val[threads]</p>{lang threads}</em></dd>
+								<dd>$val[description]</dd>
+							</dl>
+						</div>
+						<p class="ln"></p>
+					<!--{/loop}-->
+				<!--{/if}-->
+			</div>
+			<div class="pgs cl bm">
+				<p class="pg">$multipage</p>
+				<span class="pgb y"><a href="group.php">{lang return_index}</a></span>
+			</div>
+			{hook/index_bottom}
+			<!--{else}-->
+				<div class="bm">
+					<h2>{lang group_category_no_groups}</h2>
+					<p>{lang group_category_no_groups_detail}</p>
+				</div>
+			<!--{/if}-->
+		</div>
+	<!--{/if}-->
+		<div class="sd pph">
+			{subtemplate common/userabout}
+		</div>
+	</div>
+
+<div class="wp mtn">
+	<!--[diy=diy4]--><div id="diy4" class="area"></div><!--[/diy]-->
+</div>
+{subtemplate common/footer}

@@ -1,0 +1,24 @@
+{subtemplate common/header}
+
+<!--{block subtitle}-->$member[username]<!--{if empty($item) || $item == 'threads'}-->{lang member_threads}<!--{elseif $item == 'posts'}-->{lang member_replys}<!--{/if}--><!--{/block}-->
+<div id="pt" class="wp">
+	<a href="forum.php">$_G['setting']['bbname']</a> &rsaquo; $subtitle
+</div>
+<div id="ct" class="wp cl">
+	<div class="content datalist">
+	<div class="itemtitle s_clear">
+	<h1>$subtitle</h1>
+	<ul>
+		<li{if $item == 'threads'} class="current"{/if}><a href="forum.php?mod=my&item=threads&uid=$uid"><span>{lang threads}</span></a></li>
+		<li{if $item == 'posts'} class="current"{/if}><a href="forum.php?mod=my&item=posts&uid=$uid"><span>{lang posts}</span></a></li>
+	</ul>
+	</div>
+	<!--{if empty($item) || $item == 'threads'}-->
+		{template forum/my_thread}
+	<!--{elseif $item == 'posts'}-->
+		{template forum/my_post}
+	<!--{/if}-->
+	</div>
+</div>
+
+{subtemplate common/footer}

@@ -1,0 +1,102 @@
+<!--{eval $_G['home_tpl_titles'] = array({lang my_app});}-->
+<!--{template common/header}-->
+<div id="pt" class="wp"><a href="index.php" class="nvhm">$_G[setting][bbname]</a> &rsaquo; <a href="$_G[setting][navs][5][filename]">$_G[setting][navs][5][navname]</a></div>
+<div id="ct" class="wp cl">
+	<div class="ch">
+		<label class="wx"><a href="$_G[setting][navs][5][filename]">$_G[setting][navs][5][navname]</a></label>
+	</div>
+	<div class="mn">
+		<div class="bm">
+			
+
+			<!--{if $my_userapp}-->
+			
+			<h1 class="mt"><img src="{IMGDIR}/appsetting.gif" alt="app" /> {lang my_app}</h1>
+			
+			<p class="pbm bbda">{lang app_list_message}</p>
+			<ul class="apl mtm cl">
+				<!--{loop $my_userapp $value}-->
+				<li><img src="http://appicon.manyou.com/icons/$value[appid]" alt="$value[appname]" /><a href="userapp.php?mod=app&id=$value[appid]">$value[appname]</a></li>
+				<!--{/loop}-->
+			</ul>
+			<!--{/if}-->
+
+			{hook/userapp_index_top}
+
+			<ul class="tb cl">
+				<li$actives[all]><a href="userapp.php?view=all">{lang what_everybody_playing}</a></li>
+				<!--{if $_G[uid]}-->
+				<!--{if !empty($space[feedfriend])}-->
+				<li$actives[we]><a href="userapp.php?view=we">{lang what_friend_playing}</a></li>
+				<!--{/if}-->
+				<li$actives[me]><a href="userapp.php?view=me">{lang own}</a></li>
+				<!--{/if}-->
+				<li class="o"><a href="userapp.php?mod=manage&my_suffix=%2Fapp%2Flist">{lang add_app}</a></li>
+			</ul>
+
+			<div id="feed_div">
+			<!--{if $list}-->
+				<div class="xld xlda mtm">
+				<!--{loop $list $appicon $values}-->
+					<dl class="bbda cl">
+						<dd class="m avt">
+							<a href="userapp.php?mod=app&id=$appicon"><img src="http://appicon.manyou.com/logos/$appicon" alt="" /></a>
+						</dd>
+						<dd class="cl">
+							<ul class="el">
+								<!--{loop $values $value}-->
+								<li class="cl">
+									<a class="t" href="userapp.php?icon=$value[icon]" title="{lang just_look_dynamic}"><img src="$value[icon_image]" /></a>
+									$value[title_template] 
+									<span class="xg1"><!--{date($value[dateline], 'n-j H:i')}--></span>
+
+									<div class="ec">
+										<!--{if $value['image_1']}-->
+										<a href="$value[image_1_link]"{$value[target]}><img src="$value[image_1]" class="tn" /></a>
+										<!--{/if}-->
+										<!--{if $value['image_2']}-->
+										<a href="$value[image_2_link]"{$value[target]}><img src="$value[image_2]" class="tn" /></a>
+										<!--{/if}-->
+										<!--{if $value['image_3']}-->
+										<a href="$value[image_3_link]"{$value[target]}><img src="$value[image_3]" class="tn" /></a>
+										<!--{/if}-->
+										<!--{if $value['image_4']}-->
+										<a href="$value[image_4_link]"{$value[target]}><img src="$value[image_4]" class="tn" /></a>
+										<!--{/if}-->
+
+										<!--{if $value['body_template']}-->
+										<div class="detail"{if $value['image_3']} style="clear: both; zoom: 1;"{/if}>
+											$value[body_template]
+										</div>
+										<!--{/if}-->
+
+										<!--{if $value['body_general']}-->
+										<div class="quote"><blockquote>$value[body_general]</blockquote></div>
+										<!--{/if}-->
+									</div>
+								</li>
+							<!--{/loop}-->
+							</ul>
+						</dd>
+					</dl>
+					<!--{/loop}-->
+				</div>
+			<!--{else}-->
+				<p class="emp">{lang no_feed}</p>
+			<!--{/if}-->
+			</div>
+
+			<!--{if $multi}-->
+				<div class="pgs cl">$multi</div>
+			<!--{/if}-->
+
+			{hook/userapp_index_bottom}
+			<div id="ajax_wait"></div>
+
+		</div>
+	</div>
+	<div class="sd">
+		{subtemplate userapp/userapp_menu_list}
+	</div>
+</div>
+<!--{template common/footer}-->

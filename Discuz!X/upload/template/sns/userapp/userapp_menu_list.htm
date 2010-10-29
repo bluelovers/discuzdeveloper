@@ -1,0 +1,26 @@
+<div id="ppc_menu">
+	<ul class="apl bbda" id="my_defaultapp">
+		<!--{loop $_G['cache']['userapp'] $value}-->
+		<li><img src="http://appicon.manyou.com/icons/$value[appid]"><a href="userapp.php?mod=app&id=$value[appid]">$value[appname]</a></li>
+		<!--{/loop}-->
+		{hook/userapp_menu_top}
+	</ul>
+	
+	<ul class="apl mtm" id="my_userapp">
+		<!--{loop $_G['my_menu'] $value}-->
+		<li id="userapp_li_$value[appid]"><img src="http://appicon.manyou.com/icons/$value[appid]"><a href="userapp.php?mod=app&id=$value[appid]" title="$value[appname]">$value[appname]</a></li>
+		<!--{/loop}-->
+		{hook/userapp_menu_middle}
+	</ul>
+	
+	<!--{if $_G['my_menu_more']}-->
+	<p class="pbm bbda xg1 cl"><a href="javascript:;" class="unfold" id="a_app_more" onclick="userapp_open();">{lang open}</a></p>
+	<!--{/if}-->
+	<!--{if checkperm('allowmyop')}-->
+	<ul class="myo mtm">
+		<li><img src="{IMGDIR}/app_add.gif" class="vm" /> <a href="userapp.php?mod=manage&my_suffix=%2Fapp%2Flist">{lang app_add}</a></li>
+		<li><img src="{IMGDIR}/app_set.gif" class="vm" /> <a href="userapp.php?mod=manage&ac=menu">{lang app_management}</a></li>
+	</ul>
+	<!--{/if}-->
+	{hook/userapp_menu_bottom}
+</div>

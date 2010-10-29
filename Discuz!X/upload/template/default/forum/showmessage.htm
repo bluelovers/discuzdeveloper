@@ -1,0 +1,55 @@
+<!--{if !$_G[inajax]}-->
+	{template common/header}
+<!--{else}-->
+	{template common/header_ajax}
+<!--{/if}-->
+{eval $allowreturn = $url_forward || !stristr($show_message, '{lang return}') ? 0 : 1;$alerttype = $url_forward ? (preg_match('/\_succeed$/', $message) ? 'alert_right' : 'alert_info') : ($allowreturn ? 'alert_error' : 'alert_info');}
+<!--{if !$_G[inajax]}-->
+	<div id="pt" class="wp"><a href="forum.php">$_G['setting']['bbname']</a> &rsaquo; {lang board_message}</div>
+
+	<div id="ct" class="wp cl"><div class="mn"><div class="content nofloat">
+		<div class="f_c altw">
+			<h3 class="flb"><em>$_G['setting']['bbname'] {lang board_message}</em></h3>
+			<hr class="l" />
+			<div class="o"><div class="$alerttype">
+				<p>$show_message</p>
+				<!--{if $url_forward}-->
+					<!--{if empty($forwardtype)}-->
+						<p class="alert_btnleft"><a href="$url_forward">{lang message_forward}</a></p>
+					<!--{else}-->
+						<p class="alert_btnleft"><a href="$url_forward">{lang attach_forward}</a></p>
+					<!--{/if}-->
+				<!--{elseif $allowreturn}-->
+					<p class="alert_btnleft"><a href="javascript:history.back()">{lang message_go_back}</a></p>
+				<!--{/if}-->
+			</div></div>
+		</div>
+	</div></div></div>
+<!--{elseif !empty($_G['gp_infloat']) && (empty($_POST) || !empty($nopost))}-->
+	<div class="f_c altw">
+		<h3 class="flb"><em>{lang board_message}</em><span><a href="javascript:;" class="flbc" onclick="hideWindow('$_G['gp_handlekey']');" title="{lang close}">{lang close}</a></span></h3>
+		<hr class="l" />
+		<div class="o">
+			<div class="$alerttype">$show_message</div>
+			<!--{if $messagehandle == 'NOPERM' && !$_G['uid']}-->
+				<div class="alert_btn"><input type="button" onclick="hideWindow('$_G['gp_handlekey']');showWindow('login', 'member.php?mod=logging&action=login');" value="&nbsp;{lang confirms}&nbsp;" />&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<input type="button" onclick="hideWindow('$_G['gp_handlekey']');" value="&nbsp;{lang cancel}&nbsp;" /></div>
+			<!--{else}-->
+				<div class="alert_btn"><input type="button" onclick="hideWindow('$_G['gp_handlekey']');" value="{lang close}" /></div>
+			<!--{/if}-->
+		</div>
+	</div>
+<!--{else}-->{echo str_replace(array({lang return_search}), array({lang return_replace}), $show_message)}<!--{if $extra == 'HALTED' || $extra == 'NOPERM'}-->
+	<script type="text/javascript" reload="1">
+	function ajaxerror() {
+		hideMenu();
+		showDialog('$show_message', 'notice', '', null, 0);
+	}
+	ajaxerror();
+	</script>
+<!--{/if}-->
+<!--{/if}-->
+<!--{if !$_G[inajax]}-->
+	{template common/footer}
+<!--{else}-->
+	{template common/footer_ajax}
+<!--{/if}-->

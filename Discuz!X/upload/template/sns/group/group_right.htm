@@ -1,0 +1,29 @@
+<!--{if CURMODULE == 'group'}-->{hook/group_side_top}<!--{else}-->{hook/forumdisplay_side_top}<!--{/if}-->
+<!--{if $action != 'create'}-->
+	<div class="bn">
+		<h2>{lang group_find_topics}</h2>
+		<div class="gsh">
+			<form method="post" action="search.php?mod=group&srchfid=$_G[fid]&searchsubmit=1">
+				<p class="pns">
+				<input type="text" name="srchtxt" id="groupsearch" class="px vm" value="{lang input_search_key_words}" onclick="$('groupsearch').value=''" />
+				&nbsp;<button type="submit" class="pn vm"><strong>{lang search}</strong></button>
+				</p>
+			</form>
+		</div>
+	</div>
+	<hr class="da" />
+	<div class="bn cl">
+		<h2>{lang group_url}</h2>
+		<dl>
+			<dt><a href="forum.php?mod=group&fid={$_G[fid]}" id="group_link"></a></dt>
+			<dd class="mtn mbn xg1">($_G[forum][foundername] {lang create_on} $_G[forum][dateline])</dd>
+			<dd class="pns">
+				<button class="pn" onclick="setCopy($('group_link').href, '{lang group_url_copy_finished}')"><span>{lang group_url_copy}</span></button>
+				<!--{if $status == 'isgroupuser'}-->
+					<a onclick="showDialog('{lang group_exit_confirm}', 'confirm', '', function(){location.href='forum.php?mod=group&amp;action=out&amp;fid=$_G[fid]'})" href="#">{lang group_exit}</a>
+				<!--{/if}-->
+			</dd>
+		</dl>
+		<script type="text/javascript">$('group_link').innerHTML = $('group_link').href</script>
+	</div>
+<!--{/if}-->
