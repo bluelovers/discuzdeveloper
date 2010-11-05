@@ -1578,7 +1578,7 @@ class My extends Manyou {
 	}
 
 	function _preGetPosts($table, $pIds) {
-		$sql = sprintf("SELECT * FROM %s WHERE invisible = '0' AND pid IN (%s)",
+		$sql = sprintf("SELECT * FROM %s WHERE pid IN (%s)",
 					   $table, implode(', ', $pIds));
 		$query = DB::query($sql);
 		$result = array();

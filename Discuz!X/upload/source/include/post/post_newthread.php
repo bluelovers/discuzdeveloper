@@ -112,6 +112,7 @@ if(!submitcheck('topicsubmit', 0, $seccodecheck, $secqaacheck)) {
 	} elseif(checkmaxpostsperhour()) {
 		showmessage('post_flood_ctrl_posts_per_hour', '', array('posts_per_hour' => $_G['group']['maxpostsperhour']));
 	}
+	$_G['gp_save'] = $_G['uid'] ? $_G['gp_save'] : 0;
 
 	$typeid = isset($typeid) && isset($_G['forum']['threadtypes']['types'][$typeid]) ? $typeid : 0;
 	$displayorder = $modnewthreads ? -2 : (($_G['forum']['ismoderator'] && !empty($_G['gp_sticktopic'])) ? 1 : (empty($_G['gp_save']) ? 0 : -4));

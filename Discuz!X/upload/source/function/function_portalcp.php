@@ -837,29 +837,24 @@ function getblockperm($bid) {
 	$perm = DB::fetch_first('SELECT * FROM '.DB::table('common_block_permission')." WHERE bid = '$bid' AND uid='$_G[uid]'");
 	if($perm) return $perm;
 
-	$block = DB::fetch_first('SELECT tb.*,b.notinherited FROM '.DB::table('common_block')." b LEFT JOIN ".DB::table('common_template_block')." tb ON b.bid=tb.bid WHERE b.bid = '$bid'");
+	$block = DB::fetch_first('SELECT tb.*,b.blocktype,b.uid,b.notinherited FROM '.DB::table('common_block')." b LEFT JOIN ".DB::table('common_template_block')." tb ON b.bid=tb.bid WHERE b.bid = '$bid'");
 	if($block && $block['notinherited'] == '0') {
 		$perm = DB::fetch_first('SELECT * FROM '.DB::table('common_template_permission')." WHERE targettplname='$block[targettplname]' AND uid='$_G[uid]'");
 		if(!$perm) {
 			$tplpre = 'portal/list_';
 			if(substr($block['targettplname'], 0, 12) == $tplpre){
-				$protalcategory = loadcache('portalcategory');
+				loadcache('portalcategory');
+				$portalcategory = $_G['cache']['portalcategory'];
 				$catid = intval(str_replace($tplpre, '', $block['targettplname']));
-				if(isset($portalcategory[$catid])) {
+				//如果是频道且继承上级权限,则查找频道的上级权限
+				if(isset($portalcategory[$catid]) && !$portalcategory[$catid]['notinheritedblock']) {
 					$cattpls = array();
-					$cattplname = '';
-					if(!$portalcategory[$catid]['notinheritedblock'] && $portalcategory[$catid]['upid']){
-						$cattplname = $tplpre.$catid;
-					}
-					while($cattplname) {
-						$cattpls[] = $cattplname;
-						$catupid =$portalcategory[$catid]['upid'];
-						if(!$portalcategory[$catupid]['notinheritedblock'] && $portalcategory[$catupid]['upid']
-								|| $portalcategory[$catupid]['level'] == '0'){
-							$cattplname = $tplpre.$catupid;
-						} else {
-							$cattplname = '';
-						}
+					$upid = $portalcategory[$catid]['upid'];
+					//循环查找频道的上级权限
+					while(!empty($upid)) {
+						$cattpls[] = $tplpre.$upid;
+						//当前频道继承上级权限则继续循环
+						$upid = !$portalcategory[$upid]['notinheritedblock'] ? $portalcategory[$upid]['upid'] : 0;
 					}
 					if(!empty($cattpls)){
 						$tplperm = array();
@@ -884,6 +879,10 @@ function getblockperm($bid) {
 					if($topic['uid'] == $_G['uid']) {
 						$perm = $allperm;
 					}
+				}
+			} elseif(empty($block['targettplname']) && empty($block['blocktype'])) {
+				if(($_G['group']['allowmanagetopic'] || ($_G['group']['allowaddtopic'] && $block['uid'] == $_G['uid']))) {
+					$perm = $allperm;
 				}
 			}
 		}

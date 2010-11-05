@@ -458,7 +458,7 @@ class discuz_core {
 
 		if($this->var['setting']['bbclosed']) {
 			if($this->var['uid'] && ($this->var['group']['allowvisit'] == 2 || $this->var['groupid'] == 1)) {
-			} elseif(in_array(CURSCRIPT, array('admin', 'member', 'api'))) {
+			} elseif(in_array(CURSCRIPT, array('admin', 'member', 'api')) || defined('ALLOWGUEST') && ALLOWGUEST) {
 			} else {
 				$closedreason = DB::result_first("SELECT svalue FROM ".DB::table('common_setting')." WHERE skey='closedreason'");
 				$closedreason = str_replace(':', '&#58;', $closedreason);

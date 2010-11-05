@@ -311,9 +311,11 @@
 				<!--{elseif $_G[gp_action] == 'edit'}--><span>{lang edit_save}</span>
 				<!--{/if}-->
 				</button>
-				<input type="hidden" id="postsave" name="save" value="" />
-				<!--{if $_G[gp_action] == 'newthread' && !$modnewthreads || $_G[gp_action] == 'edit' && $isfirstpost && !$modnewreplies && $thread['displayorder'] == -4}-->
-					<button type="button" id="postsubmit" class="pn" value="true" onclick="$('postsave').value = 1;$('postsubmit').click();" tabindex="4"><em>{lang save_draft}</em></button>
+				<!--{if $_G['uid']}-->
+					<input type="hidden" id="postsave" name="save" value="" />				
+					<!--{if $_G[gp_action] == 'newthread' && !$modnewthreads || $_G[gp_action] == 'edit' && $isfirstpost && !$modnewreplies && $thread['displayorder'] == -4}-->
+						<button type="button" id="postsubmit" class="pn" value="true" onclick="$('postsave').value = 1;$('postsubmit').click();" tabindex="4"><em>{lang save_draft}</em></button>
+					<!--{/if}-->
 				<!--{/if}-->
 				<!--{if $special == 2}--><label><input type="checkbox" name="continueadd" value="yes" class="pc" /> {lang post_message2}</label><!--{/if}-->
 			</div>

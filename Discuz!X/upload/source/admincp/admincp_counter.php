@@ -121,7 +121,7 @@ if(submitcheck('forumsubmit', 1)) {
 	}
 	while($mem = DB::fetch($queryt)) {
 		$processed = 1;
-		$postcount = getcountofposts(DB::table('forum_post'), "authorid='{$mem['uid']}' AND invisible='0'");
+		$postcount = getcountofposts(DB::table('forum_post'), "authorid='{$mem['uid']}' AND invisible='0'") + DB::result_first("SELECT COUNT(*) FROM ".DB::table('forum_postcomment')." WHERE authorid='$mem[uid]'");
 		$threadcount = DB::result_first("SELECT COUNT(*) FROM ".DB::table('forum_thread')." WHERE authorid='$mem[uid]'");
 		foreach($threadtableids as $tableid) {
 			if(!$tableid) {

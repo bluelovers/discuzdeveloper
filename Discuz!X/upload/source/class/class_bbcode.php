@@ -34,7 +34,7 @@ class bbcode {
 			$this->search_exp = array(
 				"/\s*\[quote\][\n\r]*(.+?)[\n\r]*\[\/quote\]\s*/is",
 				"/\[url\]\s*(https?:\/\/|ftp:\/\/|gopher:\/\/|news:\/\/|telnet:\/\/|rtsp:\/\/|mms:\/\/|callto:\/\/|ed2k:\/\/){1}([^\[\"']+?)\s*\[\/url\]/i",
-				"/\[em:(.+?):\]/i",
+				"/\[em:([0-9]+):\]/i",
 			);
 			$this->replace_exp = array(
 				"<div class=\"quote\"><blockquote>\\1</blockquote></div>",

@@ -79,6 +79,7 @@ if(($_G['group']['allowpostattach'] || $_G['group']['allowpostimage']) && is_arr
 	}
 }
 
+$_G['gp_save'] = $_G['uid'] ? $_G['gp_save'] : 0;
 $typeid = isset($typeid) ? $typeid : 0;
 $displayorder = $modnewthreads ? -2 : (($_G['forum']['ismoderator'] && !empty($_G['gp_sticktopic'])) ? 1 : (empty($_G['gp_save']) ? 0 : -4));
 if($displayorder == -2) {

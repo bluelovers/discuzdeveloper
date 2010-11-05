@@ -455,8 +455,8 @@ var rowtypedata = [
 		if(!$targethreadtypes['icons']) {
 			$targethreadtypes['icons'] = array();
 		}
-		$targethreadtypes['types'] = $targethreadtypes['types'] + $sourcethreadtypes['types'];
-		$targethreadtypes['icons'] = $targethreadtypes['icons'] + $sourcethreadtypes['icons'];
+		$targethreadtypes['types'] = array_merge($targethreadtypes['types'], $sourcethreadtypes['types']);
+		$targethreadtypes['icons'] = array_merge($targethreadtypes['icons'], $sourcethreadtypes['icons']);
 
 		DB::update('forum_forum', array(
 			'threads' => $targetforum['threads'] + $sourceforum['threads'],

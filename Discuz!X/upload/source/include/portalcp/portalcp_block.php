@@ -726,7 +726,7 @@ function block_convert($bid, $toblockclass) {
 				$block['script'] = $convertrule['script'];
 				$block['blockclass'] = $toblockclass;
 				$block['blockstyle'] = serialize($blockstyle);
-				DB::update('common_block', $block, array('bid'=>$bid));
+				DB::update('common_block', daddslashes($block), array('bid'=>$bid));
 			}
 		}
 

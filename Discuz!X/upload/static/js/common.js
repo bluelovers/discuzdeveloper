@@ -2428,7 +2428,7 @@ function slideshow(el) {
 	this.active = function(index) {
 		this.slideshows[this.index].style.display = "none";
 		this.slideshows[index].style.display = "block";
-		if(this.controls.length > 0) {
+		if(this.controls && this.controls.length > 0) {
 			this.controls[this.index].className = '';
 			this.controls[index].className = 'on';
 		}
@@ -2868,7 +2868,7 @@ function createPalette(colorid, id, func) {
 		$('append_parent').appendChild(dom);
 	}
 	var base = document.getElementsByTagName('base');
-	var baseurl = base ? base[0].getAttribute('href') : '';
+	var baseurl = base && base > 0 ? base[0].getAttribute('href') : '';
 	func = !func ? '' : '|' + func;
 	window.frames["c"+colorid+"_frame"].location.href = baseurl+STATICURL+"image/admincp/getcolor.htm?c"+colorid+"|"+id+func;
 	showMenu({'ctrlid':'c'+colorid});

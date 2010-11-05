@@ -764,7 +764,7 @@ class SearchHelper {
 		$tIds = implode($tIds, ', ');
 		$result = array();
 		if($tIds) {
-			$sql = sprintf("SELECT * FROM %s WHERE tid IN (%s) AND displayorder >= 0", $table, $tIds);
+			$sql = sprintf("SELECT * FROM %s WHERE tid IN (%s)", $table, $tIds);
 
 			$query = DB::query($sql);
 			while($thread = DB::fetch($query)) {
@@ -780,7 +780,7 @@ class SearchHelper {
 		foreach($tIds as $postTableId => $_tIds) {
 			$suffix = $postTableId ? "_$postTableId" : '';
 			$sql = sprintf("SELECT * FROM %s
-						   WHERE tid IN (%s) AND first = 1 AND invisible = '0'", DB::table('forum_post' . $suffix), implode($_tIds, ', ')
+						   WHERE tid IN (%s) AND first = 1", DB::table('forum_post' . $suffix), implode($_tIds, ', ')
 						  );
 			$query = DB::query($sql);
 			while($post = DB::fetch($query)) {

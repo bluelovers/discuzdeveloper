@@ -363,6 +363,7 @@ function credit_payurl($price, &$orderid) {
 	$reqHandler->setParameter("key_index", "1");
 	$reqHandler->setParameter("verify_relation_flag",  "1");
 	$reqHandler->setParameter("ver", "3");
+	$reqHandler->setParameter("spbill_create_ip", $_G['clientip']);
 
 	$reqUrl = $reqHandler->getRequestURL();
 	return $reqUrl;

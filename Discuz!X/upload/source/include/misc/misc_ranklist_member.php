@@ -215,7 +215,7 @@ $ols = array();
 if($fuids && $_GET['view'] != 'online') {
 	$query = DB::query("SELECT * FROM ".DB::table('common_session')." WHERE uid IN (".dimplode($fuids).")");
 	while ($value = DB::fetch($query)) {
-		if(!$value['magichidden']) {
+		if(!$value['magichidden'] && !$value['invisible']) {
 			$ols[$value['uid']] = $value['lastactivity'];
 		} elseif ($_GET['view'] == 'online' && $list[$value['uid']]) {
 			unset($list[$value['uid']]);

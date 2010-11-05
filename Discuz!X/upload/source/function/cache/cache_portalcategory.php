@@ -79,7 +79,7 @@ function build_cache_portalcategory() {
 		$data[$key]['caturl'] = $url;
 
 		if($data[$key]['shownav']) {
-			$rs = DB::update('common_nav', array('url' => $url, 'name' =>$value['catname']), array('type' => '4','identifier' => $key));
+			$rs = DB::update('common_nav', array('url' => addslashes($url), 'name' =>addslashes($value['catname'])), array('type' => '4','identifier' => $key));
 		}
 	}
 
