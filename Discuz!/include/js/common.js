@@ -2,23 +2,27 @@
 	[Discuz!] (C)2001-2009 Comsenz Inc.
 	This is NOT a freeware, use is subject to license terms
 
-	$Id: common.js 20980 2009-11-05 02:06:19Z monkey $
+	$Id: common.js 21424 2010-11-06 09:34:15Z monkey $
 */
 
+//note userAgent
 var BROWSER = {};
 var USERAGENT = navigator.userAgent.toLowerCase();
 BROWSER.ie = window.ActiveXObject && USERAGENT.indexOf('msie') != -1 && USERAGENT.substr(USERAGENT.indexOf('msie') + 5, 3);
-BROWSER.firefox = document.getBoxObjectFor && USERAGENT.indexOf('firefox') != -1 && USERAGENT.substr(USERAGENT.indexOf('firefox') + 8, 3);
+BROWSER.firefox = USERAGENT.indexOf('firefox') != -1 && USERAGENT.substr(USERAGENT.indexOf('firefox') + 8, 3);
 BROWSER.chrome = window.MessageEvent && !document.getBoxObjectFor && USERAGENT.indexOf('chrome') != -1 && USERAGENT.substr(USERAGENT.indexOf('chrome') + 7, 10);
 BROWSER.opera = window.opera && opera.version();
 BROWSER.safari = window.openDatabase && USERAGENT.indexOf('safari') != -1 && USERAGENT.substr(USERAGENT.indexOf('safari') + 7, 8);
 BROWSER.other = !BROWSER.ie && !BROWSER.firefox && !BROWSER.chrome && !BROWSER.opera && !BROWSER.safari;
 BROWSER.firefox = BROWSER.chrome ? 1 : BROWSER.firefox;
 
+//note [code]
 var DISCUZCODE = [];
 DISCUZCODE['num'] = '-1';
 DISCUZCODE['html'] = [];
+//note loadcss
 var CSSLOADED = [];
+//note JSMENU
 var JSMENU = [];
 JSMENU['active'] = [];
 JSMENU['timer'] = [];
@@ -26,17 +30,21 @@ JSMENU['drag'] = [];
 JSMENU['layer'] = 0;
 JSMENU['zIndex'] = {'win':200,'menu':300,'prompt':400,'dialog':500};
 JSMENU['float'] = '';
+//note ajax
 var AJAX = [];
 AJAX['debug'] = 0;
-AJAX['url'] = [];
-AJAX['stack'] = [0, 0, 0, 0, 0, 0, 0, 0, 0, 0];
+AJAX['url'] = [];//note 每个URL只允许生成一个AJAX对象，防止重复点击。
+AJAX['stack'] = [0, 0, 0, 0, 0, 0, 0, 0, 0, 0];//note ajax 对象时间占位堆栈。预置位10个，应该足够用了。
+//note Clipboard SWF
 var clipboardswfdata = '';
+//note smiliesOnload
 var CURRENTSTYPE = null;
 var discuz_uid = isUndefined(discuz_uid) ? 0 : discuz_uid;
 var creditnotice = isUndefined(creditnotice) ? '' : creditnotice;
 var cookiedomain = isUndefined(cookiedomain) ? '' : cookiedomain;
 var cookiepath = isUndefined(cookiepath) ? '' : cookiepath;
 
+//note FixPrototypeForGecko
 if(BROWSER.firefox && window.HTMLElement) {
 	HTMLElement.prototype.__defineSetter__('outerHTML', function(sHTML) {
         	var r = this.ownerDocument.createRange();
@@ -385,6 +393,25 @@ function loadcss(cssname) {
 	}
 }
 
+/**
+* 显示菜单
+* @param v	数组格式的参数 详情如下
+* ctrlid	控制菜单的 id
+* menuid	显示菜单的 id
+* showid	弹出菜单的 id
+* evt		响应函数的事件		click:鼠标左键点击ctrlObj触发 mouseover:鼠标移到ctrlObj上触发
+* pos		菜单位置
+* duration	菜单持续		0:菜单显示即开始计时 1:鼠标移开ctrlObj即开始计时 2:鼠标移开ctrlObj及menuObj即开始计时 3:菜单一直显示
+* timeout	菜单持续时间
+* mtype		菜单类型		menu:普通菜单 win:浮窗 prompt:提示信息 dialog:对话框
+* maxh		菜单最大高度
+* layer		菜单层级
+* cache		是否缓存菜单		0:否 1:是
+* drag		拖拽菜单对象的id
+* fade		淡入淡出效果
+* cover		覆盖整个页面
+* zindex
+*/
 function showMenu(v) {
 	var ctrlid = isUndefined(v['ctrlid']) ? v : v['ctrlid'];
 	var showid = isUndefined(v['showid']) ? ctrlid : v['showid'];
@@ -418,6 +445,7 @@ function showMenu(v) {
 	}
 
 	if(ctrlObj) {
+		//note 初始化ctrlObj
 		if(!ctrlObj.initialized) {
 			ctrlObj.initialized = true;
 			ctrlObj.unselectable = true;
@@ -471,6 +499,7 @@ function showMenu(v) {
 		}
 	};
 
+	//note 初始化menuObj
 	if(!menuObj.initialized) {
 		menuObj.initialized = true;
 		menuObj.ctrlkey = ctrlid;
@@ -690,6 +719,11 @@ function fetchOffset(obj) {
 	return { 'left' : left_offset, 'top' : top_offset };
 }
 
+/**
+* 隐藏菜单
+* @param attr	菜单属性 空字串:隐藏所有菜单 字串:隐藏指定menuid的菜单 数字:隐藏某一层菜单
+* @param mtype	菜单类型 参见showMenu函数
+*/
 function hideMenu(attr, mtype) {
 	attr = isUndefined(attr) ? '' : attr;
 	mtype = isUndefined(mtype) ? 'menu' : mtype;
@@ -743,6 +777,14 @@ function hideMenu(attr, mtype) {
 	}
 }
 
+/**
+* 显示提示信息
+* @param ctrlid		弹出提示信息的对象
+* @param evt		点击弹出还是鼠标移上去弹出
+* @param msg		提示信息内容
+* @param timeout	提示信息持续时间
+* @param negligible	是否可忽略
+*/
 function showPrompt(ctrlid, evt, msg, timeout, negligible) {
 	var menuid = ctrlid ? ctrlid + '_pmenu' : 'ntcwin';
 	var duration = timeout ? 0 : 3;
@@ -802,6 +844,14 @@ function showCreditPrompt() {
 	setcookie('discuz_creditnotice', '', -2592000);
 }
 
+/**
+* 显示对话框
+* @param mode		对话框模式 alert:有确定按钮 confirm:有确定和取消按钮 notice:有确定按钮 info:没有按钮
+* @param t		标题
+* @param msg		提示信息内容
+* @param func		点“确定”执行的函数
+* @param cover		覆盖整个页面
+*/
 function showDialog(msg, mode, t, func, cover) {
 	cover = isUndefined(cover) ? (mode == 'info' ? 0 : 1) : cover;
 	mode = in_array(mode, ['confirm', 'notice', 'info']) ? mode : 'alert';
@@ -836,6 +886,13 @@ function showDialog(msg, mode, t, func, cover) {
 	showMenu({'mtype':'dialog','menuid':menuid,'duration':3,'pos':'00','zindex':JSMENU['zIndex']['dialog'],'cache':0,'cover':cover});
 }
 
+/**
+* 显示浮动窗口
+* @param k		浮窗的key
+* @param url		浮窗请求的url
+* @param mode		get和post两种方式
+* @param cache		是否缓存浮窗		0:否 1:是
+*/
 function showWindow(k, url, mode, cache) {
 	mode = isUndefined(mode) ? 'get' : mode;
 	cache = isUndefined(cache) ? 1 : cache;
@@ -901,25 +958,27 @@ function hideWindow(k) {
 
 function Ajax(recvType, waitId) {
 
-	for(var stackId = 0; stackId < AJAX['stack'].length && AJAX['stack'][stackId] != 0; stackId++);
-	AJAX['stack'][stackId] = 1;
+	for(var stackId = 0; stackId < AJAX['stack'].length && AJAX['stack'][stackId] != 0; stackId++);//note 查询空闲的时间位
+	AJAX['stack'][stackId] = 1;//note 表示该任务占位
 
 	var aj = new Object();
 
-	aj.loading = '加载中...';
-	aj.recvType = recvType ? recvType : 'XML';
-	aj.waitId = waitId ? $(waitId) : null;
+	aj.loading = '加载中...';//note public
+	aj.recvType = recvType ? recvType : 'XML';//note public
+	aj.waitId = waitId ? $(waitId) : null;//note public
 
-	aj.resultHandle = null;
-	aj.sendString = '';
-	aj.targetUrl = '';
+	aj.resultHandle = null;//note private
+	aj.sendString = '';//note private
+	aj.targetUrl = '';//note private
 	aj.stackId = 0;
 	aj.stackId = stackId;
 
+	//note loading 为 null 时，表示使用默认，为空字符串时表示不显示。
 	aj.setLoading = function(loading) {
 		if(typeof loading !== 'undefined' && loading !== null) aj.loading = loading;
 	};
 
+	//note 默认为 XML 方式
 	aj.setRecvType = function(recvtype) {
 		aj.recvType = recvtype;
 	};
@@ -950,6 +1009,7 @@ function Ajax(recvType, waitId) {
 	};
 
 	aj.XMLHttpRequest = aj.createXMLHttpRequest();
+	//note private
 	aj.showLoading = function() {
 		if(aj.waitId && (aj.XMLHttpRequest.readyState != 4 || aj.XMLHttpRequest.status != 200)) {
 			aj.waitId.style.display = '';
@@ -957,6 +1017,7 @@ function Ajax(recvType, waitId) {
 		}
 	};
 
+	//note private
 	aj.processHandle = function() {
 		if(aj.XMLHttpRequest.readyState == 4 && aj.XMLHttpRequest.status == 200) {
 			for(k in AJAX['url']) {
@@ -979,10 +1040,11 @@ function Ajax(recvType, waitId) {
 					}
 				}
 			}
-			AJAX['stack'][aj.stackId] = 0;
+			AJAX['stack'][aj.stackId] = 0;//note 清空标志位，使其它对象有时间段可以被申请
 		}
 	};
 
+	//note public
 	aj.get = function(targetUrl, resultHandle) {
 		setTimeout(function(){aj.showLoading()}, 250);
 		if(in_array(targetUrl, AJAX['url'])) {
@@ -1005,6 +1067,7 @@ function Ajax(recvType, waitId) {
 			aj.XMLHttpRequest.send();}, delay);
 		}
 	};
+	//note public
 	aj.post = function(targetUrl, sendString, resultHandle) {
 		setTimeout(function(){aj.showLoading()}, 250);
 		if(in_array(targetUrl, AJAX['url'])) {
@@ -1023,6 +1086,7 @@ function Ajax(recvType, waitId) {
 	return aj;
 }
 
+//note 封装函数参数
 function newfunction(func){
 	var args = [];
 	for(var i=1; i<arguments.length; i++) args.push(arguments[i]);
@@ -1091,9 +1155,9 @@ function ajaxupdateevents(obj, tagName) {
 function ajaxupdateevent(o) {
 	if(typeof o == 'object' && o.getAttribute) {
 		if(o.getAttribute('ajaxtarget')) {
-			if(!o.id) o.id = Math.random();
-			var ajaxevent = o.getAttribute('ajaxevent') ? o.getAttribute('ajaxevent') : 'click';
-			var ajaxurl = o.getAttribute('ajaxurl') ? o.getAttribute('ajaxurl') : o.href;
+			if(!o.id) o.id = Math.random();//note 该标签唯一标识
+			var ajaxevent = o.getAttribute('ajaxevent') ? o.getAttribute('ajaxevent') : 'click';//note 默认为 click 事件
+			var ajaxurl = o.getAttribute('ajaxurl') ? o.getAttribute('ajaxurl') : o.href;//note 默认为 click 事件
 			_attachEvent(o, ajaxevent, newfunction('ajaxget', ajaxurl, o.getAttribute('ajaxtarget'), o.getAttribute('ajaxwaitid'), o.getAttribute('ajaxloading'), o.getAttribute('ajaxdisplay')));
 			if(o.getAttribute('ajaxfunc')) {
 				o.getAttribute('ajaxfunc').match(/(\w+)\((.+?)\)/);
@@ -1115,8 +1179,8 @@ function ajaxget(url, showid, waitid, loading, display, recall) {
 	x.setLoading(loading);
 	x.setWaitId(waitid);
 	x.display = typeof display == 'undefined' || display == null ? '' : display;
-	x.showId = $(showid);
-	if(x.showId) x.showId.orgdisplay = typeof x.showId.orgdisplay === 'undefined' ? x.showId.style.display : x.showId.orgdisplay;
+	x.showId = $(showid);//note 自定义属性。
+	if(x.showId) x.showId.orgdisplay = typeof x.showId.orgdisplay === 'undefined' ? x.showId.style.display : x.showId.orgdisplay;//note 纪录 showId 的最原始的显示状态
 
 	if(url.substr(strlen(url) - 1) == '#') {
 		url = url.substr(0, strlen(url) - 1);
@@ -1131,6 +1195,7 @@ function ajaxget(url, showid, waitid, loading, display, recall) {
 			evaled = true;
 		}
 		if(!evaled && (typeof ajaxerror == 'undefined' || !ajaxerror)) {
+			//note 隐藏 Loading... 切换内容显示状态
 			if(x.showId) {
 				x.showId.style.display = x.showId.orgdisplay;
 				x.showId.style.display = x.display;
@@ -1151,6 +1216,7 @@ function ajaxget(url, showid, waitid, loading, display, recall) {
 	});
 }
 
+//note id 为 menuid
 function ajaxpost(formid, showid, waitid, showidclass, submitbtn, recall) {
 	var waitid = typeof waitid == 'undefined' || waitid === null ? showid : (waitid !== '' ? waitid : '');
 	var showidclass = !showidclass ? '' : showidclass;
@@ -1167,13 +1233,14 @@ function ajaxpost(formid, showid, waitid, showidclass, submitbtn, recall) {
 			if(BROWSER.ie) {
 				s = $(ajaxframeid).contentWindow.document.XMLDocument.text;
 			} else {
-				s = $(ajaxframeid).contentWindow.document.documentElement.firstChild.nodeValue;
+				if(BROWSER.safari > 0) {
+					s = $(ajaxframeid).contentWindow.document.documentElement.firstChild.wholeText;
+				} else {
+					s = $(ajaxframeid).contentWindow.document.documentElement.firstChild.nodeValue;
+				}
 			}
 		} catch(e) {
-			if(AJAX['debug']) {
-				var error = mb_cutstr($(ajaxframeid).contentWindow.document.body.innerText.replace(/\r?\n/g, '\\n').replace(/"/g, '\\\"'), 200);
-				s = '<root>ajaxerror<script type="text/javascript" reload="1">showDialog(\'Ajax Error: \\n' + error + '\');</script></root>';
-			}
+			s = '内部错误，无法显示此内容';
 		}
 
 		if(s != '' && s.indexOf('ajaxerror') != -1) {
@@ -1182,9 +1249,9 @@ function ajaxpost(formid, showid, waitid, showidclass, submitbtn, recall) {
 		}
 		if(showidclass) {
 			$(showid).className = showidclass;
-			if(submitbtn) {
-				submitbtn.disabled = false;
-			}
+		}
+		if(submitbtn) {
+			submitbtn.disabled = false;
 		}
 		if(!evaled && (typeof ajaxerror == 'undefined' || !ajaxerror)) {
 			ajaxinnerhtml($(showid), s);
@@ -1198,19 +1265,15 @@ function ajaxpost(formid, showid, waitid, showidclass, submitbtn, recall) {
 		}
 		if(!evaled) evalscript(s);
 		ajaxframe.loading = 0;
-		$('append_parent').removeChild(ajaxframe);
+		$('append_parent').removeChild(ajaxframe.parentNode);
 	};
+	//note 避免重复创建iframe，判断IFRAME对象是否存在
 	if(!ajaxframe) {
-		if (BROWSER.ie) {
-			ajaxframe = document.createElement('<iframe name="' + ajaxframeid + '" id="' + ajaxframeid + '"></iframe>');
-		} else {
-			ajaxframe = document.createElement('iframe');
-			ajaxframe.name = ajaxframeid;
-			ajaxframe.id = ajaxframeid;
-		}
-		ajaxframe.style.display = 'none';
-		ajaxframe.loading = 1;
-		$('append_parent').appendChild(ajaxframe);
+		var div = document.createElement('div');
+		div.style.display = 'none';
+		div.innerHTML = '<iframe name="' + ajaxframeid + '" id="' + ajaxframeid + '" loading="1"></iframe>';
+		$('append_parent').appendChild(div);
+		ajaxframe = $(ajaxframeid);
 	} else if(ajaxframe.loading) {
 		return false;
 	}
@@ -1219,8 +1282,13 @@ function ajaxpost(formid, showid, waitid, showidclass, submitbtn, recall) {
 
 	showloading();
 	$(formid).target = ajaxframeid;
-	$(formid).action += '&inajax=1';
+	var action = $(formid).getAttribute('action');
+	$(formid).action = action.replace(/\&inajax\=1/g, '')+'&inajax=1';
 	$(formid).submit();
+	if(submitbtn) {
+		submitbtn.disabled = true;
+	}
+	doane();
 	return false;
 }
 
@@ -1261,6 +1329,7 @@ function ajaxmenu(ctrlObj, timeout, cache, duration, pos, recall) {
 	}
 }
 
+//note 得到一个定长的hash值， 依赖于 stringxor()
 function hash(string, length) {
 	var length = length ? length : 32;
 	var start = 0;
@@ -1277,6 +1346,7 @@ function hash(string, length) {
 	return result;
 }
 
+//note 将两个字符串进行异或运算，结果为英文字符组合
 function stringxor(s1, s2) {
 	var s = '';
 	var hash = 'abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ';
@@ -1422,6 +1492,7 @@ function AC_FL_RunContent() {
 	return str;
 }
 
+//note 模拟下拉菜单
 function simulateSelect(selectId) {
 	var selectObj = $(selectId);
 	var defaultopt = defaultv = '';
@@ -1515,6 +1586,7 @@ function simulateSelect(selectId) {
 	};
 }
 
+//note detectCapsLock
 function detectCapsLock(e, obj) {
 	var valueCapsLock = e.keyCode ? e.keyCode : e.which;
 	var valueShift = e.shiftKey ? e.shiftKey : (valueCapsLock == 16 ? true : false);
@@ -1531,6 +1603,7 @@ function detectCapsLock(e, obj) {
 	}
 }
 
+//note switchTab
 function switchTab(prefix, current, total) {
 	for(i = 1; i <= total;i++) {
 		$(prefix + '_' + i).className = '';
@@ -1540,6 +1613,7 @@ function switchTab(prefix, current, total) {
 	$(prefix + '_c_' + current).style.display = '';
 }
 
+//note keyPageScroll
 function keyPageScroll(e, prev, next, url, page) {
 	e = e ? e : window.event;
 	var tagname = BROWSER.ie ? e.srcElement.tagName : e.target.tagName;
@@ -1553,6 +1627,7 @@ function keyPageScroll(e, prev, next, url, page) {
 	}
 }
 
+//note ShowSelect
 function showselect(obj, inpid, t, rettype) {
 	if(!obj.id) {
 		var t = !t ? 0 : t;
@@ -1635,6 +1710,7 @@ function showColorBox(ctrlid, layer, k) {
 	showMenu({'ctrlid':ctrlid,'evt':'click','layer':layer});
 }
 
+//note Index
 function announcement() {
 	var ann = new Object();
 	ann.anndelay = 3000;ann.annst = 0;ann.annstop = 0;ann.annrowcount = 0;ann.anncount = 0;ann.annlis = $('annbody').getElementsByTagName("LI");ann.annrows = new Array();
@@ -1687,6 +1763,7 @@ function removeindexheats() {
 	return confirm('您确认要把此主题从热点主题中移除么？');
 }
 
+//note Smilies
 function smilies_show(id, smcols, seditorkey) {
 	if(seditorkey && !$(seditorkey + 'smilies_menu')) {
 		var div = document.createElement("div");
@@ -1791,6 +1868,7 @@ function smilies_preview(seditorkey, id, obj, w) {
 	showMenu({'ctrlid':obj.id,'showid':id + '_data','menuid':menu.id,'pos':pos,'layer':3});
 }
 
+//note SEditor
 function seditor_ctlent(event, script) {
 	if(event.ctrlKey && event.keyCode == 13 || event.altKey && event.keyCode == 83) {
 		eval(script);
