@@ -19,8 +19,9 @@ if($_GET['hash']) {
 	dsetcookie('stat_hash', $_GET['hash']);
 	showmessage('do_success', 'misc.php?mod=stat&op=trend&quickforward=1');
 }
+$siteuniqueid = DB::result_first("SELECT svalue FROM ".DB::table('common_setting')." WHERE skey='siteuniqueid'");
+$stat_hash = md5($siteuniqueid."\t".substr($_G['timestamp'], 0, 6));
 
-$stat_hash = md5($_G['setting']['sitekey']."\t".substr($_G['timestamp'], 0, 6));
 if(!checkperm('allowstatdata') && $_G['cookie']['stat_hash'] != $stat_hash) {
 	showmessage('no_privilege');
 }
@@ -48,8 +49,8 @@ if(!empty($_GET['xml'])) {
 	$xaxis = '';
 	$graph = array();
 	$count = 1;
-	$begin = str_replace('-', '', $primarybegin);
-	$end = str_replace('-', '', $primaryend);
+	$begin = dgmdate($beginunixstr, 'Ymd');
+	$end = dgmdate($endunixstr, 'Ymd');
 	$field = '*';
 	if(!empty($_GET['merge'])) {
 		$field = 'daytime,'.implode('+', $_GET['types']).' AS statistic';

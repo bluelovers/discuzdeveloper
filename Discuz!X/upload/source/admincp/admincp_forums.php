@@ -449,14 +449,8 @@ var rowtypedata = [
 		$targetforum = DB::fetch_first("SELECT f.threads, f.posts, ff.threadtypes FROM ".DB::table('forum_forum')." f LEFT JOIN ".DB::table('forum_forumfield')." ff USING(fid) WHERE f.fid='$target'");
 		$sourcethreadtypes = (array)unserialize($sourceforum['threadtypes']);
 		$targethreadtypes = (array)unserialize($targetforum['threadtypes']);
-		if(!$targethreadtypes['types']) {
-			$targethreadtypes['types'] = array();
-		}
-		if(!$targethreadtypes['icons']) {
-			$targethreadtypes['icons'] = array();
-		}
-		$targethreadtypes['types'] = array_merge($targethreadtypes['types'], $sourcethreadtypes['types']);
-		$targethreadtypes['icons'] = array_merge($targethreadtypes['icons'], $sourcethreadtypes['icons']);
+		$targethreadtypes['types'] = array_merge((array)$targethreadtypes['types'], (array)$sourcethreadtypes['types']);
+		$targethreadtypes['icons'] = array_merge((array)$targethreadtypes['icons'], (array)$sourcethreadtypes['icons']);
 
 		DB::update('forum_forum', array(
 			'threads' => $targetforum['threads'] + $sourceforum['threads'],
@@ -1400,7 +1394,7 @@ EOT;
 							continue;
 						}
 						if($cpfid != $fid) {
-							$cpfidsnew[$fid] = $cpfid;
+							$cpfidsnew[] = $cpfid;
 						}
 					}
 					if(!$usedefault) {

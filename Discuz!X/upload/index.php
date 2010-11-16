@@ -93,6 +93,8 @@ if(!empty($_SERVER['QUERY_STRING']) && is_numeric($_SERVER['QUERY_STRING'])) {
 						break;
 				}
 			}
+		} else {
+			$jump = true;
 		}
 
 		if(empty($url) && empty($_ENV['curapp'])) {

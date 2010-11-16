@@ -16,6 +16,13 @@ if($_G['gp_action'] == 'checkusername') {
 
 
 	$username = trim($_G['gp_username']);
+	$usernamelen = strlen($username);
+	if($usernamelen < 3) {
+		showmessage('profile_username_tooshort');
+	} elseif($usernamelen > 15) {
+		showmessage('profile_username_toolong');
+	}
+
 	loaducenter();
 	$ucresult = uc_user_checkname($username);
 

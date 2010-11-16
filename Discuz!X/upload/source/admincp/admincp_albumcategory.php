@@ -116,7 +116,7 @@ SCRIPT;
 			cpmsg('albumcategory_delete_succeed', 'action=albumcategory', 'succeed');
 		}
 
-		shownav('album', 'albumcategory');
+		shownav('portal', 'albumcategory');
 		showsubmenu('albumcategory',  array(
 					array('list', 'albumcategory', 0),
 					array('delete', 'albumcategory&operation=delete&catid='.$_GET['catid'], 1)
@@ -133,7 +133,7 @@ SCRIPT;
 			);
 		}
 		include_once libfile('function/portalcp');
-		showsetting('albumcategory_article_moveto', '', '', category_showselect('portal', 'tocatid', false, $category[$_GET['catid']]['upid']));
+		showsetting('albumcategory_article_moveto', '', '', category_showselect('album', 'tocatid', false, $category[$_GET['catid']]['upid']));
 		showsubmit('deletesubmit');
 		showtablefooter();
 		showformfooter();

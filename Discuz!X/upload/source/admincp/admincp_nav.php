@@ -64,10 +64,11 @@ if($operation == 'headernav') {
 			foreach($navlist as $nav) {
 				$navsubtype = array();
 				$navsubtype[$nav['subtype']] = 'selected="selected"';
+				$readonly = $nav['type'] == '4' ? ' readonly="readonly"' : '';
 				showtablerow('', array('class="td25"', 'class="td25"', '', '', '',''), array(
 					in_array($nav['type'], array('2', '1')) ? "<input class=\"checkbox\" type=\"checkbox\" name=\"delete[]\" value=\"$nav[id]\">" : '',
 					"<input type=\"text\" class=\"txt\" size=\"2\" name=\"displayordernew[$nav[id]]\" value=\"$nav[displayorder]\">",
-					"<div><input type=\"text\" class=\"txt\" size=\"15\" name=\"namenew[$nav[id]]\" value=\"".dhtmlspecialchars($nav['name'])."\">".
+					"<div><input type=\"text\" class=\"txt\" size=\"15\" name=\"namenew[$nav[id]]\" value=\"".dhtmlspecialchars($nav['name'])."\"$readonly>".
 						($nav['identifier'] == 6 && $nav['type'] == 0 ? '' : "<a href=\"###\" onclick=\"addrowdirect=1;addrow(this, 1, $nav[id])\" class=\"addchildboard\">$lang[misc_customnav_add_submenu]</a></div>"),
 					$nav['identifier'] == 6 && $nav['nav'] == 0 ? $lang['misc_customnav_subtype_menu'] : "<select name=\"subtypenew[$nav[id]]\"><option value=\"0\" $navsubtype[0]>$lang[misc_customnav_subtype_menu]</option><option value=\"1\" $navsubtype[1]>$lang[misc_customnav_subtype_sub]</option></select>",
 					$nav['type'] == '0' || $nav['type'] == '4' ? "<span title='{$nav['url']}'>".$nav['url'].'<span>' : "<input type=\"text\" class=\"txt\" size=\"15\" name=\"urlnew[$nav[id]]\" value=\"".dhtmlspecialchars($nav['url'])."\">",
@@ -96,11 +97,12 @@ if($operation == 'headernav') {
 				if(!empty($subnavlist[$nav['id']])) {
 					$subnavnum = count($subnavlist[$nav['id']]);
 					foreach($subnavlist[$nav['id']] as $sub) {
+						$readonly = $sub['type'] == '4' ? ' readonly="readonly"' : '';
 						$subnavnum--;
 						showtablerow('', array('class="td25"', 'class="td25"', '', ''), array(
 							$sub['type'] == '0' || $sub['type'] == '4' ? '' : "<input class=\"checkbox\" type=\"checkbox\" name=\"delete[]\" value=\"$sub[id]\">",
 							"<input type=\"text\" class=\"txt\" size=\"2\" name=\"displayordernew[$sub[id]]\" value=\"$sub[displayorder]\">",
-							"<div class=\"".($subnavnum ? 'board' : 'lastboard')."\"><input type=\"text\" class=\"txt\" size=\"15\" name=\"namenew[$sub[id]]\" value=\"".dhtmlspecialchars($sub['name'])."\"></div>",
+							"<div class=\"".($subnavnum ? 'board' : 'lastboard')."\"><input type=\"text\" class=\"txt\" size=\"15\" name=\"namenew[$sub[id]]\" value=\"".dhtmlspecialchars($sub['name'])."\"$readonly></div>",
 							'',
 							$sub['type'] == '0' || $sub['type'] == '4' ? "<span title='{$sub['url']}'>".$sub['url'].'</span>' : "<input type=\"text\" class=\"txt\" size=\"15\" name=\"urlnew[$sub[id]]\" value=\"".dhtmlspecialchars($sub['url'])."\">",
 							cplang($sub['type'] == '0' ? 'inbuilt' : ($sub['type'] == '3' ? 'nav_plugin' : ($sub['type'] == '4' ? 'channel' : 'custom'))),
@@ -240,7 +242,7 @@ EOT;
 			showformheader("nav&operation=headernav&do=edit&id=$id");
 			showtableheader();
 			showtitle(cplang('nav_nav_headernav').$parentname.' - '.$nav['name']);
-			showsetting('misc_customnav_name', 'namenew', $nav['name'], 'text');
+			showsetting('misc_customnav_name', 'namenew', $nav['name'], 'text', $nav['type'] == '4');
 			showsetting('misc_customnav_parent', array('parentidnew', $parentselect), $nav['parentid'], 'select');
 			showsetting('misc_customnav_title', 'titlenew', $nav['title'], 'text');
 			showsetting('misc_customnav_url', 'urlnew', $nav['url'], 'text', ($nav['type'] == '0' || $nav['type'] == '4'));

@@ -33,11 +33,12 @@ function build_cache_heats() {
 			WHERE t.dateline>'$heatdateline' AND t.heats>'0' AND t.displayorder>='0' ORDER BY t.heats DESC LIMIT ".($_G['setting']['indexhot']['limit'] * 2));
 
 		$messageitems = 2;
+		$limit = $_G['setting']['indexhot']['limit'];
 		while($heat = DB::fetch($query)) {
 			$posttable = $heat['posttableid'] ? "forum_post_{$heat['posttableid']}" : 'forum_post';
 			$post = DB::fetch_first("SELECT p.pid, p.message FROM ".DB::table($posttable)." p WHERE p.tid='{$heat['tid']}' AND p.first='1'");
 			$heat = array_merge($heat, (array)$post);
-			if($_G['setting']['indexhot']['limit'] == 0) {
+			if($limit == 0) {
 				break;
 			}
 			if($messageitems > 0) {
@@ -48,7 +49,7 @@ function build_cache_heats() {
 				$data['subject'][$heat['tid']] = $heat;
 			}
 			$messageitems--;
-			$_G['setting']['indexhot']['limit']--;
+			$limit--;
 		}
 		$data['expiration'] = TIMESTAMP + $_G['setting']['indexhot']['expiration'];
 	}

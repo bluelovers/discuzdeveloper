@@ -7,15 +7,14 @@
 	$Id$
 */
 
-if(!$_G['group']['allowstatdata']) {
-	showmessage('group_nopermission', NULL, array('grouptitle' => $_G['group']['grouptitle']), array('login' => 1));
-}
-
 define('CACHE_TIME', 18000);
 
 $op = $_G['gp_op'];
 if(!in_array($op, array('basic', 'threadsrank', 'postsrank', 'forumsrank', 'creditsrank', 'trade', 'onlinetime', 'team', 'trend', 'modworks', 'memberlist', 'forumstat', 'trend'))) {
 	$op = 'basic';
+}
+if(!$_G['group']['allowstatdata'] && $op != 'trend') {
+	showmessage('group_nopermission', NULL, array('grouptitle' => $_G['group']['grouptitle']), array('login' => 1));
 }
 
 $navtitle = lang('core', 'title_stats_'.$op).' - '.lang('core', 'title_stats');

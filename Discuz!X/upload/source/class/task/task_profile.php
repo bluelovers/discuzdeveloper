@@ -41,11 +41,17 @@ class task_profile {
 		global $_G;
 
 		$fields = lang('task/profile', 'profile_fields');
+		loadcache('profilesetting');
+		$fieldsql = array();
 		foreach($fields as $k => $v) {
 			$nk = explode('.', $k);
+			if(isset($_G['cache']['profilesetting'][$nk[1]])) {
 			$fieldsnew[$nk[1]] = $v;
+				$fieldsql[] = $k;
+			}
 		}
-		$result = DB::fetch_first("SELECT ".implode(',', array_keys($fields))." FROM ".DB::table('common_member')." m LEFT JOIN ".DB::table('common_member_profile')." mp ON m.uid=mp.uid WHERE m.uid='$_G[uid]'");
+		if($fieldsql) {
+			$result = DB::fetch_first("SELECT ".implode(',', $fieldsql)." FROM ".DB::table('common_member')." m LEFT JOIN ".DB::table('common_member_profile')." mp ON m.uid=mp.uid WHERE m.uid='$_G[uid]'");
 		$none = array();
 		foreach($result as $k => $v) {
 			if(!trim($v)) {
@@ -54,6 +60,9 @@ class task_profile {
 		}
 		$csc = intval((count($fields) - count($none)) / count($fields) * 100);
 		return array($none, $csc);
+		} else {
+			return true;
+		}
 	}
 
 }
