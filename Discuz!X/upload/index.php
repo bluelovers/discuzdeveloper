@@ -106,7 +106,7 @@ if(!empty($_SERVER['QUERY_STRING']) && is_numeric($_SERVER['QUERY_STRING'])) {
 				}
 			} else {
 				if($jump) {
-					$url = empty($_ENV['domain']['app']['default']) ? 'forum.php' : 'http://'.$_ENV['domain']['app']['default'];
+					$url = empty($_ENV['domain']['app']['default']) ? (!empty($_ENV['domain']['defaultindex']) ? $_ENV['domain']['defaultindex'] : 'forum.php') : 'http://'.$_ENV['domain']['app']['default'];
 				} else {
 					$_ENV['curapp'] = 'forum';
 				}
