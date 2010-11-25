@@ -457,6 +457,8 @@ if(!submitcheck('replysubmit', 0, $seccodecheck, $secqaacheck)) {
 	$_G['forum']['threadcaches'] && deletethreadcaches($_G['tid']);
 
 	$param = array('fid' => $_G['fid'], 'tid' => $_G['tid'], 'pid' => $pid, 'from' => $_G['gp_from'], 'sechash' => !empty($_G['gp_sechash']) ? $_G['gp_sechash'] : '');
+	include_once libfile('function/stat');
+	updatestat($thread['isgroup'] ? 'grouppost' : 'post');
 	if($modnewreplies) {
 		unset($param['pid']);
 		DB::query("UPDATE ".DB::table('forum_forum')." SET todayposts=todayposts+1, modworks='1' WHERE fid='$_G[fid]'", 'UNBUFFERED');
@@ -557,8 +559,6 @@ if(!submitcheck('replysubmit', 0, $seccodecheck, $secqaacheck)) {
 				postfeed($feed);
 			}
 		}
-		include_once libfile('function/stat');
-		updatestat($thread['isgroup'] ? 'grouppost' : 'post');
 
 		$page = getstatus($thread['status'], 4) ? 1 : @ceil(($thread['special'] ? $thread['replies'] + 1 : $thread['replies'] + 2) / $_G['ppp']);
 

@@ -343,7 +343,7 @@ EOF;
 				header('Content-Disposition: attachment; filename='.$filename);
 				header('Pragma: no-cache');
 				header('Expires: 0');
-				echo diconv($verifylist, $_G['charset'], 'UCS-2LE');
+				echo $verifylist;
 				exit();
 			} else {
 				cpmsg('members_verify_succeed', 'action=verify&operation=verify&do='.$vid.'&anchor=pass', 'succeed');

@@ -29,7 +29,11 @@
 			<button type="submit" name="editsubmit_btn" class="pn pnc" value="true"><strong>{lang determine}</strong></button>
 		</p>
 	</form>
-
+	<script type="text/javascript">
+		function succeedhandle_$_G['gp_handlekey'] (url, message, values) {
+			$('classid'+values['classid']).innerHTML = values['classname'];
+		}
+	</script>
 <!--{elseif $_GET['op'] == 'delete'}-->
 
 	<h3 class="flb">

@@ -2,7 +2,7 @@
 	[Discuz!] (C)2001-2009 Comsenz Inc.
 	This is NOT a freeware, use is subject to license terms
 
-	$Id: common.js 17636 2010-10-26 05:55:39Z zhangguosheng $
+	$Id: common.js 17866 2010-11-04 02:33:07Z zhangguosheng $
 */
 
 var BROWSER = {};

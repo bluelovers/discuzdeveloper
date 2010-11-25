@@ -491,9 +491,11 @@ class task {
 		global $_G;
 
 		$medals = DB::result_first("SELECT medals FROM ".DB::table('common_member_field_forum')." WHERE uid='$_G[uid]'");
-		$medalsnew = $medals ? $medals."\t".$medalid : $medalid;
-		DB::query("UPDATE ".DB::table('common_member_field_forum')." SET medals='$medalsnew' WHERE uid='$_G[uid]'", 'UNBUFFERED');
-		DB::query("INSERT INTO ".DB::table('forum_medallog')." (uid, medalid, type, dateline, expiration, status) VALUES ('$_G[uid]', '$medalid', '0', '$_G[timestamp]', '".($day ? TIMESTAMP + $day * 86400 : '')."', '1')");
+		if(empty($medals) || !in_array($medalid, explode("\t", $medals))) {
+			$medalsnew = $medals ? $medals."\t".$medalid : $medalid;
+			DB::query("UPDATE ".DB::table('common_member_field_forum')." SET medals='$medalsnew' WHERE uid='$_G[uid]'", 'UNBUFFERED');
+			DB::query("INSERT INTO ".DB::table('forum_medallog')." (uid, medalid, type, dateline, expiration, status) VALUES ('$_G[uid]', '$medalid', '0', '$_G[timestamp]', '".($day ? TIMESTAMP + $day * 86400 : '')."', '1')");
+		}
 	}
 
 	function reward_invite($num, $day) {

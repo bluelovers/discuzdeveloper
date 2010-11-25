@@ -155,7 +155,7 @@ if($operation == 'search') {
 	header('Content-Disposition: attachment; filename='.$filename);
 	header('Pragma: no-cache');
 	header('Expires: 0');
-	echo diconv($detail, $_G['charset'], 'UCS-2LE');
+	echo $detail;
 	exit();
 
 } elseif($operation == 'repeat') {

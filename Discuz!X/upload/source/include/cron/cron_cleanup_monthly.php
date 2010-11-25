@@ -15,5 +15,4 @@ $myrecordtimes = TIMESTAMP - $_G['setting']['myrecorddays'] * 86400;
 
 DB::query("DELETE FROM ".DB::table('common_mytask')." WHERE status='-1' AND dateline<'$_G[timestamp]'-2592000", 'UNBUFFERED');
 
-DB::query("UPDATE ".DB::table('common_onlinetime')." SET thismonth='0'");
 ?>

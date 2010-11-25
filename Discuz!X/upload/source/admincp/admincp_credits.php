@@ -90,7 +90,7 @@ if($operation == 'list') {
 	$fid = intval($_G['gp_fid']);
 	if($rid) {
 		$query = DB::query("SELECT * FROM ".DB::table('common_credit_rule')." WHERE rid='$rid'");
-		$ruleinfo = DB::fetch($query);
+		$globalrule = $ruleinfo = DB::fetch($query);
 		if($fid) {
 			$query = DB::query("SELECT f.name AS forumname, ff.creditspolicy
 				FROM ".DB::table('forum_forum')." f
@@ -112,14 +112,14 @@ if($operation == 'list') {
 			shownav('global', 'credits_edit');
 			showsubmenu("$lang[credits_edit] - $ruleinfo[rulename]");
 		} else {
-			$globalrule = $ruleinfo;
-			if(!in_array($fid, explode(',', $ruleinfo['fids']))) {
+			if(!in_array($fid, explode(',', $globalrule['fids']))) {
 				for($i = 1; $i <= 8; $i++) {
 					$ruleinfo['extcredits'.$i] = '';
 				}
 			}
 			shownav('forum', 'forums_edit');
 			showsubmenu("$forumname - $lang[credits_edit] - $ruleinfo[rulename]");
+			showtips('forums_edit_tips');
 		}
 		showformheader("credits&operation=edit&rid=$rid&".($fid ? "fid=$fid" : ''));
 
@@ -159,9 +159,6 @@ if($operation == 'list') {
 				$rule['cycletime'] = 0;
 				$rule['rewardnum'] = 1;
 			}
-			foreach($rule as $key => $val) {
-				$rule[$key] = $val ? (float)$val : '';
-			}
 			$havecredit = false;
 			for($i = 1; $i <= 8; $i++) {
 				if(!$_G['setting']['extcredits'][$i]) {
@@ -170,8 +167,11 @@ if($operation == 'list') {
 					$havecredit = true;
 				}
 			}
+			foreach($rule as $key => $val) {
+				$rule[$key] = (float)$val;
+			}
 			if($fid) {
-				$fids = $ruleinfo['fids'] ? explode(',', $ruleinfo['fids']) : array();
+				$fids = $globalrule['fids'] ? explode(',', $globalrule['fids']) : array();
 				if($havecredit) {
 					$rule['rid'] = $rid;
 					$rule['fid'] = $fid;
@@ -188,10 +188,9 @@ if($operation == 'list') {
 					}
 					unset($policy[$ruleinfo['action']]);
 					if(in_array($fid, $fids)) {
-						unset($fids[$fid]);
+						unset($fids[array_search($fid, $fids)]);
 					}
 				}
-
 				DB::update('forum_forumfield', array('creditspolicy' => addslashes(serialize($policy))), array('fid' => $fid));
 				DB::update('common_credit_rule', array('fids' => implode(',', $fids)), array('rid' => $rid));
 				cpmsg('credits_update_succeed', 'action=forums&operation=edit&anchor=credits&fid='.$fid, 'succeed');
@@ -199,19 +198,6 @@ if($operation == 'list') {
 				DB::update('common_credit_rule', $rule, array('rid' => $rid));
 			}
 			updatecache('creditrule');
-		} else {
-			$lowerlimit['creditspolicy']['lowerlimit'] = array();
-			for($i = 1; $i <= 8; $i++) {
-				if($_G['setting']['extcredits'][$i]) {
-					$lowerlimit['creditspolicy']['lowerlimit'][$i] = (float)$rule['extcredits'.$i];
-				}
-			}
-			$setting = array(
-				'skey' => 'creditspolicy',
-				'svalue' => addslashes(serialize($lowerlimit['creditspolicy']))
-			);
-			DB::insert('common_setting', $setting, 0, true);
-			updatecache(array('setting', 'creditrule'));
 		}
 		cpmsg('credits_update_succeed', 'action=credits&operation=list&anchor=policytable', 'succeed');
 	}

@@ -15,14 +15,10 @@ if(empty($_G['setting']['updatestat'])) {
 	showmessage('not_open_updatestat');
 }
 
-if($_GET['hash']) {
-	dsetcookie('stat_hash', $_GET['hash']);
-	showmessage('do_success', 'misc.php?mod=stat&op=trend&quickforward=1');
-}
 $siteuniqueid = DB::result_first("SELECT svalue FROM ".DB::table('common_setting')." WHERE skey='siteuniqueid'");
 $stat_hash = md5($siteuniqueid."\t".substr($_G['timestamp'], 0, 6));
 
-if(!checkperm('allowstatdata') && $_G['cookie']['stat_hash'] != $stat_hash) {
+if(!checkperm('allowstatdata') && $_G['gp_hash'] != $stat_hash) {
 	showmessage('no_privilege');
 }
 
@@ -53,7 +49,10 @@ if(!empty($_GET['xml'])) {
 	$end = dgmdate($endunixstr, 'Ymd');
 	$field = '*';
 	if(!empty($_GET['merge'])) {
-		$field = 'daytime,'.implode('+', $_GET['types']).' AS statistic';
+		if(empty($_GET['types'])) {
+			$_GET['types'] = array_merge($cols['login'], $cols['forum'], $cols['tgroup'], $cols['home'], $cols['space']);
+		}
+		$field = 'daytime,`'.implode('`+`', $_GET['types']).'` AS statistic';
 		$type = 'statistic';
 	}
 	$query = DB::query("SELECT $field FROM ".DB::table('common_stat')." WHERE daytime>='$begin' AND daytime<='$end' ORDER BY daytime");
@@ -115,7 +114,7 @@ foreach($_GET['types'] as $value) {
 	$types .= '&types[]='.$value;
 	$actives[$value] = ' class="a"';
 }
-$statuspara = "path=&settings_file=data/stat_setting.xml&data_file=".urlencode("misc.php?mod=stat&op=trend&xml=1&type=$type&primarybegin=$primarybegin&primaryend=$primaryend{$types}{$merge}");
+$statuspara = "path=&settings_file=data/stat_setting.xml&data_file=".urlencode("misc.php?mod=stat&op=trend&xml=1&type=$type&primarybegin=$primarybegin&primaryend=$primaryend{$types}{$merge}&hash=$stat_hash");
 
 include template('home/misc_stat');
 ?>

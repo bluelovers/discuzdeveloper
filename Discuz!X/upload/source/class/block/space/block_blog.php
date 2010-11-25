@@ -189,7 +189,7 @@ class block_blog {
 		if($uids) {
 			$wheres[] = 'b.uid IN ('.dimplode($uids).')';
 		}
-		if($catid) {
+		if($catid && !in_array('0', $catid)) {
 			$wheres[] = 'b.catid IN ('.dimplode($catid).')';
 		}
 		if($hours) {

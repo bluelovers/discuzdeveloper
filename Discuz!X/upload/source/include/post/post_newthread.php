@@ -416,6 +416,11 @@ if(!submitcheck('topicsubmit', 0, $seccodecheck, $secqaacheck)) {
 	($_G['group']['allowpostattach'] || $_G['group']['allowpostimage']) && ($_G['gp_attachnew'] || $_G['gp_attachdel'] || $sortid || !empty($_G['gp_activityaid'])) && updateattach($postattachcredits, $tid, $pid, $_G['gp_attachnew'], $_G['gp_attachdel']);
 
 	$param = array('fid' => $_G['fid'], 'tid' => $tid, 'pid' => $pid);
+
+	$statarr = array(0 => 'thread', 1 => 'poll', 2 => 'trade', 3 => 'reward', 4 => 'activity', 5 => 'debate', 127 => 'thread');
+	include_once libfile('function/stat');
+	updatestat($isgroup ? 'groupthread' : $statarr[$special]);
+
 	if($modnewthreads) {
 		DB::query("UPDATE ".DB::table('forum_forum')." SET todayposts=todayposts+1 WHERE fid='$_G[fid]'", 'UNBUFFERED');
 		showmessage('post_newthread_mod_succeed', "forum.php?mod=viewthread&tid=$tid&extra=$extra", $param);
@@ -539,9 +544,6 @@ if(!submitcheck('topicsubmit', 0, $seccodecheck, $secqaacheck)) {
 			require_once libfile('function/grouplog');
 			updategroupcreditlog($_G['fid'], $_G['uid']);
 		}
-		$statarr = array(0 => 'thread', 1 => 'poll', 2 => 'trade', 3 => 'reward', 4 => 'activity', 5 => 'debate', 127 => 'thread');
-		include_once libfile('function/stat');
-		updatestat($isgroup ? 'groupthread' : $statarr[$special]);
 
 		showmessage('post_newthread_succeed', "forum.php?mod=viewthread&tid=$tid&extra=$extra", $param);
 

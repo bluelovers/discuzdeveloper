@@ -11,5 +11,6 @@ if(!defined('IN_DISCUZ')) {
 	exit('Access Denied');
 }
 
+DB::query("UPDATE ".DB::table('common_onlinetime')." SET thismonth='0'");
 
 ?>

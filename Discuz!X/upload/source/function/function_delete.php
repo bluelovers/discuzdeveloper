@@ -406,6 +406,10 @@ function deletealbums($albumids) {
 		if($allowmanage || $value['uid'] == $_G['uid']) {
 			$dels[] = $value;
 			$newids[] = $value['albumid'];
+			if(!empty($value['pic'])) {
+				include_once libfile('function/home');
+				pic_delete($value['pic'], 'album', 0, ($value['picflag'] == 2 ? 1 : 0));
+			}
 		}
 		$counts[$value['uid']]['albums'] -= 1;
 	}

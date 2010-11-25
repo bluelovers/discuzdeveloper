@@ -727,14 +727,13 @@ if($operation == 'threads') {
 		if($moderation['delete']) {
 			$deletetids = '0';
 			$recyclebintids = '0';
-			if(!empty($moderation['delete'])) {
-				$deletetids = "'" . implode("','", $moderation['delete']) . "'";
-			}
-			$query = DB::query("SELECT tid, fid, authorid, subject FROM ".DB::table('forum_thread')." t WHERE t.tid IN ($deletetids) AND displayorder='$displayorder' $fidadd[and]$fidadd[fids]");
+			$query = DB::query("SELECT tid, fid, authorid, subject FROM ".DB::table('forum_thread')." t WHERE t.tid IN ('".implode('\',\'', $moderation['delete'])."') AND displayorder='$displayorder' $fidadd[and]$fidadd[fids]");
 			while($thread = DB::fetch($query)) {
 				my_thread_log('delete', array('tid' => $thread['tid']));
 				if($recyclebins[$thread['fid']]) {
 					$recyclebintids .= ','.$thread['tid'];
+				} else {
+					$deletetids .= ','.$thread['tid'];
 				}
 				$pm = 'pm_'.$thread['tid'];
 				if(isset($_G['gp_'.$pm]) && $_G['gp_'.$pm] <> '' && $thread['authorid']) {

@@ -293,12 +293,14 @@ class block_activity {
 			);
 		require_once libfile('block_thread', 'class/block/forum');
 		$bt = new block_thread();
+		$listtids = array();
 		while($data = DB::fetch($query)) {
 			$data['time'] = dgmdate($data['starttimefrom']);
 			if($data['starttimeto']) {
 				$data['time'] .= ' - '.dgmdate($data['starttimeto']);
 			}
-			$list[] = array(
+			$listtids[$data['tid']] = $data['tid'];
+			$list[$data['tid']] = array(
 				'id' => $data['tid'],
 				'idtype' => 'tid',
 				'title' => cutstr(str_replace('\\\'', '&#39;', $data['subject']), $titlelength, ''),
@@ -320,6 +322,13 @@ class block_activity {
 					'applynumber' => $data['applynumber'],
 				)
 			);
+		}
+
+		if(!empty($listtids)) {
+			$query = DB::query("SELECT tid,COUNT(*) as sum FROM ".DB::table('forum_activityapply')." WHERE tid IN(".dimplode($listtids).") GROUP BY tid");
+			while($value = DB::fetch($query)) {
+				$list[$value['tid']]['fields']['applynumber'] = $value['sum'];
+			}
 		}
 		return array('html' => '', 'data' => $list);
 	}

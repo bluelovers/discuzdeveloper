@@ -846,14 +846,11 @@ function getblockperm($bid) {
 				loadcache('portalcategory');
 				$portalcategory = $_G['cache']['portalcategory'];
 				$catid = intval(str_replace($tplpre, '', $block['targettplname']));
-				//如果是频道且继承上级权限,则查找频道的上级权限
 				if(isset($portalcategory[$catid]) && !$portalcategory[$catid]['notinheritedblock']) {
 					$cattpls = array();
 					$upid = $portalcategory[$catid]['upid'];
-					//循环查找频道的上级权限
 					while(!empty($upid)) {
 						$cattpls[] = $tplpre.$upid;
-						//当前频道继承上级权限则继续循环
 						$upid = !$portalcategory[$upid]['notinheritedblock'] ? $portalcategory[$upid]['upid'] : 0;
 					}
 					if(!empty($cattpls)){

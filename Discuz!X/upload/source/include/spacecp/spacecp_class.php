@@ -31,7 +31,7 @@ if ($op == 'edit') {
 			showmessage('enter_the_correct_class_name');
 		}
 		DB::update('home_class', array('classname'=>$_POST['classname']), array('classid'=>$classid));
-		showmessage('do_success', dreferer(),array('classid'=>$classid), array('showdialog' => 1, 'showmsg' => true, 'closetime' => true));
+		showmessage('do_success', dreferer(),array('classid'=>$classid, 'classname' => $_POST['classname']), array('showdialog' => 1, 'showmsg' => true, 'closetime' => true));
 	}
 
 } elseif ($op == 'delete') {

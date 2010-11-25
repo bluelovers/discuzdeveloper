@@ -206,6 +206,8 @@ if(!empty($_G['gp_tradeaid'])) {
 
 $param = array($_G['fid'], $tid, $pid);
 
+include_once libfile('function/stat');
+updatestat($isgroup ? 'groupthread' : 'trade');
 if($modnewthreads) {
 
 	DB::query("UPDATE ".DB::table('forum_forum')." SET todayposts=todayposts+1 WHERE fid='$_G[fid]'", 'UNBUFFERED');
@@ -271,8 +273,6 @@ if($modnewthreads) {
 		require_once libfile('function/grouplog');
 		updategroupcreditlog($_G['fid'], $_G['uid']);
 	}
-	include_once libfile('function/stat');
-	updatestat($isgroup ? 'groupthread' : 'trade');
 	if(!empty($_G['gp_continueadd'])) {
 		dheader("location: forum.php?mod=post&action=reply&fid=$_G[fid]&tid=$tid&addtrade=yes");
 	} else {

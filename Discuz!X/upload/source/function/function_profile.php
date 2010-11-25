@@ -24,7 +24,7 @@ function profile_setting($fieldid, $space=array(), $showstatus=false) {
 
 	if($showstatus) {
 		$uid = intval($space['uid']);
-		if($uid && (!isset($_G['profile_verifys'][$uid]) || empty($_G['profile_verifys'][$uid]))) {
+		if($uid && !isset($_G['profile_verifys'][$uid])) {
 			$_G['profile_verifys'][$uid] = array();
 			$query = DB::query('SELECT field FROM '.DB::table('common_member_verify_info')." WHERE uid = '$uid' AND verifytype='0'");
 			while($value = DB::fetch($query)) {

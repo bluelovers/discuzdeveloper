@@ -1137,7 +1137,7 @@ if($_G['gp_action'] == 'votepoll' && submitcheck('pollsubmit', 1)) {
 	$filename = "activity_{$_G[tid]}.csv";
 
 	include template('forum/activity_export');
-	$csvstr = diconv(ob_get_contents(), $_G['charset'], 'UCS-2LE');
+	$csvstr = ob_get_contents();
 	ob_end_clean();
 	header('Content-Encoding: none');
 	header('Content-Type: application/octet-stream');

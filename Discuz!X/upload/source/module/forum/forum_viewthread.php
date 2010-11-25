@@ -515,15 +515,17 @@ if($_G['forum_thread']['special'] > 0 && (empty($_G['gp_viewpid']) || $_G['gp_vi
 		case 4: require_once libfile('thread/activity', 'include'); break;
 		case 5: require_once libfile('thread/debate', 'include'); break;
 		case 127:
-			$sppos = strpos($postlist[$_G['forum_firstpid']]['message'], chr(0).chr(0).chr(0));
-			$specialextra = substr($postlist[$_G['forum_firstpid']]['message'], $sppos + 3);
-			$postlist[$_G['forum_firstpid']]['message'] = substr($postlist[$_G['forum_firstpid']]['message'], 0, $sppos);
-			if($specialextra) {
-				if(array_key_exists($specialextra, $_G['setting']['threadplugins'])) {
-					@include_once DISCUZ_ROOT.'./source/plugin/'.$_G['setting']['threadplugins'][$specialextra]['module'].'.class.php';
-					$classname = 'threadplugin_'.$specialextra;
-					if(class_exists($classname) && method_exists($threadpluginclass = new $classname, 'viewthread')) {
-						$threadplughtml = $threadpluginclass->viewthread($_G['tid']);
+			if($_G['forum_firstpid']) {
+				$sppos = strpos($postlist[$_G['forum_firstpid']]['message'], chr(0).chr(0).chr(0));
+				$specialextra = substr($postlist[$_G['forum_firstpid']]['message'], $sppos + 3);
+				$postlist[$_G['forum_firstpid']]['message'] = substr($postlist[$_G['forum_firstpid']]['message'], 0, $sppos);
+				if($specialextra) {
+					if(array_key_exists($specialextra, $_G['setting']['threadplugins'])) {
+						@include_once DISCUZ_ROOT.'./source/plugin/'.$_G['setting']['threadplugins'][$specialextra]['module'].'.class.php';
+						$classname = 'threadplugin_'.$specialextra;
+						if(class_exists($classname) && method_exists($threadpluginclass = new $classname, 'viewthread')) {
+							$threadplughtml = $threadpluginclass->viewthread($_G['tid']);
+						}
 					}
 				}
 			}

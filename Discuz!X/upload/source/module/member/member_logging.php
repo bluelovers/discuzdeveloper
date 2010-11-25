@@ -76,7 +76,7 @@ class logging_ctl {
 				$ucsynlogin = $_G['setting']['allowsynlogin'] ? uc_user_synlogin($_G['uid']) : '';
 
 				include_once libfile('function/stat');
-				updatestat('login');
+				updatestat('login', 1);
 				updatecreditbyaction('daylogin', $_G['uid']);
 				checkusergroup($_G['uid']);
 				if($invite['id']) {

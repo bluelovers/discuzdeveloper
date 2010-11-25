@@ -404,7 +404,6 @@ var rowtypedata = [
 		showsetting('groups_editgroup_jointype', array('jointypenew', $jointypeselect), $group['jointype'], 'select');
 		showsetting('groups_editgroup_visible_all', 'gviewpermnew', $group['gviewperm'], 'radio');
 		showsetting('groups_editgroup_description', 'descriptionnew', $group['description'], 'textarea');
-		//showsetting('groups_editgroup_rules', 'rulesnew', $group['rules'], 'textarea');
 		if($groupicon) {
 			$groupicon = '<input type="checkbox" class="checkbox" name="deleteicon" value="yes" /> '.$lang['delete'].'<br /><img src="'.$groupicon.'?'.random(6).'" width="48" height="48" />';
 		}
@@ -422,7 +421,6 @@ var rowtypedata = [
 		$_G['gp_fupnew'] = intval($_G['gp_fupnew']);
 		$_G['gp_gviewpermnew'] = intval($_G['gp_gviewpermnew']);
 		$_G['gp_descriptionnew'] = dhtmlspecialchars(censor(trim($_G['gp_descriptionnew'])));
-		//$_G['gp_rulesnew'] = dhtmlspecialchars(censor(trim($_G['gp_rulesnew'])));
 		$_G['gp_namenew'] = dhtmlspecialchars(censor(trim($_G['gp_namenew'])));
 		$icondata = array();
 		$iconnew = upload_icon_banner($group, $_FILES['iconnew'], 'icon');
@@ -497,6 +495,7 @@ var rowtypedata = [
 		DB::query("DELETE FROM ".DB::table('forum_forum')." WHERE fid IN(".dimplode($fidarray).")");
 		DB::query("DELETE FROM ".DB::table('forum_forumfield')." WHERE fid IN(".dimplode($fidarray).")");
 		DB::query("DELETE FROM ".DB::table('forum_groupuser')." WHERE fid IN(".dimplode($fidarray).")");
+		DB::query("UPDATE ".DB::table('common_member_field_forum')." SET groups=''");
 
 		deletedomain($fidarray, 'group');
 		updatecache('grouptype');

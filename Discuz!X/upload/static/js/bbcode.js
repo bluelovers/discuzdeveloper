@@ -2,7 +2,7 @@
 	[Discuz!] (C)2001-2009 Comsenz Inc.
 	This is NOT a freeware, use is subject to license terms
 
-	$Id: bbcode.js 17237 2010-09-27 06:16:37Z monkey $
+	$Id: bbcode.js 18083 2010-11-11 08:35:37Z monkey $
 */
 
 var re;

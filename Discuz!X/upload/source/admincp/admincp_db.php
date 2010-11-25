@@ -1162,6 +1162,7 @@ function sqldumptablestruct($table) {
 	if(in_array($table, $excepttables)) {
 		return;
 	}
+
 	$createtable = DB::query("SHOW CREATE TABLE $table", 'SILENT');
 
 	if(!DB::error()) {

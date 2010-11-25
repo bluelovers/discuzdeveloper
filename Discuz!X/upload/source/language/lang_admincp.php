@@ -1805,7 +1805,7 @@ $lang = array
 	'forums_edit_comment' => '编辑本版块设置',
 	'forums_edit_inherited' => '继承上级版块设置',
 	'forums_edit_newinherited' => '继承指定版块设置',
-	'forums_edit_tips' => '<li>以下设置没有继承性，即仅对当前版块有效，不会对下级子版块产生影响。</li>',
+	'forums_edit_tips' => '<li>以下设置没有继承性，即仅对当前版块有效，不会对下级子版块产生影响。</li><li>积分策略中积分项全部为空时表示默认使用全局积分策略</li><li>策略中所有积分项为 <strong>0</strong> 时代表该条策略在该版块中无效,任意一项有值，均代表启用本条策略</li>',
 	'forums_edit_switch' => '切换版块 / 批量编辑',
 	'forums_multiedit' => '批量编辑所选版块',
 
