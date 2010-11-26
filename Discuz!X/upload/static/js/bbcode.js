@@ -314,7 +314,6 @@ function html2bbcode(str) {
 		], str);
 
 		str = str.replace(/<h([0-9]+)[^>]*>(.*)<\/h\\1>/ig, "[size=$1]$2[/size]\n\n");
-		str = str.replace(/<p>([\s\S]*?)<\/p>/ig, "$1<br />");
 		str = str.replace(/<hr[^>]*>/ig, "[hr]");
 		str = str.replace(/<img[^>]+smilieid=(["']?)(\d+)(\1)[^>]*>/ig, function($1, $2, $3) {return smileycode($3);});
 		str = str.replace(/<img([^>]*src[^>]*)>/ig, function($1, $2) {return imgtag($2);});
