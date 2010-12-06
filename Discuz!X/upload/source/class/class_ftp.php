@@ -161,7 +161,7 @@ class discuz_ftp
 
 	function set_option($cmd, $value) {
 		if(function_exists('ftp_set_option')) {
-			return @ftp_set_option($$this->connectid, $cmd, $value);
+			return @ftp_set_option($this->connectid, $cmd, $value);
 		}
 	}
 

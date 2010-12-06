@@ -170,7 +170,7 @@ function block_memory_clear($bid) {
 function block_updatecache($bid, $forceupdate=false) {
 	global $_G;
 
-	if(!$forceupdate && discuz_process::islocked('block_update_cache', 5)) {
+	if((isset($_G['block'][$bid]['cachetime']) && empty($_G['block'][$bid]['cachetime'])) || !$forceupdate && discuz_process::islocked('block_update_cache', 5)) {
 		return false;
 	}
 	block_memory_clear($bid);

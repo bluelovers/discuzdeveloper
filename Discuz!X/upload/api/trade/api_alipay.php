@@ -114,6 +114,7 @@ function trade_notifycheck($type) {
 	}
 	unset($notify['diy']);
 	if(dfsockopen("http://notify.alipay.com/trade/notify_query.do?partner=".DISCUZ_PARTNER."&notify_id=".$notify['notify_id'], 60) !== 'true') {
+		exit('Access Denied');
 	}
 
 	if($type == 'trade') {
@@ -133,7 +134,7 @@ function trade_notifycheck($type) {
 		}
 	}
 
-	if($type == 'credit' && (!DISCUZ_DIRECTPAY && $notify['notify_type'] == 'trade_status_sync' && ($notify['trade_status'] == 'WAIT_SELLER_SEND_GOODS' || $notify['trade_status'] == 'TRADE_FINISHED') || DISCUZ_DIRECTPAY && $notify['trade_status'] == 'TRADE_FINISHED')
+	if($type == 'credit' && (!DISCUZ_DIRECTPAY && $notify['notify_type'] == 'trade_status_sync' && ($notify['trade_status'] == 'WAIT_SELLER_SEND_GOODS' || $notify['trade_status'] == 'TRADE_FINISHED') || DISCUZ_DIRECTPAY && ($notify['trade_status'] == 'TRADE_FINISHED' || $notify['trade_status'] == 'TRADE_SUCCESS'))
 		|| $type == 'trade' && $notify['notify_type'] == 'trade_status_sync') {
 		return array(
 			'validator'	=> TRUE,

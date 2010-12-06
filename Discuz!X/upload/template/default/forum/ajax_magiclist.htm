@@ -1,9 +1,0 @@
-{template common/header}
-<ul class="headermenu_popup inlinelist" style="width: 180px;">
-	<!--{loop $mymagiclist $magic}-->
-		<li class="wide">
-			<a href="forum.php?mod=magic&action=mybox&amp;operation=use&amp;typeid=1&amp;pid=$pid&amp;fid=$_G[fid]&amp;magicid=$magic[magicid]&amp;from=viewthread" onclick="showWindow('magics', this.href)">$magic[name]</a>($magic[num])
-		</li>
-	<!--{/loop}-->
-</ul>
-{template common/footer}

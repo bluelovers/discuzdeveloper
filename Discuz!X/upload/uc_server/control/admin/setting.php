@@ -78,7 +78,7 @@ class control extends adminbase {
 		$sendpmseccodechecked = array($settings['sendpmseccode'] => 'checked="checked"');
 		$this->view->assign('sendpmseccode', $sendpmseccodechecked);
 		$timeoffset = intval($settings['timeoffset'] / 3600);
-		$checkarray = array($timeoffset => 'selected="selected"');
+		$checkarray = array($timeoffset < 0 ? '0'.substr($timeoffset, 1) : $timeoffset => 'selected="selected"');
 		$this->view->assign('checkarray', $checkarray);
 		$this->view->assign('updated', $updated);
 		$this->view->display('admin_setting');

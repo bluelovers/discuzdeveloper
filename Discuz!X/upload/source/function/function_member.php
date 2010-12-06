@@ -82,7 +82,7 @@ function setloginstatus($member, $cookietime) {
 		dsetcookie($k);
 	}
 	$_G['uid'] = $member['uid'];
-	$_G['username'] = $member['username'];
+	$_G['username'] = addslashes($member['username']);
 	$_G['adminid'] = $member['adminid'];
 	$_G['groupid'] = $member['groupid'];
 	$_G['formhash'] = formhash();

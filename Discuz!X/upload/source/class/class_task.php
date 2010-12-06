@@ -275,7 +275,7 @@ class task {
 			$weektimestamp = $timestamp - ($todayweek - $task['period']) * 86400;
 			$weekstart = $weektimestamp - ($weektimestamp + $_G['setting']['timeoffset'] * 3600) % 86400;
 			$weekfirstday = $weekstart - $task['period'] * 86400;
-			if($task['dateline'] < $weekstart || $task['dateline'] > $weekfirstday) {
+			if($task['dateline'] && ($task['dateline'] < $weekstart || $task['dateline'] > $weekfirstday)) {
 				$allowapply = -6;
 				if($task['dateline'] > $weekfirstday) {
 					$weekstart += 604800;
@@ -288,7 +288,7 @@ class task {
 			list($year, $month) = explode('/', dgmdate(TIMESTAMP, 'Y/n'));
 			$monthstart = mktime(0, 0, 0, $month, $task['period'], $year);
 			$monthfirstday = mktime(0, 0, 0, $month, 1, $year);
-			if($task['dateline'] < $monthstart || $task['dateline'] > $monthfirstday) {
+			if($task['dateline'] && ($task['dateline'] < $monthstart || $task['dateline'] > $monthfirstday)) {
 				$allowapply = -6;
 				if($task['dateline'] > $monthfirstday) {
 					$monthstart = mktime(0, 0, 0, $month + 1, $task['period'], $year);

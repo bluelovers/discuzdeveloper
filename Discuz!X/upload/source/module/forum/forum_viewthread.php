@@ -107,17 +107,18 @@ $feeduid = $_G['forum_thread']['authorid'] ? $_G['forum_thread']['authorid'] : 0
 $feedpostnum = $_G['forum_thread']['replies'] > $_G['ppp'] ? $_G['ppp'] : ($_G['forum_thread']['replies'] ? $_G['forum_thread']['replies'] : 1);
 if(!empty($_G['gp_extra'])) {
 	parse_str($_G['gp_extra'], $extra);
-	$_G['gp_extra'] = '';
+	$_G['gp_extra'] = array();
 	foreach($extra as $_k => $_v) {
 		if(preg_match('/^\w+$/', $_k)) {
-			$_G['gp_extra'] .= '&'.$_k.'='.$_v;
+			$_G['gp_extra'][] = $_k.'='.$_v;
 		}
 	}
+	$_G['gp_extra'] = implode('&', $_G['gp_extra']);
 }
 
 if(!$_G['gp_from']) {
 	$forumarchivename = $threadtable_info[$_G['forum']['threadtableid']]['displayname'] ? htmlspecialchars($threadtable_info[$_G['forum']['threadtableid']]['displayname']) : lang('core', 'archive').' '.$_G['forum']['threadtableid'];
-	$upnavlink = 'forum.php?mod=forumdisplay&fid='.$_G['fid'].($_G['gp_extra'] && !IS_ROBOT ? $_G['gp_extra'] : '');
+	$upnavlink = 'forum.php?mod=forumdisplay&fid='.$_G['fid'].($_G['gp_extra'] && !IS_ROBOT ? '&'.$_G['gp_extra'] : '');
 	if(empty($_G['forum']['threadtableid'])) {
 		$navigation = ' <em>&rsaquo;</em> <a href="forum.php">'.$_G['setting']['navs'][2]['navname'].'</a> <em>&rsaquo;</em> <a href="'.$upnavlink.'">'.(strip_tags($_G['forum']['name']) ? strip_tags($_G['forum']['name']) : $_G['forum']['name']).'</a>';
 	} else {

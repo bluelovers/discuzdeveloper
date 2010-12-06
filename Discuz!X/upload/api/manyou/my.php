@@ -1310,6 +1310,8 @@ class My extends Manyou {
 		}
 		if ($version !== null) {
 			$fields['version'] = $version;
+			$fields['iconstatus'] = 0;
+			$fields['icondowntime'] = 0;
 		}
 		if ($displayMethod !== null) {
 			$fields['displaymethod'] = $displayMethod;
