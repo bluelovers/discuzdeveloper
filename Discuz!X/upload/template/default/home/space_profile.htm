@@ -10,7 +10,7 @@
 					<div class="pbm mbm bbda cl">
 						<h2 class="mbn">
 							{$space[username]} 
-							<!--{if TIMESTAMP - $space['lastactivitydb'] <= 10800}-->
+							<!--{if $_G['ols'][$space[uid]]}-->
 								<img src="{IMGDIR}/ol.gif" alt="online" title="{lang online}" class="vm" />&nbsp;
 							<!--{/if}-->
 							<span class="xw0">(UID: {$space[uid]})</span>

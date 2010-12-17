@@ -50,7 +50,7 @@ $lang = array
 	'feed_profile_update_edu' => '{actor} 更新了自己的教育情况',
 	'feed_profile_update_work' => '{actor} 更新了自己的工作信息',
 	'feed_profile_update_info' => '{actor} 更新了自己的个人信息',
-	'feed_profile_update_bbs' => '{actor} 更新了自己的广场信息',
+	'feed_profile_update_bbs' => '{actor} 更新了自己的个人信息',
 	'feed_profile_update_verify' => '{actor} 更新了自己的认证信息',
 
 	'feed_add_attachsize' => '{actor} 用 {credit} 个积分兑换了 {size} 附件空间，可以上传更多的图片啦(<a href="home.php?mod=spacecp&ac=credit&op=addsize">我也来兑换</a>)',

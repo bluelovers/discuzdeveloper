@@ -292,8 +292,8 @@ if($op == 'blockclass') {
 		} else {
 			$arr = import_diy($attach['target']);
 			if (!empty($arr)) {
-				$search = array('<script', '</script>',"{","}", "\r", "\n");
-				$replace = array('[script','[/script]','\{','\}', '', '');
+				$search = array('/\<script/i', '/\<\/script\>/i',"/\{/","/\}/", "/\\r/", "/\\n/", '/(\[script [^>]*?)(src=)(.*?\[\/script\])/');
+				$replace = array('[script','[/script]','\{','\}', '', '', '$1[src=]$3');
 				$arr['css'] = addslashes($arr['css']);
 				$arr['css'] = str_replace(array("{","}","\r","\n"),array('\{','\}',''),$arr['css']);
 
@@ -301,8 +301,7 @@ if($op == 'blockclass') {
 
 				foreach ($arr['html'] as $key => $value) {
 					$value = addslashes($value);
-					$value = str_replace($search,$replace,$value);
-					$value = preg_replace('/(\[script [^>]*?)(src=)(.*?\[\/script\])/','$1[src=]$3',$value);
+					$value = preg_replace($search,$replace,$value);
 					$jsarr['html'][$key] = $value;
 				}
 

@@ -135,11 +135,13 @@ if($article['allowcomment']) {
 			$form_url = "home.php?mod=spacecp&ac=comment";
 
 			$article['commentnum'] = getcount('home_comment', array('id'=>$article['id'], 'idtype'=>'blogid'));
-			$query = DB::query("SELECT authorid AS uid, author AS username, dateline, message
-				FROM ".DB::table('home_comment')." WHERE id='$article[id]' AND idtype='blogid' ORDER BY dateline DESC LIMIT 0,20");
-			while ($value = DB::fetch($query)) {
-				if($value['status'] == 0 || $_G['adminid'] == 1 || $value['uid'] == $_G['uid']) {
-					$commentlist[] = $value;
+			if($article['commentnum']) {
+				$query = DB::query("SELECT authorid AS uid, author AS username, dateline, message
+					FROM ".DB::table('home_comment')." WHERE id='$article[id]' AND idtype='blogid' ORDER BY dateline DESC LIMIT 0,20");
+				while ($value = DB::fetch($query)) {
+					if($value['status'] == 0 || $_G['adminid'] == 1 || $value['uid'] == $_G['uid']) {
+						$commentlist[] = $value;
+					}
 				}
 			}
 
@@ -152,14 +154,14 @@ if($article['allowcomment']) {
 			$posttable = getposttablebytid($article['id']);
 			$article['commentnum'] = getcount($posttable, array('tid'=>$article['id'], 'first'=>'0'));
 
-			if($article['allowcomment']) {
+			if($article['allowcomment'] && $article['commentnum']) {
 				$query = DB::query("SELECT pid, first, authorid AS uid, author AS username, dateline, message, smileyoff, bbcodeoff, htmlon, attachment, status
-					FROM ".DB::table($posttable)." WHERE tid='$article[id]' AND first='0' ORDER BY dateline DESC LIMIT 0,20");
+					FROM ".DB::table($posttable)." WHERE tid='$article[id]' AND invisible='0' ORDER BY dateline DESC LIMIT 0,20");
 				$attachpids = -1;
 				$attachtags = array();
 				$_G['group']['allowgetattach'] = 1;
 				while ($value = DB::fetch($query)) {
-					if($value['status'] == '0') {
+					if(!($value['status'] & 1) && !$value['first']) {
 						$value['message'] = discuzcode($value['message'], $value['smileyoff'], $value['bbcodeoff'], $value['htmlon']);
 						$value['cid'] = $value['pid'];
 						$commentlist[$value['pid']] = $value;

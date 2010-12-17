@@ -1570,7 +1570,7 @@ EOT;
 		$fieldarr = array();
 		include_once libfile('function/profile');
 		foreach($_POST as $field_key=>$field_val) {
-			if(isset($fields[$field_key]) && profile_check($field_key, $field_val)) {
+			if(isset($fields[$field_key]) && (profile_check($field_key, $field_val) || $_G['adminid'] == 1)) {
 				$fieldarr[$field_key] = "$field_key='".$field_val."'";
 			}
 		}

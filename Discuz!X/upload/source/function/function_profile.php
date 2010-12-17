@@ -352,4 +352,22 @@ function showdistrict($values, $elems=array(), $container='districtbox', $showle
 	return $html;
 }
 
+function get_constellation($birthmonth,$birthday) {
+	$birthmonth = intval($birthmonth);
+	$birthday = intval($birthday);
+	$idx = $birthmonth;
+	if ($birthday <= 22) {
+		if (1 == $birthmonth) {
+			$idx = 12;
+		} else {
+			$idx = $birthmonth - 1;
+		}
+	}
+	return $idx > 0 && $idx <= 12 ? lang('space', 'constellation_'.$idx) : '';
+}
+function get_zodiac($birthyear) {
+	$birthyear = intval($birthyear);
+	$idx = (($birthyear - 1900) % 12) + 1;
+	return $idx > 0 && $idx <= 12 ? lang('space', 'zodiac_'. $idx) : '';
+}
 ?>

@@ -162,7 +162,7 @@ if($operation == 'export') {
 			}
 		}
 
-		$backupfilename = './data/'.$backupdir.'/'.str_replace(array('/', '\\', '.'), '', $_G['gp_filename']);
+		$backupfilename = './data/'.$backupdir.'/'.str_replace(array('/', '\\', '.', "'"), '', $_G['gp_filename']);
 
 		if($_G['gp_usezip']) {
 			require_once './source/class/class_zip.php';
@@ -174,7 +174,7 @@ if($operation == 'export') {
 			$tableid = intval($_G['gp_tableid']);
 			$startfrom = intval($_G['gp_startfrom']);
 
-			if(!$tableid) {
+			if(!$tableid && $volume == 1) {
 				foreach($tables as $table) {
 					$sqldump .= sqldumptablestruct($table);
 				}
@@ -1228,7 +1228,7 @@ function sqldumptable($table, $startfrom = 0, $currsize = 0) {
 		if($_G['gp_extendins'] == '0') {
 			while($currsize + strlen($tabledump) + 500 < $_G['gp_sizelimit'] * 1000 && $numrows == $offset) {
 				if($firstfield['Extra'] == 'auto_increment') {
-					$selectsql = "SELECT * FROM $table WHERE $firstfield[Field] > $startfrom LIMIT $offset";
+					$selectsql = "SELECT * FROM $table WHERE $firstfield[Field] > $startfrom ORDER BY $firstfield[Field] LIMIT $offset";
 				} else {
 					$selectsql = "SELECT * FROM $table LIMIT $startfrom, $offset";
 				}

@@ -176,6 +176,9 @@ function succeedhandle_mods(locationhref) {
 	<!--{elseif $_G[gp_action] == 'banpost' || $_G[gp_action] == 'warn'}-->
 		<!--{loop $topiclist $pid}-->
 			ajaxget('forum.php?mod=viewthread&tid=$_G[tid]&viewpid=$pid&modclick=yes', 'post_$pid', 'post_$pid');
+			if($('topiclist_$pid')) {
+				$('modactions').removeChild($('topiclist_$pid'));
+			}
 		<!--{/loop}-->
 		hideWindow('mods');
 		resetmodcount();

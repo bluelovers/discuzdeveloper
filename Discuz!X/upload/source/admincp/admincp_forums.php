@@ -179,6 +179,7 @@ var rowtypedata = [
 					$forumfields['fid'] = $fid = DB::insert('forum_forum', $data, 1);
 
 					$data = array();
+					$forumfields['threadtypes'] = copy_threadclasses($forumfields['threadtypes'], $fid);
 					foreach($table_forumfield_columns as $field) {
 						if(isset($forumfields[$field])) {
 							$data[$field] = $forumfields[$field];
@@ -1990,4 +1991,22 @@ function get_forum_by_fid($fid, $field = '', $table = 'forum') {
 	return $return;
 }
 
+function copy_threadclasses($threadtypes, $fid) {
+	global $_G;
+	if($threadtypes) {
+		$threadtypes = unserialize($threadtypes);
+		$i = 0;
+		$data = array();
+		foreach($threadtypes['types'] as $key => $val) {
+			$data = array('fid' => $fid, 'name' => addslashes($val), 'displayorder' => $i++, 'icon' => addslashes($threadtypes['icons'][$key]));
+			$newtypeid = DB::insert('forum_threadclass', $data, 1);
+			$newtypes[$newtypeid] = $val;
+			$newicons[$newtypeid] = $threadtypes['icons'][$key];
+		}
+		$threadtypes['types'] = $newtypes;
+		$threadtypes['icons'] = $newicons;
+		return serialize($threadtypes);
+	}
+	return '';
+}
 ?>

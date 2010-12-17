@@ -608,38 +608,11 @@ if($operation == 'threads') {
 				}
 			}
 
-			$optiondata = $optionlist = array();
 			if($thread['sortid']) {
-				if(@include DISCUZ_ROOT.'./data/cache/forum_threadsort_'.$thread['sortid'].'.php') {
-					$sortquery = DB::query("SELECT optionid, value FROM ".DB::table('forum_typeoptionvar')." WHERE tid='$thread[tid]'");
-					while($option = DB::fetch($sortquery)) {
-						$optiondata[$option['optionid']] = $option['value'];
-					}
+				require_once libfile('function/threadsort');
+				$threadsortshow = threadsortshow($thread['sortid'], $thread['tid']);
 
-					foreach($_G['forum_dtype'] as $optionid => $option) {
-						$optionlist[$option['identifier']]['title'] = $_G['forum_dtype'][$optionid]['title'];
-						if($_G['forum_dtype'][$optionid]['type'] == 'checkbox') {
-							$optionlist[$option['identifier']]['value'] = '';
-							foreach(explode("\t", $optiondata[$optionid]) as $choiceid) {
-								$optionlist[$option['identifier']]['value'] .= $_G['forum_dtype'][$optionid]['choices'][$choiceid].'&nbsp;';
-							}
-						} elseif(in_array($_G['forum_dtype'][$optionid]['type'], array('radio', 'select'))) {
-							$optionlist[$option['identifier']]['value'] = $_G['forum_dtype'][$optionid]['choices'][$optiondata[$optionid]];
-						} elseif($_G['forum_dtype'][$optionid]['type'] == 'image') {
-							$maxwidth = $_G['forum_dtype'][$optionid]['maxwidth'] ? 'width="'.$_G['forum_dtype'][$optionid]['maxwidth'].'"' : '';
-							$maxheight = $_G['forum_dtype'][$optionid]['maxheight'] ? 'height="'.$_G['forum_dtype'][$optionid]['maxheight'].'"' : '';
-							$optionlist[$option['identifier']]['value'] = $optiondata[$optionid] ? "<a href=\"$optiondata[$optionid]\" target=\"_blank\"><img src=\"$optiondata[$optionid]\"  $maxwidth $maxheight border=\"0\"></a>" : '';
-						} elseif($_G['forum_dtype'][$optionid]['type'] == 'url') {
-							$optionlist[$option['identifier']]['value'] = $optiondata[$optionid] ? "<a href=\"$optiondata[$optionid]\" target=\"_blank\">$optiondata[$optionid]</a>" : '';
-						} elseif($_G['forum_dtype'][$optionid]['type'] == 'textarea') {
-							$optionlist[$option['identifier']]['value'] = $optiondata[$optionid] ? nl2br($optiondata[$optionid]) : '';
-						} else {
-							$optionlist[$option['identifier']]['value'] = $optiondata[$optionid];
-						}
-					}
-				}
-
-				foreach($optionlist as $option) {
+				foreach($threadsortshow['optionlist'] as $option) {
 					$threadsortinfo .= $option['title'].' '.$option['value']."<br />";
 				}
 			}

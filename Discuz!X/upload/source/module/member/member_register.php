@@ -225,6 +225,12 @@ if(!submitcheck('regsubmit', 0, $seccodecheck, $secqaacheck)) {
 			$profile[$field_key] = $field_val;
 		}
 	}
+	if(isset($_POST['birthmonth']) && isset($_POST['birthday'])) {
+		$profile['constellation'] = get_constellation($_POST['birthmonth'], $_POST['birthday']);
+	}
+	if(isset($_POST['birthyear'])) {
+		$profile['zodiac'] = get_zodiac($_POST['birthyear']);
+	}
 	if($_FILES) {
 		require_once libfile('class/upload');
 		$upload = new discuz_upload();

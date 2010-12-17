@@ -254,7 +254,7 @@ if($action == 'index') {
 	if(!submitcheck('createsubmit')) {
 		$groupselect = get_groupselect(getgpc('fupid'), getgpc('groupid'));
 	} else {
-		$_G['gp_name'] = dhtmlspecialchars(censor(addslashes(cutstr(stripslashes(trim($_G['gp_name'])), 20, ''))));
+		$_G['gp_name'] = censor(addslashes(dhtmlspecialchars(cutstr(stripslashes(trim($_G['gp_name'])), 20, ''))));
 		if(empty($_G['gp_name'])) {
 			showmessage('group_name_empty');
 		} elseif(empty($_G['gp_fup'])) {
@@ -334,14 +334,14 @@ if($action == 'index') {
 				}
 
 				if(isset($_G['gp_name'])) {
-					$_G['gp_name'] = dhtmlspecialchars(censor(addslashes(cutstr(stripslashes(trim($_G['gp_name'])), 20, ''))));
+					$_G['gp_name'] = censor(addslashes(dhtmlspecialchars(cutstr(stripslashes(trim($_G['gp_name'])), 20, ''))));
 					if(empty($_G['gp_name'])) showmessage('group_name_empty');
 				} elseif(isset($_G['gp_fup']) && empty($_G['gp_fup'])) {
 					showmessage('group_category_empty');
 				}
 
 
-				if(!empty($_G['gp_name']) && $_G['gp_name'] != $_G['forum']['name']) {
+				if(!empty($_G['gp_name']) && $_G['gp_name'] != addslashes($_G['forum']['name'])) {
 					if(DB::result(DB::query("SELECT fid FROM ".DB::table('forum_forum')." WHERE name='$_G[gp_name]'"), 0)) {
 						showmessage('group_name_exist', $url);
 					}

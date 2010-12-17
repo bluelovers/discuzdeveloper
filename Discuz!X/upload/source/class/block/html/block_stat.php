@@ -162,11 +162,6 @@ class block_stat extends commonblock_html {
 			$html .= "<th$class><p>".intval($postdata[0]).'</p>'.(!empty($parameter['bbslastposts_title']) ? $parameter['bbslastposts_title'] : lang('block/stat', 'stat_bbslastposts')).'</th>';
 		}
 		if(in_array('onlinemembers', $parameter['option'])) {
-			if(!empty($_G['cookie']['onlineusernum'])) {
-				$num = intval($_G['cookie']['onlineusernum']);
-			} else {
-				$num = DB::result_first("SELECT count(*) FROM ".DB::table('common_session'));
-			}
 			$num = !empty($_G['cookie']['onlineusernum']) ? intval($_G['cookie']['onlineusernum']) : DB::result_first("SELECT count(*) FROM ".DB::table('common_session'));
 			$class = ($index-- == 0) ? ' class="bbn"' : '';
 			$html .= "<th$class><p>".intval($num).'</p>'.(!empty($parameter['onlinemembers_title']) ? $parameter['onlinemembers_title'] : lang('block/stat', 'stat_onlinemembers')).'</th>';

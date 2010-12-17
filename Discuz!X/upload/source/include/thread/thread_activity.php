@@ -26,7 +26,7 @@ if($_G['uid']) {
 }
 $applylist = array();
 $activity = DB::fetch_first("SELECT * FROM ".DB::table('forum_activity')." WHERE tid='$_G[tid]'");
-$activityclose = $activity['expiration'] ? ($activity['expiration'] > TIMESTAMP - date('Z') ? 0 : 1) : 0;
+$activityclose = $activity['expiration'] ? ($activity['expiration'] > TIMESTAMP ? 0 : 1) : 0;
 $activity['starttimefrom'] = dgmdate($activity['starttimefrom'], 'u');
 $activity['starttimeto'] = $activity['starttimeto'] ? dgmdate($activity['starttimeto']) : 0;
 $activity['expiration'] = $activity['expiration'] ? dgmdate($activity['expiration']) : 0;
@@ -74,6 +74,7 @@ while($activityapplies = DB::fetch($query)) {
 	if($activityapplies['verified'] == 1) {
 		$activityapplies['ufielddata'] = unserialize($activityapplies['ufielddata']);
 		if(count($applylist) < 8) {
+			$activityapplies['message'] = preg_replace("/(".lang('forum/misc', 'contact').".*)/", '', $activityapplies['message']);
 			$applylist[] = $activityapplies;
 		}
 	} else {

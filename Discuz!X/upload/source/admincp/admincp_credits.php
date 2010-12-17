@@ -193,6 +193,7 @@ if($operation == 'list') {
 				}
 				DB::update('forum_forumfield', array('creditspolicy' => addslashes(serialize($policy))), array('fid' => $fid));
 				DB::update('common_credit_rule', array('fids' => implode(',', $fids)), array('rid' => $rid));
+				updatecache('creditrule');
 				cpmsg('credits_update_succeed', 'action=forums&operation=edit&anchor=credits&fid='.$fid, 'succeed');
 			} else {
 				DB::update('common_credit_rule', $rule, array('rid' => $rid));

@@ -57,7 +57,7 @@ function pidchecked(obj) {
 		}
 		inp.id = 'topiclist_' + obj.value;
 		inp.value = obj.value;
-		inp.style.display = 'none';
+		inp.type = 'hidden';
 		$('modactions').appendChild(inp);
 	} else {
 		$('modactions').removeChild($('topiclist_' + obj.value));

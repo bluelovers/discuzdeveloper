@@ -170,7 +170,7 @@ function block_memory_clear($bid) {
 function block_updatecache($bid, $forceupdate=false) {
 	global $_G;
 
-	if((isset($_G['block'][$bid]['cachetime']) && empty($_G['block'][$bid]['cachetime'])) || !$forceupdate && discuz_process::islocked('block_update_cache', 5)) {
+	if(!$forceupdate && discuz_process::islocked('block_update_cache', 5)) {
 		return false;
 	}
 	block_memory_clear($bid);
@@ -313,6 +313,8 @@ function block_template($bid) {
 			$blockitem['parity'] = $order % 2;
 
 			$searcharr = $replacearr = array();
+			$searcharr[] = '{parity}';
+			$replacearr[] = $blockitem['parity'];
 			foreach($fields as $key=>$field) {
 				$replacevalue = isset($blockitem[$key]) ? $blockitem[$key] : (isset($blockitem['fields'][$key]) ? $blockitem['fields'][$key] : '');
 				$field['datatype'] = !empty($field['datatype']) ? $field['datatype'] : '';

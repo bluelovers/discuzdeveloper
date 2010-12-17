@@ -259,7 +259,7 @@ if($allowposturl < 3 && $message) {
 				break;
 			} elseif($allowposturl == 2) {
 				$message = str_replace('[url]'.$urllist[0][$key].'[/url]', $urllist[0][$key], $message);
-				$message = preg_replace("@\[url={$urllist[0][$key]}\](.*?)\[/url\]@i", '\\1', $message);
+				$message = preg_replace(array("@\[url=".preg_quote($urllist[0][$key])."\](.*?)\[/url\]@i"),array('\\1'),$message);
 			}
 		}
 	}

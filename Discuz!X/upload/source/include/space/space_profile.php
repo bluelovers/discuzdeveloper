@@ -18,6 +18,7 @@ space_merge($space, 'field_home');
 space_merge($space, 'field_forum');
 space_merge($space, 'profile');
 space_merge($space, 'status');
+getonlinemember(array($space['uid']));
 
 if($space['videophoto'] && ckvideophoto('viewphoto', $space, 1)) {
 	$space['videophoto'] = getvideophoto($space['videophoto']);

@@ -23,7 +23,7 @@
 					<!--{if !empty($specialswitch['allowchangename']) && ($_G['uid'] == $_G['forum']['founderuid'] || $_G['adminid'] == 1)}-->
 					<tr>
 						<th><strong class="rq">*</strong>{lang group_name}:</th>
-						<td><input type="text" id="name" name="name" class="px" size="36" tabindex="1" value="$_G[forum][name]" autocomplete="off" onBlur="checkgroupname()" tabindex="1" /></td>
+						<td><input type="text" id="name" name="name" class="px" size="36" tabindex="1" value="$_G[forum][name]" autocomplete="off" tabindex="1" /></td>
 					</tr>
 					<!--{/if}-->
 					<!--{if !empty($specialswitch['allowchangetype']) && ($_G['uid'] == $_G['forum']['founderuid'] || $_G['adminid'] == 1)}-->
@@ -114,16 +114,6 @@
 			</table>
 		</form>
 	</div>
-
-	<script type="text/javascript">
-		function checkgroupname() {
-			var oldgroupname = '$_G[forum][name]';
-			var groupname = trim($('name').value);
-			if(groupname != oldgroupname) {
-				ajaxget('forum.php?mod=ajax&forumcheck=1&infloat=creategroup&handlekey=creategroup&action=checkgroupname&groupname=' + (BROWSER.ie && document.charset == 'utf-8' ? encodeURIComponent(groupname) : groupname), 'returnmessage4');
-			}
-		}
-	</script>
 <!--{elseif $_G['gp_op'] == 'checkuser'}-->
 	<!--{if $checkusers}-->
 		<p class="tbmu cl">

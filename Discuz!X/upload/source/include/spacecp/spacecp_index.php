@@ -215,7 +215,7 @@ if (submitcheck('musicsubmit')) {
 	}
 	$setarr['blockposition'] = daddslashes(serialize($blockdata));
 	DB::update('common_member_field_home', $setarr, "uid = {$space['uid']}");
-	showmessage('do_success', 'portal.php?mod=spacecp&ac=index&op=getblock&blockname='.$blockname, array('blockname'=>$blockname));
+	showmessage('do_success', 'home.php?mod=spacecp&ac=index&op=getblock&blockname='.$blockname, array('blockname'=>$blockname));
 }
 
 if (submitcheck('diysubmit')) {

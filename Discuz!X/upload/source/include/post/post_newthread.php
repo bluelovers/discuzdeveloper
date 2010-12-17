@@ -218,7 +218,7 @@ if(!submitcheck('topicsubmit', 0, $seccodecheck, $secqaacheck)) {
 		$activity['number'] = intval($_G['gp_activitynumber']);
 
 		if($_G['gp_activityexpiration']) {
-			$activity['expiration'] = @strtotime($_G['gp_activityexpiration']);
+			$activity['expiration'] = @strtotime($_G['gp_activityexpiration']) - date('Z');
 		} else {
 			$activity['expiration'] = 0;
 		}

@@ -380,7 +380,10 @@
 				 for (var i in ids) {
 					 if (typeof ids[i] == 'object' && ids[i].checked) {
 						id = parseInt(ids[i].value)+1;
-						$(id).parentNode.removeChild($(id));
+						var obj = $(id);
+						if(obj) {
+							obj.parentNode.removeChild(obj);
+						}
 					 }
 				 }
 			}

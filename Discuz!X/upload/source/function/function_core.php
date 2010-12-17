@@ -2413,4 +2413,16 @@ function return_bytes($val) {
     return $val;
 }
 
+function getonlinemember($uids) {
+	global $_G;
+	if ($uids && is_array($uids) && empty($_G['ols'])) {
+		$_G['ols'] = array();
+		$query = DB::query("SELECT * FROM ".DB::table('common_session')." WHERE uid IN (".dimplode($uids).")");
+		while ($value = DB::fetch($query)) {
+			if(!$value['invisible']) {
+				$_G['ols'][$value['uid']] = $value['lastactivity'];
+			}
+		}
+	}
+}
 ?>

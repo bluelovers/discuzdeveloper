@@ -392,7 +392,7 @@ if(!submitcheck('editsubmit')) {
 				$activity['gender'] = intval($_G['gp_gender']);
 				$activity['number'] = intval($_G['gp_activitynumber']);
 				if($_G['gp_activityexpiration']) {
-					$activity['expiration'] = @strtotime($_G['gp_activityexpiration']);
+					$activity['expiration'] = @strtotime($_G['gp_activityexpiration']) - date('Z');
 				} else {
 					$activity['expiration'] = 0;
 				}
@@ -493,6 +493,7 @@ if(!submitcheck('editsubmit')) {
 			$displayorder = empty($_G['gp_save']) ? ($thread['displayorder'] == -4 ? 0 : $thread['displayorder']) : -4;
 
 			DB::query("UPDATE ".DB::table('forum_thread')." SET typeid='$typeid', sortid='$sortid', subject='$subject', readperm='$readperm', price='$price' $authoradd $polladd ".($_G['forum_auditstatuson'] && $audit == 1 ? ",displayorder='$displayorder', moderated='1'" : ",displayorder='$displayorder'").", status='$thread[status]' WHERE tid='$_G[tid]'", 'UNBUFFERED');
+			$_G['tid'] > 1 && DB::query("UPDATE ".DB::table('forum_thread')." SET subject='$subject' WHERE closed='$_G[tid]'", 'UNBUFFERED');
 
 		} else {
 

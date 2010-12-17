@@ -16,7 +16,9 @@ function build_cache_groupicon() {
 	$query = DB::query("SELECT * FROM ".DB::table('forum_onlinelist')." ORDER BY displayorder");
 
 	while($list = DB::fetch($query)) {
-		$data[$list['groupid']] = STATICURL.'image/common/'.$list['url'];
+		if($list['url']) {
+			$data[$list['groupid']] = STATICURL.'image/common/'.$list['url'];
+		}
 	}
 
 	save_syscache('groupicon', $data);
