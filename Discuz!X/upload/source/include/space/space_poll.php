@@ -15,6 +15,7 @@ $minhot = $_G['setting']['feedhotmin']<1?3:$_G['setting']['feedhotmin'];
 $page = empty($_GET['page'])?1:intval($_GET['page']);
 if($page<1) $page=1;
 $id = empty($_GET['id'])?0:intval($_GET['id']);
+$_G['gp_order'] = in_array($_G['gp_order'], array('dateline', 'hot')) ? $_G['gp_order'] : 'dateline';
 
 if(empty($_GET['view'])) $_GET['view'] = 'we';
 
@@ -32,7 +33,7 @@ $gets = array(
 	'uid' => $space['uid'],
 	'do' => 'poll',
 	'view' => $_GET['view'],
-	'order' => $_GET['order'],
+	'order' => $_G['gp_order'],
 	'fuid' => $_GET['fuid'],
 	'filter' => $_G['gp_filter'],
 	'searchkey' => $_GET['searchkey']
@@ -47,7 +48,7 @@ $need_count = true;
 
 if($_GET['view'] == 'all') {
 
-	if($_GET['order'] == 'hot') {
+	if($_G['gp_order'] == 'hot') {
 		$wheresql .= " AND t.replies>='$minhot'";
 		$orderactives = array('hot' => ' class="a"');
 	} else {
@@ -100,6 +101,7 @@ if($need_count) {
 
 	if($searchkey = stripsearchkey($_GET['searchkey'])) {
 		$wheresql .= " AND t.subject LIKE '%$searchkey%'";
+		$searchkey = dhtmlspecialchars($searchkey);
 	}
 
 	$count = DB::result(DB::query("SELECT COUNT(*) FROM ".DB::table('forum_thread')." t $apply_sql WHERE $wheresql"),0);

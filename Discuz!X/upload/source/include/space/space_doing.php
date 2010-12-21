@@ -75,6 +75,7 @@ if($doid) {
 
 if($searchkey = stripsearchkey($_GET['searchkey'])) {
 	$wheresql .= " AND message LIKE '%$searchkey%'";
+	$searchkey = dhtmlspecialchars($searchkey);
 }
 
 if(empty($count)) {

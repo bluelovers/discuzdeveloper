@@ -111,6 +111,7 @@ if($op == 'recommend') {
 				$_GET['searchkey'] = stripsearchkey($_GET['searchkey']);
 				$wherearr[] = " b.name LIKE '%$_GET[searchkey]%'";
 			}
+			$_GET['searchkey'] = dhtmlspecialchars($_GET['searchkey']);
 		}
 
 		require_once libfile('function/block');

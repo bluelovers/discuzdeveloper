@@ -625,9 +625,6 @@ function get_cachedata_mainnav() {
 				continue;
 			}
 		}
-		$data['navs'][$id]['nav'] = "id=\"$navid\" ".($onmouseover ? 'onmouseover="'.$onmouseover.'"' : '')."><a href=\"$nav[url]\" hidefocus=\"true\" ".($nav['title'] ? "title=\"$nav[title]\" " : '').($nav['target'] == 1 ? "target=\"_blank\" " : '')." $nav[style]>$nav[name]</a";
-		$data['navs'][$id]['navid'] = $navid;
-		$data['navs'][$id]['level'] = $nav['level'];
 
 		$purl = parse_url($nav['url']);
 		$getvars = array();
@@ -639,6 +636,15 @@ function get_cachedata_mainnav() {
 		} elseif($purl['path']) {
 			$data['navmn'][$purl['path']] = $navid;
 		}
+		if($nav['type'] == 0) {
+			$domainkey = substr($purl['path'], 0, -strlen(strrchr($purl['path'], '.')));
+			if(!empty($_G['setting']['domain']['app'][$domainkey])) {
+				$nav['url'] = 'http://'.$_G['setting']['domain']['app'][$domainkey];
+			}
+		}
+		$data['navs'][$id]['nav'] = "id=\"$navid\" ".($onmouseover ? 'onmouseover="'.$onmouseover.'"' : '')."><a href=\"$nav[url]\" hidefocus=\"true\" ".($nav['title'] ? "title=\"$nav[title]\" " : '').($nav['target'] == 1 ? "target=\"_blank\" " : '')." $nav[style]>$nav[name]</a";
+		$data['navs'][$id]['navid'] = $navid;
+		$data['navs'][$id]['level'] = $nav['level'];
 	}
 	$data['menunavs'] = implode('', $data['menunavs']);
 

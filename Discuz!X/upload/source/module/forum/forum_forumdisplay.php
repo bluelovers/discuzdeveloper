@@ -308,13 +308,13 @@ if($filter) {
 			foreach($filterfield as $option) {
 				foreach($geturl as $field => $value) {
 					if(in_array($field, $filterfield) && $option != $field && $field != 'page') {
-						$forumdisplayadd[$option] .= '&'.$field.'='.$value;
+						$forumdisplayadd[$option] .= '&'.$field.'='.rawurlencode($value);
 					}
 				}
 				if($issort) {
 					$sfilterfield = array_merge(array('filter', 'sortid', 'orderby', 'fid'), $filterfield);
 					foreach($geturl as $soption => $value) {
-						$forumdisplayadd[$soption] .= !in_array($soption, $sfilterfield) ? "&$soption=$value" : '';
+						$forumdisplayadd[$soption] .= !in_array($soption, $sfilterfield) ? "&$soption=".rawurlencode($value) : '';
 					}
 				}
 			}
@@ -329,7 +329,7 @@ if($filter) {
 
 			foreach($geturl as $field => $value) {
 				if($field != 'page' && $field != 'fid') {
-					$multiadd[] = $field.'='.$value;
+					$multiadd[] = $field.'='.rawurlencode($value);
 					if(in_array($field, $filterfield)) {
 						$filteradd .= $sp;
 						if($field == 'digest') {

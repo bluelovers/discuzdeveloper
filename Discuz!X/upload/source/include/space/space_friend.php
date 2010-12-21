@@ -152,6 +152,7 @@ if($_GET['view'] == 'online') {
 	if($_GET['searchkey']) {
 		$wheresql = "AND main.fusername LIKE '%$_GET[searchkey]%'";
 		$theurl .= "&searchkey=$_GET[searchkey]";
+		$_GET['searchkey'] = dhtmlspecialchars($_GET['searchkey']);
 	}
 
 	$count = DB::result(DB::query("SELECT COUNT(*) FROM ".DB::table('home_friend')." main WHERE main.uid='$space[uid]' $wheresql"), 0);

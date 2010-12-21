@@ -392,6 +392,7 @@ if($id) {
 
 		if($searchkey = stripsearchkey($_GET['searchkey'])) {
 			$wheresql .= " AND albumname LIKE '%$searchkey%'";
+			$searchkey = dhtmlspecialchars($searchkey);
 		}
 
 		$catid = empty($_GET['catid'])?0:intval($_GET['catid']);

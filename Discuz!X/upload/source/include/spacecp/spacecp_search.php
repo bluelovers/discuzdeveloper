@@ -32,6 +32,7 @@ if(!empty($_GET['searchsubmit']) || !empty($_GET['searchmode'])) {
 
 	if($searchkey = stripsearchkey($_GET['searchkey'])) {
 		$wherearr[] = "s.username='$searchkey'";
+		$searchkey = dhtmlspecialchars($searchkey);
 	} else {
 		foreach (array('uid','username','videophotostatus','avatarstatus') as $value) {
 			if($_GET[$value]) {

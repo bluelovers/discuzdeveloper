@@ -83,7 +83,7 @@
 				</div>
 				<!--{elseif !empty($_G['cookie']['loginuser'])}-->
 				<p>
-					<strong><a id="loginuser" class="noborder">$_G['cookie']['loginuser']</a></strong>
+					<strong><a id="loginuser" class="noborder">{echo htmlspecialchars($_G['cookie']['loginuser'])}</a></strong>
 					<span class="pipe">|</span><a href="member.php?mod=logging&action=login" onclick="showWindow('login', this.href);hideWindow('register');">{lang activation}</a>
 					<span class="pipe">|</span><a href="member.php?mod=logging&action=logout&formhash={FORMHASH}">{lang logout}</a>
 				</p>

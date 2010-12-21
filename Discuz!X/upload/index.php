@@ -115,6 +115,12 @@ if(!empty($_SERVER['QUERY_STRING']) && is_numeric($_SERVER['QUERY_STRING'])) {
 	}
 }
 if(!empty($url)) {
+	$delimiter = strrpos($url, '?') ? '&' : '?';
+	if($_GET['fromuid']) {
+		$url .= $delimiter.'fromuid='.$_GET['fromuid'];
+	} elseif($_GET['fromuser']) {
+		$url .= $delimiter.'fromuser='.$_GET['fromuser'];
+	}
 	header("HTTP/1.1 301 Moved Permanently");
 	header("location: $url");
 } else {

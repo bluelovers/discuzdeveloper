@@ -245,6 +245,7 @@ if($id) {
 	if($need_count) {
 		if($searchkey = stripsearchkey($_GET['searchkey'])) {
 			$wheresql .= " AND b.subject LIKE '%$searchkey%'";
+			$searchkey = dhtmlspecialchars($searchkey);
 		}
 
 		$catid = empty($_GET['catid'])?0:intval($_GET['catid']);

@@ -170,6 +170,9 @@ EOF;
 		$randkeys = array();
 		$likekeys = array('username');
 		$results = getwheres($intkeys, $strkeys, $randkeys, $likekeys, 'v.');
+		foreach($likekeys as $k) {
+			$_GET[$k] = htmlspecialchars($_GET[$k]);
+		}
 		$mpurl .= '&'.implode('&', $results['urls']);
 		$wherearr = $results['wherearr'];
 		if($_G['gp_dateline1']){

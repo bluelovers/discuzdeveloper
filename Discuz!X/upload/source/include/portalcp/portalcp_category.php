@@ -39,6 +39,7 @@ $wherearr[] = "catid IN (".dimplode($catids).")";
 if($_GET['searchkey']) {
 	$_GET['searchkey'] = stripsearchkey($_GET['searchkey']);
 	$wherearr[] = "title LIKE '%$_GET[searchkey]%'";
+	$_GET['searchkey'] = dhtmlspecialchars($_GET['searchkey']);
 }
 if($_GET['type'] == 'recommended') {
 	$wherearr[] = "bid != ''";

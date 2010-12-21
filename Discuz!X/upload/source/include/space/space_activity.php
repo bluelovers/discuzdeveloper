@@ -103,6 +103,7 @@ if($need_count) {
 
 	if($searchkey = stripsearchkey($_GET['searchkey'])) {
 		$threadsql .= " AND t.subject LIKE '%$searchkey%'";
+		$searchkey = dhtmlspecialchars($searchkey);
 	}
 	$count = DB::result(DB::query("SELECT COUNT(*) FROM ".DB::table('forum_activity')." a $apply_sql WHERE $wheresql"),0);
 	if($count) {

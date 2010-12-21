@@ -32,7 +32,7 @@ if(empty($orig)) {
 	showmessage('undefined_action');
 } elseif((!$_G['forum']['ismoderator'] || !$_G['group']['alloweditpost'] || (in_array($orig['adminid'], array(1, 2, 3)) && $_G['adminid'] > $orig['adminid'])) && !(($_G['forum']['alloweditpost'] || $orig['invisible'] == -3)&& $isorigauthor)) {
 	showmessage('post_edit_nopermission', NULL);
-} elseif($isorigauthor && !$_G['forum']['ismoderator']) {
+} elseif($isorigauthor && !$_G['forum']['ismoderator'] && $orig['invisible'] != -3) {
 	$alloweditpost_status = getstatus($_G['setting']['alloweditpost'], $special + 1);
 	if(!$alloweditpost_status && $_G['group']['edittimelimit'] && TIMESTAMP - $orig['dateline'] > $_G['group']['edittimelimit'] * 60) {
 		showmessage('post_edit_timelimit', NULL, array('edittimelimit' => $_G['group']['edittimelimit']));

@@ -89,6 +89,7 @@ if($_GET['searchkey']) {
 			$bids[] = intval($value['bid']);
 		}
 	}
+	$_GET['searchkey'] = dhtmlspecialchars($_GET['searchkey']);
 }
 
 $datalist = $ids = array();

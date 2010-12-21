@@ -100,6 +100,7 @@ if($need_count) {
 	$wheresql .= " AND t.special='5'";
 	if($searchkey = stripsearchkey($_GET['searchkey'])) {
 		$wheresql .= " AND t.subject LIKE '%$searchkey%'";
+		$searchkey = dhtmlspecialchars($searchkey);
 	}
 
 	$count = DB::result(DB::query("SELECT COUNT(*) FROM ".DB::table('forum_thread')." t $apply_sql WHERE $wheresql"),0);

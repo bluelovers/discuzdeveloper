@@ -85,6 +85,7 @@ if($need_count) {
 
 	if($searchkey = stripsearchkey($_GET['searchkey'])) {
 		$wheresql .= " AND t.subject LIKE '%$searchkey%'";
+		$searchkey = dhtmlspecialchars($searchkey);
 	}
 
 	if($_G['gp_flag'] < 0) {

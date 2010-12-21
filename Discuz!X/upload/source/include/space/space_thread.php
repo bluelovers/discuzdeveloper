@@ -251,6 +251,7 @@ if($need_count) {
 
 	if($searchkey = stripsearchkey($_GET['searchkey'])) {
 		$wheresql .= " AND t.subject LIKE '%$searchkey%'";
+		$searchkey = dhtmlspecialchars($searchkey);
 	}
 
 	$havecache = false;
