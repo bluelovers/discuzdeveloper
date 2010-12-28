@@ -860,7 +860,7 @@ EOT;
 			if(empty($_G['gp_searchoption']) && !$_G['gp_sortid']) {
 				cpmsg('threadtype_content_no_choice', 'action=threadtypes&operation=content', 'error');
 			}
-			$mpurl = 'admin.php?action=threadtypes&operation=content&sortid='.$_G['gp_sortid'].'&searchsortsubmit=true';
+			$mpurl = ADMINSCRIPT.'?action=threadtypes&operation=content&sortid='.$_G['gp_sortid'].'&searchsortsubmit=true';
 			if(!is_array($_G['gp_searchoption'])) {
 				$mpurl .= '&searchoption='.$_G['gp_searchoption'];
 				$_G['gp_searchoption'] = unserialize(base64_decode($_G['gp_searchoption']));

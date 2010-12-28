@@ -158,7 +158,7 @@ function build_cache_setting() {
 	$data['commentitem'] = $commentitem;
 
 	if($data['allowviewuserthread']['allow']) {
-		$data['allowviewuserthread'] = is_array($data['allowviewuserthread']['fids']) && $data['allowviewuserthread']['fids'] ? dimplode($data['allowviewuserthread']['fids']) : '';
+		$data['allowviewuserthread'] = is_array($data['allowviewuserthread']['fids']) && $data['allowviewuserthread']['fids'] && !in_array('', $data['allowviewuserthread']['fids']) ? dimplode($data['allowviewuserthread']['fids']) : '';
 	} else {
 		$data['allowviewuserthread'] = false;
 	}

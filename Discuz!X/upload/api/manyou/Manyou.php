@@ -38,8 +38,23 @@ class Manyou {
 	}
 
 	function run() {
-		$response = $this->_processServerRequest();
+		$result = $this->checkRequest();
+		if($result) {
+			$response = $result;
+		} else {
+			$response = $this->_processServerRequest();
+		}
 		echo serialize($this->_formatLocalResponse($response));
+	}
+
+	function checkRequest() {
+		$siteuniqueid = DB::result_first("SELECT svalue FROM ".DB::table('common_setting')." WHERE skey='siteuniqueid'");
+		if (empty($siteuniqueid)) {
+			return new ErrorResponse('11', 'Client SiteKey NOT Exists');
+		} elseif (empty($this->siteKey)) {
+			return new ErrorResponse('12', 'My SiteKey NOT Exists');
+		}
+		return false;
 	}
 
 	function getApplicationIframe($aId, $uId) {

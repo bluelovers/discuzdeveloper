@@ -256,10 +256,10 @@ function sub_url($url, $length) {
 function space_domain($space) {
 	global $_G;
 
-	if($_G['config']['home']['allowdomain'] && $_G['config']['home']['domainroot']) {
+	if($_G['setting']['allowspacedomain'] && $_G['setting']['domain']['root']['home']) {
 		space_merge($space, 'field_home');
 		if($space['domain']) {
-			$space['domainurl'] = 'http://'.$space['domain'].'.'.$_G['config']['home']['domainroot'];
+			$space['domainurl'] = 'http://'.$space['domain'].'.'.$_G['setting']['domain']['root']['home'];
 		}
 	}
 	if(empty($space['domainurl'])) {

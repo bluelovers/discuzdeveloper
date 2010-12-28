@@ -1144,6 +1144,9 @@ if($_G['gp_action'] == 'votepoll' && submitcheck('pollsubmit', 1)) {
 	header('Content-Disposition: attachment; filename='.$filename);
 	header('Pragma: no-cache');
 	header('Expires: 0');
+	if($_G['charset'] != 'gbk') {
+		$csvstr = diconv($csvstr, $_G['charset'], 'GBK');
+	}
 	echo $csvstr;
 } elseif($_G['gp_action'] == 'tradeorder') {
 

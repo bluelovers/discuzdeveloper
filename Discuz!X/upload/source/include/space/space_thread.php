@@ -186,7 +186,13 @@ if($_G['gp_view'] == 'all') {
 		} elseif($filter == 'common') {
 			$postsql .= " AND p.invisible='0'";
 			$threadsql .= " AND t.displayorder>='0' AND t.closed='0'";
-		} else {
+		} elseif($space['uid'] != $_G['uid']) {
+			if($allowviewuserthread === false && $_G['adminid'] != 1) {
+				showmessage('ban_view_other_thead');
+			}
+			if(!$allowviewuserthread && $_G['adminid'] != 1) {
+				showmessage('allow_view_other_thead_but_no_detail');
+			}
 			$threadsql .= '';
 		}
 		$postsql .= " AND p.first='0'";

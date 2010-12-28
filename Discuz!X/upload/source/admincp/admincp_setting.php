@@ -1024,7 +1024,7 @@ EOF;
 		showtableheader('', '', 'id="mailcheck"'.($_G['gp_anchor'] != 'check' ? ' style="display: none"' : ''));
 		showsetting('setting_mail_check_test_from', 'test_from', '', 'text');
 		showsetting('setting_mail_check_test_to', 'test_to', '', 'textarea');
-		showsubmit('', '', '<input type="submit" class="btn" name="mailcheck" value="'.cplang('setting_mail_check_submit').'" onclick="this.form.action=\''.ADMINSCRIPT.'?action=checktools&operation=mailcheck&frame=no\';this.form.target=\'mailcheckiframe\'">', '<iframe name="mailcheckiframe" style="display: none"></iframe>');
+		showsubmit('', '', '<input type="submit" class="btn" name="mailcheck" value="'.cplang('setting_mail_check_submit').'" onclick="this.form.operation.value=\'mailcheck\';this.form.action=\''.ADMINSCRIPT.'?action=checktools&operation=mailcheck&frame=no\';this.form.target=\'mailcheckiframe\';">', '<iframe name="mailcheckiframe" style="display: none"></iframe>');
 		showtablefooter();
 
 		showformfooter();

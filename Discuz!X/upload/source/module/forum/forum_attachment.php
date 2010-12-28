@@ -254,12 +254,9 @@ function getremotefile($file) {
 	global $_G;
 	@set_time_limit(0);
 	if(!@readfile($_G['setting']['ftp']['attachurl'].'forum/'.$file)) {
-		require_once libfile('function/ftp');
-		if(!($_G['setting']['ftp']['connid'] = dftp_connect($_G['setting']['ftp']['host'], $_G['setting']['ftp']['username'], authcode($_G['setting']['ftp']['password'], 'DECODE', md5($_G['config']['security']['authkey'])), $_G['setting']['ftp']['attachdir'], $_G['setting']['ftp']['port'], $_G['setting']['ftp']['ssl']))) {
-			return FALSE;
-		}
+		$ftp = ftpcmd('object');
 		$tmpfile = @tempnam($_G['setting']['attachdir'], '');
-		if(dftp_get($_G['setting']['ftp']['connid'], $tmpfile, $file, FTP_BINARY)) {
+		if($ftp->ftp_get($tmpfile, 'forum/'.$file, FTP_BINARY)) {
 			@readfile($tmpfile);
 			@unlink($tmpfile);
 		} else {

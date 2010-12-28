@@ -267,9 +267,9 @@ class block_article {
 				'fields' => array(
 					'uid'=>$data['uid'],
 					'username'=>$data['username'],
-					'avatar' => avatar($data['uid'], 'small', true, false, $_G['setting']['avatarmethod'], $_G['setting']['ucenterurl']),
-					'avatar_middle' => avatar($data['uid'], 'middle', true, false, $_G['setting']['avatarmethod'], $_G['setting']['ucenterurl']),
-					'avatar_big' => avatar($data['uid'], 'big', true, false, $_G['setting']['avatarmethod'], $_G['setting']['ucenterurl']),
+					'avatar' => avatar($data['uid'], 'small', true, false, false, $_G['setting']['ucenterurl']),
+					'avatar_middle' => avatar($data['uid'], 'middle', true, false, false, $_G['setting']['ucenterurl']),
+					'avatar_big' => avatar($data['uid'], 'big', true, false, false, $_G['setting']['ucenterurl']),
 					'fulltitle' => $data['title'],
 					'dateline'=>$data['dateline'],
 					'caturl'=> $_G['cache']['portalcategory'][$data['catid']]['caturl'],

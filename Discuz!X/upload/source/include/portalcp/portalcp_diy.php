@@ -292,15 +292,13 @@ if($op == 'blockclass') {
 		} else {
 			$arr = import_diy($attach['target']);
 			if (!empty($arr)) {
-				$search = array('/\<script/i', '/\<\/script\>/i',"/\{/","/\}/", "/\\r/", "/\\n/", '/(\[script [^>]*?)(src=)(.*?\[\/script\])/');
-				$replace = array('[script','[/script]','\{','\}', '', '', '$1[src=]$3');
-				$arr['css'] = addslashes($arr['css']);
-				$arr['css'] = str_replace(array("{","}","\r","\n"),array('\{','\}',''),$arr['css']);
+				$search = array('/\<script/i', '/\<\/script\>/i', "/\r/", "/\n/", '/(\[script [^>]*?)(src=)(.*?\[\/script\])/');
+				$replace = array('[script', '[/script]', '', '', '$1[src=]$3');
+				$arr['css'] = str_replace(array("\r","\n"),array(''),$arr['css']);
 
 				$jsarr = array('status'=>1,'css'=>$arr['css'],'bids'=>implode(',',$arr['mapping']));
 
 				foreach ($arr['html'] as $key => $value) {
-					$value = addslashes($value);
 					$value = preg_replace($search,$replace,$value);
 					$jsarr['html'][$key] = $value;
 				}

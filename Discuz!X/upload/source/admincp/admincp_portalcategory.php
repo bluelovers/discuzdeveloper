@@ -368,7 +368,7 @@ SCRIPT;
 		showsetting('portalcategory_url', 'url', $cate['url'], 'text');
 
 		$tpls = array('list'=>getprimaltplname('list.htm'));
-		if (($dh = opendir(DISCUZ_ROOT.'./template/default/portal'))) {
+		if (($dh = opendir(DISCUZ_ROOT.($_G['cache']['style_default']['tpldir'] ? $_G['cache']['style_default']['tpldir'] : './template/default').'/portal/'))) {
 			while(($file = readdir($dh)) !== false) {
 				$file = strtolower($file);
 				if (fileext($file) == 'htm' && substr($file, 0, 5) == 'list_') {
@@ -686,7 +686,7 @@ function showcategoryrow($key, $level = 0, $last = '') {
 		<a href="'.ADMINSCRIPT.'?action=portalcategory&operation=move&catid='.$value['catid'].'">'.cplang('portalcategory_move').'</a>&nbsp;
 		<a href="'.ADMINSCRIPT.'?action=portalcategory&operation=delete&catid='.$value['catid'].'">'.cplang('delete').'</a>&nbsp;
 		<a href="'.ADMINSCRIPT.'?action=diytemplate&operation=perm&targettplname=portal/list_'.$value['catid'].'">'.cplang('portalcategory_blockperm').'</a></td>
-		<td><a href="admin.php?action=article&operation=list&&catid='.$value['catid'].'">'.cplang('portalcategory_articlemanagement').'</a>&nbsp;
+		<td><a href="'.ADMINSCRIPT.'?action=article&operation=list&&catid='.$value['catid'].'">'.cplang('portalcategory_articlemanagement').'</a>&nbsp;
 		<a href="'.ADMINSCRIPT.'?action=portalcategory&operation=perm&catid='.$value['catid'].'">'.cplang('portalcategory_articleperm').'</a>'.$publish.'</td></tr>';
 	} elseif($level == 1) {
 		$return = '<tr class="hover" id="cat'.$value['catid'].'"><td>&nbsp;</td><td class="td25"><input type="text" class="txt" name="neworder['.$value['catid'].']" value="'.$value['displayorder'].'" /></td><td><div class="board">'.
@@ -702,7 +702,7 @@ function showcategoryrow($key, $level = 0, $last = '') {
 		<a href="'.ADMINSCRIPT.'?action=portalcategory&operation=move&catid='.$value['catid'].'">'.cplang('portalcategory_move').'</a>&nbsp;
 		<a href="'.ADMINSCRIPT.'?action=portalcategory&operation=delete&catid='.$value['catid'].'">'.cplang('delete').'</a>&nbsp;
 		<a href="'.ADMINSCRIPT.'?action=diytemplate&operation=perm&targettplname=portal/list_'.$value['catid'].'">'.cplang('portalcategory_blockperm').'</a></td>
-		<td><a href="admin.php?action=article&operation=list&&catid='.$value['catid'].'">'.cplang('portalcategory_articlemanagement').'</a>&nbsp;
+		<td><a href="'.ADMINSCRIPT.'?action=article&operation=list&&catid='.$value['catid'].'">'.cplang('portalcategory_articlemanagement').'</a>&nbsp;
 		<a href="'.ADMINSCRIPT.'?action=portalcategory&operation=perm&catid='.$value['catid'].'">'.cplang('portalcategory_articleperm').'</a>'.$publish.'</td></tr>';
 		for($i=0,$L=count($value['children']); $i<$L; $i++) {
 			$return .= showcategoryrow($value['children'][$i], 2, $i==$L-1);
@@ -724,7 +724,7 @@ function showcategoryrow($key, $level = 0, $last = '') {
 		<a href="'.ADMINSCRIPT.'?action=portalcategory&operation=move&catid='.$value['catid'].'">'.cplang('portalcategory_move').'</a>&nbsp;
 		<a href="'.ADMINSCRIPT.'?action=portalcategory&operation=delete&catid='.$value['catid'].'">'.cplang('delete').'</a>&nbsp;
 		<a href="'.ADMINSCRIPT.'?action=diytemplate&operation=perm&targettplname=portal/list_'.$value['catid'].'">'.cplang('portalcategory_blockperm').'</a></td>
-		<td><a href="admin.php?action=article&operation=list&&catid='.$value['catid'].'">'.cplang('portalcategory_articlemanagement').'</a>&nbsp;
+		<td><a href="'.ADMINSCRIPT.'?action=article&operation=list&&catid='.$value['catid'].'">'.cplang('portalcategory_articlemanagement').'</a>&nbsp;
 		<a href="'.ADMINSCRIPT.'?action=portalcategory&operation=perm&catid='.$value['catid'].'">'.cplang('portalcategory_articleperm').'</a>'.$publish.'</td></tr></tbody>
 		<tbody id="group_'.$value['catid'].'"'.$toggle.'>';
 		for($i=0,$L=count($value['children']); $i<$L; $i++) {
@@ -766,8 +766,8 @@ function deleteportalcategory($ids) {
 }
 
 function getprimaltplname($filename) {
-	global $lang;
-	$content = @file_get_contents(DISCUZ_ROOT.'./template/default/portal/'.$filename);
+	global $_G, $lang;
+	$content = @file_get_contents(DISCUZ_ROOT.($_G['cache']['style_default']['tpldir'] ? $_G['cache']['style_default']['tpldir'] : './template/default').'/portal/'.$filename);
 	$name = $filename;
 	if($content) {
 		preg_match("/\<\!\-\-\[name\](.+?)\[\/name\]\-\-\>/i", trim($content), $mathes);

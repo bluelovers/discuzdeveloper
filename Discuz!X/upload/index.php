@@ -96,7 +96,6 @@ if(!empty($_SERVER['QUERY_STRING']) && is_numeric($_SERVER['QUERY_STRING'])) {
 		} else {
 			$jump = true;
 		}
-
 		if(empty($url) && empty($_ENV['curapp'])) {
 			if(!empty($_ENV['domain']['defaultindex']) && !$jump) {
 				if($_ENV['defaultapp'][$_ENV['domain']['defaultindex']]) {

@@ -88,7 +88,6 @@ EOT;
 		}
 		if($albums) {
 			$selectalbumids = array_keys($albums);
-			$selectalbumids = implode("','", $selectalbumids);
 			if($_POST['optype'] == 'delete') {
 				include_once libfile('function/delete');
 				$deletecount = count(deletealbums($selectalbumids));
@@ -97,7 +96,7 @@ EOT;
 				$tocatid = intval($_POST['tocatid']);
 				$catids[] = $tocatid;
 				$catids = array_merge($catids);
-				DB::update('home_album', array('catid'=>$tocatid), 'albumid IN ('.$selectalbumids.')');
+				DB::update('home_album', array('catid'=>$tocatid), 'albumid IN ('.dimplode($selectalbumids).')');
 				foreach($catids as $catid) {
 					$catid = intval($catid);
 					$cnt = DB::result_first('SELECT COUNT(*) FROM '.DB::table('home_album')." WHERE catid = '$catid'");

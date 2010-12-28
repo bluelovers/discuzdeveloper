@@ -80,7 +80,7 @@ EOT;
 
 		$lastmessage = fgets($fp, 512);
 		if(substr($lastmessage, 0, 3) != '220') {
-			runlog('SMTP', "$_G[setting][mail][server]:$_G[setting][mail][port] CONNECT - $lastmessage", 0);
+			runlog('SMTP', "{$_G[setting][mail][server]}:{$_G[setting][mail][port]} CONNECT - $lastmessage", 0);
 			return false;
 		}
 

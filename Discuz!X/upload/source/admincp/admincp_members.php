@@ -99,7 +99,7 @@ if($operation == 'search') {
 		showsubmenu('nav_members');
 		showtips('members_export_tips');
 		showformheader("members&operation=clean");
-		showtableheader(cplang('members_search_result', array('membernum' => $membernum)).'<a href="admin.php?action=members&operation=search" class="act lightlink normal">'.cplang('research').'</a>');
+		showtableheader(cplang('members_search_result', array('membernum' => $membernum)).'<a href="'.ADMINSCRIPT.'?action=members&operation=search" class="act lightlink normal">'.cplang('research').'</a>');
 		showsubtitle(array('', 'username', 'credits', 'posts', 'admingroup', 'usergroup', ''));
 		echo $members;
 		foreach($search_condition as $k => $v) {
@@ -155,6 +155,9 @@ if($operation == 'search') {
 	header('Content-Disposition: attachment; filename='.$filename);
 	header('Pragma: no-cache');
 	header('Expires: 0');
+	if($_G['charset'] != 'gbk') {
+		$detail = diconv($detail, $_G['charset'], 'GBK');
+	}
 	echo $detail;
 	exit();
 
@@ -1201,7 +1204,18 @@ EOT;
 		if(!$reason && ($_G['group']['reasonpm'] == 1 || $_G['group']['reasonpm'] == 3)) {
 			cpmsg('members_edit_reason_invalid', '', 'error');
 		}
-
+		$my_data = array();
+		$mylogtype = '';
+		if(in_array($_G['gp_bannew'], array('post', 'visit', 'status'))) {
+			$my_data = array('uid' => $member['uid']);
+			if($_G['gp_delpost']) {
+				$my_data['otherid'] = 1;
+			}
+			$mylogtype = 'banuser';
+		} elseif($member['groupid'] == 4 || $member['groupid'] == 5 || $member['status'] == '-1') {
+			$my_data = array('uid' => $member['uid']);
+			$mylogtype = 'unbanuser';
+		}
 		if($_G['gp_bannew'] == 'post' || $_G['gp_bannew'] == 'visit') {
 			$groupidnew = $_G['gp_bannew'] == 'post' ? 4 : 5;
 			$_G['gp_banexpirynew'] = !empty($_G['gp_banexpirynew']) ? TIMESTAMP + $_G['gp_banexpirynew'] * 86400 : 0;
@@ -1214,13 +1228,8 @@ EOT;
 				$sql .= ', groupexpiry=0';
 			}
 			$adminidnew = -1;
-			$my_data = array('uid' => $member['uid'], 'expiry' => groupexpiry($member['groupterms']));
-			if($_G['gp_delpost']) {
-				$my_data['otherid'] = 1;
-			}
-			my_thread_log('banuser', $my_data);
+			$my_data['expiry'] = groupexpiry($member['groupterms']);
 		} elseif($member['groupid'] == 4 || $member['groupid'] == 5) {
-			my_thread_log('unbanuser', array('uid' => $member['uid']));
 			if(!empty($member['groupterms']['main']['groupid'])) {
 				$groupidnew = $member['groupterms']['main']['groupid'];
 				$adminidnew = $member['groupterms']['main']['adminid'];
@@ -1234,6 +1243,9 @@ EOT;
 			$update = false;
 			$groupidnew = $member['groupid'];
 			$adminidnew = $member['adminid'];
+		}
+		if(!empty($my_data) && !empty($mylogtype)) {
+			my_thread_log($mylogtype, $my_data);
 		}
 
 		$sql .= ", adminid='$adminidnew', groupid='$groupidnew', status='".($_G['gp_bannew'] == 'status' ? -1 : 0)."'";
@@ -2106,6 +2118,7 @@ function showsearchform($operation = '') {
 
 	showtagheader('div', 'searchmembers', !$_G['gp_submit']);
 	echo '<script src="static/js/calendar.js" type="text/javascript"></script>';
+	echo '<style type="text/css">#residedistrictbox select, #birthdistrictbox select{width: auto;}</style>';
 	showformheader("members&operation=$operation", "onSubmit=\"if($('updatecredittype1') && $('updatecredittype1').checked && !window.confirm('$lang[members_reward_clean_alarm]')){return false;} else {return true;}\"");
 	showtableheader();
 	showsetting('members_search_user', 'username', $_G['gp_username'], 'text');
@@ -2165,13 +2178,23 @@ function showsearchform($operation = '') {
 	unset($_G['cache']['profilesetting']['birthyear']);
 	unset($_G['cache']['profilesetting']['birthmonth']);
 	unset($_G['cache']['profilesetting']['birthday']);
+	require_once libfile('function/profile');
 	foreach($_G['cache']['profilesetting'] as $fieldid=>$value) {
+		if(!$value['available'] || in_array($fieldid, array('birthprovince', 'birthdist', 'birthcommunity', 'resideprovince', 'residedist', 'residecommunity'))) {
+			continue;
+		}
 		if($fieldid == 'gender') {
 			$select = "<option value=\"\">".cplang('nolimit')."</option>\n";
 			$select .= "<option value=\"0\">".cplang('members_edit_gender_secret')."</option>\n";
 			$select .= "<option value=\"1\">".cplang('members_edit_gender_male')."</option>\n";
 			$select .= "<option value=\"2\">".cplang('members_edit_gender_female')."</option>\n";
 			showsetting($value['title'], '', '', '<select class="txt" name="gender">'.$select.'</select>');
+		} elseif($fieldid == 'birthcity') {
+			$elems = array('birthprovince', 'birthcity', 'birthdist', 'birthcommunity');
+			showsetting($value['title'], '', '', '<div id="birthdistrictbox">'.showdistrict(array(0,0,0,0), $elems, 'birthdistrictbox', 1).'</div>');
+		} elseif($fieldid == 'residecity') {
+			$elems = array('resideprovince', 'residecity', 'residedist', 'residecommunity');
+			showsetting($value['title'], '', '', '<div id="residedistrictbox">'.showdistrict(array(0,0,0,0), $elems, 'residedistrictbox', 1).'</div>');
 		} elseif($fieldid == 'constellation') {
 			$select = "<option value=\"\">".cplang('nolimit')."</option>\n";
 			for($i=1; $i<=12; $i++) {

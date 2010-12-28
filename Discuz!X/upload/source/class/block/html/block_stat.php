@@ -31,7 +31,6 @@ class block_stat extends commonblock_html {
 					array('posts', 'stat_option_posts'),
 					array('groups', 'stat_option_groups'),
 					array('members', 'stat_option_members'),
-					array('groupmembers', 'stat_option_groupmembers'),
 					array('groupnewposts', 'stat_option_groupnewposts'),
 					array('bbsnewposts', 'stat_option_bbsnewposts'),
 					array('bbslastposts', 'stat_option_bbslastposts'),
@@ -63,11 +62,6 @@ class block_stat extends commonblock_html {
 				'title' => 'stat_option_members',
 				'type' => 'text',
 				'default' => lang('block/stat', 'stat_members')
-			),
-			'groupmembers_title' => array(
-				'title' => 'stat_option_groupmembers',
-				'type' => 'text',
-				'default' => lang('block/stat', 'stat_groupmembers')
 			),
 			'groupnewposts_title' => array(
 				'title' => 'stat_option_groupnewposts',
@@ -129,7 +123,7 @@ class block_stat extends commonblock_html {
 			$sql = "SELECT sum(f.posts) AS posts, sum(f.todayposts) AS todayposts FROM ".DB::table('forum_forum')." f WHERE f.status='1'";
 			$forum = DB::fetch_first($sql);
 		}
-		if(in_array('groups', $parameter['option']) || in_array('groupmembers', $parameter['option']) || in_array('groupnewposts', $parameter['option'])) {
+		if(in_array('groups', $parameter['option']) || in_array('groupnewposts', $parameter['option'])) {
 			loadcache('groupindex');
 		}
 		$index = count($parameter['option']) - 1;

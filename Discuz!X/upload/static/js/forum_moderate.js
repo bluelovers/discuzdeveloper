@@ -2,7 +2,7 @@
 	[Discuz!] (C)2001-2009 Comsenz Inc.
 	This is NOT a freeware, use is subject to license terms
 
-	$Id: forum_moderate.js 14223 2010-08-09 09:57:27Z xupeng $
+	$Id: forum_moderate.js 18912 2010-12-08 08:01:45Z monkey $
 */
 
 function modaction(action, pid, extra, mod) {

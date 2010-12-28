@@ -239,7 +239,7 @@ class block_member {
 			case 'show':
 				$tables[] = DB::table('home_show')." s";
 				$wheres[] = 's.uid=m.uid';
-				$sqlorderby = ' ORDER BY s.unitprice DESC';
+				$sqlorderby = ' ORDER BY s.unitprice DESC, s.credit DESC';
 				break;
 		}
 
@@ -260,9 +260,9 @@ class block_member {
 				'picflag' => 0,
 				'summary' => '',
 				'fields' => array(
-					'avatar' => avatar($data['uid'], 'small', true, false, $_G['setting']['avatarmethod'], $_G['setting']['ucenterurl']),
-					'avatar_middle' => avatar($data['uid'], 'middle', true, false, $_G['setting']['avatarmethod'], $_G['setting']['ucenterurl']),
-					'avatar_big' => avatar($data['uid'], 'big', true, false, $_G['setting']['avatarmethod'], $_G['setting']['ucenterurl']),
+					'avatar' => avatar($data['uid'], 'small', true, false, false, $_G['setting']['ucenterurl']),
+					'avatar_middle' => avatar($data['uid'], 'middle', true, false, false, $_G['setting']['ucenterurl']),
+					'avatar_big' => avatar($data['uid'], 'big', true, false, false, $_G['setting']['ucenterurl']),
 					'credits' => $data['credits'],
 					'extcredits1' => $data['extcredits1'],
 					'extcredits2' => $data['extcredits2'],

@@ -82,7 +82,7 @@ function getpermissioncategory($category, $permission = array()) {
 				$cats[$cur['upid']]['permissionchildren'][$cur['catid']] = $cur['catid'];
 				$cur = $category[$cur['upid']];
 			}
-		} else {
+		} elseif(empty($cats[$v])) {
 			$cats[$v] = array();
 		}
 	}

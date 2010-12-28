@@ -1544,6 +1544,7 @@ function showmessage($message, $url_forward = '', $values = array(), $extraparam
 	if($param['handle']) {
 		$valuesjs = $comma = $subjs = '';
 		foreach($values as $k => $v) {
+			$v = daddslashes($v);
 			if(is_array($v)) {
 				$subcomma = '';
 				foreach ($v as $subk => $subv) {

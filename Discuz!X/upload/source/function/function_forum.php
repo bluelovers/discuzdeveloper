@@ -472,6 +472,7 @@ function loadforum() {
 			if($forum['status'] == 3) {
 				$_G['isgroupuser'] = 0;
 				$_G['basescript'] = 'group';
+				$_G['group']['allowstickthread'] = 1;
 				if(empty($forum['level'])) {
 					$levelid = DB::result_first("SELECT levelid FROM ".DB::table('forum_grouplevel')." WHERE creditshigher<='$forum[commoncredits]' AND '$forum[commoncredits]'<creditslower LIMIT 1");
 					$forum['level'] = $levelid;

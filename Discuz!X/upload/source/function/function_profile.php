@@ -18,7 +18,7 @@ function profile_setting($fieldid, $space=array(), $showstatus=false) {
 		loadcache('profilesetting');
 	}
 	$field = $_G['cache']['profilesetting'][$fieldid];
-	if(empty($field) || !$field['available'] || in_array($fieldid, array('uid', 'constellation', 'zodiac', 'birthmonth', 'birthyear', 'birthprovince', 'resideprovince', 'residedist', 'residecommunity'))) {
+	if(empty($field) || !$field['available'] || in_array($fieldid, array('uid', 'constellation', 'zodiac', 'birthmonth', 'birthyear', 'birthprovince', 'birthdist', 'birthcommunity', 'resideprovince', 'residedist', 'residecommunity'))) {
 		return '';
 	}
 
@@ -365,6 +365,7 @@ function get_constellation($birthmonth,$birthday) {
 	}
 	return $idx > 0 && $idx <= 12 ? lang('space', 'constellation_'.$idx) : '';
 }
+
 function get_zodiac($birthyear) {
 	$birthyear = intval($birthyear);
 	$idx = (($birthyear - 1900) % 12) + 1;

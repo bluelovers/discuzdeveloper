@@ -1991,6 +1991,7 @@ function get_forum_by_fid($fid, $field = '', $table = 'forum') {
 	return $return;
 }
 
+
 function copy_threadclasses($threadtypes, $fid) {
 	global $_G;
 	if($threadtypes) {
