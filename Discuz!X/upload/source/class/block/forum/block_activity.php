@@ -299,7 +299,7 @@ class block_activity {
 			if($data['starttimeto']) {
 				$data['time'] .= ' - '.dgmdate($data['starttimeto']);
 			}
-			$listtids[$data['tid']] = $data['tid'];
+			$listtids[] = $data['tid'];
 			$list[$data['tid']] = array(
 				'id' => $data['tid'],
 				'idtype' => 'tid',
@@ -329,8 +329,11 @@ class block_activity {
 			while($value = DB::fetch($query)) {
 				$list[$value['tid']]['fields']['applynumber'] = $value['sum'];
 			}
+			foreach($listtids as $key => $value) {
+				$listdata[] = $list[$value];
+			}
 		}
-		return array('html' => '', 'data' => $list);
+		return array('html' => '', 'data' => $listdata);
 	}
 }
 

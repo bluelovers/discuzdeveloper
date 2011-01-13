@@ -591,7 +591,7 @@ EOT;
 		if($group['groupid'] != 7) {
 			showsetting('usergroups_edit_post_recommend', 'allowrecommendnew', $group['allowrecommend'], 'text');
 		}
-		showsetting('usergroups_edit_post_edit_time_limit', 'edittimelimit', intval($group['edittimelimit']), 'text');
+		showsetting('usergroups_edit_post_edit_time_limit', 'edittimelimitnew', intval($group['edittimelimit']), 'text');
 		showsetting('usergroups_edit_post_allowcommentpost', array('allowcommentpostnew', array(
 			array(0, $lang['usergroups_edit_post_allowcommentpost_none']),
 			array(1, $lang['usergroups_edit_post_allowcommentpost_firstpost']),
@@ -1014,7 +1014,7 @@ EOT;
 			'allowbuildgroup' => $_G['gp_allowbuildgroupnew'],
 			'allowgroupdirectpost' => intval($_G['gp_allowgroupdirectpostnew']),
 			'allowgroupposturl' => intval($_G['gp_allowgroupposturlnew']),
-			'edittimelimit' => intval($_G['gp_edittimelimit']),
+			'edittimelimit' => intval($_G['gp_edittimelimitnew']),
 			'allowcommentpost' => intval($_G['gp_allowcommentpostnew']),
 			'allowdownlocalimg' => intval($_G['gp_allowdownlocalimgnew']),
 			'allowcommentitem' => intval($_G['gp_allowcommentitemnew']),

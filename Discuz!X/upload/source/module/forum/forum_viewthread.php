@@ -330,7 +330,6 @@ $_G['setting']['tagstatus'] = $_G['setting']['tagstatus'] && $_G['forum']['allow
 
 viewthread_updateviews();
 
-@extract($_G['cache']['custominfo']);
 
 $_G['setting']['infosidestatus']['posts'] = $_G['setting']['infosidestatus'][1] && isset($_G['setting']['infosidestatus']['f'.$_G['fid']]['posts']) ? $_G['setting']['infosidestatus']['f'.$_G['fid']]['posts'] : $_G['setting']['infosidestatus']['posts'];
 
@@ -474,8 +473,10 @@ if(!$metadescription) {
 	$metadescription = strip_tags($_G['forum_thread']['subject']);
 }
 
+$postno = & $_G['cache']['custominfo']['postno'];
 if($postusers) {
 	$verifyadd = '';
+	$fieldsadd = $_G['cache']['custominfo']['fieldsadd'];
 	if($_G['setting']['verify']['enabled']) {
 		$verifyadd = "LEFT JOIN ".DB::table('common_member_verify')." mv USING(uid)";
 		$fieldsadd .= ', mv.verify1, mv.verify2, mv.verify3, mv.verify4, mv.verify5';
@@ -811,6 +812,7 @@ function viewthread_procpost($post, $lastvisit, $ordertype, $special = 0) {
 		$post['message'] = discuzcode($post['message'], $post['smileyoff'], $post['bbcodeoff'], $post['htmlon'] & 1, $_G['forum']['allowsmilies'], $_G['forum']['allowbbcode'], ($_G['forum']['allowimgcode'] && $_G['setting']['showimages'] ? 1 : 0), $_G['forum']['allowhtml'], ($_G['forum']['jammer'] && $post['authorid'] != $_G['uid'] ? 1 : 0), 0, $post['authorid'], $_G['forum']['allowmediacode'], $post['pid']);
 	}
 	$_G['forum_firstpid'] = intval($_G['forum_firstpid']);
+	$post['custominfo'] = viewthread_custominfo($post);
 	return $post;
 }
 
@@ -864,6 +866,55 @@ function viewthread_lastmod() {
 		DB::query("UPDATE ".DB::table($threadtable)." SET moderated='0' WHERE tid='$_G[tid]'", 'UNBUFFERED');
 	}
 	return $lastmod;
+}
+
+function viewthread_custominfo($post) {
+	global $_G;
+
+	$types = array('left', 'menu');
+	foreach($types as $type) {
+		if(!is_array($_G['cache']['custominfo']['setting'][$type])) {
+			continue;
+		}
+		$data = '';
+		foreach($_G['cache']['custominfo']['setting'][$type] as $key => $order) {
+			$v = '';
+			if(substr($key, 0, 10) == 'extcredits') {
+				$i = substr($key, 10);
+				$extcredit = $_G['setting']['extcredits'][$i];
+				$v = '<dt>'.($extcredit['img'] ? $extcredit['img'].' ' : '').$extcredit['title'].'</dt><dd>'.$post['extcredits'.$i].' '.$extcredit['unit'].'&nbsp;</dd>';
+			} elseif(substr($key, 0, 6) == 'field_') {
+				require_once libfile('function/profile');
+				$v = profile_show(substr($key, 6), $post);
+				if($v) {
+					$v = '<dt>'.$_G['cache']['custominfo']['profile'][$key][0].'</dt><dd>'.$v.'&nbsp;</dd>';
+				}
+			} else {
+				switch($key) {
+					case 'uid': $v = $post['uid'];break;
+					case 'posts': $v = '<a href="home.php?mod=space&uid='.$post['uid'].'&do=thread&type=reply&view=me&from=space" target="_blank">'.$post['posts'].'</a>';break;
+					case 'threads': $v = '<a href="home.php?mod=space&uid='.$post['uid'].'&do=thread&type=thread&view=me&from=space" target="_blank">'.$post['threads'].'</a>';break;
+					case 'doings': $v = '<a href="home.php?mod=space&uid='.$post['uid'].'&do=doing&view=me&from=space" target="_blank">'.$post['doings'].'</a>';break;
+					case 'blogs': $v = '<a href="home.php?mod=space&uid='.$post['uid'].'&do=blog&view=me&from=space" target="_blank">'.$post['blogs'].'</a>';break;
+					case 'albums': $v = '<a href="home.php?mod=space&uid='.$post['uid'].'&do=album&view=me&from=space" target="_blank">'.$post['albums'].'</a>';break;
+					case 'sharings': $v = '<a href="home.php?mod=space&uid='.$post['uid'].'&do=share&view=me&from=space" target="_blank">'.$post['sharings'].'</a>';break;
+					case 'friends': $v = '<a href="home.php?mod=space&uid='.$post['uid'].'&do=friend&view=me&from=space" target="_blank">'.$post['friends'].'</a>';break;
+					case 'digest': $v = $post['digestposts'];break;
+					case 'credits': $v = $post['credits'];break;
+					case 'readperm': $v = $post['readaccess'];break;
+					case 'regtime': $v = $post['regdate'];break;
+					case 'lastdate': $v = $post['lastdate'];break;
+					case 'oltime': $v = $post['oltime'].' '.lang('space', 'viewthread_userinfo_hour');break;
+				}
+				if($v !== '') {
+					$v = '<dt>'.lang('space', 'viewthread_userinfo_'.$key).'</dt><dd>'.$v.'&nbsp;</dd>';
+				}
+			}
+			$data .= $v;
+		}
+		$return[$type] = $data;
+	}
+	return $return;
 }
 
 function remaintime($time) {

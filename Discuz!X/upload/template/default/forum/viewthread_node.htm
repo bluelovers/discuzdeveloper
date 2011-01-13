@@ -50,7 +50,7 @@
 						</em>
 					<!--{/if}-->
 				</div>
-				<dl class="cl"><!--{eval @eval('echo "'.$customauthorinfo[2].'";');}--></dl>
+				<dl class="cl">{$post[custominfo][menu]}</dl>
 				<div class="imicn">
 					<!--{if $post['qq']}--><a href="http://wpa.qq.com/msgrd?V=1&Uin=$post[qq]&Site=$_G['setting']['bbname']&Menu=yes" target="_blank" title="QQ"><img src="{IMGDIR}/qq.gif" alt="QQ" /></a><!--{/if}-->
 					<!--{if $post['icq']}--><a href="http://wwp.icq.com/scripts/search.dll?to=$post[icq]" target="_blank" title="ICQ"><img src="{IMGDIR}/icq.gif" alt="ICQ" /></a><!--{/if}-->
@@ -85,7 +85,7 @@
 				</div>
 			<!--{/if}-->
 			<!--{hook/viewthread_sidetop $postcount}-->
-			<!--{if $customauthorinfo[1]}--><dl class="pil cl"><!--{eval @eval('echo "'.$customauthorinfo[1].'";');}--></dl><!--{/if}-->
+			<!--{if $post[custominfo][left]}--><dl class="pil cl">{$post[custominfo][left]}</dl><!--{/if}-->
 			<!--{if $post['medals']}--><p>
 				<!--{loop $post['medals'] $medal}-->
 				<img src="{STATICURL}image/common/$medal[image]" alt="$medal[name]" title="$medal[name]" />

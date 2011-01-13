@@ -325,7 +325,7 @@ function blog_flash($swf_url, $type='') {
 		$html = '<object classid="clsid:d27cdb6e-ae6d-11cf-96b8-444553540000" width="'.$width.'" height="'.$height.'">
 			<param name="movie" value="'.$swf_url.'">
 			<param name="allowscriptaccess" value="none">
-			<param name="allowNetworking" value="none">
+			<param name="allowNetworking" value="internal">
 			<embed src="'.$swf_url.'" type="application/x-shockwave-flash" width="'.$width.'" height="'.$height.'" allowfullscreen="true" allowscriptaccess="always"></embed>
 			</object>';
 	}

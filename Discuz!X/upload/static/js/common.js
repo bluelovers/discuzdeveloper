@@ -550,19 +550,18 @@ function ajaxpost(formid, showid, waitid, showidclass, submitbtn, recall) {
 
 		showloading('none');
 		try {
-			if(BROWSER.ie) {
-				s = $(ajaxframeid).contentWindow.document.XMLDocument.text;
-			} else {
-				if(BROWSER.safari > 0) {
+			s = $(ajaxframeid).contentWindow.document.XMLDocument.text;
+		} catch(e) {
+			try {
+				s = $(ajaxframeid).contentWindow.document.documentElement.firstChild.nodeValue;
+			} catch(e) {
+				try {
 					s = $(ajaxframeid).contentWindow.document.documentElement.firstChild.wholeText;
-				} else {
-					s = $(ajaxframeid).contentWindow.document.documentElement.firstChild.nodeValue;
+				} catch(e) {
+					s = '内部错误，无法显示此内容';
 				}
 			}
-		} catch(e) {
-			s = '内部错误，无法显示此内容';
 		}
-
 		if(s != '' && s.indexOf('ajaxerror') != -1) {
 			evalscript(s);
 			evaled = true;

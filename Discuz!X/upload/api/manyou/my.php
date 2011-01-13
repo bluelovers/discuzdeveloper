@@ -2014,7 +2014,7 @@ class My extends Manyou {
 			$_tids = $_threadIds = array();
 			foreach($threads as $thread) {
 				$_tids[] = $thread['tId'];
-				$postTable = $thread['postTableId'] ? '-' . $thread['postTableId'] : '';
+				$postTable = $thread['postTableId'] ? '_' . $thread['postTableId'] : '';
 				$_threadIds[$postTable][] = $thread['tId'];
 			}
 

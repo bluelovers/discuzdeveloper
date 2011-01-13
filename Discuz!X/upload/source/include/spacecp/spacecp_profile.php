@@ -68,6 +68,18 @@ if(submitcheck('profilesubmit')) {
 			$vid = 0;
 		}
 	}
+	if(!empty($_POST['birthprovince'])) {
+		$initcity = array('birthprovince', 'birthcity', 'birthdist', 'birthcommunity');
+		foreach($initcity as $key) {
+			$_POST[$key] = !empty($_POST[$key]) ? $_POST[$key] : '';
+		}
+	}
+	if(!empty($_POST['resideprovince'])) {
+		$initcity = array('resideprovince', 'residecity', 'residedist', 'residecommunity');
+		foreach($initcity as $key) {
+			$_POST[$key] = !empty($_POST[$key]) ? $_POST[$key] : '';
+		}
+	}
 	foreach($_POST as $key => $value) {
 		$field = $_G['cache']['profilesetting'][$key];
 		if(in_array($key, $forumfield)) {

@@ -262,12 +262,10 @@ function space_domain($space) {
 			$space['domainurl'] = 'http://'.$space['domain'].'.'.$_G['setting']['domain']['root']['home'];
 		}
 	}
-	if(empty($space['domainurl'])) {
-		if($_G['setting']['allowrewrite']) {
-			$space['domainurl'] = $_G['siteurl'].$space['uid'];
-		} else {
-			$space['domainurl'] = $_G['siteurl'].'?'.$space['uid'];
-		}
+	if(!empty($_G['setting']['domain']['app']['home'])) {
+		$space['domainurl'] = 'http://'.$_G['setting']['domain']['app']['home'].'/?'.$space['uid'];
+	} elseif(empty($space['domainurl'])) {
+		$space['domainurl'] = $_G['siteurl'].'?'.$space['uid'];
 	}
 	return $space['domainurl'];
 }

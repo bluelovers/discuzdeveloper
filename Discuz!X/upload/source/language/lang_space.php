@@ -193,6 +193,22 @@ $lang = array(
 	'sb_wall' => '{who}的留言板',
 	'sb_profile' => '{who}的个人资料',
 	'sb_thread' => '{who}的帖子',
+
+	'viewthread_userinfo_hour' => '小时',
+	'viewthread_userinfo_uid' => 'UID',
+	'viewthread_userinfo_posts' => '帖子',
+	'viewthread_userinfo_threads' => '主题',
+	'viewthread_userinfo_doings' => '记录',
+	'viewthread_userinfo_blogs' => '日志',
+	'viewthread_userinfo_albums' => '相册',
+	'viewthread_userinfo_sharings' => '分享',
+	'viewthread_userinfo_friends' => '好友',
+	'viewthread_userinfo_digest' => '精华',
+	'viewthread_userinfo_credits' => '积分',
+	'viewthread_userinfo_readperm' => '阅读权限',
+	'viewthread_userinfo_regtime' => '注册时间',
+	'viewthread_userinfo_lastdate' => '最后登录',
+	'viewthread_userinfo_oltime' => '在线时间',
 );
 
 ?>

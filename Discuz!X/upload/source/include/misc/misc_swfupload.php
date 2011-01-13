@@ -133,7 +133,10 @@ if($op == "finish") {
 		$picid =  $uploadfiles['picid'];
 		if($op == "doodle") {
 			$fileurl = pic_get($uploadfiles['filepath'], 'album', $uploadfiles['thumb'], $uploadfiles['remote'], 0);
-
+			$remote = $uploadfiles['remote'] > 1 ? $uploadfiles['remote'] - 2 : $uploadfiles['remote'];
+			if(!$remote) {
+				$fileurl = getsiteurl().$fileurl;
+			}
 			require_once libfile('function/magic');
 			usemagic($magic['magicid'], $magic['num'], 1);
 			updatemagiclog($magic['magicid'], '2', '1', '0');
