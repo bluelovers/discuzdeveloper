@@ -330,7 +330,6 @@ $_G['setting']['tagstatus'] = $_G['setting']['tagstatus'] && $_G['forum']['allow
 
 viewthread_updateviews();
 
-
 $_G['setting']['infosidestatus']['posts'] = $_G['setting']['infosidestatus'][1] && isset($_G['setting']['infosidestatus']['f'.$_G['fid']]['posts']) ? $_G['setting']['infosidestatus']['f'.$_G['fid']]['posts'] : $_G['setting']['infosidestatus']['posts'];
 
 

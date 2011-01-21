@@ -399,7 +399,7 @@ function parsemedia($params, $url) {
 
 function bbcodeurl($url, $tags) {
 	if(!preg_match("/<.+?>/s", $url)) {
-		if(!in_array(strtolower(substr($url, 0, 6)), array('http:/', 'https:', 'ftp://', 'rtsp:/', 'mms://'))) {
+		if(!in_array(strtolower(substr($url, 0, 6)), array('http:/', 'https:', 'ftp://', 'rtsp:/', 'mms://')) && !preg_match('/^static\//', $url)) {
 			$url = 'http://'.$url;
 		}
 		return str_replace(array('submit', 'member.php?mod=logging'), array('', ''), str_replace('{url}', addslashes($url), $tags));

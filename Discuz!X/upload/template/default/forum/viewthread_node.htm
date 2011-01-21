@@ -66,7 +66,7 @@
 		<!--{/if}-->
 		<!--{if $post['authorid'] && $post['username'] && !$post['anonymous']}-->
 			<div>
-			<!--{if $_G['setting']['bannedmessages'] & 2 && (($post['authorid'] && !$post['username']) || ($post['groupid'] == 4 || $post['groupid'] == 5) || ($post['status'] & 1))}-->
+			<!--{if $_G['setting']['bannedmessages'] & 2 && ($post['memberstatus'] == '-1' || ($post['authorid'] && !$post['username']) || ($post['groupid'] == 4 || $post['groupid'] == 5) || ($post['status'] & 1))}-->
 				<div class="avatar">{lang member_avatar_banned}</div>
 			<!--{elseif $post['avatar'] && $showavatars}-->
 				<div class="avatar" onmouseover="showauthor(this, 'userinfo$post[pid]')"><a href="home.php?mod=space&uid=$post[authorid]" target="_blank">$post[avatar]</a></div>
@@ -231,7 +231,7 @@
 				<!--{hook/viewthread_useraction}-->
 			</div>
 		<!--{/if}-->
-		<!--{if $post['signature'] && ($_G['setting']['bannedmessages'] & 4 && (($post['authorid'] && !$post['username']) || ($post['groupid'] == 4 || $post['groupid'] == 5) || ($post['status'] & 1)))}-->
+		<!--{if $post['signature'] && ($_G['setting']['bannedmessages'] & 4 && ($post['memberstatus'] == '-1' || ($post['authorid'] && !$post['username']) || ($post['groupid'] == 4 || $post['groupid'] == 5) || ($post['status'] & 1)))}-->
 			<div class="sign">{lang member_signature_banned}</div>
 		<!--{elseif $post['signature'] && !$post['anonymous'] && $showsignatures}-->
 			<div class="sign" style="max-height:{$_G['setting']['maxsigrows']}px;maxHeightIE:{$_G['setting']['maxsigrows']}px;">$post[signature]</div>

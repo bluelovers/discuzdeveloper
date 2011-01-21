@@ -6,7 +6,7 @@
 		<h2>$post[subject]</h2>
 	<!--{/if}-->
 
-<!--{if $_G['adminid'] != 1 && $_G['setting']['bannedmessages'] & 1 && (($post['authorid'] && !$post['username']) || ($post['groupid'] == 4 || $post['groupid'] == 5) || $post['status'] == -1 || $post['memberstatus'])}-->
+<!--{if $_G['adminid'] != 1 && $_G['setting']['bannedmessages'] & 1 && ($post['memberstatus'] == '-1' || ($post['authorid'] && !$post['username']) || ($post['groupid'] == 4 || $post['groupid'] == 5) || $post['status'] == -1 || $post['memberstatus'])}-->
 	<div class="locked">{lang message_banned}</div>
 <!--{elseif $_G['adminid'] != 1 && $post['status'] & 1}-->
 	<div class="locked">{lang message_single_banned}</div>
@@ -16,7 +16,7 @@
 	<!--{template forum/viewthread_pay}-->
 <!--{else}-->
 	<!--{hook/viewthread_posttop $postcount}-->
-	<!--{if $_G['setting']['bannedmessages'] & 1 && (($post['authorid'] && !$post['username']) || ($post['groupid'] == 4 || $post['groupid'] == 5))}-->
+	<!--{if $_G['setting']['bannedmessages'] & 1 && ($post['memberstatus'] == '-1' || ($post['authorid'] && !$post['username']) || ($post['groupid'] == 4 || $post['groupid'] == 5))}-->
 		<div class="locked">{lang admin_message_banned}</div>
 	<!--{elseif $post['status'] & 1}-->
 		<div class="locked">{lang admin_message_single_banned}</div>

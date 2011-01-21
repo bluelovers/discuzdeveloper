@@ -92,7 +92,7 @@
 					<h2 class="mbn">{lang active_profile}</h2>
 					<ul>
 						<!--{if $space[adminid]}--><li><em>{lang management_team}</em><span style="color:{$space[admingroup][color]}"><a href="home.php?mod=spacecp&ac=usergroup&gid=$space[adminid]" target="_blank">{$space[admingroup][grouptitle]}</a></span> {$space[admingroup][icon]}</li><!--{/if}-->
-						<li><em>{lang usergroup}</em><span style="color:{$space[group][color]}"{if $upgradecredit !== 'false'} id="g_upuser" class="xi2" onmouseover="showMenu({'ctrlid':this.id, 'pos':'12'});"{/if}><a href="home.php?mod=spacecp&ac=usergroup&gid=$space[groupid]" target="_blank">{$space[group][grouptitle]}</a></span> {$space[group][icon]}</li>
+						<li><em>{lang usergroup}</em><span style="color:{$space[group][color]}"{if $upgradecredit !== false} id="g_upuser" class="xi2" onmouseover="showMenu({'ctrlid':this.id, 'pos':'12'});"{/if}><a href="home.php?mod=spacecp&ac=usergroup&gid=$space[groupid]" target="_blank">{$space[group][grouptitle]}</a></span> {$space[group][icon]} <!--{if !empty($space['groupexpiry'])}-->&nbsp;<!--{lang group_useful_life}-->&nbsp;<!--{date($space[groupexpiry], 'Y-m-d H:i')}--><!--{/if}--></li>
 						<!--{if $space[extgroupids]}--><li><em>{lang group_expiry_type_ext}</em>$space[extgroupids]</li><!--{/if}-->
 					</ul>
 					<!--{if $upgradecredit !== false}-->

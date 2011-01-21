@@ -43,6 +43,8 @@ class credit {
 
 		if($enabled) {
 			$rulelog = array();
+			$fids = $rule['fids'] ? explode(',', $rule['fids']) : array();
+			$fid = in_array($fid, $fids) ? $fid : 0;
 			$rulelog = $this->getrulelog($rule['rid'], $uid, $fid);
 			if($rulelog && $rule['norepeat']) {
 				$rulelog = array_merge($rulelog, $this->getchecklogbyclid($rulelog['clid'], $uid));

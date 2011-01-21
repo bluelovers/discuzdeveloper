@@ -811,9 +811,9 @@ function cutstr($string, $length, $dot = ' ...') {
 
 	$strcut = str_replace(array($pre.'&'.$end, $pre.'"'.$end, $pre.'<'.$end, $pre.'>'.$end), array('&amp;', '&quot;', '&lt;', '&gt;'), $strcut);
 
-	$pos = strrpos($s, chr(1));
+	$pos = strrpos($strcut, chr(1));
 	if($pos !== false) {
-		$strcut = substr($s,0,$pos);
+		$strcut = substr($strcut,0,$pos);
 	}
 	return $strcut.$dot;
 }
@@ -1644,6 +1644,10 @@ function multi($num, $perpage, $curpage, $mpurl, $maxpages = 0, $page = 10, $aut
 
 	$realpages = 1;
 	$_G['page_next'] = 0;
+	$page -= strlen($curpage) - 1;
+	if($page <= 0) {
+		$page = 1;
+	}
 	if($num > $perpage) {
 
 		$offset = floor($page * 0.5);

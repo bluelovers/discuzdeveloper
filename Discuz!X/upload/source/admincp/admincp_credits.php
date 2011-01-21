@@ -168,7 +168,7 @@ if($operation == 'list') {
 				}
 			}
 			foreach($rule as $key => $val) {
-				$rule[$key] = (float)$val;
+				$rule[$key] = intval($val);
 			}
 			if($fid) {
 				$fids = $globalrule['fids'] ? explode(',', $globalrule['fids']) : array();

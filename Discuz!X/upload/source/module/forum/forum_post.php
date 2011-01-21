@@ -17,11 +17,10 @@ cknewuser();
 require_once libfile('class/credit');
 require_once libfile('function/post');
 
-
-$pid = intval(getgpc('pid'));
-$sortid = intval(getgpc('sortid'));
-$typeid = intval(getgpc('typeid'));
-$special = intval(getgpc('special'));
+$pid =  $_G['gp_pid'] = isset($_G['gp_pid']) ? intval($_G['gp_pid']) : 0;
+$sortid = $_G['gp_sortid'] = isset($_G['gp_sortid']) ? intval($_G['gp_sortid']) : 0;
+$typeid = $_G['gp_typeid'] = isset($_G['gp_typeid']) ? intval($_G['gp_typeid']) : 0;
+$special = $_G['gp_special'] = isset($_G['gp_special']) ? intval($_G['gp_special']) : 0;
 
 $postinfo = array('subject' => '');
 $thread = array('readperm' => '', 'pricedisplay' => '', 'hiddenreplies' => '');

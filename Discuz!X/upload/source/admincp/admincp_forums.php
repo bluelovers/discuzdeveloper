@@ -1384,7 +1384,7 @@ EOT;
 
 					if(!$usedefault) {
 						foreach($rule as $i => $v) {
-							$creditspolicynew[$rules[$rid]['action']]['extcredits'.$i] = is_numeric($v) ? $v : 0;
+							$creditspolicynew[$rules[$rid]['action']]['extcredits'.$i] = is_numeric($v) ? intval($v) : 0;
 						}
 					}
 

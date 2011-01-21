@@ -483,12 +483,12 @@ if($op == 'add') {
 	$perpage = 20;
 
 	$page = empty($_G['gp_page'])?0:intval($_G['gp_page']);
+	$gid = isset($_G['gp_gid']) ? intval($_G['gp_gid']) : -1;
 	if($page<1) $page = 1;
 	$start = ($page-1) * $perpage;
 	$json = array();
 	$wheresql = '';
-	if($_G['gp_gid']) {
-		$gid = intval($_G['gp_gid']);
+	if($gid > -1) {
 		$wheresql = " AND gid='$gid'";
 	}
 	$singlenum = 0;

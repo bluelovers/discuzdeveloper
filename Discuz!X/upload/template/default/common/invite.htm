@@ -50,12 +50,12 @@
 			<ul class="usl cl{if empty($_G['inajax'])} usl2{/if}" id="friends"></ul>
 			<script type="text/javascript">				
 				var page = 1;
-				var gid = 0;
+				var gid = -1;
 				var showNum = 0;
 				var haveFriend = true;
 				function getUser(pageId, gid) {
 					page = parseInt(pageId);
-					gid = isUndefined(gid) ? 0 : parseInt(gid);
+					gid = isUndefined(gid) ? -1 : parseInt(gid);
 					var x = new Ajax();
 					x.get('home.php?mod=spacecp&ac=friend&op=getinviteuser&inajax=1&page='+ page + '&gid=' + gid + '&' + Math.random(), function(s) {
 						var data = eval('('+s+')');
@@ -77,9 +77,9 @@
 					<!--{/if}-->
 					var listObj = $('friends');
 					listObj.onscroll = function() {
-						if(this.scrollTop >= this.scrollHeight/5) {
+						if(this.scrollTop >= (this.scrollHeight/5-5)) {
 							page++;
-							gid = isUndefined(gid) ? 0 : parseInt(gid);
+							gid = isUndefined(gid) ? -1 : parseInt(gid);
 							if(haveFriend) {
 								getUser(page, gid);
 							}

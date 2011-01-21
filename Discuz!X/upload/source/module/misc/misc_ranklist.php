@@ -274,69 +274,99 @@ function getranklist_member_credits($type = 'all' , $num = 20) {
 function getranklist_member_friendnum($num = 20) {
 	global $_G;
 
-	$friendnum = array();
-	$sql = "SELECT main.friends, m.uid, m.username, m.videophotostatus, m.groupid, field.spacenote FROM ".DB::table('common_member_count')." main
-		LEFT JOIN ".DB::table('common_member')." m ON m.uid=main.uid
-		LEFT JOIN ".DB::table('common_member_field_home')." field ON field.uid=main.uid WHERE main.friends>0
-		ORDER BY main.friends DESC LIMIT 0, $num";
-
-	$query = DB::query($sql);
-	while($result = DB::fetch($query)) {
-		$friendnum[] = $result;
+	$num = intval($num);
+	$num = $num ? $num : 20;
+	$data = $users = $oldorder = array();
+	$query = DB::query('SELECT uid, friends FROM '.DB::table('common_member_count').' WHERE friends>0 ORDER BY friends DESC LIMIT '.$num);
+	while($user = DB::fetch($query)) {
+		$users[$user['uid']] = $user;
+		$oldorder[] = $user['uid'];
 	}
+	$uids = array_keys($users);
+	if($uids) {
+		$query = DB::query('SELECT m.uid, m.username, m.videophotostatus, m.groupid, field.spacenote
+			FROM '.DB::table('common_member')." m
+			LEFT JOIN ".DB::table('common_member_field_home')." field ON m.uid=field.uid
+			WHERE m.uid IN (".dimplode($uids).")");
+		while($value = DB::fetch($query)) {
+			$users[$value['uid']] = array_merge($users[$value['uid']], $value);
+		}
 
-	return $friendnum;
+		foreach($oldorder as $uid) {
+			$data[] = $users[$uid];
+		}
+
+	}
+	return $data;
 
 }
 
 function getranklist_member_blogs($num = 20) {
 	global $_G;
+	$num = intval($num);
+	$num = $num ? $num : 20;
+	$data = $users = $oldorder = array();
+	$query = DB::query('SELECT uid, blogs FROM '.DB::table('common_member_count').' WHERE blogs>0 ORDER BY blogs DESC LIMIT '.$num);
+	while($user = DB::fetch($query)) {
+		$users[$user['uid']] = $user;
+		$oldorder[] = $user['uid'];
+	}
+	$uids = array_keys($users);
+	if($uids) {
+		$query = DB::query('SELECT m.uid,m.username,m.videophotostatus,m.groupid
+			FROM '.DB::table('common_member')." m
+			WHERE m.uid IN (".dimplode($uids).")");
+		while($value = DB::fetch($query)) {
+			$users[$value['uid']] = array_merge($users[$value['uid']], $value);
+		}
 
-	$blogs = array();
-	$sql = "SELECT m.uid,m.username,m.videophotostatus,m.groupid,c.blogs FROM ".DB::table('common_member').
-			" m LEFT JOIN ".DB::table('common_member_count')." c ON m.uid=c.uid WHERE c.blogs>0 ORDER BY blogs DESC LIMIT 0, $num";
+		foreach($oldorder as $uid) {
+			$data[] = $users[$uid];
+		}
 
-	$query = DB::query($sql);
-	while($result = DB::fetch($query)) {
-		$blogs[] = $result;
 	}
 
-	return $blogs;
+	return $data;
+
+}
+
+function getranklist_member_gender($gender, $num = 20) {
+	global $_G;
+
+	$num = intval($num);
+	$num = $num ? $num : 20;
+	$data = $users = $oldorder = array();
+	$query = DB::query("SELECT c.uid, c.views FROM ".DB::table('common_member_count')." c
+			LEFT JOIN ".DB::table('common_member_profile')." p ON c.uid=p.uid
+			WHERE c.views>0 AND p.gender = '$gender' ORDER BY c.views DESC LIMIT 0, $num");
+	while($user = DB::fetch($query)) {
+		$users[$user['uid']] = $user;
+		$oldorder[] = $user['uid'];
+	}
+	$uids = array_keys($users);
+	if($uids) {
+		$query = DB::query('SELECT m.uid, m.username, m.videophotostatus, m.groupid
+			FROM '.DB::table('common_member')." m
+			WHERE m.uid IN (".dimplode($uids).")");
+		while($value = DB::fetch($query)) {
+			$users[$value['uid']] = array_merge($users[$value['uid']], $value);
+		}
+
+		foreach($oldorder as $uid) {
+			$data[] = $users[$uid];
+		}
+
+	}
+	return $data;
 
 }
 
 function getranklist_member_beauty($num = 20) {
-	global $_G;
-
-	$beauty = array();
-	$sql = "SELECT m.uid,m.username,m.videophotostatus,m.groupid,c.views FROM ".DB::table('common_member').
-			" m LEFT JOIN ".DB::table('common_member_count')." c ON m.uid=c.uid LEFT JOIN ".DB::table('common_member_profile')." p ON m.uid=p.uid
-			WHERE p.gender = '2' AND c.views>0 ORDER BY c.views DESC LIMIT 0, $num";
-
-	$query = DB::query($sql);
-	while($result = DB::fetch($query)) {
-		$beauty[] = $result;
-	}
-
-	return $beauty;
-
+	return getranklist_member_gender(2, $num);
 }
 
 function getranklist_member_handsome($num = 20) {
-	global $_G;
-
-	$handsome = array();
-	$sql = "SELECT m.uid,m.username,m.videophotostatus,m.groupid,c.views FROM ".DB::table('common_member').
-			" m LEFT JOIN ".DB::table('common_member_count')." c ON m.uid=c.uid LEFT JOIN ".DB::table('common_member_profile')." p ON m.uid=p.uid
-			WHERE p.gender = '1' AND c.views>0 ORDER BY c.views DESC LIMIT 0, $num";
-
-	$query = DB::query($sql);
-	while($result = DB::fetch($query)) {
-		$handsome[] = $result;
-	}
-
-	return $handsome;
-
+	return getranklist_member_gender(1, $num);
 }
 
 function getranklist_member_posts($type = 'posts', $num = 20) {

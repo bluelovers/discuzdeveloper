@@ -130,7 +130,7 @@ if($space['medals']) {
         }
 }
 
-$upgradecredit = $space['uid'] && $space['group']['type'] == 'member' && $space['group']['creditslower'] != 999999999 ? $space['group']['creditslower'] - $space['credits'] : false;
+$upgradecredit = $space['uid'] && $space['group']['type'] == 'member' && $space['group']['creditslower'] != 9999999 ? $space['group']['creditslower'] - $space['credits'] : false;
 $allowupdatedoing = $space['uid'] == $_G['uid'] && checkperm('allowdoing');
 
 if($_G['setting']['verify']['enabled']) {

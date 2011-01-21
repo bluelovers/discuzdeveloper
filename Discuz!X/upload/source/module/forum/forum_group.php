@@ -368,6 +368,13 @@ if($action == 'index') {
 			$bannernew = upload_icon_banner($_G['forum'], $_FILES['bannernew'], 'banner');
 			if($iconnew) {
 				$iconsql .= ", icon='$iconnew'";
+				$group_recommend = unserialize($_G['setting']['group_recommend']);
+				if($group_recommend[$_G['fid']]) {
+					$group_recommend[$_G['fid']]['icon'] = get_groupimg($iconnew);
+					DB::query("UPDATE ".DB::table('common_setting')." SET svalue = '".serialize($group_recommend)."' WHERE skey = 'group_recommend' LIMIT 1");
+					include libfile('function/cache');
+					updatecache('setting');
+				}
 			}
 			if($bannernew && empty($deletebanner)) {
 				$iconsql .= ", banner='$bannernew'";

@@ -70,6 +70,7 @@ $lang = array
 	'groupattachment_dateline_week' => '最近1周',
 	'groupattachment_dateline_month' => '最近1月',
 	'groupattachment_gviewperm' => '群组浏览权限',
+	'groupattachment_gviewperm_nolimit' => '不限制',
 	'groupattachment_gviewperm_only_member' => '仅成员',
 	'groupattachment_gviewperm_all_member' => '所有人',
 );

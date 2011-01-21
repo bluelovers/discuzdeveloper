@@ -92,6 +92,7 @@ $lang = array
 	'groupthread_lastpost_month' => '1个月内',
 	'groupthread_orderby_displayorder' => '按默认顺序',
 	'groupthread_gviewperm' => '群组浏览权限',
+	'groupthread_gviewperm_nolimit' => '不限制',
 	'groupthread_gviewperm_only_member' => '仅成员',
 	'groupthread_gviewperm_all_member' => '所有人'
 );

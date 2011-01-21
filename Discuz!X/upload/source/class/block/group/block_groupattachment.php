@@ -87,10 +87,11 @@ class block_groupattachment {
 				'title' => 'groupattachment_gviewperm',
 				'type' => 'mradio',
 				'value' => array(
+					array('-1', 'groupattachment_gviewperm_nolimit'),
 					array('0', 'groupattachment_gviewperm_only_member'),
 					array('1', 'groupattachment_gviewperm_all_member')
 				),
-				'default' => '1'
+				'default' => '-1'
 			),
 			'dateline' => array(
 				'title' => 'groupattachment_dateline',
@@ -204,7 +205,6 @@ class block_groupattachment {
 			}
 			$typeids = $parameter['gtids'];
 		}
-		if(empty($typeids)) $typeids = array_keys($_G['cache']['grouptype']['second']);
 		$startrow	= isset($parameter['startrow']) ? intval($parameter['startrow']) : 0;
 		$items		= isset($parameter['items']) ? intval($parameter['items']) : 10;
 		$titlelength	= !empty($parameter['titlelength']) ? intval($parameter['titlelength']) : 40;
@@ -216,24 +216,37 @@ class block_groupattachment {
 		$dateline = isset($parameter['dateline']) ? intval($parameter['dateline']) : '8640000';
 		$threadmethod = !empty($parameter['threadmethod']) ? 1 : 0;
 		$isimage = isset($parameter['isimage']) ? intval($parameter['isimage']) : '';
-		$gviewperm = isset($parameter['gviewperm']) ? intval($parameter['gviewperm']) : 1;
+		$gviewperm = isset($parameter['gviewperm']) ? intval($parameter['gviewperm']) : -1;
 
 		$bannedids = !empty($parameter['bannedids']) ? explode(',', $parameter['bannedids']) : array();
 
-		if($typeids) {
-			$query = DB::query('SELECT f.fid, f.name, ff.description FROM '.DB::table('forum_forum')." f LEFT JOIN ".DB::table('forum_forumfield')." ff ON f.fid = ff.fid WHERE f.fup IN (".dimplode($typeids).") AND ff.gviewperm='$gviewperm'");
+		$gviewwhere = $gviewperm == -1 ? '' : " AND ff.gviewperm='$gviewperm'";
+
+		$groups = array();
+		if(empty($fids) && $typeids) {
+			$query = DB::query('SELECT f.fid, f.name, ff.description FROM '.DB::table('forum_forum')." f LEFT JOIN ".DB::table('forum_forumfield')." ff ON f.fid = ff.fid WHERE f.fup IN (".dimplode($typeids).") AND threads > 0$gviewwhere");
 			while($value = DB::fetch($query)) {
+				$groups[$value['fid']] = $value;
 				$fids[] = intval($value['fid']);
 			}
-			$fids = array_unique($fids);
+			if(empty($fids)){
+				return array('html' => '', 'data' => '');
+			}
 		}
 		$datalist = $list = array();
 		$sql = ($fids ? ' AND t.fid IN ('.dimplode($fids).')' : '')
 			.($tids ? ' AND t.tid IN ('.dimplode($tids).')' : '')
 			.($digest ? ' AND t.digest IN ('.dimplode($digest).')' : '')
 			.($special ? ' AND t.special IN ('.dimplode($special).')' : '')
-			.((in_array(3, $special) && $rewardstatus) ? ($rewardstatus == 1 ? ' AND t.price < 0' : ' AND t.price > 0') : '')
-			. " AND t.isgroup='1'";
+			.((in_array(3, $special) && $rewardstatus) ? ($rewardstatus == 1 ? ' AND t.price < 0' : ' AND t.price > 0') : '');
+
+		if(empty($fids)) {
+			$sql .= " AND t.isgroup='1'";
+			if($gviewwhere) {
+				$sql .= $gviewwhere;
+			}
+		}
+
 		$orderbysql = $historytime = '';
 		switch($orderby) {
 			case 'dateline':
@@ -267,6 +280,10 @@ class block_groupattachment {
 			$sqlgroupby = ' GROUP BY t.tid';
 		}
 		$sqlban = !empty($bannedids) ? ' AND attach.tid NOT IN ('.dimplode($bannedids).')' : '';
+		if(empty($fids)) {
+			$sqlfield = ', f.name groupname';
+			$sqljoin .= ' LEFT JOIN '.DB::table('forum_forum').' f ON t.fid=f.fid LEFT JOIN '.DB::table('forum_forumfield').' ff ON f.fid = ff.fid';
+		}
 		$query = DB::query("SELECT attach.*,t.tid,t.author,t.authorid,t.subject $sqlfield
 			FROM `".DB::table('forum_attachment')."` attach
 			$sqljoin

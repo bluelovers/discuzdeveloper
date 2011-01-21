@@ -150,7 +150,9 @@ class task {
 		global $_G;
 
 		$this->task = DB::fetch_first("SELECT t.*, mt.status, mt.csc, mt.dateline, mt.dateline AS applytime FROM ".DB::table('common_task')." t LEFT JOIN ".DB::table('common_mytask')." mt ON mt.uid='$_G[uid]' AND mt.taskid=t.taskid WHERE t.taskid='$id' AND t.available='2'");
-
+		if(!$this->task) {
+			showmessage('task_nonexistence');
+		}
 		switch($this->task['reward']) {
 			case 'magic':
 				$this->task['rewardtext'] = DB::result_first("SELECT name FROM ".DB::table('common_magic')." WHERE magicid='".$this->task['prize']."'");
@@ -270,12 +272,11 @@ class task {
 			$nextapplytime = dgmdate($nextapplytime);
 		} elseif($task['periodtype'] == 2 && $task['period'] > 0 && $task['period'] <= 7) {
 			$task['period'] = $task['period'] != 7 ? $task['period'] : 0;
-			$timestamp = TIMESTAMP;
-			$todayweek = dgmdate($timestamp, 'w');
-			$weektimestamp = $timestamp - ($todayweek - $task['period']) * 86400;
+			$todayweek = dgmdate(TIMESTAMP, 'w');
+			$weektimestamp = TIMESTAMP - ($todayweek - $task['period']) * 86400;
 			$weekstart = $weektimestamp - ($weektimestamp + $_G['setting']['timeoffset'] * 3600) % 86400;
 			$weekfirstday = $weekstart - $task['period'] * 86400;
-			if($task['dateline'] && ($task['dateline'] < $weekstart || $task['dateline'] > $weekfirstday)) {
+			if($task['dateline'] && ($task['dateline'] > $weekstart || $task['dateline'] > $weekfirstday)) {
 				$allowapply = -6;
 				if($task['dateline'] > $weekfirstday) {
 					$weekstart += 604800;
@@ -288,7 +289,7 @@ class task {
 			list($year, $month) = explode('/', dgmdate(TIMESTAMP, 'Y/n'));
 			$monthstart = mktime(0, 0, 0, $month, $task['period'], $year);
 			$monthfirstday = mktime(0, 0, 0, $month, 1, $year);
-			if($task['dateline'] && ($task['dateline'] < $monthstart || $task['dateline'] > $monthfirstday)) {
+			if($task['dateline'] && ($task['dateline'] > $monthstart || $task['dateline'] > $monthfirstday)) {
 				$allowapply = -6;
 				if($task['dateline'] > $monthfirstday) {
 					$monthstart = mktime(0, 0, 0, $month + 1, $task['period'], $year);

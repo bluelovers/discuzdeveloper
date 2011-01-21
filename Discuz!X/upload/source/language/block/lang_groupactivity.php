@@ -92,6 +92,7 @@ $lang = array
 	'groupactivity_orderby_weekexp' => '按一周内报名截止时间排序',
 	'groupactivity_orderby_monthexp' => '按一月内报名截止时间排序',
 	'groupactivity_gviewperm' => '群组浏览权限',
+	'groupactivity_gviewperm_nolimit' => '不限制',
 	'groupactivity_gviewperm_only_member' => '仅成员',
 	'groupactivity_gviewperm_all_member' => '所有人',
 );

@@ -500,6 +500,9 @@ if($op == 'block') {
 				$item['fields'][$key] = $_POST[$key];
 			}
 		}
+		if(isset($item['fields']['fulltitle'])) {
+			$item['fields']['fulltitle'] = $item['title'];
+		}
 		$item['fields']	= addslashes(serialize($item['fields']));
 
 		if(submitcheck('itemsubmit')) {

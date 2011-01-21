@@ -54,7 +54,7 @@ $srhfid = intval($_G['gp_srhfid']);
 
 $keyword = isset($srchtxt) ? htmlspecialchars(trim($srchtxt)) : '';
 
-$forumselect = forumselect('', '', '', TRUE);
+$forumselect = forumselect();
 if(!empty($srchfid) && !is_numeric($srchfid)) {
 	$forumselect = str_replace('<option value="'.$srchfid.'">', '<option value="'.$srchfid.'" selected="selected">', $forumselect);
 }

@@ -76,10 +76,11 @@ class block_grouptrade {
 				'title' => 'grouptrade_gviewperm',
 				'type' => 'mradio',
 				'value' => array(
+					array('-1', 'grouptrade_gviewperm_nolimit'),
 					array('0', 'grouptrade_gviewperm_only_member'),
 					array('1', 'grouptrade_gviewperm_all_member')
 				),
-				'default' => '1'
+				'default' => '-1'
 			),
 			'titlelength' => array(
 				'title' => 'grouptrade_titlelength',
@@ -167,7 +168,6 @@ class block_grouptrade {
 			}
 			$typeids = $parameter['gtids'];
 		}
-		if(empty($typeids)) $typeids = array_keys($_G['cache']['grouptype']['second']);
 		$tids		= !empty($parameter['tids']) ? explode(',', $parameter['tids']) : array();
 		$fids		= !empty($parameter['fids']) ? explode(',', $parameter['fids']) : array();
 		$uids		= !empty($parameter['uids']) ? explode(',', $parameter['uids']) : array();
@@ -182,15 +182,22 @@ class block_grouptrade {
 		$keyword	= !empty($parameter['keyword']) ? $parameter['keyword'] : '';
 
 		$bannedids = !empty($parameter['bannedids']) ? explode(',', $parameter['bannedids']) : array();
-		$gviewperm = isset($parameter['gviewperm']) ? intval($parameter['gviewperm']) : 1;
+		$gviewperm = isset($parameter['gviewperm']) ? intval($parameter['gviewperm']) : -1;
 
-		if($typeids) {
-			$query = DB::query('SELECT f.fid, f.name, ff.description FROM '.DB::table('forum_forum')." f LEFT JOIN ".DB::table('forum_forumfield')." ff ON f.fid = ff.fid WHERE f.fup IN (".dimplode($typeids).") AND ff.gviewperm='$gviewperm'");
+		$gviewwhere = $gviewperm == -1 ? '' : " AND ff.gviewperm='$gviewperm'";
+
+		$groups = array();
+		if(empty($fids) && $typeids) {
+			$query = DB::query('SELECT f.fid, f.name, ff.description FROM '.DB::table('forum_forum')." f LEFT JOIN ".DB::table('forum_forumfield')." ff ON f.fid = ff.fid WHERE f.fup IN (".dimplode($typeids).") AND threads > 0$gviewwhere");
 			while($value = DB::fetch($query)) {
+				$groups[$value['fid']] = $value;
 				$fids[] = intval($value['fid']);
 			}
-			$fids = array_unique($fids);
+			if(empty($fids)){
+				return array('html' => '', 'data' => '');
+			}
 		}
+
 		require_once libfile('function/post');
 		$datalist = $list = array();
 		if($keyword) {
@@ -218,8 +225,15 @@ class block_grouptrade {
 		$sql = ($fids ? ' AND t.fid IN ('.dimplode($fids).')' : '')
 			.($tids ? ' AND t.tid IN ('.dimplode($tids).')' : '')
 			.($digest ? ' AND t.digest IN ('.dimplode($digest).')' : '')
-			.($stick ? ' AND t.displayorder IN ('.dimplode($stick).')' : '')
-			." AND t.isgroup='1'";
+			.($stick ? ' AND t.displayorder IN ('.dimplode($stick).')' : '');
+
+		if(empty($fids)) {
+			$sql .= " AND t.isgroup='1'";
+			if($gviewwhere) {
+				$sql .= $gviewwhere;
+			}
+		}
+
 		$where = '';
 		if(in_array($orderby, array('todayhots','weekhots','monthhots'))) {
 			$historytime = 0;
@@ -236,17 +250,26 @@ class block_grouptrade {
 					$historytime = mktime(0, 0, 0, date('m', TIMESTAMP), 1, date('Y', TIMESTAMP));
 				break;
 			}
-			$where = ' WHERE tr.dateline>='.$historytime;
+			$where = ' AND tr.dateline>='.$historytime;
 			$orderby = 'totalitems';
 		}
 		$where .= ($uids ? ' AND tr.sellerid IN ('.dimplode($uids).')' : '').$keyword;
 		$where .= ($bannedids ? ' AND tr.pid NOT IN ('.dimplode($bannedids).')' : '');
-		$sqlfrom = " INNER JOIN `".DB::table('forum_thread')."` t ON t.tid=tr.tid $sql AND t.displayorder>='0'";
+		$where = "$sql AND t.displayorder>='0' $where";
+		$sqlfrom = " INNER JOIN `".DB::table('forum_thread')."` t ON t.tid=tr.tid ";
 		if($recommend) {
 			$sqlfrom .= " INNER JOIN `".DB::table('forum_forumrecommend')."` fc ON fc.tid=tr.tid";
 		}
-		$query = DB::query("SELECT tr.pid, tr.tid, tr.aid, tr.price, tr.credit, tr.subject, tr.totalitems, tr.seller, tr.sellerid
-			FROM ".DB::table('forum_trade')." tr $sqlfrom $where
+
+		$sqlfield = '';
+		if(empty($fids)) {
+			$sqlfield = ', f.name groupname';
+			$sqlfrom .= ' LEFT JOIN '.DB::table('forum_forum').' f ON t.fid=f.fid LEFT JOIN '.DB::table('forum_forumfield').' ff ON f.fid = ff.fid';
+		}
+
+		$query = DB::query("SELECT tr.pid, tr.tid, tr.aid, tr.price, tr.credit, tr.subject, tr.totalitems, tr.seller, tr.sellerid$sqlfield
+			FROM ".DB::table('forum_trade')." tr $sqlfrom
+			WHERE 1$where
 			ORDER BY tr.$orderby DESC
 			LIMIT $startrow,$items;"
 			);

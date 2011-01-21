@@ -329,9 +329,11 @@ class block_activity {
 			while($value = DB::fetch($query)) {
 				$list[$value['tid']]['fields']['applynumber'] = $value['sum'];
 			}
+
 			foreach($listtids as $key => $value) {
 				$listdata[] = $list[$value];
 			}
+
 		}
 		return array('html' => '', 'data' => $listdata);
 	}

@@ -2,7 +2,7 @@
 	[Discuz!] (C)2001-2009 Comsenz Inc.
 	This is NOT a freeware, use is subject to license terms
 
-	$Id: common.js 17866 2010-11-04 02:33:07Z zhangguosheng $
+	$Id: common.js 19763 2011-01-18 07:22:07Z zhangguosheng $
 */
 
 var BROWSER = {};
@@ -553,10 +553,10 @@ function ajaxpost(formid, showid, waitid, showidclass, submitbtn, recall) {
 			s = $(ajaxframeid).contentWindow.document.XMLDocument.text;
 		} catch(e) {
 			try {
-				s = $(ajaxframeid).contentWindow.document.documentElement.firstChild.nodeValue;
+				s = $(ajaxframeid).contentWindow.document.documentElement.firstChild.wholeText;
 			} catch(e) {
 				try {
-					s = $(ajaxframeid).contentWindow.document.documentElement.firstChild.wholeText;
+					s = $(ajaxframeid).contentWindow.document.documentElement.firstChild.nodeValue;
 				} catch(e) {
 					s = '内部错误，无法显示此内容';
 				}

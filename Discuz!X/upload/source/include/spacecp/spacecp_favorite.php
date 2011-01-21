@@ -83,7 +83,7 @@ if($_GET['op'] == 'delete') {
 	$description = '';
 	$description_show = nl2br($description);
 
-	$fav_count = DB::result_first("SELECT COUNT(*) FROM ".DB::table('home_favorite')." WHERE idtype='$idtype' AND id='$id'");
+	$fav_count = DB::result_first("SELECT COUNT(*) FROM ".DB::table('home_favorite')." WHERE id='$id' AND idtype='$idtype'");
 	if(submitcheck('favoritesubmit')) {
 		$arr = array(
 			'uid' => intval($_G['uid']),

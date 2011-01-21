@@ -96,10 +96,11 @@ class block_groupactivity {
 				'title' => 'groupactivity_gviewperm',
 				'type' => 'mradio',
 				'value' => array(
+					array('-1', 'groupactivity_gviewperm_nolimit'),
 					array('0', 'groupactivity_gviewperm_only_member'),
 					array('1', 'groupactivity_gviewperm_all_member')
 				),
-				'default' => '1'
+				'default' => '-1'
 			),
 			'titlelength' => array(
 				'title' => 'groupactivity_titlelength',
@@ -198,7 +199,6 @@ class block_groupactivity {
 			}
 			$typeids = $parameter['gtids'];
 		}
-		if(empty($typeids)) $typeids = array_keys($_G['cache']['grouptype']['second']);
 		$tids		= !empty($parameter['tids']) ? explode(',', $parameter['tids']) : array();
 		$fids		= !empty($parameter['fids']) ? explode(',', $parameter['fids']) : array();
 		$uids		= !empty($parameter['uids']) ? explode(',', $parameter['uids']) : array();
@@ -214,17 +214,24 @@ class block_groupactivity {
 		$place		= !empty($parameter['place']) ? $parameter['place'] : '';
 		$class		= !empty($parameter['class']) ? $parameter['class'] : '';
 		$gender		= !empty($parameter['gender']) ? intval($parameter['gender']) : '';
-		$gviewperm = isset($parameter['gviewperm']) ? intval($parameter['gviewperm']) : 1;
+		$gviewperm = isset($parameter['gviewperm']) ? intval($parameter['gviewperm']) : -1;
 
 		$bannedids = !empty($parameter['bannedids']) ? explode(',', $parameter['bannedids']) : array();
 
-		if($typeids) {
-			$query = DB::query('SELECT f.fid, f.name, ff.description FROM '.DB::table('forum_forum')." f LEFT JOIN ".DB::table('forum_forumfield')." ff ON f.fid = ff.fid WHERE f.fup IN (".dimplode($typeids).") AND ff.gviewperm='$gviewperm'");
+		$gviewwhere = $gviewperm == -1 ? '' : " AND ff.gviewperm='$gviewperm'";
+
+		$groups = array();
+		if(empty($fids) && $typeids) {
+			$query = DB::query('SELECT f.fid, f.name, ff.description FROM '.DB::table('forum_forum')." f LEFT JOIN ".DB::table('forum_forumfield')." ff ON f.fid = ff.fid WHERE f.fup IN (".dimplode($typeids).") AND threads > 0$gviewwhere");
 			while($value = DB::fetch($query)) {
+				$groups[$value['fid']] = $value;
 				$fids[] = intval($value['fid']);
 			}
-			$fids = array_unique($fids);
+			if(empty($fids)){
+				return array('html' => '', 'data' => '');
+			}
 		}
+
 		require_once libfile('function/post');
 		$datalist = $list = array();
 		if($keyword) {
@@ -250,12 +257,19 @@ class block_groupactivity {
 			$keyword = '';
 		}
 		$sql = ($fids ? ' AND t.fid IN ('.dimplode($fids).')' : '')
-			.$keyword
 			.($tids ? ' AND t.tid IN ('.dimplode($tids).')' : '')
 			.($bannedids ? ' AND t.tid NOT IN ('.dimplode($bannedids).')' : '')
 			.($digest ? ' AND t.digest IN ('.dimplode($digest).')' : '')
 			.($stick ? ' AND t.displayorder IN ('.dimplode($stick).')' : '')
-			." AND t.isgroup='1'";
+			.$keyword;
+
+		if(empty($fids)) {
+			$sql .= " AND t.isgroup='1'";
+			if($gviewwhere) {
+				$sql .= $gviewwhere;
+			}
+		}
+
 		$where = '';
 		if(in_array($orderby, array('weekstart','monthstart'))) {
 			$historytime = 0;
@@ -267,7 +281,7 @@ class block_groupactivity {
 					$historytime = TIMESTAMP + 86400 * 30;
 				break;
 			}
-			$where = ' WHERE a.starttimefrom >= '.TIMESTAMP.' AND a.starttimefrom<='.$historytime;
+			$where = ' AND a.starttimefrom >= '.TIMESTAMP.' AND a.starttimefrom<='.$historytime;
 			$orderby = 'a.starttimefrom ASC';
 		} elseif(in_array($orderby, array('weekexp','monthexp'))) {
 			$historytime = 0;
@@ -279,7 +293,7 @@ class block_groupactivity {
 					$historytime = TIMESTAMP + 86400 * 30;
 				break;
 			}
-			$where = ' WHERE a.expiration >= '.TIMESTAMP.' AND a.expiration<='.$historytime;
+			$where = ' AND a.expiration >= '.TIMESTAMP.' AND a.expiration<='.$historytime;
 			$orderby = 'a.expiration ASC';
 		} else {
 			$orderby = 't.dateline DESC';
@@ -288,12 +302,20 @@ class block_groupactivity {
 		if($gender) {
 			$where .= " AND a.gender='$gender'";
 		}
-		$sqlfrom = " INNER JOIN `".DB::table('forum_thread')."` t ON t.tid=a.tid $sql AND t.displayorder>='0'";
+		$where = $sql." AND t.displayorder>='0' ".$where;
+		$sqlfrom = " INNER JOIN `".DB::table('forum_thread')."` t ON t.tid=a.tid ";
 		if($recommend) {
 			$sqlfrom .= " INNER JOIN `".DB::table('forum_forumrecommend')."` fc ON fc.tid=tr.tid";
 		}
-		$query = DB::query("SELECT a.*, t.tid, t.subject, t.authorid, t.author
-			FROM ".DB::table('forum_activity')." a $sqlfrom $where
+
+		$sqlfield = '';
+		if(empty($fids)) {
+			$sqlfield = ', f.name groupname';
+			$sqlfrom .= ' LEFT JOIN '.DB::table('forum_forum').' f ON t.fid=f.fid LEFT JOIN '.DB::table('forum_forumfield').' ff ON f.fid = ff.fid';
+		}
+		$query = DB::query("SELECT a.*, t.tid, t.subject, t.authorid, t.author$sqlfield
+			FROM ".DB::table('forum_activity')." a $sqlfrom
+			WHERE 1$where
 			ORDER BY $orderby
 			LIMIT $startrow,$items;"
 			);
@@ -335,9 +357,11 @@ class block_groupactivity {
 			while($value = DB::fetch($query)) {
 				$list[$value['tid']]['fields']['applynumber'] = $value['sum'];
 			}
+
 			foreach($listtids as $key => $value) {
 				$listdata[] = $list[$value];
 			}
+
 		}
 		return array('html' => '', 'data' => $listdata);
 	}

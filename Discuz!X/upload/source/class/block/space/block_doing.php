@@ -94,6 +94,7 @@ class block_doing {
 		if($bannedids) {
 			$wheres[] = 'doid NOT IN ('.dimplode($bannedids).')';
 		}
+		$wheres[] = " status = '0'";
 		$wheresql = $wheres ? implode(' AND ', $wheres) : '1';
 		$query = DB::query("SELECT * FROM ".DB::table('home_doing')." WHERE $wheresql ORDER BY $orderby DESC LIMIT $startrow,$items");
 		while($data = DB::fetch($query)) {

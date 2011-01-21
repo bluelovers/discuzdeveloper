@@ -41,12 +41,12 @@ if($tpls) {
 }
 $pageblocks['others'] = array();
 if(!$_G['group']['allowdiy']) {
-	$query = DB::query('SELECT bid,allowmanage,allowrecommend,needverify FROM '.DB::table('common_block_permission')." WHERE uid='$_G[uid]' AND (allowmanage='1' OR (allowrecommend='1' AND needverify='0'))");
+	$query = DB::query('SELECT bp.bid,bp.allowmanage,bp.allowrecommend,bp.needverify, tb.targettplname FROM '.DB::table('common_block_permission')." bp LEFT JOIN ".DB::table('common_template_block')." tb ON tb.bid=bp.bid WHERE bp.uid='$_G[uid]' AND (bp.allowmanage='1' OR (bp.allowrecommend='1'".($op == 'recommend' ? '' : "AND bp.needverify='0'")."))");
 	while(($value=DB::fetch($query))) {
 		$bid = intval($value['bid']);
 		$blockpermissions[$bid] = $value;
 		$bids[] = $bid;
-		$pageblocks['others'][] = $bid;
+		$pageblocks[$value['targettplname'] ? $value['targettplname'] : 'others'][] = $bid;
 	}
 } else {
 	$query = DB::query('SELECT bid FROM '.DB::table('common_block')." WHERE blocktype = '1'");

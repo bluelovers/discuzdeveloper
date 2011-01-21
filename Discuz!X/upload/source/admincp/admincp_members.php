@@ -325,6 +325,7 @@ if($operation == 'search') {
 			}
 		}
 
+
 		if((empty($membernum) || empty($uids))) {
 			cpmsg('members_no_find_deluser', '', 'error');
 		}
@@ -1564,6 +1565,7 @@ EOT;
 		$ucresult = uc_user_edit($member['username'], $_G['gp_passwordnew'], $_G['gp_passwordnew'], $_G['gp_emailnew'], 1, $questionid);
 
 		if($_G['gp_clearavatar']) {
+			DB::query("UPDATE ".DB::table('common_member')." SET avatarstatus='0' WHERE uid='{$_G['gp_uid']}'");
 			uc_user_deleteavatar($member['uid']);
 		}
 
@@ -1618,7 +1620,7 @@ EOT;
 		}
 
 		$emailadd = $ucresult < 0 ? '' : "email='$_G[gp_emailnew]', ";
-		$passwordadd = $ucresult < 0 ? '' : ", password='".md5(random(10))."'";
+		$passwordadd = ($ucresult < 0 || empty($_G['gp_passwordnew'])) ? '' : ", password='".md5(random(10))."'";
 
 		$addsize = intval($_G['gp_addsizenew']);
 		$addfriend = intval($_G['gp_addfriendnew']);

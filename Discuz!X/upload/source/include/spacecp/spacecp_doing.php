@@ -70,8 +70,8 @@ if(submitcheck('addsubmit')) {
 	DB::update('common_member_field_home', $setarr, "uid='$_G[uid]'");
 
 	if($_POST['to_signhtml'] && $_G['group']['maxsigsize']) {
-		$message = cutstr($message, $_G['group']['maxsigsize']);
-		DB::update('common_member_field_forum', array('sightml'=>$message), "uid='$_G[uid]'");
+		$signhtml = cutstr(strip_tags($message), $_G['group']['maxsigsize']);
+		DB::update('common_member_field_forum', array('sightml'=>$signhtml), "uid='$_G[uid]'");
 	}
 
 	if($add_doing && ckprivacy('doing', 'feed') && $doing_status == '0') {

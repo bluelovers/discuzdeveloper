@@ -91,6 +91,7 @@ $lang = array
 	'grouptrade_orderby_weekexp' => '按一周内报名截止时间排序',
 	'grouptrade_orderby_monthexp' => '按一月内报名截止时间排序',
 	'grouptrade_gviewperm' => '群组浏览权限',
+	'grouptrade_gviewperm_nolimit' => '不限制',
 	'grouptrade_gviewperm_only_member' => '仅成员',
 	'grouptrade_gviewperm_all_member' => '所有人',
 );
