@@ -2,7 +2,7 @@
 	[Discuz!] (C)2001-2009 Comsenz Inc.
 	This is NOT a freeware, use is subject to license terms
 
-	$Id: common.js 21424 2010-11-06 09:34:15Z monkey $
+	$Id: common.js 21529 2011-02-11 01:08:25Z monkey $
 */
 
 //note userAgent
@@ -1230,19 +1230,18 @@ function ajaxpost(formid, showid, waitid, showidclass, submitbtn, recall) {
 
 		showloading('none');
 		try {
-			if(BROWSER.ie) {
-				s = $(ajaxframeid).contentWindow.document.XMLDocument.text;
-			} else {
-				if(BROWSER.safari > 0) {
-					s = $(ajaxframeid).contentWindow.document.documentElement.firstChild.wholeText;
-				} else {
+			s = $(ajaxframeid).contentWindow.document.XMLDocument.text;
+		} catch(e) {
+			try {
+				s = $(ajaxframeid).contentWindow.document.documentElement.firstChild.wholeText;
+			} catch(e) {
+				try {
 					s = $(ajaxframeid).contentWindow.document.documentElement.firstChild.nodeValue;
+				} catch(e) {
+					s = '内部错误，无法显示此内容';
 				}
 			}
-		} catch(e) {
-			s = '内部错误，无法显示此内容';
 		}
-
 		if(s != '' && s.indexOf('ajaxerror') != -1) {
 			evalscript(s);
 			evaled = true;
