@@ -537,7 +537,7 @@ function iswhitelist($host) {
 
 
 function savepostposition($tid, $pid) {
-	$res = DB::query("REPLACE INTO ".DB::table('forum_postposition')." SET tid='$tid', pid='$pid'");
+	$res = DB::query("INSERT INTO ".DB::table('forum_postposition')." SET tid='$tid', pid='$pid'");
 	return $res;
 }
 

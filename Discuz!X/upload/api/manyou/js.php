@@ -191,7 +191,7 @@ class Search {
 		global $_G;
 
 		$leftHtmlCode = '<div id="navs-wraper-v2" class="v2" onmouseover="document.getElementById(\'navs-menu\').style.display=\'block\'" onmouseout="document.getElementById(\'navs-menu\').style.display=\'none\'">';
-		$leftHtmlCode .= '<p id="return-homepage"><a href="home.php?mod=space&do=home">' . lang('home/template', 'return_homepage') . '</a></p>' . "\n";
+		$leftHtmlCode .= '<p id="return-homepage"><a href="'.(!empty($_G['setting']['defaultindex']) ? $_G['setting']['defaultindex'] : 'forum.php').'">' . lang('home/template', 'return_homepage') . '</a></p>' . "\n";
 		$leftHtmlCode .= "<ul id=\"navs-menu\">\n";
 		foreach($_G['setting']['navs'] as $navsid => $nav) {
 			$nav['nav'] = '<li ' . $nav['nav'] . '></li>';

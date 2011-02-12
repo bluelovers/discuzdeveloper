@@ -207,6 +207,7 @@ function getblockhtml($blockname,$parameters = array()) {
 
 		case 'doing':
 			$do = $blockname;
+			if(ckprivacy('doing', 'view')) {
 			$dolist = array();
 			$sql = "SELECT * FROM ".DB::table('home_doing')." WHERE uid='$uid' ORDER BY dateline DESC LIMIT 0,$shownum";
 			$query = DB::query($sql);
@@ -227,6 +228,9 @@ function getblockhtml($blockname,$parameters = array()) {
 				}
 			} else {
 				$html .= "<p class=\"emp\">".lang('space', 'block_doing_no_content')."</p>";
+				}
+			} else {
+				$html .= "<p class=\"emp\">".lang('space', 'block_view_noperm')."</p>";
 			}
 			$html = '<ul class="xl">'.$html.'</ul>';
 			break;

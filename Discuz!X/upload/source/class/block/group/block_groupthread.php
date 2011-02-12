@@ -309,7 +309,7 @@ class block_groupthread {
 					'views' => $data['views'],
 					'heats' => $data['heats'],
 					'recommends' => $data['recommends'],
-					'groupname' => $groups[$data['fid']]['name'],
+					'groupname' => empty($groups[$data['fid']]['name']) ? $data['groupname'] : $groups[$data['fid']]['name'],
 					'groupurl' => 'forum.php?mod=group&fid='.$data['fid'],
 				)
 			);

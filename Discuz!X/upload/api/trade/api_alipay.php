@@ -131,6 +131,7 @@ function trade_notifycheck($type) {
 		}
 
 		if($notify['sign'] != md5(substr($sign,1).DISCUZ_SECURITYCODE)) {
+			exit('Access Denied');
 		}
 	}
 

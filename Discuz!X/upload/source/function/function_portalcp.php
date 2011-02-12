@@ -134,6 +134,7 @@ function save_diy_data($primaltplname, $targettplname, $data, $database = false,
 	if (!file_exists($file)) {
 		$file = './template/default/'.$primaltplname.'.htm';
 	}
+	if(!file_exists($file)) return false;
 	$content = file_get_contents(DISCUZ_ROOT.$file);
 	$content = preg_replace("/\<\!\-\-\[name\](.+?)\[\/name\]\-\-\>/i", '', $content);
 	foreach ($data['layoutdata'] as $key => $value) {

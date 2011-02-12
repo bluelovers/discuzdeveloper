@@ -134,6 +134,10 @@ if($view == 'userapp') {
 		$space['notifications'] = $newcount;
 	}
 
+	$updatenotice = array();
+	if($newnotice) {
+		$updatenotice['notifications'] = -$newnotice;
+	}
 	$newprompt = 0;
 	foreach (array('notifications','myinvitations','pokes','pendingfriends') as $key) {
 		$newprompt = $newprompt + $space[$key];
@@ -151,15 +155,24 @@ if($view == 'userapp') {
 			while($value = DB::fetch($query)) {
 				$pendingfriends[] = $value;
 			}
+			if(empty($pendingfriends)) {
+				$updatenotice['pendingfriends'] = -$space['pendingfriends'];
+			}
 		}
 		if($space['pokes']) {
 			$query = DB::query("SELECT * FROM ".DB::table('home_poke')." WHERE uid='$_G[uid]' ORDER BY dateline DESC LIMIT 0, 2");
 			while($value = DB::fetch($query)) {
 				$pokes[] = $value;
 			}
+			if(empty($pokes)) {
+				$updatenotice['pokes'] = -$space['pokes'];
+			}
 		}
 	}
 
+	if(!empty($updatenotice)) {
+		member_status_update($_G['uid'], $updatenotice);
+	}
 }
 dsetcookie('promptstate_'.$_G['uid'], $newprompt, 31536000);
 include_once template("diy:home/space_notice");

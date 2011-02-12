@@ -354,7 +354,7 @@ function block_template($bid) {
 							require_once libfile('class/image');
 							$image = new image();
 							$thumbpath = block_thumbpath($block, $blockitem);
-							if(file_exists($_G['setting']['attachdir'].$thumbpath) || ($return = $image->Thumb($replacevalue, $thumbpath, $block['picwidth'], $block['picheight'], 2))) {
+							if(file_exists($_G['setting']['attachdir'].$thumbpath) || ($return = $image->Thumb($replacevalue, $thumbpath, $block['picwidth'], $block['picheight'], 1))) {
 								DB::update('common_block_item', array('makethumb'=>1), array('itemid'=>$blockitem['itemid']));
 								$replacevalue = $_G['setting']['attachurl'].$thumbpath;
 								$_G['block_makethumb'] = true;

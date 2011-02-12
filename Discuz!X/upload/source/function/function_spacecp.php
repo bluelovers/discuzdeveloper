@@ -64,7 +64,7 @@ function album_update_pic($albumid, $picid=0) {
 		return false;
 	}
 	$from = $pic['remote'];
-	$pic['remote'] = $pic['remote'] > 1 ? $pic['remote'] - 2 : 0;
+	$pic['remote'] = $pic['remote'] > 1 ? $pic['remote'] - 2 : $pic['remote'];
 	$basedir = !getglobal('setting/attachdir') ? (DISCUZ_ROOT.'./data/attachment/') : getglobal('setting/attachdir');
 	$picdir = 'cover/'.substr(md5($albumid), 0, 2).'/';
 	dmkdir($basedir.'./album/'.$picdir);
@@ -81,6 +81,7 @@ function album_update_pic($albumid, $picid=0) {
 		if(getglobal('setting/ftp/on')) {
 			if(ftpcmd('upload', 'album/'.$picdir.$albumid.'.jpg')) {
 				$setarr['picflag'] = 2;
+				@unlink($_G['setting']['attachdir'].'album/'.$picdir.$albumid.'.jpg');
 			}
 		}
 	} else {
@@ -139,7 +140,24 @@ function pic_save($FILE, $albumid, $title, $iswatermark = true, $catid = 0) {
 	}
 
 	if(!cknewuser(1)) {
-		return lang('message', 'no_privilege_newbiespan', array('newbiespan' => $_G['setting']['newbiespan']));
+		if($_G['setting']['newbiespan'] && $_G['timestamp'] - $_G['member']['regdate'] < $_G['setting']['newbiespan'] * 60) {
+			return lang('message', 'no_privilege_newbiespan', array('newbiespan' => $_G['setting']['newbiespan']));
+		}
+
+		if($_G['setting']['need_avatar'] && empty($_G['member']['avatarstatus'])) {
+			return lang('message', 'no_privilege_avatar');
+		}
+
+		if($_G['setting']['need_email'] && empty($_G['member']['emailstatus'])) {
+			return lang('message', 'no_privilege_email');
+		}
+
+		if($_G['setting']['need_friendnum']) {
+			space_merge($_G['member'], 'count');
+			if($_G['member']['friends'] < $_G['setting']['need_friendnum']) {
+				return lang('message', 'no_privilege_friendnum', array('friendnum' => $_G['setting']['need_friendnum']));
+			}
+		}
 	}
 
 	$maxspacesize = checkperm('maxspacesize');
@@ -189,8 +207,10 @@ function pic_save($FILE, $albumid, $title, $iswatermark = true, $catid = 0) {
 		$ftpresult_thumb = 0;
 		$ftpresult = ftpcmd('upload', 'album/'.$upload->attach['attachment']);
 		if($ftpresult) {
+			@unlink($_G['setting']['attachdir'].'album/'.$upload->attach['attachment']);
 			if($thumb) {
 				ftpcmd('upload', 'album/'.$upload->attach['attachment'].'.thumb.jpg');
+				@unlink($_G['setting']['attachdir'].'album/'.$upload->attach['attachment'].'.thumb.jpg');
 			}
 			$pic_remote = 1;
 			$album_picflag = 2;
@@ -294,8 +314,10 @@ function stream_save($strdata, $albumid = 0, $fileext = 'jpg', $name='', $title=
 				$ftpresult_thumb = 0;
 				$ftpresult = ftpcmd('upload', 'album/'.$filepath);
 				if($ftpresult) {
+					@unlink($_G['setting']['attachdir'].'album/'.$filepath);
 					if($thumb) {
 						ftpcmd('upload', 'album/'.$filepath.'.thumb.jpg');
+						@unlink($_G['setting']['attachdir'].'album/'.$filepath.'.thumb.jpg');
 					}
 					$pic_remote = 1;
 					$album_picflag = 2;

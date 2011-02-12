@@ -41,7 +41,7 @@ if($activity['ufield']) {
 				$query = DB::query("SELECT ".implode(',', $activity['ufield']['userfield'])." FROM ".DB::table('common_member_profile')." WHERE uid='$_G[uid]'");
 				$ufielddata['userfield'] = DB::fetch($query);
 			}
-			$html = profile_setting($fieldid, $ufielddata['userfield'], true);
+			$html = profile_setting($fieldid, $ufielddata['userfield'], false, true);
 			if($html) {
 				$settings[$fieldid] = $_G['cache']['profilesetting'][$fieldid];
 				$htmls[$fieldid] = $html;

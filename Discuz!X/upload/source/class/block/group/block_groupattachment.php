@@ -286,9 +286,9 @@ class block_groupattachment {
 		}
 		$query = DB::query("SELECT attach.*,t.tid,t.author,t.authorid,t.subject $sqlfield
 			FROM `".DB::table('forum_attachment')."` attach
-			$sqljoin
 			INNER JOIN `".DB::table('forum_thread')."` t
 			ON `t`.`tid`=`attach`.`tid` AND `displayorder`>='0'
+			$sqljoin
 			WHERE $htsql AND `attach`.`readperm`='0' AND `attach`.`price`='0'
 			$sql
 			$sqlban

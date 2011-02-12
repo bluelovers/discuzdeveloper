@@ -146,9 +146,9 @@ function getuserprofile($field) {
 		}
 	}
 	if($profiletable) {
-		$data = DB::fetch_first("SELECT ".implode(',', $tablefields[$table])." FROM ".DB::table('common_member_'.$table)." WHERE uid='$_G[uid]'");
+		$data = DB::fetch_first("SELECT ".implode(', ', $tablefields[$profiletable])." FROM ".DB::table('common_member_'.$profiletable)." WHERE uid='$_G[uid]'");
 		if(!$data) {
-			foreach($tablefields[$table] as $k) {
+			foreach($tablefields[$profiletable] as $k) {
 				$data[$k] = '';
 			}
 		}

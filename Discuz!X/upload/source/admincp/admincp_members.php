@@ -299,6 +299,10 @@ if($operation == 'search') {
 
 	} else {
 
+		if(!$search_condition) {
+			cpmsg('members_no_find_deluser', '', 'error');
+		}
+
 		$membernum = countmembers($search_condition, $urladd);
 
 		$uids = 0;
@@ -310,21 +314,18 @@ if($operation == 'search') {
 		if(!empty($_G['gp_uidarray'])) {
 			$uids = is_array($_G['gp_uidarray']) ? '\''.implode('\', \'', $_G['gp_uidarray']).'\'' : '0';
 			$query = DB::query("SELECT uid, groupid, adminid FROM ".DB::table('common_member')." WHERE uid IN($uids) AND adminid<>1 AND groupid<>1");
-
-			$membernum = DB::num_rows($query);
-			$uids = array();
-			while($member = DB::fetch($query)) {
-				if($membernum < 2000 || !empty($_G['gp_uidarray'])) {
-					$extra .= '<input type="hidden" name="uidarray[]" value="'.$member['uid'].'" />';
-				}
-				$uids[] = $member['uid'];
-			}
-		} else {
-			foreach($uids as $uid) {
-				$extra .= '<input type="hidden" name="uidarray[]" value="'.$uid.'" />';
-			}
 		}
 
+		$membernum = DB::num_rows($query);
+
+		$uids = $comma = '';
+		while($member = DB::fetch($query)) {
+			if($membernum < 2000 || !empty($_G['gp_uidarray'])) {
+				$extra .= '<input type="hidden" name="uidarray[]" value="'.$member['uid'].'" />';
+			}
+			$uids .= $comma.$member['uid'];
+			$comma = ',';
+		}
 
 		if((empty($membernum) || empty($uids))) {
 			cpmsg('members_no_find_deluser', '', 'error');
@@ -1563,6 +1564,17 @@ EOT;
 
 		$questionid = $_G['gp_clearquestion'] ? 0 : '';
 		$ucresult = uc_user_edit($member['username'], $_G['gp_passwordnew'], $_G['gp_passwordnew'], $_G['gp_emailnew'], 1, $questionid);
+		if($ucresult <= 0) {
+			if($ucresult == -4) {
+				cpmsg('members_email_illegal', '', 'error');
+			} elseif($ucresult == -5) {
+				cpmsg('members_email_domain_illegal', '', 'error');
+			} elseif($ucresult == -6) {
+				cpmsg('members_email_duplicate', '', 'error');
+			} else {
+				cpmsg('undefined_action', '', 'error');
+			}
+		}
 
 		if($_G['gp_clearavatar']) {
 			DB::query("UPDATE ".DB::table('common_member')." SET avatarstatus='0' WHERE uid='{$_G['gp_uid']}'");

@@ -137,7 +137,7 @@ if($_G['fid'] && $_G['forum']['ismoderator'] && $modforums['recyclebins'][$_G['f
 		$total = DB::result_first("SELECT count(*) FROM ".DB::table('forum_thread')." WHERE fid='$_G[fid]' AND displayorder='-1'");
 		$tpage = ceil($total / $_G['tpp']);
 		$page = min($tpage, $page);
-		$multipage = multi($total, $_G['tpp'], $page, "$cpscript?action=$action&amp;op=$op&amp;fid=$_G[fid]&amp;do=$do");
+		$multipage = multi($total, $_G['tpp'], $page, "$cpscript?mod=modcp&action=$action&op=$op&fid=$_G[fid]&do=$do");
 		if($total) {
 			$start = ($page - 1) * $_G['tpp'];
 			$query = DB::query("SELECT t.*, tm.reason FROM ".DB::table('forum_thread')." t LEFT JOIN ".DB::table('forum_threadmod')." tm ON tm.tid=t.tid WHERE t.fid='$_G[fid]' AND t.displayorder='-1' GROUP BY t.tid ORDER BY t.lastpost DESC LIMIT $start, $_G[tpp]");
@@ -172,7 +172,7 @@ if($_G['fid'] && $_G['forum']['ismoderator'] && $modforums['recyclebins'][$_G['f
 			$total = $result['count'];
 			$tpage = ceil($total / $_G['tpp']);
 			$page = min($tpage, $page);
-			$multipage = multi($total, $_G['tpp'], $page, "$cpscript?action=$action&amp;op=$op&amp;fid=$_G[fid]&amp;do=$do");
+			$multipage = multi($total, $_G['tpp'], $page, "$cpscript?mod=modcp&action=$action&op=$op&fid=$_G[fid]&do=$do");
 			if($total) {
 				$start = ($page - 1) * $_G['tpp'];
 				$query = DB::query("SELECT t.*, tm.reason FROM ".DB::table('forum_thread')." t LEFT JOIN ".DB::table('forum_threadmod')." tm ON tm.tid=t.tid WHERE t.tid in($result[tids]) AND t.fid='$_G[fid]' AND t.displayorder='-1' ORDER BY t.lastpost DESC LIMIT $start, $_G[tpp]");

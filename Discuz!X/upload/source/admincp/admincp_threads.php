@@ -704,10 +704,10 @@ EOT;
 					} else {
 						$r_replies = $_G['gp_replies'] ? $_G['gp_replies'] : $_G['gp_above_replies'];
 						if($r_replies = max(0, intval($r_replies))) {
-							$limit_start = 2 * ($page - 1);
+							$limit_start = 20 * ($page - 1);
 							if($count = DB::result_first("SELECT COUNT(*) FROM ".DB::table('forum_thread')." WHERE replies>'$r_replies'")) {
-								$multipage = multi($count, 2, $page, ADMINSCRIPT."?action=threads&operation=postposition&do=add&srchthreadsubmit=yes&replies=$r_replies");
-								$query = DB::query("SELECT * FROM ".DB::table('forum_thread')." WHERE replies>'$r_replies' LIMIT $limit_start, 2");
+								$multipage = multi($count, 20, $page, ADMINSCRIPT."?action=threads&operation=postposition&do=add&srchthreadsubmit=yes&replies=$r_replies");
+								$query = DB::query("SELECT * FROM ".DB::table('forum_thread')." WHERE replies>'$r_replies' LIMIT $limit_start, 20");
 								$have = 0;
 								while($thread = DB::fetch($query)) {
 									if(getstatus($thread['status'], 1)) continue;
@@ -755,8 +755,15 @@ function create_position(&$select, $lastpid = 0) {
 	if(empty($select) || !is_array($select)) {
 		return 0;
 	}
-	$round = 500;
 	$tid = $select[0];
+	if(empty($lastpid)) {
+		$check = DB::result_first("SELECT tid FROM ".DB::table('forum_postposition')." WHERE tid='$tid' LIMIT 1");
+		if($check) {
+			unset($select[0]);
+			return 0;
+		}
+	}
+	$round = 500;
 	$posttable = getposttablebytid($tid);
 	$query = DB::query("SELECT pid FROM ".DB::table($posttable)." WHERE tid='$tid' AND pid>'$lastpid' ORDER BY pid ASC LIMIT 0, $round");
 	while($post = DB::fetch($query)) {

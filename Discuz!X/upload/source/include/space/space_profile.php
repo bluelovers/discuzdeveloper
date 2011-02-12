@@ -49,7 +49,7 @@ if($space['lastactivity']) {
 }
 if($space['lastpost']) $space['lastpost'] = dgmdate($space['lastpost']);
 if($space['lastsendmail']) $space['lastsendmail'] = dgmdate($space['lastsendmail']);
-if($space['lastsendmail']) $space['groupexpiry'] = dgmdate($space['groupexpiry']);
+
 
 if($_G['uid'] == $space['uid'] || $_G['group']['allowviewip']) {
 	require_once libfile('function/misc');

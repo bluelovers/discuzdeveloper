@@ -1174,7 +1174,7 @@ EOT;
 						showtitle($setting['name']);
 						foreach($setting['setting'] as $varid => $var) {
 							if($var['type'] != 'select') {
-								showsetting($var['title'], 'pluginnew['.$varid.']', $forum['plugin'][$varid], 'radio', '', 0, $var['description']);
+								showsetting($var['title'], 'pluginnew['.$varid.']', $forum['plugin'][$varid], $var['type'], '', 0, $var['description']);
 							} else {
 								showsetting($var['title'], array('pluginnew['.$varid.']', $var['select']), $forum['plugin'][$varid], $var['type'], '', 0, $var['description']);
 							}

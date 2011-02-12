@@ -132,7 +132,7 @@ if($operation == 'newreport') {
 			$users[$founder['uid']] = $founder['username'];
 		}
 	}
-	$query = DB::query("SELECT uid FROM ".DB::table('common_admincp_perm')." ap LEFT JOIN ".DB::table('common_admincp_member')." am ON am.cpgroupid=ap.cpgroupid where perm='report'");
+	$query = DB::query("SELECT uid FROM ".DB::table('common_admincp_member')." am LEFT JOIN ".DB::table('common_admincp_perm')." ap ON am.cpgroupid=ap.cpgroupid where am.cpgroupid=0 OR ap.perm='report'");
 	while($user = DB::fetch($query)) {
 		if(empty($users[$user[uid]])) {
 			$newuids[] = $user['uid'];

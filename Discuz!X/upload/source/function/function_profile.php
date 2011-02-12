@@ -11,7 +11,7 @@ if(!defined('IN_DISCUZ')) {
 	exit('Access Denied');
 }
 
-function profile_setting($fieldid, $space=array(), $showstatus=false) {
+function profile_setting($fieldid, $space=array(), $showstatus=false, $ignoreunchangable = false) {
 	global $_G;
 
 	if(empty($_G['cache']['profilesetting'])) {
@@ -49,6 +49,7 @@ function profile_setting($fieldid, $space=array(), $showstatus=false) {
 	}
 
 	$html = '';
+	$field['unchangeable'] = !$ignoreunchangable && $field['unchangeable'] ? 1 : 0;
 	if($fieldid == 'birthday') {
 		if($field['unchangeable'] && !empty($space[$fieldid])) {
 			return '<span>'.$space['birthyear'].'-'.$space['birthmonth'].'-'.$space['birthday'].'</span>';

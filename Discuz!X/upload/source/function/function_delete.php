@@ -77,6 +77,7 @@ function deletemember($uids, $other = 1) {
 
 	DB::query("DELETE FROM ".DB::table('home_friend')." WHERE (uid IN ($uids) OR fuid IN ($uids))", 'UNBUFFERED');
 
+	DB::query("DELETE FROM ".DB::table('home_friend_request')." WHERE (uid IN ($uids) OR fuid IN ($uids))", 'UNBUFFERED');
 	DB::query("DELETE FROM ".DB::table('home_clickuser')." WHERE uid IN ($uids)", 'UNBUFFERED');
 
 	DB::query("DELETE FROM ".DB::table('common_invite')." WHERE (uid IN ($uids) OR fuid IN ($uids))", 'UNBUFFERED');
