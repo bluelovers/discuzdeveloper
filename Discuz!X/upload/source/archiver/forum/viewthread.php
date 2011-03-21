@@ -12,7 +12,11 @@ include loadarchiver('common/header');
 	<?php foreach($postlist as $post): ?>
 	<?php if($hiddenreplies && !$post['first']) break; ?>
 	<p class="author">
-		<strong><?php echo $post['author']; ?></strong>
+		<?php if(!$post['anonymous']): ?>
+			<strong><?php echo $post['author']; ?></strong>
+		<?php else: ?>
+			<strong><i>Anonymous</i></strong>
+		<?php endif; ?>
 		<?php echo lang('forum/archiver', 'post_time') . ' ' . $post['dateline']; ?>
 	</p>
 	<h3><?php echo $post['subject']; ?></h3>

@@ -478,7 +478,10 @@ EOT;
 			showtablefooter();
 			showtagfooter('div');
 		}
-
+		if($_GET['id'] == 7) {
+			showtips('usergroups_edit_system_guest_portal_tips', 'portal_tips', $anchor == 'portal');
+			showtips('usergroups_edit_system_guest_home_tips', 'home_tips', $anchor == 'home');
+		}
 		showtagheader('div', 'basic', $anchor == 'basic');
 		showtableheader();
 		showtitle('usergroups_edit_basic');

@@ -279,6 +279,7 @@ class block_groupthread {
 		require_once libfile('block_thread', 'class/block/forum');
 		$bt = new block_thread();
 		while($data = DB::fetch($query)) {
+			if($data['closed'] > 1 && $data['closed'] < $data['tid']) continue;
 			$_G['thread'][$data['tid']] = $data;
 			if($style['getpic'] && $data['attachment']=='2') {
 				$pic = $bt->getpic($data['tid']);

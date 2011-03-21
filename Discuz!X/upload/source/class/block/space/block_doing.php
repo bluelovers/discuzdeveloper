@@ -86,7 +86,7 @@ class block_doing {
 
 		$bannedids = !empty($parameter['bannedids']) ? explode(',', $parameter['bannedids']) : array();
 
-		$list = array();
+		$datalist = $list = array();
 		$wheres = array();
 		if($uids) {
 			$wheres[] = 'uid IN ('.dimplode($uids).')';
@@ -98,7 +98,7 @@ class block_doing {
 		$wheresql = $wheres ? implode(' AND ', $wheres) : '1';
 		$query = DB::query("SELECT * FROM ".DB::table('home_doing')." WHERE $wheresql ORDER BY $orderby DESC LIMIT $startrow,$items");
 		while($data = DB::fetch($query)) {
-			$listdata = array(
+			$datalist = array(
 				'id' => $data['doid'],
 				'idtype' => 'doid',
 				'title' => cutstr(strip_tags($data['message']), $titlelength, ''),
@@ -117,11 +117,11 @@ class block_doing {
 				)
 			);
 			if($titlelength) {
-				$listdata['title'] = cutstr(strip_tags($data['message']), $titlelength);
+				$datalist['title'] = cutstr(strip_tags($data['message']), $titlelength);
 			} else {
-				$listdata['title'] = strip_tags($data['message'], '<img>');
+				$datalist['title'] = strip_tags($data['message'], '<img>');
 			}
-			$list[] = $listdata;
+			$list[] = $datalist;
 		}
 		return array('html' => '', 'data' => $list);
 	}

@@ -2,7 +2,7 @@
 	[Discuz!] (C)2001-2009 Comsenz Inc.
 	This is NOT a freeware, use is subject to license terms
 
-	$Id: portal.js 16908 2010-09-16 10:40:05Z zhangguosheng $
+	$Id: portal.js 20603 2011-02-28 08:42:36Z zhangguosheng $
 */
 
 function block_get_setting(classname, script, bid) {
@@ -66,14 +66,14 @@ function block_pushitem(bid, itemid) {
 	}
 }
 
-function block_delete_item(bid, itemid, itemtype, from) {
+function block_delete_item(bid, itemid, itemtype, itemfrom, from) {
 	var msg = itemtype==1 ? '您确定要删除该数据吗？' : '您确定要屏蔽该数据吗？';
 	if(confirm(msg)) {
 		var url = 'portal.php?mod=portalcp&ac=block&op=remove&bid='+bid+'&itemid='+itemid;
-		if(from=='ajax') {
+		if(itemfrom=='ajax') {
 			var x = new Ajax();
 			x.get(url+'&inajax=1', function(){
-				showWindow('showblock', 'portal.php?mod=portalcp&ac=block&op=data&bid='+bid+'&tab=data&t='+(+ new Date()), 'get', 0);
+				showWindow('showblock', 'portal.php?mod=portalcp&ac=block&op=data&bid='+bid+'&from='+from+'&tab=data&t='+(+ new Date()), 'get', 0);
 			});
 		} else {
 			location.href = url;

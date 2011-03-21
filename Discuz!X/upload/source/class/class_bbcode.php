@@ -91,6 +91,11 @@ class bbcode {
 	}
 
 	function bb_img($url) {
+		global $_G;
+
+		if(!in_array(strtolower(substr($url, 0, 6)), array('http:/', 'https:', 'ftp://', 'rtsp:/', 'mms://'))) {
+			$url = isset($_G['siteurl']) && !empty($_G['siteurl']) ? $_G['siteurl'].$url : 'http://'.$url;
+		}
 		$url = addslashes($url);
 		return "<img src=\"$url\" class=\"vm\">";
 	}

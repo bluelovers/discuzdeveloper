@@ -119,7 +119,6 @@ if (submitcheck('uploadsubmit')) {
 		$templatedata = array();
 		checksecurity($_POST['spacecss']);
 		$_POST['spacecss'] = dstripslashes($_POST['spacecss']);
-		$templatedata['spacecss'] = preg_replace("/(\<|\>)/is", '', $_POST['spacecss']);
 		$style = empty($_POST['style'])?'':preg_replace("/[^0-9a-z]/i", '', $_POST['style']);
 		if($style) {
 			$cssfile = DISCUZ_ROOT.'./static/topic/'.$style.'/style.css';

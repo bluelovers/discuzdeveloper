@@ -160,7 +160,7 @@ function getranklist_blogs($num = 20, $dateline = 0, $orderby = 'hot DESC') {
 		b.click1, b.click2, b.click3, b.click4, b.click5, b.click6, b.click7, b.click8, bf.message
 		FROM ".DB::table('home_blog')." b
 		LEFT JOIN ".DB::table('home_blogfield'). " bf ON bf.blogid=b.blogid
-		WHERE b.friend='0' AND b.dateline>='$dateline'
+		WHERE b.friend='0' AND status = '0' AND b.dateline>='$dateline'
 		ORDER BY b.$orderby
 		LIMIT 0, $num");
 	require_once libfile('function/forum');

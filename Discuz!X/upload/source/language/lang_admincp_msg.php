@@ -156,7 +156,8 @@ $lang = array
 	'members_stat_do_stepstat_prepared' => '准备更新统计数据，共 {t} 项。此过程将自动完成，请稍候',
 	'members_stat_do_stepstat' => '更新统计数据中({i} / {t})，请稍候',
 
-	'members_verify_title_invalid' => '你没有为全部被启用的认证设置认证名称，请返回修改。',
+	'members_verify_title_invalid' => '你没有为被启用的认证设置认证名称，请返回修改。',
+	'members_verify_update_title_error' => '认证启用时认证名称不能为空，请返回修改。',
 	'members_verify_update_succeed' => '认证设置更新成功',
 	'members_verify_succeed' => '资料审核成功',
 

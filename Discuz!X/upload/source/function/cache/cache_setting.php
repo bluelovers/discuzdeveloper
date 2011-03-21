@@ -195,7 +195,7 @@ function build_cache_setting() {
 		unset($data['relatedtag']['status'], $data['relatedtag']['order'], $relatedtag);
 	}
 
-	$data['domain']['defaultindex'] = isset($data['defaultindex']) ? $data['defaultindex'] : '';
+	$data['domain']['defaultindex'] = isset($data['defaultindex']) && $data['defaultindex'] != '#' ? $data['defaultindex'] : '';
 	$data['domain']['holddomain'] = isset($data['holddomain']) ? $data['holddomain'] : '';
 	$data['domain']['list'] = array();
 	$query = DB::query("SELECT * FROM ".DB::table('common_domain')." WHERE idtype IN('subarea', 'forum', 'topic', 'channel')");

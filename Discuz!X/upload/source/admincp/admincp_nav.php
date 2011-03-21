@@ -73,7 +73,7 @@ if($operation == 'headernav') {
 					$nav['identifier'] == 6 && $nav['nav'] == 0 ? $lang['misc_customnav_subtype_menu'] : "<select name=\"subtypenew[$nav[id]]\"><option value=\"0\" $navsubtype[0]>$lang[misc_customnav_subtype_menu]</option><option value=\"1\" $navsubtype[1]>$lang[misc_customnav_subtype_sub]</option></select>",
 					$nav['type'] == '0' || $nav['type'] == '4' ? "<span title='{$nav['url']}'>".$nav['url'].'<span>' : "<input type=\"text\" class=\"txt\" size=\"15\" name=\"urlnew[$nav[id]]\" value=\"".dhtmlspecialchars($nav['url'])."\">",
 					cplang($nav['type'] == '0' ? 'inbuilt' : ($nav['type'] == '3' ? 'nav_plugin' : ($nav['type'] == '4' ? 'channel' : 'custom'))),
-					"<input name=\"defaultindex\" class=\"radio\" type=\"radio\" value=\"$nav[url]\"".($_G['setting']['defaultindex'] == $nav['url'] ? ' checked="checked"' : '')." />",
+					$nav['url'] != '#' ? "<input name=\"defaultindex\" class=\"radio\" type=\"radio\" value=\"$nav[url]\"".($_G['setting']['defaultindex'] == $nav['url'] ? ' checked="checked"' : '')." />" : '',
 					"<input class=\"checkbox\" type=\"checkbox\" name=\"availablenew[$nav[id]]\" value=\"1\" ".($nav['available'] ? 'checked' : '').">",
 					"<a href=\"".ADMINSCRIPT."?action=nav&operation=headernav&do=edit&id=$nav[id]\" class=\"act\">$lang[edit]</a>"
 				));
@@ -106,7 +106,7 @@ if($operation == 'headernav') {
 							'',
 							$sub['type'] == '0' || $sub['type'] == '4' ? "<span title='{$sub['url']}'>".$sub['url'].'</span>' : "<input type=\"text\" class=\"txt\" size=\"15\" name=\"urlnew[$sub[id]]\" value=\"".dhtmlspecialchars($sub['url'])."\">",
 							cplang($sub['type'] == '0' ? 'inbuilt' : ($sub['type'] == '3' ? 'nav_plugin' : ($sub['type'] == '4' ? 'channel' : 'custom'))),
-							"<input name=\"defaultindex\" class=\"radio\" type=\"radio\" value=\"$sub[url]\"".($_G['setting']['defaultindex'] == $sub['url'] ? ' checked="checked"' : '')." />",
+							$sub['url'] != '#' ? "<input name=\"defaultindex\" class=\"radio\" type=\"radio\" value=\"$sub[url]\"".($_G['setting']['defaultindex'] == $sub['url'] ? ' checked="checked"' : '')." />" : '',
 							"<input class=\"checkbox\" type=\"checkbox\" name=\"availablenew[$sub[id]]\" value=\"1\" ".($sub['available'] ? 'checked' : '').">",
 							"<a href=\"".ADMINSCRIPT."?action=nav&operation=headernav&do=edit&id=$sub[id]\" class=\"act\">$lang[edit]</a>"
 						));
@@ -205,7 +205,7 @@ EOT;
 				}
 			}
 
-			if($_G['gp_defaultindex']) {
+			if($_G['gp_defaultindex'] && $_G['gp_defaultindex'] != '#') {
 				DB::insert('common_setting', array('skey' => 'defaultindex', 'svalue' => $_G['gp_defaultindex']), 0, 1);
 			}
 

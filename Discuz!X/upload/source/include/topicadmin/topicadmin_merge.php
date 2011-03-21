@@ -20,11 +20,13 @@ if(!submitcheck('modsubmit')) {
 	include template('forum/topicadmin_action');
 
 } else {
+
 	$posttable = getposttablebytid($_G['tid']);
+	$othertid = intval($_G['gp_othertid']);
+	$otherposttable = getposttablebytid($othertid);
 	$modaction = 'MRG';
 
 	$reason = checkreasonpm();
-	$othertid = intval($_G['gp_othertid']);
 
 	$other = DB::fetch_first("SELECT tid, fid, authorid, subject, views, replies, dateline, special FROM ".DB::table('forum_thread')." WHERE tid='$othertid' AND displayorder>='0'");
 	if(!$other) {
@@ -38,6 +40,15 @@ if(!submitcheck('modsubmit')) {
 
 	$other['views'] = intval($other['views']);
 	$other['replies']++;
+
+	if($posttable != $otherposttable) {
+		$query = DB::query("SELECT * FROM ".DB::table($otherposttable)." WHERE tid='$othertid'");
+		while($row = DB::fetch($query)) {
+			$row = daddslashes($row);
+			DB::insert($posttable, $row);
+		}
+		DB::delete($otherposttable, "tid='$othertid'");
+	}
 
 	$firstpost = DB::fetch_first("SELECT pid, fid, authorid, author, subject, dateline FROM ".DB::table($posttable)." WHERE tid IN ('$_G[tid]', '$othertid') AND invisible='0' ORDER BY dateline LIMIT 1");
 

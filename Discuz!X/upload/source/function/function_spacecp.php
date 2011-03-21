@@ -94,6 +94,7 @@ function album_update_pic($albumid, $picid=0) {
 			$setarr['picflag'] = $pic['remote'] ? 2:1;
 		}
 	}
+	$setarr['updatetime'] = $_G['timestamp'];
 	DB::update('home_album', $setarr, array('albumid'=>$albumid));
 	return true;
 }

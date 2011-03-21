@@ -192,7 +192,7 @@ class block_activity {
 		$recommend	= !empty($parameter['recommend']) ? 1 : 0;
 		$keyword	= !empty($parameter['keyword']) ? $parameter['keyword'] : '';
 		$place		= !empty($parameter['place']) ? $parameter['place'] : '';
-		$class		= !empty($parameter['class']) ? $parameter['class'] : '';
+		$class		= !empty($parameter['class']) ? trim($parameter['class']) : '';
 		$gender		= !empty($parameter['gender']) ? intval($parameter['gender']) : '';
 		$viewmod	= !empty($parameter['viewmod']) ? 1 : 0;
 
@@ -282,6 +282,9 @@ class block_activity {
 		if($gender) {
 			$where .= " AND a.gender='$gender'";
 		}
+		if($class) {
+			$where .= " AND a.class='$class'";
+		}
 		$sqlfrom = " INNER JOIN `".DB::table('forum_thread')."` t ON t.tid=a.tid $sql AND t.displayorder>='0'";
 		if($recommend) {
 			$sqlfrom .= " INNER JOIN `".DB::table('forum_forumrecommend')."` fc ON fc.tid=tr.tid";
@@ -331,11 +334,11 @@ class block_activity {
 			}
 
 			foreach($listtids as $key => $value) {
-				$listdata[] = $list[$value];
+				$datalist[] = $list[$value];
 			}
 
 		}
-		return array('html' => '', 'data' => $listdata);
+		return array('html' => '', 'data' => $datalist);
 	}
 }
 

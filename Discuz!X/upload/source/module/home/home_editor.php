@@ -28,7 +28,8 @@ if(empty($_GET['op'])) {
 <script language="javascript" src="static/image/editor/editor_base.js"></script>
 <style type="text/css">
 body{margin:0;padding:0;}
-body, td, input, button, select {font: 12px/1.5em Tahoma, Arial, Helvetica, snas-serif;}
+body, td, input, button, select, textarea {font: 12px/1.5em Tahoma, Arial, Helvetica, snas-serif;}
+textarea { resize: none; font-size: 14px; line-height: 1.8em; }
 .submit { padding: 0 10px; height: 22px; border: 1px solid; border-color: #DDD #264F6E #264F6E #DDD; background: #2782D6; color: #FFF; line-height: 20px; letter-spacing: 1px; cursor: pointer; }
 a.dm{text-decoration:none}
 a.dm:hover{text-decoration:underline}
@@ -88,7 +89,7 @@ a.cs{height:15px;position:relative}
 .toobar{position:relative;height:29px;overflow:hidden}
 .tble{position:absolute;left:0;top:2px }
 *:lang(zh) .tble{top:2px}
-.tbri{width:20px;position:absolute;right:-3px;top:2px;background-position:0 -33px}
+.tbri{width:20px;position:absolute;right:3px;top:2px;background-position:0 -33px}
 *:lang(zh) .tbri{top:2px;background-position:0 -31px}
 
 .icons a{width:23px;height:23px;background-repeat:no-repeat;display:block;float:left;border:1px solid #efefef;border-top:1px solid #EFEFEF;border-bottom:1px solid #F2F3F2}
@@ -138,7 +139,7 @@ function fontsize(size,obj){format('fontsize',size);obj.parentNode.style.display
 <td height="31">
 <table width="100%" border="0" cellpadding="0" cellspacing="0" class="edTb">
 <tr>
-<td height="31" style="padding-left:5px;">
+<td height="31" style="padding-left:3px;">
 
 <div class="toobar">
 <div class="icons tble">
@@ -147,7 +148,7 @@ function fontsize(size,obj){format('fontsize',size);obj.parentNode.style.display
 </div>
 </td></tr></table>
 </td></tr></table>
-<textarea id="dvtext" style="height:91%;width:100%;border:0px;display:none;border-top:0px;padding:7px 4px 8px 8px;font-size:14px;font-family:Arial, Helvetica, sans-serif;line-height:1.8em;"></textarea>
+<textarea id="dvtext" style="overflow-y:auto;padding:4px;width:100%;height:369px;word-wrap:break-word;border:0;display:none;"></textarea>
 <div >
 
 <table cellpadding="0" cellspacing="0" width="100%" height="100%" id="dvhtml">
@@ -155,7 +156,7 @@ function fontsize(size,obj){format('fontsize',size);obj.parentNode.style.display
 <td height="31">
 <table width="100%" border="0" cellpadding="0" cellspacing="0" class="edTb">
 <tr>
-<td height="31" style=" padding-left:3px">
+<td height="31" style="padding-left:3px">
 
 <div class="toobar">
 <div class="icons tble">
@@ -278,7 +279,7 @@ function fontsize(size,obj){format('fontsize',size);obj.parentNode.style.display
 
 </td></tr>
 <tr><td>
-<table cellpadding="0" cellspacing="0" style=" background-color:#999999;height:100%;width:100%;overflow:hidden">
+<table cellpadding="0" cellspacing="0" style="height:100%;width:100%;overflow:hidden">
 <tr>
 <td>
 <SCRIPT LANGUAGE="JavaScript">
@@ -294,12 +295,12 @@ function fontsize(size,obj){format('fontsize',size);obj.parentNode.style.display
 		window.frames['HtmlEditor'].document.body.innerHTML = inihtml;
 	}
 	if(document.all){
-		document.write('<table width="100%" height="100%" border="0" cellspacing="0" cellpadding="0" id="divEditor"><tr><td style=""><IFRAME class="HtmlEditor" ID="HtmlEditor" name="HtmlEditor" style="height:100%;width:100%" frameBorder="0" marginHeight=0 marginWidth=0 src="home.php?mod=editor&op=blank&charset=<?=$_GET['charset']?>" onload="blank_load();"></IFRAME></td></tr></table>');
+		document.write('<table width="100%" height="369" border="0" cellspacing="0" cellpadding="0" id="divEditor"><tr><td style="padding-left:4px;background-color:#fff"><IFRAME class="HtmlEditor" ID="HtmlEditor" name="HtmlEditor" style="height:100%;width:100%" frameBorder="0" marginHeight=0 marginWidth=0 src="home.php?mod=editor&op=blank&charset=<?php echo $_GET['charset'];?>" onload="blank_load();"></IFRAME></td></tr></table>');
 	}else{
-		document.write('<table width="100%" height="100%" border="0" cellspacing="0" cellpadding="0" id="divEditor"><tr><td style="background-color:#ffffff"><IFRAME class="HtmlEditor" ID="HtmlEditor" name="HtmlEditor" style="height:100%;width:100%;margin-left:1px;margin-bottom:1px;" frameBorder="0" marginHeight=0 marginWidth=0 src="home.php?mod=editor&op=blank&charset=<?=$_GET['charset']?>" onload="blank_load();"></IFRAME></td></tr></table>');
+		document.write('<table width="100%" height="369" border="0" cellspacing="0" cellpadding="0" id="divEditor"><tr><td style="padding-left:4px;background-color:#fff"><IFRAME class="HtmlEditor" ID="HtmlEditor" name="HtmlEditor" style="height:100%;width:100%;" frameBorder="0" marginHeight=0 marginWidth=0 src="home.php?mod=editor&op=blank&charset=<?php echo $_GET['charset'];?>" onload="blank_load();"></IFRAME></td></tr></table>');
 	}
 </SCRIPT>
-<textarea id="sourceEditor" style="height:100%;width:100%;display:none;border:0px;font-family: Courier New,Helvetica,Arial,sans-serif;"></textarea>
+<textarea id="sourceEditor" style="overflow-y:auto;padding-left:4px;width:100%;height:369px;word-wrap:break-word;display:none;border:0;"></textarea>
 </td>
 </tr>
 </table>
@@ -322,7 +323,7 @@ function fontsize(size,obj){format('fontsize',size);obj.parentNode.style.display
 <meta http-equiv="Content-Type" content="text/html;charset=<?=$_GET['charset']?>" />
 <title>New Document</title>
 <style>
-body { font-size:14px; line-height:1.8em; padding-right: 4px; padding-left: 8px; padding-bottom: 8px; margin: 0px; padding-top: 8px; }
+body { margin: 0; padding: 0; word-wrap: break-word; font-size:14px; line-height:1.8em; font-family: Tahoma, Arial, Helvetica, snas-serif; }
 </style>
 <meta content="mshtml 6.00.2900.3132" name=generator>
 </head>

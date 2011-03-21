@@ -130,6 +130,7 @@ function getinheritancecategoryblock($catid, &$permission, $value) {
 function save_diy_data($primaltplname, $targettplname, $data, $database = false, $optype = '') {
 	global $_G;
 	if (empty($data) || !is_array($data)) return false;
+	checksecurity($data['spacecss']);
 	$file = ($_G['cache']['style_default']['tpldir'] ? $_G['cache']['style_default']['tpldir'] : './template/default').'/'.$primaltplname.'.htm';
 	if (!file_exists($file)) {
 		$file = './template/default/'.$primaltplname.'.htm';
@@ -138,12 +139,14 @@ function save_diy_data($primaltplname, $targettplname, $data, $database = false,
 	$content = file_get_contents(DISCUZ_ROOT.$file);
 	$content = preg_replace("/\<\!\-\-\[name\](.+?)\[\/name\]\-\-\>/i", '', $content);
 	foreach ($data['layoutdata'] as $key => $value) {
+		$key = trimdxtpllang($key);
 		$html = '';
 		$html .= '<div id="'.$key.'" class="area">';
 		$html .= getframehtml($value);
 		$html .= '</div>';
 		$content = preg_replace("/(\<\!\-\-\[diy\=$key\]\-\-\>).+?(\<\!\-\-\[\/diy\]\-\-\>)/is", "\\1".$html."\\2", $content);
 	}
+	$data['spacecss'] = trimdxtpllang($data['spacecss']);
 	$content = preg_replace("/(\<style id\=\"diy_style\" type\=\"text\/css\"\>).*?(\<\/style\>)/is", "\\1".$data['spacecss']."\\2", $content);
 	if (!empty($data['style'])) {
 		$content = preg_replace("/(\<link id\=\"style_css\" rel\=\"stylesheet\" type\=\"text\/css\" href\=\").+?(\"\>)/is", "\\1".$data['style']."\\2", $content);
@@ -177,6 +180,7 @@ function save_diy_data($primaltplname, $targettplname, $data, $database = false,
 
 		$tpldata = daddslashes(serialize($data));
 		$diytplname = getdiytplname($targettplname);
+		$diytplname = addslashes($diytplname);
 		DB::query("REPLACE INTO ".DB::table('common_diy_data')." (targettplname, primaltplname, diycontent, `name`, uid, username, dateline) VALUES ('$targettplname', '$primaltplname', '$tpldata', '$diytplname', '$_G[uid]', '$_G[username]', '".TIMESTAMP."')");
 	}
 
@@ -208,20 +212,26 @@ function getframehtml($data = array()) {
 	global $_G;
 	$html = $style = '';
 	foreach ((array)$data as $id => $content) {
+		$id = trimdxtpllang($id);
 		$flag = $name = '';
 		list($flag, $name) = explode('`', $id);
 		if ($flag == 'frame') {
 			$fattr = $content['attr'];
+			$fattr['name'] = trimdxtpllang($fattr['name']);
+			$fattr['className'] = trimdxtpllang($fattr['className']);
 			$moveable = $fattr['moveable'] == 'true' ? ' move-span' : '';
 			$html .= '<div id="'.$fattr['name'].'" class="'.$fattr['className'].'">';
 			if (checkhastitle($fattr['titles'])) {
 				$style = gettitlestyle($fattr['titles']);
-				$html .= '<div class="'.implode(' ',$fattr['titles']['className']).'"'.$style.'>'.gettitlehtml($fattr['titles'], 'frame').'</div>';
+				$cn = trimdxtpllang(implode(' ',$fattr['titles']['className']));
+				$html .= '<div class="'.$cn.'"'.$style.'>'.gettitlehtml($fattr['titles'], 'frame').'</div>';
 			}
 			foreach ((array)$content as $colid => $coldata) {
 				list($colflag, $colname) = explode('`', $colid);
+				$colname = trimdxtpllang($colname);
+				$cn = trimdxtpllang($coldata['attr']['className']);
 				if ($colflag == 'column') {
-					$html .= '<div id="'.$colname.'" class="'.$coldata['attr']['className'].'">';
+					$html .= '<div id="'.$colname.'" class="'.$cn.'">';
 					$html .= '<div id="'.$colname.'_temp" class="move-span temp"></div>';
 					$html .= getframehtml($coldata);
 					$html .= '</div>';
@@ -230,18 +240,23 @@ function getframehtml($data = array()) {
 			$html .= '</div>';
 		} elseif ($flag == 'tab') {
 			$fattr = $content['attr'];
+			$fattr['name'] = trimdxtpllang($fattr['name']);
+			$fattr['className'] = trimdxtpllang($fattr['className']);
 			$moveable = $fattr['moveable'] == 'true' ? ' move-span' : '';
 			$html .= '<div id="'.$fattr['name'].'" class="'.$fattr['className'].'">';
 			$switchtype = 'click';
 			foreach ((array)$content as $colid => $coldata) {
 				list($colflag, $colname) = explode('`', $colid);
+				$colname = trimdxtpllang($colname);
+				$cn = trimdxtpllang($coldata['attr']['className']);
 				if ($colflag == 'column') {
 					if (checkhastitle($fattr['titles'])) {
 						$style = gettitlestyle($fattr['titles']);
 						$title = gettitlehtml($fattr['titles'], 'tab');
 					}
 					$switchtype = is_array($fattr['titles']['switchType']) && !empty($fattr['titles']['switchType'][0]) ? $fattr['titles']['switchType'][0] : 'click';
-					$html .= '<div id="'.$colname.'" class="'.$coldata['attr']['className'].'"'.$style.' switchtype="'.$switchtype.'">'.$title;
+					$switchtype = in_array(strtolower($switchtype), array('click', 'mouseover')) ? $switchtype : 'click';
+					$html .= '<div id="'.$colname.'" class="'.$cn.'"'.$style.' switchtype="'.$switchtype.'">'.$title;
 					$html .= getframehtml($coldata);
 					$html .= '</div>';
 				}
@@ -265,7 +280,7 @@ function gettitlestyle($title) {
 	$style = '';
 	if (is_array($title['style']) && count($title['style'])) {
 		foreach ($title['style'] as $k=>$v){
-			$style .= $k.':'.$v.';';
+			$style .= trimdxtpllang($k).':'.trimdxtpllang($v).';';
 		}
 	}
 	$style = $style ? ' style=\''.$style.'\'' : '';
@@ -287,6 +302,14 @@ function gettitlehtml($title, $type) {
 	foreach ($title as $k => $v) {
 		if (in_array(strval($k),array('className','style'))) continue;
 		if (empty($v['src']) && empty($v['text'])) continue;
+		$v['className'] = trimdxtpllang($v['className']);
+		$v['font-size'] = intval($v['font-size']);
+		$v['margin'] = intval($v['margin']);
+		$v['float'] = trimdxtpllang($v['float']);
+		$v['color'] = trimdxtpllang($v['color']);
+		$v['src'] = trimdxtpllang($v['src']);
+		$v['href'] = trimdxtpllang($v['href']);
+		$v['text'] = htmlspecialchars(str_replace(array('{', '$'), array('{ ', '$ '), $v['text']));
 		$one = "<span class=\"{$v['className']}\"";
 		$style = $color = "";
 		$style .= empty($v['font-size']) ? '' : "font-size:{$v['font-size']}px;";
@@ -921,4 +944,7 @@ function check_articleperm($catid, $aid = 0, $article = array(), $isverify = fal
 	}
 }
 
+function trimdxtpllang($s){
+	return str_replace(array('{', '$', '<', '>'), array('{ ', '$ ', '', ''), $s);
+}
 ?>

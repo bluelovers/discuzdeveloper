@@ -434,6 +434,8 @@ if($_G['gp_action'] == 'votepoll' && submitcheck('pollsubmit', 1)) {
 	require_once libfile('function/post');
 	$polloptionid = is_numeric($_G['gp_polloptionid']) ? $_G['gp_polloptionid'] : '';
 
+	$page = intval($_GET['page']) ? intval($_GET['page']) : 1;
+	$perpage = 100;
 	$overt = DB::result_first("SELECT overt FROM ".DB::table('forum_poll')." WHERE tid='$_G[tid]'");
 
 	$polloptions = array();
@@ -455,7 +457,10 @@ if($_G['gp_action'] == 'votepoll' && submitcheck('pollsubmit', 1)) {
 	}
 
 	if(!empty($arrvoterids)) {
-		$arrvoterids = array_slice($arrvoterids, -100);
+		$count = count($arrvoterids);
+		$multi = $perpage * ($page - 1);
+		$multipage = multi($count, $perpage, $page, "forum.php?mod=misc&action=viewvote&tid=$_G[tid]&polloptionid=$polloptionid".( $_G[gp_handlekey] ? "&handlekey=".$_G[gp_handlekey] : '' ));
+		$arrvoterids = array_slice($arrvoterids, $multi, $perpage);
 	}
 	$voterlist = $voter = array();
 	if($voterids = dimplode($arrvoterids)) {

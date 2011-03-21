@@ -359,11 +359,11 @@ class block_groupactivity {
 			}
 
 			foreach($listtids as $key => $value) {
-				$listdata[] = $list[$value];
+				$datalist[] = $list[$value];
 			}
 
 		}
-		return array('html' => '', 'data' => $listdata);
+		return array('html' => '', 'data' => $datalist);
 	}
 }
 

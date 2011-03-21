@@ -2,7 +2,7 @@
 	[Discuz!] (C)2001-2009 Comsenz Inc.
 	This is NOT a freeware, use is subject to license terms
 
-	$Id: common.js 19763 2011-01-18 07:22:07Z zhangguosheng $
+	$Id: common.js 21071 2011-03-14 07:03:51Z congyushuai $
 */
 
 var BROWSER = {};
@@ -2176,13 +2176,15 @@ function parsepmcode(theform) {
 
 function saveUserdata(name, data) {
 	if(BROWSER.ie){
-		with(document.documentElement) {
-			setAttribute("value", data);
-			save('Discuz_' + name);
+		if(data.length < 54889) {
+			with(document.documentElement) {
+				setAttribute("value", data);
+				save('Discuz_' + name);
+			}
 		}
 	} else if(window.sessionStorage){
 		sessionStorage.setItem('Discuz_' + name, data);
-		}
+	}
 }
 
 function loadUserdata(name) {
@@ -2936,7 +2938,7 @@ function succeedhandle_ls(location, str, param) {
 	if(param['syn'] != 1) {
 		parent.location.href = location;
 	} else {
-		setTimeout('parent.location.href = location', 2000);
+		setTimeout("parent.location.href='" + location + "'", 2000);
 		showDialog(str, 'notice', null, null, 0, null, 'µÇÂ¼ÖÐ£¬ÇëÉÔºó...');
 	}
 }

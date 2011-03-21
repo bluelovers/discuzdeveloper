@@ -184,23 +184,18 @@ if($op == 'comment') {
 	$showlevel = $showlevel >= 1 && $showlevel <= 4 ? $showlevel : 4;
 	$values = array(intval($_GET['pid']), intval($_GET['cid']), intval($_GET['did']), intval($_GET['coid']));
 	$level = 1;
+	$containertype = substr($container, 0, 5);
 	if($values[0]) {
 		$level++;
 	} else if($_G['uid']) {
 		space_merge($_G['member'], 'profile');
-		$containertype = substr($container, 0, 5);
+
 		$district = array();
 		if($containertype == 'birth') {
 			if(!empty($_G['member']['birthprovince'])) {
 				$district[] = $_G['member']['birthprovince'];
 				if(!empty($_G['member']['birthcity'])) {
 					$district[] = $_G['member']['birthcity'];
-				}
-				if(!empty($_G['member']['birthdist'])) {
-					$district[] = $_G['member']['birthdist'];
-				}
-				if(!empty($_G['member']['birthcommunity'])) {
-					$district[] = $_G['member']['birthcommunity'];
 				}
 			}
 		} else {
@@ -234,6 +229,9 @@ if($op == 'comment') {
 	}
 	if($values[3]) {
 		$level++;
+	}
+	if($containertype == 'birth' && $level > 2) {
+		$level = 2;
 	}
 	$showlevel = $level;
 	$elems = array();

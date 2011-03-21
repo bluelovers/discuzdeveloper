@@ -336,7 +336,7 @@ class task {
 			$taskclass->condition();
 		}
 		DB::query("REPLACE INTO ".DB::table('common_mytask')." (uid, username, taskid, csc, dateline)
-			VALUES ('$_G[uid]', '$_G[username]', '".$this->task['taskid']."', '0\$_G[timestamp]', '$_G[timestamp]')");
+			VALUES ('$_G[uid]', '$_G[username]', '".$this->task['taskid']."', '0\t$_G[timestamp]', '$_G[timestamp]')");
 		DB::query("UPDATE ".DB::table('common_task')." SET applicants=applicants+1 WHERE taskid='".$this->task['taskid']."'", 'UNBUFFERED');
 		if(method_exists($taskclass, 'preprocess')) {
 			$taskclass->preprocess($this->task);

@@ -471,6 +471,9 @@ EOF;
 			$_G['setting']['verify'][$key]['icon'] = str_replace($_G['setting']['attachurl'].'common/', '', $value['icon']);
 		}
 		$verifynew = getgpc('verify');
+		if($verifynew['available'] == 1 && !trim($verifynew['title'])) {
+			cpmsg('members_verify_update_title_error', '', 'error');
+		}
 		if($_FILES['iconnew']) {
 			$data = array('extid' => "$vid");
 			$iconnew = upload_icon_banner($data, $_FILES['iconnew'], 'verify_icon');

@@ -2,7 +2,7 @@
 	[Discuz!] (C)2001-2009 Comsenz Inc.
 	This is NOT a freeware, use is subject to license terms
 
-	$Id: forum_post.js 16857 2010-09-16 02:57:07Z monkey $
+	$Id: forum_post.js 21022 2011-03-10 07:08:23Z congyushuai $
 */
 
 var postSubmited = false;
@@ -616,6 +616,8 @@ function addpolloption() {
 	if(curoptions < maxoptions) {
 		$('polloption_new').outerHTML = '<p>' + $('polloption_hidden').innerHTML + '</p>' + $('polloption_new').outerHTML;
 		curoptions++;
+	} else {
+		$('polloption_new').outerHTML = '<span>已达到最大投票数'+maxoptions+'</span>';
 	}
 }
 

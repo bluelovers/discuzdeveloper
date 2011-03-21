@@ -1344,12 +1344,9 @@ function createtable($sql, $dbcharset) {
 }
 
 function langeval($array) {
-	$return = '';
-	foreach($array as $k => $v) {
-		$k = str_replace("'", '', $k);
-		$return .= "\t'$k' => '".str_replace(array("\\'", "'"), array("\\\'", "\'"), dstripslashes($v))."',\n";
-	}
-	return "array(\n$return);\n\n";
+	$return = array();
+	$array = dstripslashes($array);
+	return var_export($array, 1).";\n\n";
 }
 
 function pluginstat($type, $data) {

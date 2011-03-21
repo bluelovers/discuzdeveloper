@@ -181,6 +181,7 @@ function block_updatecache($bid, $forceupdate=false) {
 	$obj = block_script($block['blockclass'], $block['script']);
 	if(is_object($obj)) {
 		DB::update('common_block', array('dateline'=>TIMESTAMP), array('bid'=>$bid));
+		$_G['block'][$bid]['dateline'] = TIMESTAMP;
 		$block['param'] = empty($block['param'])?array():unserialize($block['param']);
 		$theclass = block_getclass($block['blockclass']);
 		$thestyle = !empty($block['styleid']) ? block_getstyle($block['styleid']) : unserialize($block['blockstyle']);
@@ -192,8 +193,13 @@ function block_updatecache($bid, $forceupdate=false) {
 			$bannedids = !empty($block['param']['bannedids']) ? explode(',', $block['param']['bannedids']) : array();
 			$bannedsql = $bannedids ? ' AND id NOT IN ('.dimplode($bannedids).')' : '';
 			$shownum = intval($block['shownum']);
+			$titlelength	= !empty($block['param']['titlelength']) ? intval($block['param']['titlelength']) : 40;
+			$summarylength	= !empty($block['param']['summarylength']) ? intval($block['param']['summarylength']) : 80;
 			$query = DB::query('SELECT * FROM '.DB::table('common_block_item_data')." WHERE bid='$bid' AND isverified='1' $bannedsql ORDER BY stickgrade DESC, verifiedtime DESC LIMIT $shownum");
 			while(($value=DB::fetch($query))) {
+				$value['title'] = cutstr($value['title'], $titlelength, '');
+				$value['summary'] = cutstr($value['summary'], $summarylength, '');
+				$value['itemtype'] = '3';
 				$datalist[] = $value;
 				$bannedids[] = intval($value['id']);
 			}
@@ -202,7 +208,7 @@ function block_updatecache($bid, $forceupdate=false) {
 				$block['param']['items'] = $leftnum;
 				$block['param']['bannedids'] = implode(',',$bannedids);
 				$return = $obj->getdata($thestyle, $block['param']);
-				$return['data'] = array_merge($datalist, $return['data']);
+				$return['data'] = array_merge($datalist, (array)$return['data']);
 			} else {
 				$return['data'] = $datalist;
 			}
@@ -218,6 +224,14 @@ function block_updatecache($bid, $forceupdate=false) {
 		}
 	} else {
 		DB::update('common_block', array('dateline'=>TIMESTAMP+999999, 'cachetime'=>0), array('bid'=>$bid));
+		$_G['block'][$bid]['dateline'] = TIMESTAMP+999999;
+	}
+	if(getglobal('setting/memory/diyblock/enable') && memory('check')) {
+		memory('set', 'blockcache_'.$bid, $_G['block'][$bid], getglobal('setting/memory/diyblock/ttl'));
+		$styleid = $_G['block'][$bid]['styleid'];
+		if($styleid && $_G['blockstyle_'.$styleid]) {
+			memory('set', 'blockstylecache_'.$styleid, $_G['blockstyle_'.$styleid], getglobal('setting/memory/diyblock/ttl'));
+		}
 	}
 	discuz_process::unlock('block_update_cache');
 }
@@ -365,7 +379,9 @@ function block_template($bid) {
 				$searcharr[] = '{'.$key.'}';
 				$replacearr[] = $replacevalue;
 
-				$_G['block_'.$bid][$order-1][$key] = $replacevalue;
+				if($block['hidedisplay']) {
+					$_G['block_'.$bid][$order-1][$key] = $replacevalue;
+				}
 			}
 			foreach($rtpl as $k=>$str_template) {
 				if($str_template) {
@@ -378,7 +394,7 @@ function block_template($bid) {
 		}// foreach($block['itemlist'] as $itemid=>$blockitem) {
 
 		foreach($dynamicparts as $value) {
-			$template = preg_replace($value[0], $value[1], $template);
+			$template = stripslashes(preg_replace($value[0], preg_quote($value[1]), $template));
 		}
 	}
 	$template = preg_replace('/\s*\[(order\d{0,1})=\w+\](.*?)\[\/\\1\]\s*/is', '', $template);
@@ -521,93 +537,77 @@ function block_updateitem($bid, $items=array()) {
 		$_G['block'][$bid] = $block;
 	}
 	$block['shownum'] = max($block['shownum'], 1);
-	$showlist = array_fill(1, $block['shownum'], array());
+	$showlist = array();
 	$archivelist = array();
 	$prelist = array();
-	$manualkeys = array();
-	$archivekeys = array();
-	$query = DB::query('SELECT * FROM '.DB::table('common_block_item')." WHERE bid='$bid'");
-	$addnum = 0;
-	$currentshowlist = $samevalue = array();
+	$query = DB::query('SELECT * FROM '.DB::table('common_block_item')." WHERE bid='$bid' ORDER BY displayorder, itemtype DESC");
+	$samevalue = $samekeys = $newvalue = $fixedvalue = $fixedkeys = array();
 	while($value=DB::fetch($query)) {
-		$currentshowlist[] = $value;
 		$key = $value['idtype'].'_'.$value['id'];
-		foreach($items as $v) {
-			if($key == $v['idtype'].'_'.$v['id']) {
-				$samevalue[$key] = true;
-				break;
-			}
-		}
-	}
-	if(!empty($samevalue)) {
-		$addnum = count($items) - count($samevalue);
-	}
-
-	foreach($currentshowlist as $value) {
-		$key = $value['idtype'].'_'.$value['id'];
-		$op_pre = $op_archive = $op_show = false;
 		if($value['itemtype'] == '1') {
-			if($value['startdate'] > TIMESTAMP) {
-				$op_pre = true;
-			} elseif((!$value['startdate'] || $value['startdate'] <= TIMESTAMP)
-					&& (!$value['enddate'] || $value['enddate'] > TIMESTAMP)
-					&& isset($showlist[$value['displayorder']])) {
-
-				$op_show = true;
-			} else {
-				$op_archive = true;
-			}
-		} elseif($value['itemtype'] == '2') {
-
-			if(isset($samevalue[$key]) && $samevalue[$key]) {
-				$value['displayorder'] += $addnum;
-				$op_show = true;
-			} else {
-				$op_archive = true;
-			}
-		} else {
-			$op_archive = true;
+			$fixedvalue[$value['displayorder']][] = $value;
+			$fixedkeys[$key] = 1;
+			continue;
 		}
 
-		if($op_pre) {
-			$prelist[] = $value;
-			$manualkeys[$key] = true;
-		} elseif($op_show) {
-			$showlist[$value['displayorder']] = $value;
-			$manualkeys[$key] = true;
-		} elseif($op_archive) {
-			$archivelist[$value['itemid']] = 1;
-			$archivekeys[$key] = $value['itemid'];
-		}
-	}
-	$itemindex = 0;
-	for($i=1; $i<=$block['shownum']; $i++) {
-		if(empty($showlist[$i])) {
-			$item = array_shift($items);
-			$key = $item['idtype'].'_'.$item['id'];
-			while($item && !empty($manualkeys[$key])) {
-				$item = array_shift($items);
-				$key = $item['idtype'].'_'.$item['id'];
-			}
-			if(!$item) {
+		$delflag = true;
+		foreach($items as $k => $v) {
+			if(!isset($samekeys[$key]) && !isset($fixedkeys[$key]) && $key == $v['idtype'].'_'.$v['id'] && $v['itemtype'] != '3') {
+				$samekeys[$key] = true;
+				$v['itemid'] = $value['itemid'];
+				$samevalue[] = $value['itemtype'] == '2' ? $value : $v;
+				$delflag = false;
 				break;
 			}
-			$item['displayorder'] = $i;
-			$item['makethumb'] = 0;
-			if(is_array($item['fields'])) {
-				$item['fields'] = serialize($item['fields']);
+		}
+		if($delflag) {
+			$archivelist[$value['itemid']] = 1;
+		}
+	}
+	$newvalue = array();
+	foreach($items as $k => $v) {
+		$key = $v['idtype'].'_'.$v['id'];
+		if(!isset($fixedkeys[$key]) && (!isset($samekeys[$key]) || $v['itemtype'] == '3')) {
+			$newvalue[] = $v;
+		}
+	}
+	$allvalue = array_merge($newvalue, $samevalue);
+	for($i = 1; $i <= $block['shownum']; $i++) {
+		$jump = false;
+		if(isset($fixedvalue[$i])) {
+			foreach($fixedvalue[$i] as $value) {
+				if($value['startdate'] > TIMESTAMP) {
+					$prelist[] = $value;
+				} elseif((!$value['startdate'] || $value['startdate'] <= TIMESTAMP)
+						&& (!$value['enddate'] || $value['enddate'] > TIMESTAMP)) {
+					$showlist[] = $value;
+					$jump = true;
+				} else {
+					$archivelist[$value['itemid']] = 1;
+				}
+			}
+		}
+		if(!$jump) {
+			$curitem = array();
+			if(!($curitem = array_shift($allvalue))) {
+				break;
+			}
+			$curitem['displayorder'] = $i;
+
+			$curitem['makethumb'] = 0;
+			if($curitem['picflag'] && $block['picwidth'] && $block['picheight'] && file_exists($_G['setting']['attachdir'].block_thumbpath($block, $curitem))) { //picflag=0ÎªurlµØÖ·
+				$curitem['makethumb'] = 1;
+			}
+			if(is_array($curitem['fields'])) {
+				$curitem['fields'] = serialize($curitem['fields']);
 			}
 
-			if($archivekeys[$key]) {
-				$item['itemid'] = $archivekeys[$key];
-				unset($archivelist[$archivekeys[$key]]);
-			}
-			$showlist[$i] = $item;
+			$showlist[] = $curitem;
 		}
-		$showlist[$i]['displayorder'] = $i;
-		$showlist[$i]['makethumb'] = 0;
-		if($block['picwidth'] && $block['picheight'] && file_exists($_G['setting']['attachdir'].block_thumbpath($block, $showlist[$i]))) {
-			$showlist[$i]['makethumb'] = 1;
+	}
+	foreach($allvalue as $value) {
+		if(!empty($value['itemid'])) {
+			$archivelist[$value['itemid']] = 1;
 		}
 	}
 	if($archivelist) {

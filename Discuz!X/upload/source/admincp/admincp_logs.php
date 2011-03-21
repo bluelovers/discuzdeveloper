@@ -731,6 +731,9 @@ if($_G['gp_keyword']) {
 showtablefooter();
 showtableheader('', 'fixpadding');
 if($operation != 'credit') {
+	if(!empty($_GET['day'])) {
+		showhiddenfields(array('day' => $_GET['day']));
+	}
 	showsubmit($operation == 'invite' ? 'invitesubmit' : '', 'submit', 'del', $filters, $multipage.(empty($_G['gp_keyword']) ? cplang('logs_lpp').':<select onchange="if(this.options[this.selectedIndex].value != \'\') {window.location=\''.ADMINSCRIPT.'?action=logs&operation='.$operation.'&lpp=\'+this.options[this.selectedIndex].value }"><option value="20" '.$checklpp[20].'> 20 </option><option value="40" '.$checklpp[40].'> 40 </option><option value="80" '.$checklpp[80].'> 80 </option></select>' : ''). '&nbsp;<input type="text" class="txt" name="keyword" value="'.$_G['gp_keyword'].'" />'.($_G['gp_day'] ? '<input type="hidden" class="btn" value="'.$_G['gp_day'].'" />' : '').'<input type="submit" class="btn" value="'.$lang['search'].'" />');
 }
 showtablefooter();

@@ -107,10 +107,10 @@ class credit {
 									$coef = $remain;
 								}
 							}
-							$cyclenunm = $newcycle ? $coef : 'cyclenum+'.$coef;
+							$cyclenunm = $newcycle ? $coef : "cyclenum+'$coef'";
 							$logarr = array(
 								'cyclenum' => "cyclenum=$cyclenunm",
-								'total' => 'total=total+'.$coef,
+								'total' => "total=total+'$coef'",
 								'dateline' => "dateline='$_G[timestamp]'"
 							);
 							$updatecredit = true;
@@ -143,8 +143,8 @@ class credit {
 							}
 							$cyclenunm = 'cyclenum+'.$coef;
 							$logarr = array(
-								'cyclenum' => "cyclenum=cyclenum+$cyclenunm",
-								'total' => 'total=total+'.$coef,
+								'cyclenum' => "cyclenum=cyclenum+'$cyclenunm'",
+								'total' => "total=total+'$coef'",
 								'dateline' => "dateline='$_G[timestamp]'"
 							);
 							$updatecredit = true;
@@ -152,7 +152,7 @@ class credit {
 							$newcycle = true;
 							$logarr = array(
 								'cyclenum' => "cyclenum=$coef",
-								'total' => 'total=total+'.$coef,
+								'total' => "total=total+'$coef'",
 								'dateline' => "dateline='$_G[timestamp]'",
 								'starttime' => "starttime='$_G[timestamp]'",
 							);

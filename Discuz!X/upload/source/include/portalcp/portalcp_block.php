@@ -16,6 +16,7 @@ $oparr = array('block', 'data', 'style', 'itemdata', 'setting', 'remove', 'item'
 				'getblock', 'thumbsetting', 'push', 'recommend', 'verifydata', 'managedata',
 				'saveblockclassname', 'saveblocktitle', 'convert');
 $op = in_array($_GET['op'], $oparr) ? $_GET['op'] : 'block';
+$_GET['from'] = $_GET['from'] == 'cp' ? 'cp' : null;
 $allowmanage = $allowdata = 0;
 
 $block = array();
@@ -170,7 +171,7 @@ if($op == 'block') {
 			foreach($_POST['displayorder'] as $k=>$v) {
 				$k = intval($k);
 				$ids[] = $k;
-				$orders[$k] = $order;
+				$orders[$k] = $v;
 				$order++;
 			}
 			$items = array();
@@ -386,7 +387,8 @@ if($op == 'block') {
 		}
 
 		$isrepeatrecommend = false;
-		$item = DB::fetch_first('SELECT * FROM '.DB::table('common_block_item_data')." WHERE bid='$bid' AND id='$_GET[id]' AND idtype='$_GET[idtype]'");
+		$idtype = $_GET['idtype'] == 'gtid' ? 'tid' : $_GET['idtype'];
+		$item = DB::fetch_first('SELECT * FROM '.DB::table('common_block_item_data')." WHERE bid='$bid' AND id='$_GET[id]' AND idtype='$idtype'");
 		if($item) {
 			$item['fields'] = unserialize($item['fields']);
 			$isrepeatrecommend = true;
@@ -397,7 +399,7 @@ if($op == 'block') {
 
 		} else {
 			if(in_array($_GET['idtype'],array('tid', 'gtid', 'aid', 'picid', 'blogid'))) {
-				$_GET['idtype'] = $_GET['idtype'].'s';
+				$_GET['idtype'] = $_GET['idtype'] == 'gtid' ? 'tids' : $_GET['idtype'].'s';
 			}
 			$item = get_push_item($thestyle, $_GET['id'], $_GET['idtype'], $block['blockclass'], $block['script']);
 			if(empty($item)) showmessage('block_data_type_invalid');
@@ -574,7 +576,7 @@ if($op == 'block') {
 	}
 
 	if (submitcheck('saveclassnamesubmit')) {
-		$setarr = array('classname'=>$_POST['classname']);
+		$setarr = array('classname'=>getstr($_POST['classname'], 100, 0, 0, 0, -1));
 		DB::update('common_block',$setarr,array('bid'=>$bid));
 	}
 	block_memory_clear($bid);
@@ -587,6 +589,7 @@ if($op == 'block') {
 	}
 
 	if (submitcheck('savetitlesubmit')) {
+		$_POST['title'] = preg_replace('/\<script|\<iframe|\<\/iframe\>/is', '', $_POST['title']);
 		$title = dstripslashes($_POST['title']);
 		$title = preg_replace('/url\([\'"](.*?)[\'"]\)/','url($1)',$title);
 

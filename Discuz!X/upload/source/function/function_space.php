@@ -125,35 +125,37 @@ function getblockhtml($blockname,$parameters = array()) {
 			}
 			$html .= '</ul>';
 
+			$encodeusername = rawurlencode($space['username']);
+
 			if(checkperm('allowbanuser')) {
-				$managehtml .= '<li><a href="'.($_G['adminid'] == 1 ? "admin.php?action=members&operation=ban&username=$space[username]&frames=yes" : "forum.php?mod=modcp&action=member&op=ban&uid=$space[uid]").'" id="usermanageli" onmouseover="showMenu(this.id)" class="showmenu" target="_blank">'.lang('home/template', 'member_manage').'</a></li>';
+				$managehtml .= '<li><a href="'.($_G['adminid'] == 1 ? "admin.php?action=members&operation=ban&username=$encodeusername&frames=yes" : "forum.php?mod=modcp&action=member&op=ban&uid=$space[uid]").'" id="usermanageli" onmouseover="showMenu(this.id)" class="showmenu" target="_blank">'.lang('home/template', 'member_manage').'</a></li>';
 			} elseif (checkperm('allowedituser')) {
-				$managehtml .= '<li><a href="'.($_G['adminid'] == 1 ? "admin.php?action=members&operation=search&username=$space[username]&submit=yes&frames=yes" : "forum.php?mod=modcp&action=member&op=edit&uid=$space[uid]").'" id="usermanageli" onmouseover="showMenu(this.id)" class="showmenu" target="_blank">'.lang('home/template', 'member_manage').'</a></li>';
+				$managehtml .= '<li><a href="'.($_G['adminid'] == 1 ? "admin.php?action=members&operation=search&username=$encodeusername&submit=yes&frames=yes" : "forum.php?mod=modcp&action=member&op=edit&uid=$space[uid]").'" id="usermanageli" onmouseover="showMenu(this.id)" class="showmenu" target="_blank">'.lang('home/template', 'member_manage').'</a></li>';
 			}
 			if($_G['adminid'] == 1) {
-				$managehtml .= "<li><a href=\"forum.php?mod=modcp&action=thread&op=post&do=search&searchsubmit=1&users=$space[username]\" id=\"umanageli\" onmouseover=\"showMenu(this.id)\" class=\"showmenu\">".lang('home/template', 'content_manage')."</a></li>";
+				$managehtml .= "<li><a href=\"forum.php?mod=modcp&action=thread&op=post&do=search&searchsubmit=1&users=$encodeusername\" id=\"umanageli\" onmouseover=\"showMenu(this.id)\" class=\"showmenu\">".lang('home/template', 'content_manage')."</a></li>";
 			}
 			if(!empty($managehtml)) {
 				$html .= '<hr class="da mtn m0" /><ul class="ptn xl xl2 cl">'.$managehtml.'</ul><ul id="usermanageli_menu" class="p_pop" style="width: 80px; display:none;">';
 				if(checkperm('allowbanuser')) {
-					$html .= '<li><a href="'.($_G['adminid'] == 1 ? "admin.php?action=members&operation=ban&username=$space[username]&frames=yes" : "forum.php?mod=modcp&action=member&op=ban&uid=$space[uid]").'" target="_blank">'.lang('home/template', 'user_ban').'</a></li>';
+					$html .= '<li><a href="'.($_G['adminid'] == 1 ? "admin.php?action=members&operation=ban&username=$encodeusername&frames=yes" : "forum.php?mod=modcp&action=member&op=ban&uid=$space[uid]").'" target="_blank">'.lang('home/template', 'user_ban').'</a></li>';
 				}
 				if (checkperm('allowedituser')) {
-					$html .= '<li><a href="'.($_G['adminid'] == 1 ? "admin.php?action=members&operation=search&username=$space[username]&submit=yes&frames=yes" : "forum.php?mod=modcp&action=member&op=edit&uid=$space[uid]").'" target="_blank">'.lang('home/template', 'user_edit').'</a></li>';
+					$html .= '<li><a href="'.($_G['adminid'] == 1 ? "admin.php?action=members&operation=search&username=$encodeusername&submit=yes&frames=yes" : "forum.php?mod=modcp&action=member&op=edit&uid=$space[uid]").'" target="_blank">'.lang('home/template', 'user_edit').'</a></li>';
 				}
 				$html .= '</ul>';
 				if($_G['adminid'] == 1) {
 					$html .= '<ul id="umanageli_menu" class="p_pop" style="width: 80px; display:none;">';
-					$html .= '<li><a href="admin.php?action=threads&users='.$space['username'].'" target="_blank">'.lang('space', 'manage_post').'</a></li>';
-					$html .= '<li><a href="admin.php?action=doing&searchsubmit=1&users='.$space['username'].'" target="_blank">'.lang('space', 'manage_doing').'</a></li>';
+					$html .= '<li><a href="admin.php?action=threads&users='.$encodeusername.'" target="_blank">'.lang('space', 'manage_post').'</a></li>';
+					$html .= '<li><a href="admin.php?action=doing&searchsubmit=1&users='.$encodeusername.'" target="_blank">'.lang('space', 'manage_doing').'</a></li>';
 					$html .= '<li><a href="admin.php?action=blog&searchsubmit=1&uid='.$uid.'" target="_blank">'.lang('space', 'manage_blog').'</a></li>';
 					$html .= '<li><a href="admin.php?action=feed&searchsubmit=1&uid='.$uid.'" target="_blank">'.lang('space', 'manage_feed').'</a></li>';
 					$html .= '<li><a href="admin.php?action=album&searchsubmit=1&uid='.$uid.'" target="_blank">'.lang('space', 'manage_album').'</a></li>';
-					$html .= '<li><a href="admin.php?action=pic&searchsubmit=1&users='.$space['username'].'" target="_blank">'.lang('space', 'manage_pic').'</a></li>';
+					$html .= '<li><a href="admin.php?action=pic&searchsubmit=1&users='.$encodeusername.'" target="_blank">'.lang('space', 'manage_pic').'</a></li>';
 					$html .= '<li><a href="admin.php?action=comment&searchsubmit=1&authorid='.$uid.'" target="_blank">'.lang('space', 'manage_comment').'</a></li>';
 					$html .= '<li><a href="admin.php?action=share&searchsubmit=1&uid='.$uid.'" target="_blank">'.lang('space', 'manage_share').'</a></li>';
-					$html .= '<li><a href="admin.php?action=threads&operation=group&users='.$space['username'].'" target="_blank">'.lang('space', 'manage_group_threads').'</a></li>';
-					$html .= '<li><a href="admin.php?action=prune&searchsubmit=1&operation=group&users='.$space['username'].'" target="_blank">'.lang('space', 'manage_group_prune').'</a></li>';
+					$html .= '<li><a href="admin.php?action=threads&operation=group&users='.$encodeusername.'" target="_blank">'.lang('space', 'manage_group_threads').'</a></li>';
+					$html .= '<li><a href="admin.php?action=prune&searchsubmit=1&operation=group&users='.$encodeusername.'" target="_blank">'.lang('space', 'manage_group_prune').'</a></li>';
 					$html .= '</ul>';
 				}
 			}
@@ -175,8 +177,6 @@ function getblockhtml($blockname,$parameters = array()) {
 						$html .= '<img src="'.STATICURL.'image/magic/gift.gif" alt="gift" />';
 						$html .= '</a>';
 						$html .= '</div>';
-					} else {
-						DB::update('common_member_field_home', array('magicgift'=>''), array('uid'=>$_G['uid']));
 					}
 				}
 			}
@@ -208,26 +208,26 @@ function getblockhtml($blockname,$parameters = array()) {
 		case 'doing':
 			$do = $blockname;
 			if(ckprivacy('doing', 'view')) {
-			$dolist = array();
-			$sql = "SELECT * FROM ".DB::table('home_doing')." WHERE uid='$uid' ORDER BY dateline DESC LIMIT 0,$shownum";
-			$query = DB::query($sql);
-			while ($value = DB::fetch($query)) {
-				if($value['status'] == 0 || $value['uid'] == $_G['uid']) {
-					$dolist[] = $value;
+				$dolist = array();
+				$sql = "SELECT * FROM ".DB::table('home_doing')." WHERE uid='$uid' ORDER BY dateline DESC LIMIT 0,$shownum";
+				$query = DB::query($sql);
+				while ($value = DB::fetch($query)) {
+					if($value['status'] == 0 || $value['uid'] == $_G['uid']) {
+						$dolist[] = $value;
+					}
 				}
-			}
 
-			if ($dolist) {
-				foreach($dolist as $dv) {
-					$doid = $dv['doid'];
-					$_G[gp_key] = $key = random(8);
-					$html .= "<li class=\"pbn bbda\">";
-					$html .= $dv['message'];
-					$html .= "&nbsp;<a href=\"home.php?mod=space&uid=$dv[uid]&do=doing&view=me&from=space&doid=$dv[doid]\" target=\"_blank\" class=\"xg1\">".lang('space', 'block_doing_reply')."</a>";
-					$html .= "</li>";
-				}
-			} else {
-				$html .= "<p class=\"emp\">".lang('space', 'block_doing_no_content')."</p>";
+				if ($dolist) {
+					foreach($dolist as $dv) {
+						$doid = $dv['doid'];
+						$_G[gp_key] = $key = random(8);
+						$html .= "<li class=\"pbn bbda\">";
+						$html .= $dv['message'];
+						$html .= "&nbsp;<a href=\"home.php?mod=space&uid=$dv[uid]&do=doing&view=me&from=space&doid=$dv[doid]\" target=\"_blank\" class=\"xg1\">".lang('space', 'block_doing_reply')."</a>";
+						$html .= "</li>";
+					}
+				} else {
+					$html .= "<p class=\"emp\">".lang('space', 'block_doing_no_content')."</p>";
 				}
 			} else {
 				$html .= "<p class=\"emp\">".lang('space', 'block_view_noperm')."</p>";
@@ -310,8 +310,8 @@ function getblockhtml($blockname,$parameters = array()) {
 			break;
 		case 'thread':
 			$do = $blockname;
-			if (!empty($_G['setting']['allowviewuserthread'])) {
-				$fidsql = " AND fid IN({$_G[setting][allowviewuserthread]}) ";
+			if ($_G['setting']['allowviewuserthread'] !== false) {
+				$fidsql = empty($_G['setting']['allowviewuserthread']) ? '' : " AND fid IN({$_G[setting][allowviewuserthread]}) ";
 				$query = DB::query("SELECT * FROM ".DB::table('forum_thread')." WHERE authorid='$uid' $fidsql AND displayorder>='0' ORDER BY tid DESC LIMIT 0,$shownum");
 				while ($thread = DB::fetch($query)) {
 					if($thread['author']) {

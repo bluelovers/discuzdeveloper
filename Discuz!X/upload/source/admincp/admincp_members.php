@@ -103,6 +103,14 @@ if($operation == 'search') {
 		showsubtitle(array('', 'username', 'credits', 'posts', 'admingroup', 'usergroup', ''));
 		echo $members;
 		foreach($search_condition as $k => $v) {
+			if($k == 'username') {
+				$v = explode(',', $v);
+				$tmpv = array();
+				foreach($v as $subvalue) {
+					$tmpv[] = rawurlencode($subvalue);
+				}
+				$v = implode(',', $tmpv);
+			}
 			if(is_array($v)) {
 				foreach($v as $value ) {
 					$condition_str .= '&'.$k.'[]='.$value;
@@ -2366,7 +2374,7 @@ function notifymembers($operation, $variable) {
 			$medals = $_G['gp_medals'];
 			if(!empty($medals)) {
 				$medalids = $comma = '';
-				foreach($medals as $key=> $medalid) {
+				foreach($medals as $key => $medalid) {
 					$medalids .= "$comma'$key'";
 					$comma = ',';
 				}
@@ -2388,13 +2396,18 @@ function notifymembers($operation, $variable) {
 				if($uids) {
 					$query = DB::query("SELECT uid, medals FROM ".DB::table('common_member_field_forum')." WHERE uid IN (".dimplode($uids).")");
 					while($medalnew = DB::fetch($query)) {
-
+						$usermedal = array();
 						$addmedalnew = '';
 						if(empty($medalnew['medals'])) {
 							$addmedalnew = $medalsnew;
 						} else {
 							foreach($medalidarray as $medalid) {
-								if(!in_array($medalid, explode("\t", $medalnew['medals']))){
+								$usermedal_arr = explode("\t", $medalnew['medals']);
+								foreach($usermedal_arr AS $key => $medalval) {
+									list($usermedalid,) = explode("|", $medalval);
+									$usermedal[] = $usermedalid;
+								}
+								if(!in_array($medalid, $usermedal)){
 									$addmedalnew .= $medalid."\t";
 								}
 							}

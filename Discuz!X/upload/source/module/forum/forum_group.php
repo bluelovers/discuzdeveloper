@@ -578,18 +578,11 @@ if($action == 'index') {
 							$threadtypesnew['types'][$type['typeid']] = $threadtypesnew['options']['name'][$type['typeid']];
 						}
 					}
-					$threadtypesnew = $threadtypesnew['types'] ? addslashes(serialize(array
-						(
-						'required' => (bool)$threadtypesnew['required'],
-						'listable' => (bool)$threadtypesnew['listable'],
-						'prefix' => $threadtypesnew['prefix'],
-						'types' => $threadtypesnew['types'],
-						))) : '';
 				}
 			} else {
 				$threadtypesnew = '';
 			}
-			DB::update('forum_forumfield', array('threadtypes' => $threadtypesnew), "fid='{$_G['fid']}'");
+			DB::update('forum_forumfield', array('threadtypes' => daddslashes(serialize($threadtypesnew))), "fid='{$_G['fid']}'");
 			showmessage('group_threadtype_edit_succeed', $url);
 		}
 	} elseif($_G['gp_op'] == 'demise') {

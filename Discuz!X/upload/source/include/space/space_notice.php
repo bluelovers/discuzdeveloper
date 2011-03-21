@@ -138,6 +138,7 @@ if($view == 'userapp') {
 	if($newnotice) {
 		$updatenotice['notifications'] = -$newnotice;
 	}
+
 	$newprompt = 0;
 	foreach (array('notifications','myinvitations','pokes','pendingfriends') as $key) {
 		$newprompt = $newprompt + $space[$key];
@@ -173,6 +174,7 @@ if($view == 'userapp') {
 	if(!empty($updatenotice)) {
 		member_status_update($_G['uid'], $updatenotice);
 	}
+
 }
 dsetcookie('promptstate_'.$_G['uid'], $newprompt, 31536000);
 include_once template("diy:home/space_notice");

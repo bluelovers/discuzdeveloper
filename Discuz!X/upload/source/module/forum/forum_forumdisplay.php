@@ -254,6 +254,7 @@ $simplestyle = !$_G['forum']['allowside'] || $page > 1 ? true : false;
 
 if($subforumonly) {
 	$_G['setting']['fastpost'] = false;
+	$_G['gp_orderby'] = '';
 	$forummenu = '';
 	if($_G['setting']['forumjump']) {
 		$forummenu = forumselect(FALSE, 1);

@@ -723,6 +723,11 @@ function block_get($parameter) {
 			$_G['block'][$bid] = memory('get', 'blockcache_'.$bid);
 			if($_G['block'][$bid] === null) {
 				$lostbids[] = $bid;
+			} else {
+				$styleid = $_G['block'][$bid]['styleid'];
+				if($styleid && !isset($_G['blockstyle_'.$styleid])) {
+					$_G['blockstyle_'.$styleid] = memory('get', 'blockstylecache_'.$styleid);
+				}
 			}
 		}
 	}
@@ -732,6 +737,10 @@ function block_get($parameter) {
 		foreach ($lostbids as $bid) {
 			if(isset($_G['block'][$bid])) {
 				memory('set', 'blockcache_'.$bid, $_G['block'][$bid], getglobal('setting/memory/diyblock/ttl'));
+				$styleid = $_G['block'][$bid]['styleid'];
+				if($styleid && $_G['blockstyle_'.$styleid]) {
+					memory('set', 'blockstylecache_'.$styleid, $_G['blockstyle_'.$styleid], getglobal('setting/memory/diyblock/ttl'));
+				}
 			}
 		}
 	}
@@ -1468,6 +1477,7 @@ function showmessage($message, $url_forward = '', $values = array(), $extraparam
 	if(empty($_G['inajax']) && (!empty($_G['gp_quickforward']) || $_G['setting']['msgforward']['quick'] && $_G['setting']['msgforward']['messages'] && @in_array($message, $_G['setting']['msgforward']['messages']))) {
 		$param['header'] = true;
 	}
+	$_G['gp_handlekey'] = !empty($_G['gp_handlekey']) && preg_match('/^\w+$/', $_G['gp_handlekey']) ? $_G['gp_handlekey'] : '';
 	if(!empty($_G['inajax'])) {
 		$handlekey = $_G['gp_handlekey'] = !empty($_G['gp_handlekey']) ? htmlspecialchars($_G['gp_handlekey']) : '';
 		$param['handle'] = true;
@@ -1824,6 +1834,7 @@ function dreferer($default = '') {
 	if(strpos($_G['referer'], 'member.php?mod=logging')) {
 		$_G['referer'] = $default;
 	}
+	$_G['referer'] = str_replace('&amp;', '&', $_G['referer']);
 	return strip_tags($_G['referer']);
 }
 

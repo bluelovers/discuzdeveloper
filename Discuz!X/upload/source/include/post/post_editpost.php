@@ -102,7 +102,6 @@ if(!submitcheck('editsubmit')) {
 				$poll['displayorder'][] = $temppoll['displayorder'];
 				$poll['polloption'][] = dstripslashes($temppoll['polloption']);
 			}
-			$_G['setting']['maxpolloptions'] = 20 - DB::num_rows($query);
 		} elseif($thread['special'] == 3) {
 			$rewardprice = $thread['price'];
 		} elseif($thread['special'] == 4) {
@@ -392,7 +391,7 @@ if(!submitcheck('editsubmit')) {
 				$activity['gender'] = intval($_G['gp_gender']);
 				$activity['number'] = intval($_G['gp_activitynumber']);
 				if($_G['gp_activityexpiration']) {
-					$activity['expiration'] = @strtotime($_G['gp_activityexpiration']) - date('Z');
+					$activity['expiration'] = @strtotime($_G['gp_activityexpiration']);
 				} else {
 					$activity['expiration'] = 0;
 				}

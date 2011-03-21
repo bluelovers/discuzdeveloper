@@ -1,4 +1,5 @@
 <!--{template common/header}-->
+	<!--{eval $encodeusername = rawurlencode($space['username']);}-->
 	<!--{hook/space_card_top}-->
 	<div class="cl">
 		<div class="avt">
@@ -56,22 +57,22 @@
 		<!--{/if}-->
 		<!--{if checkperm('allowbanuser') || checkperm('allowedituser')}-->
 			<!--{if checkperm('allowedituser')}-->
-				<a href="{if $_G[adminid] == 1}admin.php?action=members&operation=search&username=$space[username]&submit=yes&frames=yes{else}forum.php?mod=modcp&action=member&op=edit&uid=$space[uid]{/if}" target="_blank" class="xi1">{lang user_edit}</a>
+				<a href="{if $_G[adminid] == 1}admin.php?action=members&operation=search&username=$encodeusername&submit=yes&frames=yes{else}forum.php?mod=modcp&action=member&op=edit&uid=$space[uid]{/if}" target="_blank" class="xi1">{lang user_edit}</a>
 			<!--{/if}-->
 			<!--{if checkperm('allowbanuser')}-->
-				<a href="{if $_G[adminid] == 1}admin.php?action=members&operation=ban&username=$space[username]&frames=yes{else}forum.php?mod=modcp&action=member&op=ban&uid=$space[uid]{/if}" target="_blank" class="xi1">{lang user_ban}</a>
+				<a href="{if $_G[adminid] == 1}admin.php?action=members&operation=ban&username=$encodeusername&frames=yes{else}forum.php?mod=modcp&action=member&op=ban&uid=$space[uid]{/if}" target="_blank" class="xi1">{lang user_ban}</a>
 			<!--{/if}-->			
-			<a href="forum.php?mod=modcp&action=thread&op=post&do=search&searchsubmit=1&users=$space[username]" target="_blank" class="xi1">{lang manage_post}</a>
+			<a href="forum.php?mod=modcp&action=thread&op=post&do=search&searchsubmit=1&users=$encodeusername" target="_blank" class="xi1">{lang manage_post}</a>
 		<!--{/if}-->
 		<!--{hook/space_card_option}-->
 	</div>
 	<!--{if $_G['setting']['magicstatus']}-->
 	<div class="mgc">
 		<!--{if !empty($_G['setting']['magics']['showip'])}-->
-			<a href="home.php?mod=magic&mid=showip&idtype=user&id={echo rawurlencode($space[username])}" id="a_showip_li_{$space[pid]}" onclick="showWindow(this.id, this.href)"><img src="{STATICURL}/image/magic/showip.small.gif" class="vm" title="$_G['setting']['magics']['showip']" /> $_G['setting']['magics']['showip']</a>
+			<a href="home.php?mod=magic&mid=showip&idtype=user&id=$encodeusername" id="a_showip_li_{$space[pid]}" onclick="showWindow(this.id, this.href)"><img src="{STATICURL}/image/magic/showip.small.gif" class="vm" title="$_G['setting']['magics']['showip']" /> $_G['setting']['magics']['showip']</a>
 		<!--{/if}-->
 		<!--{if !empty($_G['setting']['magics']['checkonline']) && $space['uid'] != $_G['uid']}-->
-			<a href="home.php?mod=magic&mid=checkonline&idtype=user&id={echo rawurlencode($space[username])}" id="a_repent_{$space[pid]}" onclick="showWindow(this.id, this.href)"><img src="{STATICURL}/image/magic/checkonline.small.gif" class="vm" title="$_G['setting']['magics']['checkonline']" /> $_G['setting']['magics']['checkonline']</a>
+			<a href="home.php?mod=magic&mid=checkonline&idtype=user&id=$encodeusername" id="a_repent_{$space[pid]}" onclick="showWindow(this.id, this.href)"><img src="{STATICURL}/image/magic/checkonline.small.gif" class="vm" title="$_G['setting']['magics']['checkonline']" /> $_G['setting']['magics']['checkonline']</a>
 		<!--{/if}-->
 		<!--{hook/space_card_magic_user}-->
 	</div>

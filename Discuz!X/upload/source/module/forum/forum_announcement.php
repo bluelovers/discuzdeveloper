@@ -24,7 +24,7 @@ while($announce = DB::fetch($query)) {
 	$announce['authorenc'] = rawurlencode($announce['author']);
 	$tmp = explode('.', dgmdate($announce['starttime'], 'Y.m'));
 	$months[$tmp[0].$tmp[1]] = $tmp;
-	if(!empty($m) && $m != dgmdate($announce['starttime'], 'Ym')) {
+	if(!empty($_GET['m']) && $_GET['m'] != dgmdate($announce['starttime'], 'Ym')) {
 		continue;
 	}
 	$announce['starttime'] = dgmdate($announce['starttime'], 'd');
