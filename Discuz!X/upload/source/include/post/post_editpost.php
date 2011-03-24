@@ -635,7 +635,7 @@ if(!submitcheck('editsubmit')) {
 		$message = preg_replace('/\[attachimg\](\d+)\[\/attachimg\]/is', '[attach]\1[/attach]', $message);
 		$parseurloff = !empty($_G['gp_parseurloff']);
 		DB::query("UPDATE ".DB::table($posttable)." SET message='$message', usesig='$_G[gp_usesig]', htmlon='$htmlon', bbcodeoff='$bbcodeoff', parseurloff='$parseurloff',
-			smileyoff='$smileyoff', subject='$subject' ".(DB::result_first("SELECT aid FROM ".DB::table('forum_attachment')." WHERE pid='$pid' LIMIT 1") ? ", attachment='1'" : '')." $anonymousadd ".($_G['forum_auditstatuson'] && $audit == 1 ? ",invisible='0'" : ", invisible='$pinvisible'").", tags='".implode(',', $tagarray)."' WHERE pid='$pid'");
+			smileyoff='$smileyoff', subject='$subject' $anonymousadd ".($_G['forum_auditstatuson'] && $audit == 1 ? ",invisible='0'" : ", invisible='$pinvisible'").", tags='".implode(',', $tagarray)."' WHERE pid='$pid'");
 
 		$_G['forum']['lastpost'] = explode("\t", $_G['forum']['lastpost']);
 

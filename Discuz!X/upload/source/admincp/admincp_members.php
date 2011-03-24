@@ -1579,8 +1579,6 @@ EOT;
 				cpmsg('members_email_domain_illegal', '', 'error');
 			} elseif($ucresult == -6) {
 				cpmsg('members_email_duplicate', '', 'error');
-			} else {
-				cpmsg('undefined_action', '', 'error');
 			}
 		}
 
