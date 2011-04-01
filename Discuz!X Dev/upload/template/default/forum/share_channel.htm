@@ -1,0 +1,45 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+"http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml">
+    <head>
+        <meta http-equiv="content-type" content="text/html; charset=utf-8" />
+        <script language="javascript">
+            var pw = window.parent.parent.window;
+            var url = window.location.href;
+
+            var params = get_url_params(url);
+            var code = params['code'];
+            var message = decodeURIComponent(params['message']);
+
+            if (code > 0) {
+                message = message ? message : '{lang share_faild}';
+                pw.showDialog(message);
+            } else {
+                message = message ? message : '{lang share_succeed}';
+                pw.showDialog(message, 'notice');
+            }
+
+            function get_url_params(url) {
+                var pos = url.indexOf('?');
+
+                if (pos < 0) {
+                    return false;
+                }
+
+                var query = url.substr(pos + 1);
+
+                var arr = query.split('&');
+                var item = '';
+                var res = [];
+                for(k in arr) {
+                    item = arr[k].split('=');
+                    res[item[0]] = item[1];
+                }
+
+                return res;
+            }
+        </script>
+    </head>
+    <body>
+    </body>
+</html>
