@@ -322,17 +322,20 @@ if($operation == 'search') {
 		if(!empty($_G['gp_uidarray'])) {
 			$uids = is_array($_G['gp_uidarray']) ? '\''.implode('\', \'', $_G['gp_uidarray']).'\'' : '0';
 			$query = DB::query("SELECT uid, groupid, adminid FROM ".DB::table('common_member')." WHERE uid IN($uids) AND adminid<>1 AND groupid<>1");
-		}
-
-		$membernum = DB::num_rows($query);
-
-		$uids = $comma = '';
-		while($member = DB::fetch($query)) {
-			if($membernum < 2000 || !empty($_G['gp_uidarray'])) {
-				$extra .= '<input type="hidden" name="uidarray[]" value="'.$member['uid'].'" />';
+			$membernum = DB::num_rows($query);
+			$uids = $comma = '';
+			while($member = DB::fetch($query)) {
+				if($membernum < 2000 || !empty($_G['gp_uidarray'])) {
+					$extra .= '<input type="hidden" name="uidarray[]" value="'.$member['uid'].'" />';
+				}
+				$uids .= $comma.$member['uid'];
+				$comma = ',';
 			}
-			$uids .= $comma.$member['uid'];
-			$comma = ',';
+		} else {
+			foreach($uids as $uid) {
+				$extra .= '<input type="hidden" name="uidarray[]" value="'.$uid.'" />';
+			}
+			$uids = dimplode($uids);
 		}
 
 		if((empty($membernum) || empty($uids))) {

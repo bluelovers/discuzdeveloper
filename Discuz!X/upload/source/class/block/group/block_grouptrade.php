@@ -276,7 +276,7 @@ class block_grouptrade {
 		require_once libfile('block_thread', 'class/block/forum');
 		$bt = new block_thread();
 		while($data = DB::fetch($query)) {
-			$list[] = array(
+			$one = array(
 				'id' => $data['pid'],
 				'idtype' => 'pid',
 				'title' => cutstr(str_replace('\\\'', '&#39;', addslashes($data['subject'])), $titlelength, ''),
@@ -292,6 +292,12 @@ class block_grouptrade {
 					'price' => ($data['price'] > 0 ? '&yen; '.$data['price'] : '').($data['credit'] > 0 ? ($data['price'] > 0 ? lang('block/grouptrade', 'grouptrade_price_add') : '').$data['credit'].' '.$_G['setting']['extcredits'][$_G['setting']['creditstransextra'][5]]['unit'].$_G['setting']['extcredits'][$_G['setting']['creditstransextra'][5]]['title'] : ''),
 				)
 			);
+			if($data['aid']) {
+				$pic = DB::fetch_first("SELECT attachment, remote FROM ".DB::table('forum_attachment')." WHERE aid='$data[aid]'");
+				$one['pic'] = 'forum/'.$pic['attachment'];
+				$one['picflag'] = $pic['remote'] ? '2' : '1';
+			}
+			$list[] = $one;
 		}
 		return array('html' => '', 'data' => $list);
 	}

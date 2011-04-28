@@ -296,7 +296,7 @@ class block_activity {
 			);
 		require_once libfile('block_thread', 'class/block/forum');
 		$bt = new block_thread();
-		$listtids = array();
+		$listtids = $aids = array();
 		while($data = DB::fetch($query)) {
 			$data['time'] = dgmdate($data['starttimefrom']);
 			if($data['starttimeto']) {
@@ -308,7 +308,7 @@ class block_activity {
 				'idtype' => 'tid',
 				'title' => cutstr(str_replace('\\\'', '&#39;', $data['subject']), $titlelength, ''),
 				'url' => 'forum.php?mod=viewthread&tid='.$data['tid'].($viewmod ? '&from=portal' : ''),
-				'pic' => ($data['aid'] ? getforumimg($data['aid']) : $_G['style']['imgdir'].'/nophoto.gif'),
+				'pic' => ($data['aid'] ? '' : $_G['style']['imgdir'].'/nophoto.gif'),
 				'picflag' => '0',
 				'summary' => !empty($style['getsummary']) ? $bt->getthread($data['tid'], $summarylength, true) : '',
 				'fields' => array(
@@ -325,6 +325,9 @@ class block_activity {
 					'applynumber' => $data['applynumber'],
 				)
 			);
+			if($data['aid']) {
+				$aids[] = $data['aid'];
+			}
 		}
 
 		if(!empty($listtids)) {
@@ -333,6 +336,13 @@ class block_activity {
 				$list[$value['tid']]['fields']['applynumber'] = $value['sum'];
 			}
 
+			if($aids) {
+				$query = DB::query("SELECT tid, attachment, remote FROM ".DB::table('forum_attachment')." WHERE aid IN (".dimplode($aids).')');
+				while($value = DB::fetch($query)) {
+					$list[$value['tid']]['pic'] = 'forum/'.$value['attachment'];
+					$list[$value['tid']]['picflag'] = $value['remote'] ? '2' : '1';
+				}
+			}
 			foreach($listtids as $key => $value) {
 				$datalist[] = $list[$value];
 			}

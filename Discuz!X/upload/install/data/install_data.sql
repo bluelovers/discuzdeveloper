@@ -44,7 +44,6 @@ INSERT INTO pre_common_credit_rule VALUES ('29','修改域名','modifydomain','0','0
 INSERT INTO pre_common_cron VALUES ('1','1','system','清空今日发帖数','cron_todaypost_daily.php','1269746623','1269792000','-1','-1','0','0');
 INSERT INTO pre_common_cron VALUES ('2','1','system','清空本月在线时间','cron_onlinetime_monthly.php','1269682366','1270051200','-1','1','0','0');
 INSERT INTO pre_common_cron VALUES ('3','1','system','每日数据清理','cron_cleanup_daily.php','1269746634','1269811800','-1','-1','5','30');
-INSERT INTO pre_common_cron VALUES ('4','1','system','生日统计与邮件祝福','cron_birthday_daily.php','1269746627','1269792000','-1','-1','0','0');
 INSERT INTO pre_common_cron VALUES ('5','1','system','每日公告清理','cron_announcement_daily.php','1269746629','1269792000','-1','-1','0','0');
 INSERT INTO pre_common_cron VALUES ('6','1','system','限时操作清理','cron_threadexpiry_hourly.php','1269746634','1269810000','-1','-1','-1','0');
 INSERT INTO pre_common_cron VALUES ('7','1','system','论坛推广清理','cron_promotion_hourly.php','1269746629','1269792000','-1','-1','0','00');
@@ -205,7 +204,7 @@ INSERT INTO pre_common_setting VALUES ('attachsave','3');
 INSERT INTO pre_common_setting VALUES ('attachurl','data/attachment');
 INSERT INTO pre_common_setting VALUES ('authkey','9f50c9zryqZt5FYA');
 INSERT INTO pre_common_setting VALUES ('authoronleft','1');
-INSERT INTO pre_common_setting VALUES ('autoidselect','0');
+INSERT INTO pre_common_setting VALUES ('autoidselect','1');
 INSERT INTO pre_common_setting VALUES ('avatarmethod','0');
 INSERT INTO pre_common_setting VALUES ('backupdir','f027b6');
 INSERT INTO pre_common_setting VALUES ('bannedmessages','1');

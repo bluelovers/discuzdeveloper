@@ -24,18 +24,6 @@ array_splice($menu['style'], 8, 0, array(
 	array('setting_editor_code', 'misc_bbcode'),
 ));
 
-$menu['topic'][0] = array('founder_perm_moderate_threads', 'moderate_threads');
-array_splice($menu['topic'], 1, 0, array(
-	array('founder_perm_moderate_replies', 'moderate_replies'),
-	array('menu_moderate_blogs', 'moderate_blogs'),
-	array('menu_moderate_pictures', 'moderate_pictures'),
-	array('menu_moderate_doings', 'moderate_doings'),
-	array('menu_moderate_shares', 'moderate_shares'),
-	array('menu_moderate_comments', 'moderate_comments'),
-	array('menu_moderate_articles', 'moderate_articles'),
-	array('menu_moderate_articlecomments', 'moderate_articlecomments'),
-));
-
 array_splice($menu['user'], 1, 0, array(
 	array('founder_perm_members_group', 'members_group'),
 	array('founder_perm_members_access', 'members_access'),

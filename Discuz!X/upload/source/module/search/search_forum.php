@@ -46,7 +46,7 @@ if($srchtype == 'title' || $srchtype == 'fulltext') {
 
 $srchtxt = $_G['gp_srchtxt'];
 $srchuid = intval($_G['gp_srchuid']);
-$srchuname = $_G['gp_srchuname'];
+$srchuname = isset($_G['gp_srchuname']) ? trim(str_replace('|', '', $_G['gp_srchuname'])) : '';;
 $srchfrom = intval($_G['gp_srchfrom']);
 $before = intval($_G['gp_before']);
 $srchfid = $_G['gp_srchfid'];
@@ -115,7 +115,6 @@ if(!submitcheck('searchsubmit', 1)) {
 
 	} else {
 
-		$srchuname = isset($_G['gp_srchuname']) ? trim($_G['gp_srchuname']) : '';
 
 		if($_G['group']['allowsearch'] & 32 && $srchtype == 'fulltext') {
 			periodscheck('searchbanperiods');

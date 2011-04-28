@@ -29,6 +29,6 @@ if($_G['gp_srchtxt']) {
 	$url .= '&username='.$_G['gp_srchtxt'].'&searchsubmit=yes';
 }
 
-header('Location: '.$url);
+dheader('Location: '.$url);
 
 ?>

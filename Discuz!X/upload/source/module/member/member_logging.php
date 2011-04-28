@@ -72,7 +72,7 @@ class logging_ctl {
 
 			if($result['status'] > 0) {
 				setloginstatus($result['member'], $_G['gp_cookietime'] ? 2592000 : 0);
-				DB::query("UPDATE ".DB::table('common_member_status')." SET lastip='".$_G['clientip']."', lastvisit='".time()."' WHERE uid='$_G[uid]'");
+				DB::query("UPDATE ".DB::table('common_member_status')." SET lastip='".$_G['clientip']."', lastvisit='".time()."', lastactivity='".TIMESTAMP."' WHERE uid='$_G[uid]'");
 				$ucsynlogin = $_G['setting']['allowsynlogin'] ? uc_user_synlogin($_G['uid']) : '';
 
 				include_once libfile('function/stat');

@@ -429,13 +429,13 @@ if(empty($_G['gp_viewpid'])) {
 	}
 	$multipage = multi($_G['forum_thread']['replies'] + 1, $_G['ppp'], $page, 'forum.php?mod=viewthread&tid='.$_G['tid'].
 		($_G['forum_thread']['is_archived'] ? '&archive='.$_G['forum_thread']['archiveid'] : '').
-		'&extra='.$_G['gp_extra'].
-		($ordertype && $ordertype != getstatus($_G['forum_thread']['status'], 4) ? '&ordertype='.$ordertype : '').
-		(isset($_G['gp_highlight']) ? '&highlight='.rawurlencode($_G['gp_highlight']) : '').
-		(!empty($_G['gp_authorid']) ? '&authorid='.$_G['gp_authorid'] : '').
-		(!empty($_G['gp_from']) ? '&from='.$_G['gp_from'] : '').
-		(!empty($_G['gp_checkrush']) ? '&checkrush='.$_G['gp_checkrush'] : '').
-		(!empty($_G['gp_modthreadkey']) ? '&modthreadkey='.rawurlencode($_G['gp_modthreadkey']) : '').
+		'&amp;extra='.$_G['gp_extra'].
+		($ordertype && $ordertype != getstatus($_G['forum_thread']['status'], 4) ? '&amp;ordertype='.$ordertype : '').
+		(isset($_G['gp_highlight']) ? '&amp;highlight='.rawurlencode($_G['gp_highlight']) : '').
+		(!empty($_G['gp_authorid']) ? '&amp;authorid='.$_G['gp_authorid'] : '').
+		(!empty($_G['gp_from']) ? '&amp;from='.$_G['gp_from'] : '').
+		(!empty($_G['gp_checkrush']) ? '&amp;checkrush='.$_G['gp_checkrush'] : '').
+		(!empty($_G['gp_modthreadkey']) ? '&amp;modthreadkey='.rawurlencode($_G['gp_modthreadkey']) : '').
 		$specialextra);
 } else {
 	$_G['gp_viewpid'] = intval($_G['gp_viewpid']);

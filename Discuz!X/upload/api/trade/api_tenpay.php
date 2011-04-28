@@ -141,12 +141,10 @@ class ResponseHandler  {
 		$this->debugInfo = "";
 
 		foreach($_GET as $k => $v) {
-			$value = urldecode($v);
-			$this->setParameter($k, $value);
+			$this->setParameter($k, $v);
 		}
 		foreach($_POST as $k => $v) {
-			$value = urldecode($v);
-			$this->setParameter($k, $value);
+			$this->setParameter($k, $v);
 		}
 	}
 

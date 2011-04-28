@@ -368,7 +368,7 @@ function block_template($bid) {
 							require_once libfile('class/image');
 							$image = new image();
 							$thumbpath = block_thumbpath($block, $blockitem);
-							if(file_exists($_G['setting']['attachdir'].$thumbpath) || ($return = $image->Thumb($replacevalue, $thumbpath, $block['picwidth'], $block['picheight'], 1))) {
+							if(file_exists($_G['setting']['attachdir'].$thumbpath) || ($return = $image->Thumb($replacevalue, $thumbpath, $block['picwidth'], $block['picheight'], 2))) {
 								DB::update('common_block_item', array('makethumb'=>1), array('itemid'=>$blockitem['itemid']));
 								$replacevalue = $_G['setting']['attachurl'].$thumbpath;
 								$_G['block_makethumb'] = true;
@@ -541,37 +541,39 @@ function block_updateitem($bid, $items=array()) {
 	$archivelist = array();
 	$prelist = array();
 	$query = DB::query('SELECT * FROM '.DB::table('common_block_item')." WHERE bid='$bid' ORDER BY displayorder, itemtype DESC");
-	$samevalue = $samekeys = $newvalue = $fixedvalue = $fixedkeys = array();
+	$oldvalue = $fixedvalue = $fixedkeys = array();
 	while($value=DB::fetch($query)) {
 		$key = $value['idtype'].'_'.$value['id'];
 		if($value['itemtype'] == '1') {
 			$fixedvalue[$value['displayorder']][] = $value;
 			$fixedkeys[$key] = 1;
 			continue;
+		} else {
+			$oldvalue[$key] = $value;
 		}
+	}
 
-		$delflag = true;
-		foreach($items as $k => $v) {
-			if(!isset($samekeys[$key]) && !isset($fixedkeys[$key]) && $key == $v['idtype'].'_'.$v['id'] && $v['itemtype'] != '3') {
-				$samekeys[$key] = true;
-				$v['itemid'] = $value['itemid'];
-				$samevalue[] = $value['itemtype'] == '2' ? $value : $v;
-				$delflag = false;
-				break;
-			}
-		}
-		if($delflag) {
-			$archivelist[$value['itemid']] = 1;
-		}
-	}
-	$newvalue = array();
-	foreach($items as $k => $v) {
+	$itemcount = count($items);
+	for($k = 0; $k < $itemcount; $k++) {
+		$v = $items[$k];
 		$key = $v['idtype'].'_'.$v['id'];
-		if(!isset($fixedkeys[$key]) && (!isset($samekeys[$key]) || $v['itemtype'] == '3')) {
-			$newvalue[] = $v;
+		if(isset($fixedkeys[$key])) {
+			$items[$k] = null;
+		} elseif(isset($oldvalue[$key])) {
+			if($oldvalue[$key]['itemtype'] == '2') {
+				$items[$k] = $oldvalue[$key];
+			} else {
+				$items[$k]['itemid'] = $oldvalue[$key]['itemid'];
+			}
+			unset($oldvalue[$key]);
 		}
 	}
-	$allvalue = array_merge($newvalue, $samevalue);
+
+	$items = array_filter($items);
+
+	foreach($oldvalue as $value) {
+		$archivelist[$value['itemid']] = 1;
+	}
 	for($i = 1; $i <= $block['shownum']; $i++) {
 		$jump = false;
 		if(isset($fixedvalue[$i])) {
@@ -589,7 +591,7 @@ function block_updateitem($bid, $items=array()) {
 		}
 		if(!$jump) {
 			$curitem = array();
-			if(!($curitem = array_shift($allvalue))) {
+			if(!($curitem = array_shift($items))) {
 				break;
 			}
 			$curitem['displayorder'] = $i;
@@ -605,7 +607,7 @@ function block_updateitem($bid, $items=array()) {
 			$showlist[] = $curitem;
 		}
 	}
-	foreach($allvalue as $value) {
+	foreach($items as $value) {
 		if(!empty($value['itemid'])) {
 			$archivelist[$value['itemid']] = 1;
 		}

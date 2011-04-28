@@ -242,6 +242,7 @@ class block_member {
 				$sqlorderby = ' ORDER BY s.unitprice DESC, s.credit DESC';
 				break;
 		}
+		$wheres[] = '(m.groupid < 4 OR m.groupid > 8)';
 
 		$tables = array_unique($tables);
 		$wheres = array_unique($wheres);

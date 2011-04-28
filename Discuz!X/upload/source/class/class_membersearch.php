@@ -206,6 +206,7 @@ class membersearch {
 			} elseif(!$islikesearch && strexists($value, '*')) {
 				$islikesearch = true;
 			}
+			if($type != 'int') $value = addslashes(stripslashes($value));
 			if($value !== null) {
 				$values[] = $value;
 			}
@@ -247,8 +248,8 @@ class membersearch {
 			$range_low = intval($range_low);
 			$range_high = intval($range_high);
 		}  else {
-			$range_low = trim($range_low);
-			$range_high = trim($range_high);
+			$range_low = addslashes(stripslashes(trim($range_low)));
+			$range_high = addslashes(stripslashes(trim($range_high)));
 		}
 
 		$wheres = array();

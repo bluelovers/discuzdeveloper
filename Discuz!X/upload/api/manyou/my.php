@@ -693,52 +693,59 @@ class My extends Manyou {
 		if (!$res) {
 			return new ErrorResponse('1', "User($uId) Not Exists");
 		}
-
-		$pic = base64_decode($picData);
-		if (!$pic || strlen($pic) == strlen($picData)) {
-			$errCode = '200';
-			$errMessage = 'Error argument';
-			return new ErrorResponse($errCode, $errMessage);
-		}
-
-		$secret = md5($_G['timestamp']."\t".$_G['uid']);
-		$picDir = DISCUZ_ROOT . './data/avatar/' . substr($secret, 0, 1);
-		if (!is_dir($picDir)) {
-			if (!mkdir($picDir, 0777)) {
-				$errCode = '300';
-				$errMessage = 'Cannot create directory';
+		$allowPicType = array('jpg','jpeg','gif','png');
+		if(in_array($picExt, $allowPicType)) {
+			$pic = base64_decode($picData);
+			if (!$pic || strlen($pic) == strlen($picData)) {
+				$errCode = '200';
+				$errMessage = 'Error argument';
 				return new ErrorResponse($errCode, $errMessage);
 			}
-		}
 
-		$picDir .= '/' . substr($secret, 1, 1);
-		if (!is_dir($picDir)) {
-			if (!@mkdir($picDir, 0777)) {
-				$errCode = '300';
-				$errMessage = 'Cannot create directory';
-				return new ErrorResponse($errCode, $errMessage);
-			}
-		}
-
-		$picPath = $picDir . '/' . $secret . '.' . $picExt;
-		$fp = @fopen($picPath, 'wb');
-		if ($fp) {
-			if (fwrite($fp, $pic) !== FALSE) {
-				fclose($fp);
-
-				DB::update('common_member', array('videophotostatus'=>1), array('uid' => $uId));
-				$fields = array('videophoto' => $secret);
-				DB::update('common_member_field_home', $fields, array('uid' => $uId));
-				$result = DB::affected_rows();
-
-				if ($isReward) {
-					updatecreditbyaction('videophoto', $uId);
+			$secret = md5($_G['timestamp']."\t".$_G['uid']);
+			$picDir = DISCUZ_ROOT . './data/avatar/' . substr($secret, 0, 1);
+			if (!is_dir($picDir)) {
+				if (!mkdir($picDir, 0777)) {
+					$errCode = '300';
+					$errMessage = 'Cannot create directory';
+					return new ErrorResponse($errCode, $errMessage);
 				}
-				return $result;
 			}
-			fclose($fp);
-		}
 
+			$picDir .= '/' . substr($secret, 1, 1);
+			if (!is_dir($picDir)) {
+				if (!@mkdir($picDir, 0777)) {
+					$errCode = '300';
+					$errMessage = 'Cannot create directory';
+					return new ErrorResponse($errCode, $errMessage);
+				}
+			}
+
+			$picPath = $picDir . '/' . $secret . '.' . $picExt;
+			$fp = @fopen($picPath, 'wb');
+			if ($fp) {
+				if (fwrite($fp, $pic) !== FALSE) {
+					fclose($fp);
+
+					require_once libfile('class/upload');
+					$upload = new discuz_upload();
+					if(!$upload->get_image_info($picPath)) {
+						@unlink($picPath);
+					} else {
+						DB::update('common_member', array('videophotostatus'=>1), array('uid' => $uId));
+						$fields = array('videophoto' => $secret);
+						DB::update('common_member_field_home', $fields, array('uid' => $uId));
+						$result = DB::affected_rows();
+
+						if ($isReward) {
+							updatecreditbyaction('videophoto', $uId);
+						}
+						return $result;
+					}
+				}
+				fclose($fp);
+			}
+		}
 		$errCode = '300';
 		$errMessage = 'Video Auth Error';
 		return new ErrorResponse($errCode, $errMessage);

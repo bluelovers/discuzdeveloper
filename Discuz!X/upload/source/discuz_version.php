@@ -12,6 +12,6 @@ if(!defined('IN_DISCUZ')) {
 }
 
 @define('DISCUZ_VERSION', 'X1.5');
-@define('DISCUZ_RELEASE', '20110321');
+@define('DISCUZ_RELEASE', '20110428');
 
 ?>

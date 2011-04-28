@@ -38,8 +38,7 @@ function my_http_build_query ($data, $key = '', $isEncode = true) {
 }
 
 if (!$_G['setting']['my_siteid']) {
-	header('Location: index.php');
-	exit;
+	dheader('Location: index.php');
 }
 
 require_once DISCUZ_ROOT . './api/manyou/Manyou.php';

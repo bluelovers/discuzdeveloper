@@ -1827,13 +1827,12 @@ function dreferer($default = '') {
 		$referer = !empty($_G['gp_referer']) ? $_G['gp_referer'] : $_SERVER['HTTP_REFERER'];
 		$_G['referer'] = preg_replace("/([\?&])((sid\=[a-z0-9]{6})(&|$))/i", '\\1', $referer);
 		$_G['referer'] = substr($_G['referer'], -1) == '?' ? substr($_G['referer'], 0, -1) : $_G['referer'];
-	} else {
-		$_G['referer'] = htmlspecialchars($_G['referer']);
 	}
 
 	if(strpos($_G['referer'], 'member.php?mod=logging')) {
 		$_G['referer'] = $default;
 	}
+	$_G['referer'] = htmlspecialchars($_G['referer']);
 	$_G['referer'] = str_replace('&amp;', '&', $_G['referer']);
 	return strip_tags($_G['referer']);
 }

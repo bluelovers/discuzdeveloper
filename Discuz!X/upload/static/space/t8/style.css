@@ -9,6 +9,7 @@ body { background: #FFA6A1 url(images/bg.png); }
 
 #nv, #home { bottom: 12px; }
 
+#nv li a, #nv li a:visited { color: #333; }
 #ct, .n, .w { background: #FFF url(images/ct-top.png) repeat-x 0 0 !important; }
 
 #ft { background: url(images/footer.png) no-repeat 50% 0; }

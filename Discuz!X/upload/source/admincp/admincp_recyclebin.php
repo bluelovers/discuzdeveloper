@@ -37,26 +37,42 @@ if(!$operation) {
 				'&nbsp<select onchange="if(this.options[this.selectedIndex].value != \'\') {window.location=\''.ADMINSCRIPT.'?action=recyclebin&lpp=\'+this.options[this.selectedIndex].value }">
 				<option value="20" '.$checklpp[20].'> '.$lang[perpage_20].' </option><option value="50" '.$checklpp[50].'>'.$lang[perpage_50].'</option><option value="100" '.$checklpp[100].'>'.$lang[perpage_100].'</option></select>');
 		showsubtitle(array('', 'thread', 'recyclebin_list_thread', 'recyclebin_list_author', 'recyclebin_list_status', 'recyclebin_list_lastpost', 'recyclebin_list_operation', 'reason'));
-		$query = DB::query("SELECT f.name AS forumname,t.tid, t.fid, t.authorid, t.author, t.subject, t.views, t.replies, t.dateline, t.lastpost, t.lastposter,
-					tm.uid AS moduid, tm.username AS modusername, tm.dateline AS moddateline, tm.action AS modaction, tm.reason
+		$query = DB::query("SELECT f.name AS forumname,t.tid, t.fid, t.authorid, t.author, t.subject, t.views, t.replies, t.dateline, t.lastpost, t.lastposter
 					FROM ".DB::table('forum_thread')." t
-					LEFT JOIN ".DB::table('forum_threadmod')." tm ON tm.tid=t.tid
 					LEFT JOIN ".DB::table('forum_forum')." f ON f.fid=t.fid
 					WHERE t.displayorder='-1'
-					GROUP BY t.tid ORDER BY t.dateline DESC LIMIT $start_limit, $lpp");
+					ORDER BY t.dateline DESC LIMIT $start_limit, $lpp");
+		$threadlist = array();
 		while($thread = DB::fetch($query)) {
 			$thread['modthreadkey'] = modauthkey($thread['tid']);
-			showtablerow('', array('class="td25"', '', '', 'class="td28"', 'class="td28"'), array(
-				"<input type=\"checkbox\" class=\"checkbox\" name=\"threadlist[]\" value=\"$thread[tid]\">",
-				'<a href="forum.php?mod=viewthread&tid='.$thread['tid'].'&modthreadkey='.$thread['modthreadkey'].'" target="_blank">'.$thread['subject'].'</a>',
-				'<a href="forum.php?mod=forumdisplay&fid='.$thread['fid'].'" target="_blank">'.$thread['forumname'].'</a>',
-				'<a href="home.php?mod=space&uid='.$thread['authorid'].'" target="_blank">'.$thread['author'].'</a><br /><em style="font-size:9px;color:#999999;">'.dgmdate($thread['dateline'], 'd').'</em>',
-				$thread['replies'].' / '.$thread['views'],
-				$thread['lastposter'].'<br /><em style="font-size:9px;color:#999999;">'.dgmdate($thread['lastpost'], 'd').'</em>',
-				$thread['modusername'].'<br /><em style="font-size:9px;color:#999999;">'.dgmdate($thread['moddateline'], 'd').'</em>',
-				$thread['reason']
-			));
+			$threadlist[$thread['tid']] = $thread;
 		}
+		if($threadlist) {
+			$tids = array_keys($threadlist);
+			$query = DB::query("SELECT * FROM ".DB::table('forum_threadmod')." WHERE tid IN(".dimplode($tids).") ORDER BY dateline DESC");
+			while($row = DB::fetch($query)) {
+				if(empty($threadlist[$row['tid']]['moduid'])) {
+					$threadlist[$row['tid']]['moduid'] = $row['uid'];
+					$threadlist[$row['tid']]['modusername'] = $row['username'];
+					$threadlist[$row['tid']]['moddateline'] = $row['dateline'];
+					$threadlist[$row['tid']]['modaction'] = $row['action'];
+					$threadlist[$row['tid']]['reason'] = $row['reason'];
+				}
+			}
+			foreach($threadlist as $tid => $thread) {
+				showtablerow('', array('class="td25"', '', '', 'class="td28"', 'class="td28"'), array(
+					"<input type=\"checkbox\" class=\"checkbox\" name=\"threadlist[]\" value=\"$thread[tid]\">",
+					'<a href="forum.php?mod=viewthread&tid='.$thread['tid'].'&modthreadkey='.$thread['modthreadkey'].'" target="_blank">'.$thread['subject'].'</a>',
+					'<a href="forum.php?mod=forumdisplay&fid='.$thread['fid'].'" target="_blank">'.$thread['forumname'].'</a>',
+					'<a href="home.php?mod=space&uid='.$thread['authorid'].'" target="_blank">'.$thread['author'].'</a><br /><em style="font-size:9px;color:#999999;">'.dgmdate($thread['dateline'], 'd').'</em>',
+					$thread['replies'].' / '.$thread['views'],
+					$thread['lastposter'].'<br /><em style="font-size:9px;color:#999999;">'.dgmdate($thread['lastpost'], 'd').'</em>',
+					$thread['modusername'].'<br /><em style="font-size:9px;color:#999999;">'.dgmdate($thread['moddateline'], 'd').'</em>',
+					$thread['reason']
+				));
+			}
+		}
+
 
 		$threadcount = DB::result_first("SELECT count(*) FROM ".DB::table('forum_thread')." t WHERE t.displayorder='-1'");
 		$multipage = multi($threadcount, $lpp, $page, ADMINSCRIPT."?action=recyclebin&lpp=$lpp", 0, 3);
@@ -154,23 +170,21 @@ EOT;
 				$sql .= " AND ($sqlkeywords)";
 			}
 
-			$threadcount = DB::result_first("SELECT COUNT(DISTINCT t.tid)
+			$threadcount = DB::result_first("SELECT COUNT(*)
 				FROM ".DB::table('forum_thread')." t
 				LEFT JOIN ".DB::table('forum_threadmod')." tm ON tm.tid=t.tid
-				WHERE t.displayorder='-1' $sql");
+				WHERE t.displayorder='-1' AND tm.action='DEL' $sql");
 
 			$pagetmp = $page;
-			do{//split
-				$query = DB::query("SELECT f.name AS forumname, f.allowsmilies, f.allowhtml, f.allowbbcode, f.allowimgcode,
-					t.tid, t.fid, t.authorid, t.author, t.subject, t.views, t.replies, t.dateline, t.posttableid,
-					tm.uid AS moduid, tm.username AS modusername, tm.dateline AS moddateline, tm.action AS modaction, tm.reason
-					FROM ".DB::table('forum_thread')." t
-					LEFT JOIN ".DB::table('forum_threadmod')." tm ON tm.tid=t.tid
-					LEFT JOIN ".DB::table('forum_forum')." f ON f.fid=t.fid
-					WHERE t.displayorder='-1' $sql
-					GROUP BY t.tid ORDER BY t.dateline DESC LIMIT ".(($pagetmp - 1) * $_G['ppp']).",$_G[ppp]");
-				$pagetmp--;
-			} while(!count($threadarray) && $pagetmp);
+			$query = DB::query("SELECT f.name AS forumname, f.allowsmilies, f.allowhtml, f.allowbbcode, f.allowimgcode,
+				t.tid, t.fid, t.authorid, t.author, t.subject, t.views, t.replies, t.dateline, t.posttableid,
+				tm.uid AS moduid, tm.username AS modusername, tm.dateline AS moddateline, tm.action AS modaction, tm.reason
+				FROM ".DB::table('forum_thread')." t
+				LEFT JOIN ".DB::table('forum_threadmod')." tm ON tm.tid=t.tid
+				LEFT JOIN ".DB::table('forum_forum')." f ON f.fid=t.fid
+				WHERE t.displayorder='-1' AND tm.action='DEL' $sql
+				ORDER BY t.dateline DESC LIMIT ".(($pagetmp - 1) * $_G['ppp']).",$_G[ppp]");
+
 			$multi = multi($threadcount, $_G['ppp'], $page, ADMINSCRIPT."?action=recyclebin");
 			$multi = preg_replace("/href=\"".ADMINSCRIPT."\?action=recyclebin&amp;page=(\d+)\"/", "href=\"javascript:page(\\1)\"", $multi);
 			$multi = str_replace("window.location='".ADMINSCRIPT."?action=recyclebin&amp;page='+this.value", "page(this.value)", $multi);

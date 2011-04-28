@@ -35,6 +35,7 @@ $frommodcp = !empty($_G['gp_frommodcp']) ? intval($_G['gp_frommodcp']) : 0;
 $navigation = $navtitle = '';
 
 if(!empty($_G['tid'])) {
+	$_G['gp_archiveid'] = intval($_G['gp_archiveid']);
 	if(!empty($_G['gp_archiveid']) && in_array($_G['gp_archiveid'], $threadtableids)) {
 		$threadtable = "forum_thread_{$_G['gp_archiveid']}";
 	} else {

@@ -89,9 +89,9 @@ if(submitcheck("articlesubmit", 0, $seccodecheck, $secqaacheck)) {
 
 	if($_G['gp_conver']) {
 		$converfiles = unserialize(stripcslashes($_G['gp_conver']));
-		$setarr['pic'] = $converfiles['pic'];
-		$setarr['thumb'] = $converfiles['thumb'];
-		$setarr['remote'] = $converfiles['remote'];
+		$setarr['pic'] = addslashes($converfiles['pic']);
+		$setarr['thumb'] = intval($converfiles['thumb']);
+		$setarr['remote'] = intval($converfiles['remote']);
 	}
 
 	$id = 0;
