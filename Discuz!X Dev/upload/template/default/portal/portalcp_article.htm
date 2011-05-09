@@ -21,7 +21,7 @@
 		<button type="submit" name="btnsubmit" value="true" class="pn pnc"><strong>{lang confirms}</strong></button>
 	</p>
 	<input type="hidden" name="aid" value="$_GET[aid]" />
-	<input type="hidden" name="referer" value="$_G[referer]" />
+	<input type="hidden" name="referer" value="{echo dreferer()}" />
 	<input type="hidden" name="deletesubmit" value="true" />
 	<input type="hidden" name="formhash" value="{FORMHASH}" />
 </form>
@@ -41,7 +41,7 @@
 		<button type="submit" name="btnsubmit" value="true" class="pn pnc"><strong>{lang confirms}</strong></button>
 	</p>
 	<input type="hidden" name="aid" value="$aid" />
-	<input type="hidden" name="referer" value="$_G[referer]" />
+	<input type="hidden" name="referer" value="{echo dreferer()}" />
 	<input type="hidden" name="handlekey" value="$_G['gp_handlekey']" />
 	<input type="hidden" name="verifysubmit" value="true" />
 	<input type="hidden" name="formhash" value="{FORMHASH}" />
@@ -98,10 +98,12 @@
 <!--{else}-->
 
 <div id="pt" class="bm cl">
-	<!--{subtemplate common/simplesearchform}-->
 	<div class="z">
 		<a href="./" class="nvhm" title="{lang homepage}">$_G[setting][bbname]</a> <em>&rsaquo;</em>
 		<a href="$_G[setting][navs][1][filename]">$_G[setting][navs][1][navname]</a> <em>&rsaquo;</em>
+		<!--{if $catid }-->
+		<a href="$portalcategory[$catid]['caturl']">$portalcategory[$catid]['catname']</a> <em>&rsaquo;</em>
+		<!--{/if}-->
 		<!--{if !empty($aid)}-->
 		<a href="portal.php?mod=portalcp&ac=article&aid=$article[aid]">{lang article_edit}</a>
 		<!--{else}-->
@@ -180,7 +182,7 @@
 					<div class="sadd z">
 						<dl>
 							<dt>{lang article_source}</dt>
-							<dd>	
+							<dd>
 								<input type="text" id="from" name="from" class="px p_fre" value="$article[from]" {if $from_cookie}size="10"{else}size="30"{/if} />
 								<!--{if $from_cookie}-->
 								<select name="from_cookie" id="from_cookie" class="ps" onchange="$('from').value=this.value;" style="width:96px;">
@@ -195,6 +197,10 @@
 							<dd><input type="text" name="fromurl" class="px p_fre" value="$article[fromurl]" size="30" /></dd>
 							<dt>{lang article_dateline}</dt>
 							<dd><input type="text" name="dateline" class="px p_fre" value="$article[dateline]" size="30" onclick="showcalendar(event, this, true)" /></dd>
+							<!--{if $cate[allowcomment]}-->
+								<dt>{lang article_comment_setup}</dt>
+								<dd><label for="ck_allowcomment"><input type="checkbox" name="forbidcomment" id="ck_allowcomment" class="pc" value="1"{if isset($article['allowcomment']) && empty($article['allowcomment'])}checked="checked"{/if} />{lang article_forbidcomment_description}</label></dd>
+							<!--{/if}-->
 						</dl>
 						<div><input type="hidden" id="conver" name="conver" value="" /></div>
 					</div>
@@ -245,13 +251,12 @@
 
 				<!--{if checkperm('seccode') && ($secqaacheck || $seccodecheck)}-->
 					<!--{block sectpl}--><sec> <span id="sec<hash>" onclick="showMenu(this.id)"><sec></span><div id="sec<hash>_menu" class="p_pop p_opt" style="display:none"><sec></div><!--{/block}-->
-					<div class="exfm pns"><!--{template common/seccheck}--></div>
+					<div class="exfm pns"><!--{subtemplate common/seccheck}--></div>
 				<!--{/if}-->
 
 				<div class="ptm pbm">
 					<button type="button" id="issuance" class="pn pnc" name="articlebutton" onclick="validate(this);"><strong>{lang submit}</strong></button>
 					<label><input type="checkbox" name="addpage" class="pc" value="1" />{lang article_page_save_after}</label>
-					<!--{if $cate[allowcomment]}--><span class="pipe">|</span><label for="ck_allowcomment"><input type="checkbox" name="forbidcomment" id="ck_allowcomment" class="pc" value="1"{if isset($article['allowcomment']) && empty($article['allowcomment'])}checked="checked"{/if} />{lang article_forbidcomment_description}</label><!--{/if}-->
 					<!--{if $article[contents]}--><span class="pipe">|</span><label for="ck_showinnernav"><input type="checkbox" name="showinnernav" id="ck_showinnernav" class="pc" value="1"{if !empty($article['showinnernav'])}checked="checked"{/if} />{lang article_show_inner_navigation}</label><!--{/if}-->
 				</div>
 
@@ -268,7 +273,7 @@
 		<div class="pbm xg1">{lang attachment_upload_comment}</div>
 		<div id="attachbodyhidden" style="display:none;">
 			<form method="post" autocomplete="off" id="upload" action="portal.php?mod=portalcp&ac=upload&aid=$aid&catid=$catid" enctype="multipart/form-data" target="uploadframe" style="background: transparent;">
-				<input type="file" name="attach" class="pf" size="8" />
+				<input type="file" name="attach" class="pf" size="6" />
 				<span id="localfile"></span>
 				<input type="hidden" name="uploadsubmit" id="uploadsubmit" value="true" />
 				<input type="hidden" name="formhash" value="{FORMHASH}" />

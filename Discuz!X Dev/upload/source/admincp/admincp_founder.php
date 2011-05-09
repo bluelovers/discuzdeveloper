@@ -294,7 +294,7 @@ if($operation == 'perm') {
 					}
 					$row .= '</td></tr>';
 					if($topkey != 'setting') {
-						showtitle('<input class="checkbox" type="checkbox" onclick="permcheckall(this, \'perms_'.$topkey.'\')" '.($checkedall ? 'checked="checked" ' : '').'/> '.cplang('nav_'.$topkey).'</label>');
+						showtitle('<input class="checkbox" type="checkbox" onclick="permcheckall(this, \'perms_'.$topkey.'\')" '.($checkedall ? 'checked="checked" ' : '').'/> '.cplang('header_'.$topkey).'</label>');
 					} else {
 						showtitle('founder_perm_setting');
 					}

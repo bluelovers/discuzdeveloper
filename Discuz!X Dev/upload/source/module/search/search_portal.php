@@ -31,8 +31,6 @@ $cachelife_time = 300;		// Life span for cache of searching in specified range o
 $cachelife_text = 3600;		// Life span for cache of text searching
 
 $srchtype = empty($_G['gp_srchtype']) ? '' : trim($_G['gp_srchtype']);
-$checkarray = array('posts' => '', 'trade' => '', 'threadsort' => '');
-
 $searchid = isset($_G['gp_searchid']) ? intval($_G['gp_searchid']) : 0;
 
 
@@ -138,7 +136,7 @@ if(!submitcheck('searchsubmit', 1)) {
 			!($_G['portal']['exempt'] & 2) && updatecreditbyaction('search');
 		}
 
-		dheader("location: search.php?mod=portal&searchid=$searchid&searchsubmit=yes");
+		dheader("location: search.php?mod=portal&searchid=$searchid&searchsubmit=yes&kw=".urlencode($keyword));
 
 	}
 

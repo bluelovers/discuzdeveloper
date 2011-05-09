@@ -13,7 +13,7 @@ if(!defined('IN_DISCUZ')) {
 
 function build_cache_heats() {
 	global $_G;
-
+	$addsql = '';
 	$data = array();
 	if($_G['setting']['indexhot']['status']) {
 
@@ -27,10 +27,13 @@ function build_cache_heats() {
 		);
 
 		$heatdateline = TIMESTAMP - 86400 * $_G['setting']['indexhot']['days'];
-
+		if(!$_G['setting']['groupstatus']) {
+			$addtablesql = " LEFT JOIN ".DB::table('forum_forum')." f ON f.fid = t.fid ";
+			$addsql = " AND f.status IN ('0', '1') ";
+		}
 		$query = DB::query("SELECT t.tid,t.posttableid,t.views,t.dateline,t.replies,t.author,t.authorid,t.subject,t.price
-			FROM ".DB::table('forum_thread')." t
-			WHERE t.dateline>'$heatdateline' AND t.heats>'0' AND t.displayorder>='0' ORDER BY t.heats DESC LIMIT ".($_G['setting']['indexhot']['limit'] * 2));
+			FROM ".DB::table('forum_thread')." t $addtablesql
+			WHERE t.dateline>'$heatdateline' AND t.heats>'0' AND t.displayorder>='0' $addsql ORDER BY t.heats DESC LIMIT ".($_G['setting']['indexhot']['limit'] * 2));
 
 		$messageitems = 2;
 		$limit = $_G['setting']['indexhot']['limit'];

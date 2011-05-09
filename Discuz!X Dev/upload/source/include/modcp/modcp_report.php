@@ -15,19 +15,24 @@ if(!empty($_G['fid'])) {
 	if(submitcheck('reportsubmit')) {
 		if($_G['gp_reportids']) {
 			foreach($_G['gp_reportids'] as $reportid) {
-				$creditchange = '';
-				$uid = $_G['gp_reportuids'][$reportid];
-				$msg = !empty($_G['gp_msg'][$reportid]) ? '<br />'.htmlspecialchars($_G['gp_msg'][$reportid]) : '';
-				if(!empty($_G['gp_creditsvalue'][$reportid])) {
-					$credittag = $_G['gp_creditsvalue'][$reportid] > 0 ? '+' : '';
-					$creditchange = '<br />'.lang('forum/misc', 'report_msg_your').$_G['setting']['extcredits'][$curcredits]['title'].'&nbsp;'.$credittag.$_G['gp_creditsvalue'][$reportid];
-					updatemembercount($uid, array($curcredits => $_G['gp_creditsvalue'][$reportid]), true, 'RPC', $reportid);
+				if(DB::result_first("SELECT COUNT(*) FROM ".DB::table('common_report')." WHERE id='$reportid' AND opuid='0'")) {
+					$creditchange = '';
+					$uid = $_G['gp_reportuids'][$reportid];
+					if($uid != $_G['uid']) {
+						$msg = !empty($_G['gp_msg'][$reportid]) ? '<br />'.htmlspecialchars($_G['gp_msg'][$reportid]) : '';
+						if(!empty($_G['gp_creditsvalue'][$reportid])) {
+							$_G['gp_creditsvalue'][$reportid] = abs($_G['gp_creditsvalue'][$reportid]) <= 3 ? $_G['gp_creditsvalue'][$reportid] : 0;
+							$credittag = $_G['gp_creditsvalue'][$reportid] > 0 ? '+' : '';
+							$creditchange = '<br />'.lang('forum/misc', 'report_msg_your').$_G['setting']['extcredits'][$curcredits]['title'].'&nbsp;'.$credittag.$_G['gp_creditsvalue'][$reportid];
+							updatemembercount($uid, array($curcredits => $_G['gp_creditsvalue'][$reportid]), true, 'RPC', $reportid);
+						}
+						if($creditchange || $msg) {
+							notification_add($uid, 'report', 'report_change_credits', array('creditchange' => $creditchange, 'msg' => $msg), 1);
+						}
+					}
+					$opresult = !empty($_G['gp_creditsvalue'][$reportid])? $curcredits."\t".intval($_G['gp_creditsvalue'][$reportid]) : 'ignore';
+					DB::query("UPDATE ".DB::table('common_report')." SET opuid='$_G[uid]', opname='$_G[username]', optime='".TIMESTAMP."', opresult='$opresult' WHERE id='$reportid'");
 				}
-				if($uid != $_G['uid'] && ($creditchange || $msg)) {
-					notification_add($uid, 'report', 'report_change_credits', array('creditchange' => $creditchange, 'msg' => $msg), 1);
-				}
-				$opresult = !empty($_G['gp_creditsvalue'][$reportid])? $curcredits."\t".intval($_G['gp_creditsvalue'][$reportid]) : 'ignore';
-				DB::query("UPDATE ".DB::table('common_report')." SET opuid='$_G[uid]', opname='$_G[username]', optime='".TIMESTAMP."', opresult='$opresult' WHERE id='$reportid'");
 			}
 			showmessage('modcp_report_success', "$cpscript?mod=modcp&action=report&fid=$_G[fid]&lpp=$lpp");
 		}
@@ -50,7 +55,7 @@ if(!empty($_G['fid'])) {
 	$page = max(1, intval($_G['page']));
 	$start = ($page - 1) * $lpp;
 
-	$reportcount = DB::result_first("SELECT count(*) FROM ".DB::table('common_report')." WHERE opuid=0 AND fid='$_G[fid]'");
+	$reportcount = DB::result_first("SELECT COUNT(*) FROM ".DB::table('common_report')." WHERE opuid=0 AND fid='$_G[fid]'");
 	$query = DB::query("SELECT * FROM ".DB::table('common_report')." WHERE opuid=0 AND fid='$_G[fid]' ORDER BY num DESC, dateline DESC LIMIT $start, $lpp");
 	while($row = DB::fetch($query)) {
 		$row['dateline'] = dgmdate($row['dateline']);

@@ -257,6 +257,7 @@ $lang = array(
 	'blockclass_member_field_field7' => '自定义字段7',
 	'blockclass_member_field_field8' => '自定义字段8',
 	'blockclass_member_field_posts' => '发帖数',
+	'blockclass_member_field_threads' => '主题数',
 	'blockclass_member_field_digestposts' => '精华帖数',
 	'blockclass_member_field_regdate' => '注册时间',
 	'blockclass_member_field_hourposts' => '小时发帖数',

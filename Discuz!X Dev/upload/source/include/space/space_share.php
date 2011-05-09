@@ -62,9 +62,7 @@ if($id) {
 		'view' => $_GET['view'],
 		'from' => $_GET['from']
 	);
-	$theurl = 'home.php?'.url_implode($gets);
-	unset($gets['uid']);
-	$navtheurl = 'home.php?'.url_implode($gets);
+	$navtheurl = $theurl = 'home.php?'.url_implode($gets);
 	$theurl .= '&type='.$_GET['type'];
 	if(!IS_ROBOT) {
 		$f_index = '';

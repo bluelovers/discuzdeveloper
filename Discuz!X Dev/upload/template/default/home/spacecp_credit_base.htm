@@ -10,12 +10,12 @@
 				<!--{eval $creditid=$_G['setting']['creditstrans'];}-->
 				<!--{if $_G['setting']['extcredits'][$creditid]}-->
 				<!--{eval $credit=$_G['setting']['extcredits'][$creditid]; }-->
-				<li class="xi1 cl"><em>{$credit[title]}<!--{if $credit[img]}--> {$credit[img]}<!--{/if}-->:</em><!--{echo getuserprofile('extcredits'.$creditid);}--> {$credit[unit]} &nbsp; <!--{if ($_G['setting']['ec_ratio'] && ($_G['setting']['ec_tenpay_opentrans_chnid'] || $_G['setting'][ec_tenpay_bargainor] || $_G['setting']['ec_account'])) || $_G['setting']['card']['open']}--><a href="home.php?mod=spacecp&ac=credit&op=buy" class="xi2">{lang card_use}&raquo;</a><!--{/if}--></li>
+				<li class="xi1 cl"><em><!--{if $credit[img]}--> {$credit[img]}<!--{/if}--> {$credit[title]}:</em><!--{echo getuserprofile('extcredits'.$creditid);}--> {$credit[unit]} &nbsp; <!--{if ($_G['setting']['ec_ratio'] && ($_G['setting']['ec_tenpay_opentrans_chnid'] || $_G['setting'][ec_tenpay_bargainor] || $_G['setting']['ec_account'])) || $_G['setting']['card']['open']}--><a href="home.php?mod=spacecp&ac=credit&op=buy" class="xi2">{lang card_use}&raquo;</a><!--{/if}--></li>
 				<!--{/if}-->
 			<!--{/if}-->
 			<!--{loop $_G['setting']['extcredits'] $id $credit}-->
 				<!--{if $id!=$creditid}-->
-				<li><em>{$credit[title]}<!--{if $credit[img]}--> {$credit[img]}<!--{/if}-->:</em><!--{echo getuserprofile('extcredits'.$id);}--> {$credit[unit]}</li>
+				<li><em><!--{if $credit[img]}--> {$credit[img]}<!--{/if}--> {$credit[title]}:</em><!--{echo getuserprofile('extcredits'.$id);}--> {$credit[unit]}</li>
 				<!--{/if}-->
 			<!--{/loop}-->
 			<!--{if  $_G['gp_op'] == 'base'}-->
@@ -82,39 +82,34 @@
 							{lang credits_need}&nbsp;{lang memcp_credits_addfunds_caculate_radio}
 						</td>
 						<td width="300" class="d">
-							{lang memcp_credits_addfunds_rules_ratio} = {$_G[setting][extcredits][$_G[setting][creditstrans]][title]} <strong>$_G[setting][ec_ratio]</strong> {$_G[setting][extcredits][$_G[setting][creditstrans]][unit]}
-							<!--{if $_G[setting][ec_mincredits]}--><br />{lang memcp_credits_addfunds_rules_min} {$_G[setting][extcredits][$_G[setting][creditstrans]][title]} <strong>$_G[setting][ec_mincredits]</strong> {$_G[setting][extcredits][$_G[setting][creditstrans]][unit]}<!--{/if}-->
-							<!--{if $_G[setting][ec_maxcredits]}--><br />{lang memcp_credits_addfunds_rules_max} {$_G[setting][extcredits][$_G[setting][creditstrans]][title]} <strong>$_G[setting][ec_maxcredits]</strong> {$_G[setting][extcredits][$_G[setting][creditstrans]][unit]}<!--{/if}-->
-							<!--{if $_G[setting][ec_maxcreditspermonth]}--><br />{lang memcp_credits_addfunds_rules_month} {$_G[setting][extcredits][$_G[setting][creditstrans]][title]} <strong>$_G[setting][ec_maxcreditspermonth]</strong> {$_G[setting][extcredits][$_G[setting][creditstrans]][unit]}<!--{/if}-->
+							{lang memcp_credits_addfunds_rules_ratio} =  <strong>$_G[setting][ec_ratio]</strong> {$_G[setting][extcredits][$_G[setting][creditstrans]][unit]}{$_G[setting][extcredits][$_G[setting][creditstrans]][title]}
+							<!--{if $_G[setting][ec_mincredits]}--><br />{lang memcp_credits_addfunds_rules_min}  <strong>$_G[setting][ec_mincredits]</strong> {$_G[setting][extcredits][$_G[setting][creditstrans]][unit]}{$_G[setting][extcredits][$_G[setting][creditstrans]][title]}<!--{/if}-->
+							<!--{if $_G[setting][ec_maxcredits]}--><br />{lang memcp_credits_addfunds_rules_max}  <strong>$_G[setting][ec_maxcredits]</strong> {$_G[setting][extcredits][$_G[setting][creditstrans]][unit]}{$_G[setting][extcredits][$_G[setting][creditstrans]][title]}<!--{/if}-->
+							<!--{if $_G[setting][ec_maxcreditspermonth]}--><br />{lang memcp_credits_addfunds_rules_month}  <strong>$_G[setting][ec_maxcreditspermonth]</strong> {$_G[setting][extcredits][$_G[setting][creditstrans]][unit]}{$_G[setting][extcredits][$_G[setting][creditstrans]][title]}<!--{/if}-->
 						</td>
 					</tr>
 					<!--{if $_G[setting][card][open]}-->
-					  <tr id="cardbox" style="{if $_G[setting][card][open]}display:;{else}display:none;{/if}">
-						<th>{lang card}</th>
-						<td colspan="2">
-						<input type="text" class="px" id="cardid" name="cardid" />
-						</td>
-					  </tr>
-					  <!--{if $_G['setting']['seccodestatus'] & 16}-->
-						  <tr id="card_box_sec" style="{if $_G[setting][card][open]}display:;{else}display:none;{/if}">
-							<th></th>
-							<td colspan="2"><!--{eval $seccodecheck = 1;}-->
-							    <!--{block sectpl}--><p class="mbn"><label><em style="margin-right:5px;"><sec></em><sec></label></p><p><label><em style="height:30px">&nbsp;</em><sec></label></p><!--{/block}-->
-							    <!--{subtemplate common/seccheck}-->
+						<tr id="cardbox" style="{if $_G[setting][card][open]}display:;{else}display:none;{/if}">
+							<th>{lang card}</th>
+							<td colspan="2">
+								<input type="text" class="px" id="cardid" name="cardid" />
 							</td>
-						  </tr>
-					  <!--{/if}-->
+						</tr>
+						<!--{if $_G['setting']['seccodestatus'] & 16}-->
+							<!--{block sectpl}--><tr><th><sec></th><td colspan="2"><span id="sec<hash>" onclick="showMenu({'ctrlid':this.id,'win':'{$_G[gp_handlekey]}'})"><sec></span><div id="sec<hash>_menu" class="p_pop p_opt" style="display:none"><sec></div></td></tr><!--{/block}-->
+							<tbody id="card_box_sec" style="{if $_G[setting][card][open]}display:;{else}display:none;{/if}"><!--{subtemplate common/seccheck}--></tbody>
+						<!--{/if}-->
 					<!--{/if}-->
 					<tr>
 						<th>&nbsp;</th>
 						<td colspan="2">
 							<button type="submit" name="addfundssubmit_btn" class="pn" id="addfundssubmit_btn" value="true"><em>{lang memcp_credits_addfunds}</em></button>
-							<span style="display: none" id="return_addfundsform"></span>
 						</td>
 					</tr>
-                    
+
 				</table>
 			</form>
+			<span style="display: none" id="return_addfundsform"></span>
 			<script type="text/javascript">
 				function addcalcredit() {
 					var addfundamount = $('addfundamount').value.replace(/^0/, '');

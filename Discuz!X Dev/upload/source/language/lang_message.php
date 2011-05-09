@@ -13,6 +13,10 @@ $lang = array (
 
   'undefined_action' => '未定义操作',
   'to_login' => '您需要先登录才能继续本操作',
+  'profile_passwd_notmatch' => '抱歉，两次输入的密码不一致',
+  'profile_passwd_illegal' => '抱歉，密码空或包含非法字符',
+  'connect_get_access_token_failed' => '抱歉，当前存在网络问题或服务器繁忙，请您稍候再试。谢谢。',
+  'connect_get_request_token_failed' => '抱歉，当前存在网络问题或服务器繁忙，请您稍候再试。谢谢。',
   'set_cover_faild' => '封面设置失败',
   'attachment_nonexistence' => '抱歉，该附件无法读取',
   'attachment_forum_nopermission' => '抱歉，只有特定用户可以下载本站附件',
@@ -64,11 +68,10 @@ $lang = array (
   'magics_amount_no_enough' => '抱歉，您没有足够的道具可以操作，请修改',
   'magics_username_nonexistence' => '抱歉，您尚未输入要赠送的用户名',
   'space_does_not_exist' => '抱歉，您指定的用户空间不存在',
+  'home_status_off' => '抱歉，家园功能尚未开启',
   'space_has_been_locked' => '空间已被锁定无法访问，如有疑问请联系管理员',
   'qqconnect_closed' => '抱歉，QQ互联功能尚未开启',
   'connect_register_bind_already' => '抱歉，该用户已绑定过另一个QQ用户，无法再次绑定',
-  'connect_register_bind_miss_uin' => '抱歉，参数错误，请重新从QQ登录',
-  'profile_passwd_illegal' => '抱歉，密码空或包含非法字符',
   'getpasswd_account_notmatch' => '抱歉，您填写的账户资料不匹配，不能使用取回密码功能，如有疑问请与管理员联系',
   'group_member_maximum' => '抱歉，该{_G/setting/navs/3/navname}等级最多可拥有{membermaximum}名成员，已达到上限',
   'group_choose_friends_max' => '抱歉，您最多可以选择 20 位好友',
@@ -88,8 +91,6 @@ $lang = array (
   'article_not_exist' => '抱歉，指定的文章不存在',
   'article_edit_nopermission' => '抱歉，您没有权限进行当前文章操作',
   'article_delete_success' => '删除成功 ',
-  'article_move_success' => '文章转移成功 ',
-  'article_move_select_cat' => '请选择要转移到的目标栏目',
   'no_article_specified_for_pushplus' => '抱歉，尚未指定要连载的文章',
   'block_edit_nopermission' => '抱歉，您没有权限添加或编辑模块',
   'block_no_right_recommend' => '抱歉，您没有权限向该模块推荐数据',
@@ -170,7 +171,6 @@ $lang = array (
   'message_can_not_send_9' => '收件人为空或对方屏蔽了您的短消息',
   'pm_report_error_nopm' => '抱歉，您指定的短消息不存在',
   'no_privilege_sendpm' => '抱歉，您目前没有权限发短消息，<a href="home.php?mod=spacecp&ac=usergroup">点击这里查看权限</a>',
-  'profile_passwd_notmatch' => '抱歉，两次输入的密码不一致',
   'profile_email_illegal' => 'Email 地址无效',
   'profile_email_domain_illegal' => '抱歉，Email 包含不可使用的邮箱域名',
   'profile_email_duplicate' => '该 Email 地址已被注册',
@@ -182,7 +182,6 @@ $lang = array (
   'admin_nopermission' => '抱歉，您没有权限使用管理功能',
   'postcomment_not_found' => '帖子点评未找到',
   'special_noaction' => '无法操作特殊主题',
-  'recommend_group_invalid' => '抱歉，您选择的主题已被推荐版块',
   'admin_moderate_invalid' => '抱歉，您尚未选择主题或主题不可执行此类管理',
   'no_privilege_delpost' => '抱歉，您没有权限删除帖子',
   'admin_move_invalid' => '抱歉，目标版块不存在',
@@ -222,18 +221,20 @@ $lang = array (
   'magics_use_success' => '道具 {magicname} 使用成功 ',
   'magicuse_object_once_limit' => '抱歉，已对该对象使用过此道具，不能重复使用',
   'magicuse_bad_object' => '尚未正确选择道具要作用的对象',
-  'magicuse_has_no_valid_friend' => '抱歉，道具使用失败，没有任何合法的好友',
+  'magicuse_has_no_valid_friend' => '抱歉，此道具仅对您的好友有效',
   'admin_cpanel_noaccess' => '抱歉，您没有权限访问管理面板，请重新登录站点，然后重试',
   'admin_cpanel_locked' => '抱歉，由于密码尝试次数过多，管理面板已锁定 <br /><br />管理版面将于 <strong>{unlocktime}</strong> 解除锁定',
 
   'portal_status_off' => '抱歉，门户功能尚未开启',
 
-  'connect_config_success' => 'QQ绑定设置保存成功 ',
+  'no_privilege_my_app_status' => '对不起，当前站点已经关闭了用户多应用服务。',
+
+  'connect_config_success' => 'QQ互联设置更新成功',
   'connect_config_unbind_failed' => '抱歉，解绑失败，请重试使用QQ登录后再进行解绑操作',
-  'connect_config_unbind_busy' => '系统繁忙，请稍候再尝试解绑',
+  'connect_config_unbind_busy' => '抱歉，当前存在网络问题或服务器繁忙，请您稍候再尝试解绑。谢谢。',
   'connect_config_unbind_success' => '您的帐号和QQ帐号解除绑定成功 ',
 
-  'connect_authorized_faild' => 'QQ认证失败',
+  'connect_uin_in_blacklist' => '抱歉，此QQ帐号已被本站屏蔽，您可以<a href="{changeqqurl}">更换其他QQ账号登录</a>',
   'connect_register_bind_success' => '您的帐号与QQ帐号绑定成功 ',
 
   'register_check_found' => '该用户名已注册，请更换用户名或<a href="member.php?mod=logging&action=login" onclick="showWindow(\'login\', this.href);return false;" class="xi2">登录</a>',
@@ -359,7 +360,7 @@ $lang = array (
 
   'group_admin_enter_panel' => '请进入{_G/setting/navs/3/navname}管理页面进行管理',
 
-  'forum_group_not_groupmember' => '抱歉，您还不是本{_G/setting/navs/3/navname}成员不能发帖，<a href="forum.php?mod=group&action=join&fid={fid}" target="_blank">马上加入</a>',
+  'forum_group_not_groupmember' => '抱歉，您还不是本{_G/setting/navs/3/navname}成员不能发帖<br /><a href="forum.php?mod=group&action=join&fid={fid}" target="_blank">马上加入该{_G/setting/navs/3/navname}</a>',
   'forum_group_not_groupmember_guest' => '抱歉，您还不是本{_G/setting/navs/3/navname}成员不能发帖',
   'forum_disablepost' => '本版块禁止发帖',
   'post_newbie_span' => '抱歉，您在注册时间起 {newbiespan} 分钟后才能拥有发帖权限',
@@ -405,10 +406,11 @@ $lang = array (
   'medal_apply_invalid' => '抱歉，此勋章不可申请',
   'medal_apply_existence' => '抱歉，您已申请过或领取过此勋章，请不要重复申请或领取',
   'medal_permforum_nopermission' => '抱歉，您尚未达到领取该勋章的条件</p><hr class="da" /><p class="mtm"><h3>所需条件：</h3>{formulamessage}<h3 class="mtm">您的信息：</h3> {usermsg} ',
+  'medal_get_succeed' => '恭喜你获得{medalname}',
+  'medal_apply_succeed' => '勋章{medalname}申请成功,请等待管理员审核。',
 
   'enter_the_space' => '进入个人空间页面',
 
-  'home_status_off' => '抱歉，家园功能尚未开启',
   'login_before_enter_home' => '请先登录后才能继续浏览',
 
   'task_close' => '抱歉，站点任务关闭',
@@ -530,6 +532,8 @@ $lang = array (
   'article_deleted' => '文章已删除',
   'select_operation' => '请选择一个操作项',
   'article_delete_invalid_lastpage' => '抱歉，当前为最后一页，不能被删除',
+  'article_move_success' => '文章转移成功 ',
+  'article_move_select_cat' => '请选择要转移到的目标栏目',
   'all_posts_pushed_already' => '所有指定帖子均已连载过了',
   'portal_has_not_category' => '抱歉，您尚未创建任何频道栏目，请先创建频道栏目',
   'portal_article_add_nopermission' => '抱歉，您没有发布文章的权限',
@@ -588,6 +592,7 @@ $lang = array (
   'trade_add_succeed' => '非常感谢，您的商品已经发布，现在将转入主题页，请稍候……<br /><a href="forum.php?mod=post&action=reply&fid={fid}&tid={tid}&addtrade=yes">[ 继续添加商品请点击这里 ]</a><br /><a href="forum.php?mod=forumdisplay&fid={fid}">[ 点击这里转入主题列表 ]</a>',
   'post_reply_mod_succeed' => '回复需要审核，请等待通过',
 
+  'postperm_login_nopermission_mobile' => '您尚未<a href="member.php?mod=logging&action=login&referer={referer}&mobile=yes">登录</a>，没有权限在该版块发帖',
   'post_picstyle_noattach' => '帖图版块至少应上传一张图片作为封面',
   'post_sort_isnull' => '抱歉，您尚未选择主题的分类信息',
   'post_poll_inputmore' => '抱歉，您至少应当填写 2 个投票选项',
@@ -640,13 +645,13 @@ $lang = array (
 
   'memcp_credits_card_msg_cardid_incorrect' => '抱歉，您尚未输入充值卡密',
   'memcp_credits_card_msg_card_unfined' => '抱歉，您要使用的卡密不存在',
-  'memcp_credits_card_msg_used' => '此卡密已使用',
+  'memcp_credits_card_msg_used' => '抱歉，此卡密已使用',
+  'memcp_credits_card_msg_cleardateline_early' => '抱歉，此卡密已过期',
   'memcp_credits_card_msg_succeed' => '<span class="xi1">{extcreditsval}{extcreditstitle}</span>，充值成功 ',
   'memcp_credits_addfunds_msg_incorrect' => '抱歉，您尚未输入需要充值的数量',
   'credits_addfunds_amount_invalid' => '您单次购买的积分数量超出最大值 {ec_maxcredits} 或最小值 {ec_mincredits} 的限制',
   'credits_addfunds_ctrl' => '抱歉，您两次提交订单间隔过小',
   'credits_addfunds_toomuch' => '抱歉，您超出本月允许购买 {ec_maxcreditspermonth} 的限额',
-  'credits_addfunds_succeed' => '订单提交成功，正在跳转到支付页面',
   'memcp_credits_transfer_msg_self_incorrect' => '您无需给自己转账',
   'credits_transfer_balance_insufficient' => '抱歉，转账后 {title}不足 {minbalance}',
   'credits_net_amount_iszero' => '本交易扣除积分交易税后的净值为 0',
@@ -728,7 +733,6 @@ $lang = array (
   'message_can_not_send_14' => '这不是私人消息',
   'message_can_not_send_15' => '数据有误',
   'message_can_not_send' => '抱歉，发送短消息失败',
-  'message_can_not_append_reason' => '抱歉，以下用户列表加入群组失败 {cannotappend}',
   'pm_onlyacceptfriend_error' => '抱歉，您的操作有误',
   'do_success_pm' => '短消息设置成功 ',
   'pm_report_error_nome' => '您不能举报自己的短消息或公共群发短消息',
@@ -736,6 +740,7 @@ $lang = array (
   'pm_ignore_error_nopm' => '抱歉，您指定的用户不存在',
   'pm_kickmember_error_nopm' => '抱歉，您要踢除的用户不存在',
   'pm_appendkmember_error_nopm' => '抱歉，您要添加的用户不存在',
+  'message_can_not_append_reason' => '抱歉，以下用户列表加入群组失败 {cannotappend}',
   'pm_export_touser_not_exists' => '抱歉，您尚未指定导出短消息对象',
   'pm_emport_banned_export' => '抱歉，没有用于导出的短消息记录',
 
@@ -744,7 +749,7 @@ $lang = array (
   'poke_success' => '已发送，{username}下次访问时会收到通知',
   'has_been_hailed_overlooked' => '招呼已忽略',
 
-  'profile_admin_security_invalid' => '作为管理者之一，您需要填写安全提问和答案以保障站点的安全',
+//source/include/spacecp/spacecp_profile.php
   'profile_passwd_wrong' => '原密码不正确，您不能修改密码或 Email 或安全提问',
   'profile_email_verify' => '确认 Email 已发送，请用邮件中提供的方法激活您的帐号。如果您尚未收到我们发送的系统邮件，请点击密码安全中的“重新接收验证邮件”，或尝试更换另外一个地址',
   'profile_succeed' => '个人资料保存成功 ',
@@ -798,6 +803,7 @@ $lang = array (
   'admin_merge_nonexistence' => '抱歉，主题 ID (tid) 不存在',
   'admin_merge_invalid' => '抱歉，请选择其他主题进行合并',
 
+  'recommend_group_invalid' => '抱歉，您选择的主题已被推荐版块',
   'admin_nonexistence' => '抱歉，您尚未选择操作项目',
   'no_privilege_stickthread' => '抱歉，您没有权限设置主题置顶',
   'no_privilege_highlightthread' => '抱歉，您没有权限设置主题高亮',
@@ -851,7 +857,6 @@ $lang = array (
   'submit_secqaa_invalid' => '抱歉，验证问答填写错误',
   'post_url_nopermission' => '抱歉，您没有权限发表 URL 连接',
   'period_nopermission' => '抱歉，管理员设置了每日 {banperiods} 不能进行此操作或访问此页面，请其他时间再试',
-  'connect_uin_in_blacklist' => '抱歉，此QQ帐号已被本站屏蔽',
 
   'credits_policy_lowerlimit' => '抱歉，{ruletext} {rulecredit}，本操作后您的{title}将不足 {lowerlimit} {unit}',
   'credits_policy_lowerlimit_fid' => '抱歉，本版块{ruletext} {rulecredit}，本操作后您的{title}将不足 {lowerlimit} {unit}',
@@ -880,6 +885,8 @@ $lang = array (
   'file_size_overflow' => '抱歉，文件不能大于 {size} 字节',
   'forum_archiver_disabled' => '抱歉，论坛 Archiver 功能尚未开启',
 
+  'post_thread_closed_by_dateline' => '抱歉，管理员设置了本版块发表于 {autoclose} 天以前的主题自动关闭，不再接受新回复',
+  'post_thread_closed_by_lastpost' => '抱歉，管理员设置了本版块最后回复于 {autoclose} 天以前的主题自动关闭，不再接受新回复',
   'length_is_not_within_the_scope_of' => '抱歉，分页数不在允许的范围内',
 
   'magics_weight_range_invalid' => '抱歉，道具包容量不足，超出 {less}',
@@ -893,9 +900,6 @@ $lang = array (
   'bad_buynum' => '抱歉，您输入的购买数目有误',
   'not_enough_coupon' => '抱歉，您的代金券数目不足',
   'credit_is_not_enough' => '抱歉，您的积分不足购买此道具',
-
-  'showmessage_closetime' => ' 秒后窗口关闭',
-  'showmessage_locationtime' => ' 秒后页面跳转',
 
   'admin_reason_invalid' => '请输入原因',
 
@@ -927,7 +931,7 @@ $lang = array (
 
   'login_strike' => '密码错误次数过多，请 15 分钟后重新登录',
   'location_login_succeed_mobile' => '欢迎您回来，{username}。点击进入登录前页面',
-  'location_login_succeed' => '欢迎您回来，{username}。现在将转入登录前页面，请稍候……',
+  'location_login_succeed' => '',
   'login_succeed_inactive_member' => '欢迎您回来，{usergroup} {username}。您的帐号处于非激活状态，现在将转入控制面板',
   'login_question_empty' => '请选择安全提问以及填写正确的答案',
   'login_question_invalid' => '抱歉，安全提问答案填写错误',

@@ -7,7 +7,7 @@
 	</h3>
 
 	<form id="buygroupform_{$groupid}" name="buygroupform_{$groupid}" method="post" autocomplete="off" action="home.php?mod=spacecp&ac=usergroup&do=$do&groupid=$groupid"{if !empty($_G['gp_inajax'])} onsubmit="ajaxpost('buygroupform_{$groupid}', 'return_$_G['gp_handlekey']', 'return_$_G['gp_handlekey']', 'onerror');return false;"{/if}>
-		<input type="hidden" name="referer" value="$_G[referer]" />
+		<input type="hidden" name="referer" value="{echo dreferer()}" />
 		<input type="hidden" name="buysubmit" value="true" />
 		<input type="hidden" name="gid" value="$_G[gp_gid]" />
 
@@ -18,7 +18,7 @@
 			<!--{if $join}-->
 				<!--{if $group['dailyprice']}-->
 					<tr>
-						<td>{lang memcp_usergroups_dailyprice}</td><td>{$_G[setting][extcredits][$_G[setting][creditstrans]][title]} $group[dailyprice] {$_G[setting][extcredits][$_G[setting][creditstrans]][unit]}</td>
+						<td>{lang memcp_usergroups_dailyprice}</td><td> $group[dailyprice] {$_G[setting][extcredits][$_G[setting][creditstrans]][unit]}{$_G[setting][extcredits][$_G[setting][creditstrans]][title]}</td>
 					</tr>
 					<tr>
 						<td>{lang memcp_usergroups_credit}</td><td>$usermaxdays {lang days}</td>
@@ -68,7 +68,7 @@
 		<!--{if $_G[inajax]}--><span><a href="javascript:;" onclick="hideWindow('$_G[gp_handlekey]');" class="flbc" title="{lang close}">{lang close}</a></span><!--{/if}-->
 	</h3>
 	<form id="switchgroupform_{$groupid}" name="switchgroupform_{$groupid}" method="post" autocomplete="off" action="home.php?mod=spacecp&ac=usergroup&do=switch&groupid=$groupid"{if !empty($_G['gp_inajax'])} onsubmit="ajaxpost('switchgroupform_{$groupid}', 'return_$_G['gp_handlekey']', 'return_$_G['gp_handlekey']', 'onerror');return false;"{/if}>
-		<input type="hidden" name="referer" value="$_G[referer]" />
+		<input type="hidden" name="referer" value="{echo dreferer()}" />
 		<input type="hidden" name="groupsubmit" value="true" />
 		<input type="hidden" name="gid" value="$_G[gp_gid]" />
 
@@ -140,7 +140,7 @@
 			<!--{hook/spacecp_usergroup_top}-->
 			<!--{subtemplate home/spacecp_usergroup_header}-->
 				<p class="tbmu"><span class="y">
-					{lang youhave} <span class="xi1">{$_G[setting][extcredits][$_G[setting][creditstrans]][title]} $usermoney {$_G[setting][extcredits][$_G[setting][creditstrans]][unit]}</span></span>
+					{lang youhave} <span class="xi1"> $usermoney {$_G[setting][extcredits][$_G[setting][creditstrans]][unit]}{$_G[setting][extcredits][$_G[setting][creditstrans]][title]}</span></span>
 					{lang yourusergroup}: {$_G['cache']['usergroups'][$_G[groupid]]['grouptitle']}
 				</p>
 				<!--{if $expirylist}-->
@@ -160,7 +160,7 @@
 									<td><a href="home.php?mod=spacecp&ac=usergroup&gid=$groupid" class="xi2" target="_blank">$group[grouptitle]</a></td>
 									<td>
 										<!--{if $_G['cache']['usergroups'][$groupid]['pubtype'] == 'buy' && $group[dailyprice]}-->
-											{$_G[setting][extcredits][$_G[setting][creditstrans]][title]} $group[dailyprice] {$_G[setting][extcredits][$_G[setting][creditstrans]][unit]}
+											$group[dailyprice] {$_G[setting][extcredits][$_G[setting][creditstrans]][unit]}{$_G[setting][extcredits][$_G[setting][creditstrans]][title]}
 										<!--{elseif $_G['cache']['usergroups'][$groupid]['pubtype'] == 'free'}-->
 											{lang free}
 										<!--{/if}-->

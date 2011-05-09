@@ -10,46 +10,38 @@
  */
 
 $lang = array (
-
   'comment' => '评论',
   'comment_view' => '查看评论',
   'hide_portal_comment' => '提示：本页有 $pricount 个评论因未通过审核而被隐藏',
   'homepage' => '首页',
   'post_comment' => '发表评论',
-
   'delete' => '删除',
   'edit' => '编辑',
   'moderate_not_validate' => '审核未通过',
   'quote' => '引用',
-
   'article_publish' => '发布文章',
   'category' => '分类',
   'category_related' => '相关分类',
   'portal' => '{$_G[setting][navs][1][navname]}',
   'rss_subscribe_this' => '订阅',
   'sub_category' => '下级分类',
-
   'article_hot' => '热门内容',
   'article_last' => '最新文章',
-
   'latest_comment' => '最新评论',
   'view_all_comments' => '查看全部评论',
-
   'diyhelp_doit' => '自己动手，让自己拥有个性的页面。请点击上面的按钮开始 DIY，或者',
   'diyhelp_import' => '导入程序现有模板',
   'diyhelp_no_content' => '正在建设中，请稍候……',
   'diyhelp_start_diy' => '开始 DIY',
-
   'frame' => '框架',
-
   'article_add_page' => '为该文章添加分页',
   'article_author' => '原作者',
   'article_auto_grab' => '自动获取',
   'article_category' => '频道栏目',
+  'article_comment_setup' => '评论设置',
   'article_dateline' => '发布时间',
   'article_delete' => '删除文章',
   'article_delete_direct' => '直接删除',
-  'article_category_move' => '移到栏目',
   'article_delete_recyclebin' => '放入回收站',
   'article_delete_sure' => '确认要删除此文章吗？',
   'article_description' => '摘要',
@@ -88,7 +80,6 @@ $lang = array (
   'select_color' => '点击选择颜色',
   'submit' => '提交',
   'view_article' => '查看文章',
-
   'block_cancel_favorite' => '取消收藏',
   'block_data' => '模块数据',
   'block_data_block' => '屏蔽数据',
@@ -172,10 +163,8 @@ $lang = array (
   'update_mod_now' => '立即更新该模块数据',
   'verify_message' => '您推送的信息将进入审核库',
   'week' => '周',
-
   'remote' => '远程',
   'view_image_original' => '查看原图',
-
   'block_link_target_blank' => '新链接打开',
   'block_link_target_self' => '本页面打开',
   'block_link_target_top' => '本页面打开(跳出框架)',
@@ -185,7 +174,6 @@ $lang = array (
   'dateformat' => '日期格式',
   'dateuformat' => '使用人性化日期格式',
   'dateuformat_tips' => '勾选此项，则最近的时间显示“几天前”的形式',
-
   'block_operation' => '操作',
   'blockdata_verify' => '推送审核',
   'find' => '查找',
@@ -195,9 +183,9 @@ $lang = array (
   'push_people' => '推送者',
   'unused' => '未使用',
   'update_block_tips' => '数据通过审核以后，相应的模块将加入更新队列',
-
   'action_invalid' => '请选择要进行的操作',
   'all' => '全部',
+  'article_category_move' => '移到栏目',
   'article_manage' => '文章管理',
   'article_new' => '新文章',
   'article_not_choose' => '请选择要操作的文章',
@@ -208,11 +196,9 @@ $lang = array (
   'me' => '我的文章',
   'portalcp_perpage' => '每页显示',
   'view_space' => '查看空间',
-
   'comment_delete' => '删除回复',
   'comment_delete_confirm' => '确定删除指定的回复吗？',
   'comment_edit_content' => '编辑内容',
-
   'background' => '背景',
   'background_attach_fixed' => '固定',
   'background_attach_mode' => '背景滚动',
@@ -222,8 +208,10 @@ $lang = array (
   'content_area' => '内容区',
   'diy_change' => '更换',
   'diy_editing' => '正在编辑',
+  'diy_systemfile' => '系统内置',
   'diy_update_start' => '开始上传',
   'diy_upload_image' => '上传新图片',
+  'diy_uploadfile' => '上传文件',
   'image_position' => '图片位置',
   'image_repeat' => '平铺',
   'image_repeat_direct' => '直接使用',
@@ -239,16 +227,13 @@ $lang = array (
   'restore_skin' => '恢复原装皮肤',
   'text_color' => '文字颜色',
   'title_bar' => '标题栏',
-
   'article_numbers' => '文章数',
   'category_name' => '分类名称',
   'category_push_select' => '选择一个频道分类：',
   'portalcp_has_no_category' => '您还没有创建任何频道栏目',
   'portalcp_index_message' => '您还没有可管理的频道栏目',
-
   'has_no_block' => '没有要推送的模块',
   'select_block' => '请在下面选择要推送的模块',
-
   'all_page' => '全部页面',
   'block_in_updateline' => '已进入更新队列',
   'block_no_managable' => '没有可管理的模块',
@@ -264,7 +249,6 @@ $lang = array (
   'show_push' => '显示推送标志',
   'unoperation' => '&minus;',
   'view_select_mod' => '仅显示搜索条件下的模块。 ',
-
   'add_by_self' => '手工添加',
   'already_select' => '已选',
   'manage_related_article' => '管理相关文章',
@@ -273,7 +257,6 @@ $lang = array (
   'move_up' => '上移',
   'selected_tag_selected' => '将选中项标记为已选',
   'wait_select' => '待选',
-
   'link_to_internet' => '网络链接',
   'modify' => '修改',
   'topic_add' => '新建专题',
@@ -281,6 +264,7 @@ $lang = array (
   'topic_allowcomment' => '是否允许评论',
   'topic_cover' => '专题封面',
   'topic_cover_current' => '当前封面',
+  'topic_create_closed' => '创建专题时默认为关闭',
   'topic_custom_start' => '开始自定义 <b>$topic[title]</b> 吧～',
   'topic_description' => 'SEO 描述',
   'topic_description_comment' => '专题介绍,此描述内容用于搜索引擎优化，放在 meta 的 description 标签中',
@@ -291,7 +275,6 @@ $lang = array (
   'topic_keyword_comment' => '此关键词用于搜索引擎优化，放在 meta 的 keyword 标签中，多个关键字间请用半角逗号 "," 隔开',
   'topic_navs' => '站点导航',
   'topic_opened' => '是否开启',
-  'topic_create_closed' => '创建专题时默认为关闭',
   'topic_page_bottom' => '站点尾部信息',
   'topic_static_name' => '静态化名称',
   'topic_static_name_comment' => '用于专题静态化时显示在链接中的个性化名称，不能重复',
@@ -300,7 +283,6 @@ $lang = array (
   'tplname' => '模板名',
   'upload_from_local' => '本地上传',
   'yes' => '是',
-
   'article_inner_navigation' => '本文导航',
   'article_inner_page' => '页',
   'article_inner_page_pre' => '第',

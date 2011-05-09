@@ -42,8 +42,8 @@ CSS 样式模块的格式示例：
 	Dependent:		依赖关系，该模块必须依赖于何种模块
 	Sample:			用法示例，或指出改模块所作用的直接页面
 	Explain:		附加说明
-	Author:			创建者
-	Last Modify:	最终修改者
+	Author:			创建者 日期(两位数年月日时)
+	Last Modify:	最终修改者 日期(两位数年月日时)
 
 ----------------------------------
 
@@ -428,6 +428,8 @@ CSS 写作注意事项：
 
 	.pnc, a.pnc { border-color: #235994; background-color: #06C; background-position: 0 -48px; color: #FFF !important; }
 		.pnc:active { background-position: 0 -71px; }
+	
+	.pnpost .pn { height: 26px; }
 
 /*
 	Name:			mod_input[radio]_input[checkbox]_label
@@ -505,15 +507,22 @@ CSS 写作注意事项：
 		.tfm .d { clear: both; margin: 5px 0; color: {LIGHTTEXT}; }
 			.tfm .d em { margin-left: 5px; color: red; }
 			.tfm .d strong { margin-left: 5px; }
+			.tfm .d a { color: {HIGHLIGHTLINK}; }
 		.tfm .p { text-align: right; }
 		.tfm .pcl label { display: block; padding: 0 2px 5px; }
 			.tfm .pcl .pc { margin-right: 5px; padding: 0; }
 		.tfm .l th, .tfm .l td { padding-top: 0; padding-bottom: 0; }
 	.bn .tfm caption, .bn .tfm th, .bn .tfm td { padding-top: 5px; padding-bottom: 5px; }
 
-/* 发帖标题栏 postbox title */
-.pbt { padding-bottom: 9px; }
+/*
+	Name:			mod_postboxtitle
+	Level:			Function
+	Explain:		发帖页面、弹窗等的标题栏
+	Last Modify:	Pony
+*/
+.pbt { margin-bottom: 10px; }
 	.ie6 .pbt .ftid a, .ie7 .pbt .ftid a { margin-top: 1px; }
+	#custominfo.mtn { margin-bottom: -5px; }
 
 /* 提示信息 alert_win － altw*/
 .altw { width: 350px; }
@@ -564,31 +573,39 @@ CSS 写作注意事项：
 		#toptb a { float: left; padding: 0 4px; height: 24px; }
 		#toptb a.showmenu { padding-right: 15px; }
 		#toptb a.hover { background-color: #FFF; }
-	#hd { margin-bottom: 10px; border-bottom: {HEADERBORDER} solid {SPECIALBORDER}; {HEADERBGCODE} }
+		#toptb .pipe { float: left; display: none; }
+	#hd { border-bottom: {HEADERBORDER} solid {SPECIALBORDER}; {HEADERBGCODE} }
 		#hd .wp { padding: 10px 0 0; }
-			#diy-tg { width: 70px; background: url({STATICURL}image/diy/panel-toggle.png) no-repeat 100% 0; text-indent: -9999px; overflow: hidden; }
+			#diy-tg { width: 55px; background: url({STATICURL}image/diy/panel-toggle.png) no-repeat 100% 1px; text-indent: -9999px; overflow: hidden; }
 
 			.hdc { min-height: 70px; }
 				.ie6 .hdc { height: 70px; }
 			#hd h2 { padding: 0 20px 8px 0; float: left; }
 				#space #hd h2 { margin-top: 0; }
 			#hd .fastlg { float: right; padding-top: 10px; }
-			#scbar { overflow: hidden; height: 36px; line-height: 36px; background: url({IMGDIR}/search.gif) repeat-x 0 0; }
-				#scbar table { background: url({IMGDIR}/search.gif) no-repeat 0 -36px; }
-					#scbar td { padding: 0 2px; white-space: nowrap; }
-				#scbar_srchtxt { margin-top: 2px\9; margin-right: 10px; margin-left: 35px; width: 250px; height: 18px; line-height: 18px; border: none; background: transparent; outline: none; }
-				#scbar label { margin-right: 8px; cursor: pointer; }
-				#scbar_hot { padding-left: 1em; }
-					.ie6 #scbar_hot { white-space: normal; }
-			#sc td { padding: 5px 0 0; }
-				#sc #sctype_w { border-right: none; }
-				#sc #sctype { height: 17px !important; line-height: 17px; }
-					.ie8 #sc #sctype { line-height: 18px; }
-				#sc #srchtxt { margin-right: 2px; margin-left: 0; width: 100px; border-left: none; font-size: 12px; }
-				#sctype_menu { margin: 2px 0 0 -5px; width: 100px; }
-					#sctype_menu input { position: absolute; width: 0; height: 0; opacity: 0; }
-					#sctype_menu a { padding: 0; }
-					#sctype_menu label { display: block; padding: 3px 15px; line-height: 1.5; cursor: pointer; }
+
+			#scbar { height: 44px; border: solid {SPECIALBG}; border-width: 0 1px 1px; background: url({IMGDIR}/search.png) repeat-x 0 0; line-height: 44px; overflow: hidden; }
+				.scbar_icon_td { width: 50px; background: url({IMGDIR}/search.png) no-repeat 0 -74px; }
+				.scbar_txt_td, .scbar_type_td { background: url({IMGDIR}/search.png) repeat-x 0 -222px; }
+					#scbar_txt { width: 400px; border: 1px solid #FFF; outline: none; font-size: 14px; }
+				.scbar_btn_td { width: 67px; background: url({IMGDIR}/search.png) no-repeat 0 -296px; text-align: center; }
+					#scbar_btn { margin: 0; padding: 0; border: none; background: transparent none; }
+				.scbar_type_td { background: url({IMGDIR}/search.png) no-repeat 0 -370px; }
+					#scbar_type { display: block; padding-left: 5px; text-align: left; text-decoration: none; }
+						#scbar_type_menu { margin-top: -8px; }
+				#scbar_hot { padding-left: 8px; height: 45px; overflow: hidden; }
+					#scbar_hot strong, #scbar_hot a { float: left; margin-right: 8px; white-space: nowrap; }
+			
+			#sc { display: none; }
+				#sc_txt { margin-right: 0; width: 109px; border-right: none; outline: none; }
+				#sc_type_w { border-left: none; }
+				#sc_type { height: 17px !important; line-height: 17px; }
+					.ie8 #sc_type { line-height: 18px; }
+				#sc_btn { margin-right: 0; }
+				#sc_type_menu { margin: 2px 0 0 -5px; width: 100px; line-height: 1.5; }
+					#sc_type_menu a { float: none; }
+				#pt #sc { margin: 3px 0 0 0; }				
+
 			#nv { overflow: hidden; padding-left: 3px; height: 33px; {MENUBGCODE}; }
 				#nv li { float: left; padding-right: 1px; height: 33px; line-height: 33px; background: url({IMGDIR}/nv_a.png) no-repeat 100% 0; font-weight: 700; font-size: 14px; }
 					.ie_all #nv li { line-height: 36px; }
@@ -598,6 +615,8 @@ CSS 写作注意事项：
 						#nv li span { display: none; }
 					#nv li.a { margin-left: -1px; {MENUHOVERBGCODE}; }
 						#nv li.a a { color: {MENUHOVERTEXT}; }
+						#nv li a:hover { background: url({IMGDIR}/nv_a.png) no-repeat 50% -66px; }
+						#nv li.hover a:hover, #nv li.hover a { background: url({IMGDIR}/nv_a.png) no-repeat 50% -99px; }
 			#mu { position: relative; z-index: 1; }
 				.ie6 #mu, .ie7 #mu { line-height: 0; font-size: 0; }
 				#mu ul { background: url({IMGDIR}/mu_bg.png) no-repeat 0 100%; line-height: 22px; z-index: 2; font-size: 12px; }
@@ -619,8 +638,8 @@ CSS 写作注意事项：
 				#um .pipe { margin: 0 5px 0 0; }
 
 				#extcreditmenu { margin-right: 2px !important; padding-top: 3px; padding-bottom: 3px; padding-left: 10px; }
-					#extcreditmenu.a { position: relative; z-index: 302; margin-right: 1px !important; border: 1px solid {DROPMENUBORDER}; border-bottom: none; background-color: {WRAPBG}; }
-					#extcreditmenu_menu { margin-top: -1px; }
+					#extcreditmenu.a { position: relative; z-index: 302; margin-right: 1px !important; border: 1px solid; border-color: {DROPMENUBORDER}; border-bottom: none; background-color: {WRAPBG}; }
+					#extcreditmenu_menu { margin-top: -1px; width: auto; }
 						#extcreditmenu_menu li { float: none; display: block; padding-left: 10px !important; padding-right: 3em !important; }
 
 				#qmenu { float: right; display: inline; margin: 3px 4px 0; padding: 0 12px 0 0; width: 83px; height: 26px; background: url({IMGDIR}/qmenu.png) no-repeat 0 0; line-height: 26px; text-align: center; color: {HIGHLIGHTLINK}; font-weight: 700; text-shadow: 0 1px 0 #FFF; overflow: hidden; }
@@ -628,25 +647,33 @@ CSS 写作注意事项：
 					#qmenu.a { position: relative; z-index: 302; background-position: 0 -30px; }
 					.ie8 #qmenu { line-height: 30px; }
 				#qmenu_menu { margin-top: -1px; padding: 20px 5px 10px; width: 180px; border-color: #9A9A9A; }
+					.ie_all #qmenu_menu { margin-left: 1px; }
+						.ie9 #qmenu_menu { margin-left: 0; }
 					#qmenu_menu ul li { float: left; }
-					#qmenu_menu ul a { margin-bottom: 10px; padding: 42px 0 0; width: 60px; background: url({IMGDIR}/noicon.gif) no-repeat 50% 0; text-align: center; }
+					#qmenu_menu ul a { margin-bottom: 10px; padding: 42px 0 0; width: 60px; border: none; background: url({IMGDIR}/noicon.gif) no-repeat 50% 0; text-align: center; }
 						#qmenu_menu ul a:hover { background-color: transparent; color: {HIGHLIGHTLINK}; text-shadow: none; }
 
 /* 页面主区域 */
-	#ct { min-height: 400px; }
-		.ie6 #ct { height: 400px; }
+	#ct { min-height: 300px; }
+		.ie6 #ct { height: 300px; }
 		.mn { overflow: hidden; }
 		.ct2 .mn { float: left; width: 730px; margin-bottom: 1em; }
 		.ct2 .sd { float: right; width: 220px; overflow: hidden; _overflow-y: visible; }
 
 		.appl { float: left; overflow: hidden; margin-bottom: 10px; padding: 6px 10px; width: 117px; }
 
-		.ct2_a, .ct3_a { {SIDEBGCODE} }
-			.ct2_a_r { background-image: none; }
+		.ct2_a, .ct3_a { border: 1px solid {WRAPBORDERCOLOR}; {SIDEBGCODE} }
+			.ct2_a_r { border: none; background-image: none; }
+			 .ct2_a h1.mt { display: none; }
+			 .ct2_a .tb { margin-top: 3px; }
 		.ct2_a .mn { float: right; width: 810px; }
+			.ct2_a .mn { display: inline; margin-right: 10px; padding-top: 10px; width: 800px; }
+				#nv_userapp .ct2_a .mn, .ct2_a_r .mn { margin-right: 0; width: 810px; }
 
 		.ct3_a .mn { float: left; margin-left: 20px; width: 565px; }
 		.ct3_a .sd { float: right; width: 220px; }
+			#nv_home .ct3_a .sd .bm { margin-right: 10px; border: none; }
+				#nv_home .ct3_a .sd .bm_c { padding: 10px 0; }
 
 		.mw { width: 100%; float: none; }
 		.mnw { clear: both; border-top: 1px solid #CCC; }
@@ -655,8 +682,10 @@ CSS 写作注意事项：
 /* 页尾 */
 	#ft { padding: 10px 0 50px; border-top: 1px solid {COMMONBORDER}; line-height: 1.8; color: {FOOTERTEXT}; }
 		#flk { text-align: right; }
+			#flk img { vertical-align: middle; }
 			#scrolltop { visibility: hidden; position: fixed; bottom: 100px; display: block; margin: -30px 0 0; width: 26px; height: 50px; background: url({IMGDIR}/scrolltop.png) no-repeat 50% 0; line-height: 999px; overflow: hidden; cursor: pointer; }
 		.ie6 #scrolltop { position: absolute; bottom: auto; }
+		#nv_home #ft, .pg_announcement #ft, .pg_modcp #ft, .pg_portalcp #ft, .pg_ranklist #ft, #nv_userapp #ft { border-top: none; }
 
 /* 通用的区域块 */
 	/*
@@ -673,6 +702,7 @@ CSS 写作注意事项：
 		.bm_h .o { float: right; width: 30px; }
 			.bm_h .o img { float: right; margin-top: 11px; cursor: pointer; }
 		.bm_h .i { padding-left: 10px; }
+		.bm_h .pn { margin-top: 4px; }
 		.bm_h { padding: 0 10px; height: 31px; border-top: 1px solid #FFF; border-bottom: 1px solid {CONTENTSEPARATE}; background: {COMMONBG}; line-height: 31px; white-space: nowrap; overflow: hidden; }
 		.bmw { border: 1px solid {COMMONBORDER}; }
 			.bmw .bm_h { border-top-color: {WRAPBG}; border-right: 1px solid {WRAPBG}; border-bottom-color: {CONTENTSEPARATE}; border-left: 1px solid {WRAPBG}; background: {SPECIALBG}; }
@@ -692,11 +722,14 @@ CSS 写作注意事项：
 	/* 宽布局下的通用块 */.bw { padding: 0 15px; }
 
 /* 面包屑导航 #pt --> Path */
-	#pt { margin-bottom: 10px; height: 32px; border: 1px solid {COMMONBORDER}; background: {COMMONBG}; line-height: 32px; }
-		#pt a, #pt em, #pt .z span { float: left; height: 32px; }
-		#pt em { width: 20px; background: url({IMGDIR}/pt_item.png) no-repeat 30% 0; line-height: 200px; overflow: hidden; }
-		.nvhm { width: 24px; background: url({IMGDIR}/pt_icn.png) no-repeat 7px 8px; line-height: 200px; overflow: hidden; }
-
+	#pt { margin: 2px 0; height: 29px; border:none; background: transparent; line-height: 29px; }
+		#pt .z { padding-right: 10px; }
+		#pt .z a, #pt .z em, #pt .z span { float: left; height: 29px; }
+		#pt .z em { width: 20px; background: url({IMGDIR}/pt_item.png) no-repeat 3px 10px; line-height: 200px; overflow: hidden; }
+		.nvhm { width: 16px; background: url({IMGDIR}/search.png) no-repeat -8px -119px; line-height: 200px; overflow: hidden; }
+			/* XP 或 Windows 7，IE 最高版本为 8 或 9，这几种组合情况对字体的渲染存在差异，所以需要对背景进行微调，以适应更多情况 by Pony 11050511 */
+			.ie_all #pt .z em { background-position: 3px 9px; }
+			.ie_all .nvhm { background-position: -8px -120px; }
 /* 统计数据 */
 .tns { padding: 10px 0; }
 	.tns table { width: 100%; }
@@ -748,6 +781,7 @@ CSS 写作注意事项：
 		.ie6 .tb .a, .ie6 .tb .current { position: relative; }
 	.tb a { display: block; padding: 0 10px; border: 1px solid {COMMONBORDER}; background: {SPECIALBG}; }
 		.tb .a a, .tb .current a { border-bottom-color: {WRAPBG}; background: {WRAPBG}; font-weight: 700;}
+		.tb a:hover { text-decoration: none; }
 	.tb .y { float: right; margin-right: 0; }
 		.tb .y a { border: none; background: transparent; }
 	.tb .o { margin: 1px 4px 0 2px; border: 1px solid #235994; }
@@ -883,10 +917,10 @@ CSS 写作注意事项：
 	.myo img { margin-bottom: -1px; }
 	.myo a { color: {HIGHLIGHTLINK}; }
 	/* 侧边管理列表 */
-	.tbn { margin: -7px -10px -6px; }
+	.tbn { margin: -6px -10px 0; }
 		.tbn ul { margin: 0; }
 			.tbn li { margin: 0 10px; height: 33px; border-bottom: 1px dashed #CCC; }
-			.tbn li.a { margin: -1px 0 0; padding: 0 10px 0 9px; border-top: 1px solid {COMMONBORDER}; border-bottom-style: solid; border-left: 1px solid {COMMONBORDER}; background: {WRAPBG}; }
+			.tbn li.a { margin: -1px 0 0; padding: 0 10px 0 9px; border-top: 1px solid {COMMONBORDER}; border-bottom-style: solid; background: {WRAPBG}; }
 		.tbn ul a { display: block; height: 33px; line-height: 33px; }
 		.tbn .mt { padding: 10px; }
 
@@ -929,7 +963,7 @@ CSS 写作注意事项：
 	.m_c .tedt { width: 600px; }
 
 /* 表情 */
-.sllt { padding: 5px; border: 1px solid #CCC; background: {WRAPBG}; }
+.sllt { padding: 10px 5px 5px !important; }
 	.sllt td { padding: 8px; border: none; cursor: pointer; }
 	.sllt_p { *float: left; text-align: right; }
 		.sllt_p a { margin-right: 5px; color: #069; text-decoration: underline; }
@@ -949,13 +983,16 @@ CSS 写作注意事项：
 			.sslct_btn i { float: left; display: inline; margin: 1px; width: 10px; height: 10px; background: #2E80D1; overflow: hidden; font-style: normal; }
 
 /* 弹出菜单、弹出层及弹出窗口 */
-	.p_pop, .p_pof { padding: 5px 0; border: 1px solid; border-color: {DROPMENUBORDER}; {DROPMENUBGCODE} }
+	.p_pop, .p_pof, .sllt { padding: 4px; border: 1px solid; min-width: 60px; border-color: {DROPMENUBORDER}; {DROPMENUBGCODE}; box-shadow: 1px 2px 2px rgba(0,0,0,0.3); }
+		.ie6 .p_pop { width: 100px; }
+		.ie_all .p_pop, .ie_all .p_pof, .ie_all .sllt { filter: progid:DXImageTransform.Microsoft.Shadow(color=#999999,direction=135,strength=1); }
 		.p_pof { width: 500px; }
 		.p_opt { padding: 10px; }
 		.p_pop li { display: inline; }
-		.p_pop a { position: relative; display: block; padding: 3px 15px; white-space: nowrap; }
+		.p_pop a { position: relative; display: block; padding: 3px 5px; border-bottom: 1px solid {SPECIALBG}; white-space: nowrap; }
+			.p_pop li:last-child a { border: none; }
 			.ie6 .p_pop a { position: relative; }
-			.p_pop a:hover, .p_pop a.a, #sctype_menu .sca { background: #0093E2 url({IMGDIR}/pope_bg.png) repeat-x 0 0; color: #FFF; text-shadow: -1px -1px 0 #0081B0; text-decoration: none; }
+			.p_pop a:hover, .p_pop a.a, #sctype_menu .sca { background-color: {SPECIALBG}; color: {HIGHLIGHTLINK}; text-decoration: none; }
 		/* .blk -> block 内容较为复杂的弹出层使用 .blk 的 class，内部的 a 标签重新定义 */
 		.blk a, .inlinelist a { display: inline; padding: 0; border: none; }
 			.blk a:hover { background: none; color: {LINK}; text-shadow: none; text-decoration: underline; }
@@ -1019,7 +1056,7 @@ CSS 写作注意事项：
 
 /* 弹窗未开启时 nofloat */
 .nfl { height: auto !important; height: 320px; min-height: 320px; }
-	.nfl .f_c { margin: 120px auto; padding: 20px; width: 580px; border: 3px solid {COMMONBG}; background: {WRAPBG}; }
+	.nfl .f_c { margin: 60px auto; padding: 20px; width: 580px; border: 3px solid {COMMONBG}; background: {WRAPBG}; }
 	.nfl .loginform { height: auto; }
 	.nfl .clause { width: auto; height: auto; }
 
@@ -1040,7 +1077,7 @@ CSS 写作注意事项：
 	#postbox dd.hasd input { width: 99px; margin-right: 0; }
 
 /*弹窗 编辑器 颜色框 colorbox*/
-.colorbox{ width: 130px; }
+.colorbox{ width: 130px !important; }
 .colorbox input { float: left; margin: 2px; padding: 0; width: 12px; height: 12px; border: 0; cursor: pointer; }
 
 /* 短消息对话框 .pm -> personal_message (window) by Pony */
@@ -1099,6 +1136,29 @@ CSS 写作注意事项：
 				.pmfl strong { color: #000; }
 
 /* 登录和注册 */
+
+.rfm { margin: 0 auto; width: 760px; border-bottom: 1px dotted {COMMONBORDER}; }
+		.rfm a { color: {HIGHLIGHTLINK}; }
+		.rfm .rq {  }
+		.rfm th, .rfm td { padding: 10px 2px; vertical-align: top; line-height: 24px; }
+		.rfm th { padding-right: 10px; width: 10em; text-align: right; }
+		.rfm .px { width: 220px; }
+		.rfm .p_tip { position: absolute; z-index: 2; display: none; padding-left: 10px; width: 390px; background: {WRAPBG}; color: {MIDTEXT}; font-style: normal; }
+		.rfm .p_chk { position: absolute; z-index: 1; padding-left: 10px; width: 390px; color: red; font-weight: 700; font-family: {FONT}; }
+		.rfm #emailmore { position: absolute; }
+		.p_right { background: url({IMGDIR}/check_right.gif) no-repeat 10px 12px; width: 30px; }
+		#returnmessage4 { display: none; padding: 10px 0; border-bottom: 1px solid {COMMONBORDER}; background: #FFE; text-align: center; font-weight: 700; }
+		#returnmessage4.onerror { display: block; }
+		.rfm .l { margin: 0; }
+	.blr .c { padding: 0 10px 10px; }
+	.login_slct a { margin-right: -8px; padding-right: 16px; background: url({IMGDIR}/arrwd.gif) no-repeat 100% 50%; }
+	.fwin .rfm, .nfl .f_c .rfm { width: 500px; }
+	.fwin .rfm th, .fwin .rfm td, .nfl .f_c .rfm th, .nfl .f_c .rfm td { padding: 6px 2px; }
+	.fwin .loginb button { margin-left: 11.3em; }
+	.nfl .f_c .loginb button { margin-left: 12em; }
+
+
+
 .blr { width: 580px; margin: 20px auto 30px; }
 	.m_c .blr { margin: 0 auto; }
 .lgfm { font: {FONTSIZE} {FONT}; float: left; margin-bottom: 10px; *margin-bottom: -10px; padding: 20px 0; width: 280px; border-right: 1px solid #CCC; }
@@ -1268,6 +1328,24 @@ CSS 写作注意事项：
 	.reason_slct .pt, .reason_slct .px { width: 25.2em !important; }
 	.reasonarea { height: 5.8em; }
 
+/*
+	Name:			mod_filebtn
+	Level:			Global
+	Sample:			<div class="filebtn">
+						<input type="file" class="pf cur1" size="1" />
+						<button type="button" class="pn pnc"><strong>{lang}</strong></button>
+					</div>
+	Explain:		模拟 <input type="file" />，注意不要让 button 太宽
+	Last Modify:	Pony
+*/
+.filebtn { position: relative; margin: 0 auto; width: 60px; overflow: hidden; }
+	.filebtn .pf { position: absolute; right: 0; height: 23px; opacity: 0; filter:alpha(opacity=0); }
+
+/* 上传弹出层 */
+.upfile { width: 220px; }
+	#uploadform { border: 1px dashed {SPECIALBORDER}; background: {SPECIALBG}; }
+
+
 /* ------------------------------------------------------------------------ 拖拽及页面 DIY */
 .frame, .frame-tab { margin-bottom: 10px; border: 1px solid {WRAPBORDERCOLOR}; background: {WRAPBG}; }
 	.title { padding: 0 10px; height: 32px; font-size: 14px; font-weight: 700; line-height: 32px; overflow: hidden; }
@@ -1418,9 +1496,10 @@ CSS 写作注意事项：
 .slideblock { position: relative; }
 	.slideshow { clear: both; }
 		.slideshow li { position: relative; overflow: hidden; }
-			.slideshow span.title { position: absolute; bottom: 0; left: 0; margin-bottom: 0; width: 100%; height: 32px; background: {FLOATMASKBGCOLOR}; color: {LIGHTLINK} !important; line-height: 32px; font-size: 14px; text-indent: 10px; opacity: 0.5; filter: alpha(opacity=50); overflow: hidden; }
-			.slidebar li { float: left; margin-right: 1px; width: 20px; height: 20px; background: {FLOATMASKBGCOLOR}; line-height: 20px; text-align: center; font-size: 10px; color: {LIGHTLINK}; overflow: hidden; opacity: 0.5; filter: alpha(opacity=50); cursor: pointer; }
-				.slidebar li.on { background: {WRAPBG}; color: #000; font-weight: 700; opacity: 0.8; filter: alpha(opacity=80); }
+			.slideshow span.title { position: absolute; bottom: 0; left: 0; margin-bottom: 0; width: 100%; height: 32px; line-height: 32px; font-size: 14px; text-indent: 10px; }
+			.slideshow span.title, .slidebar li { background: rgba(0, 0, 0, 0.3); filter:progid:DXImageTransform.Microsoft.gradient(startColorstr = #30000000, endColorstr = #30000000); color: {LIGHTLINK}; overflow: hidden; }
+			.slidebar li { float: left; margin-right: 1px; width: 20px; height: 20px; line-height: 20px; text-align: center; font-size: 10px; cursor: pointer; }
+				.slidebar li.on { background: rgba(255, 255, 255, 0.5); filter:progid:DXImageTransform.Microsoft.gradient(startColorstr = #50FFFFFF, endColorstr = #50FFFFFF); color: #000; font-weight: 700; }
 
 /* 清除DIY产生的多余样式使用的公共样式 */
 .cl_frame_bm { margin: 0 !important; border: 0 !important;}
@@ -1464,6 +1543,7 @@ CSS 写作注意事项：
 		.tip_3 .tip_horn { right: 5px; bottom: -6px; background: url({IMGDIR}/tip_bottom.png); }
 		.tip_4 .tip_horn { left: 5px; bottom: -6px; background: url({IMGDIR}/tip_bottom.png); }
 		.tip_js .tip_horn { right: 61px; bottom: -6px; background: url({IMGDIR}/tip_bottom.png); }
+	.aimg_tip { margin-top: 0; }
 
 /* 推荐商品 by dfox */
 em.hot { position: absolute; left: -2px; top: -2px; text-indent: -9999px; overflow: hidden; background: url({IMGDIR}/hot.png) no-repeat 0 0; }
@@ -1475,7 +1555,7 @@ em.hot { position: absolute; left: -2px; top: -2px; text-indent: -9999px; overfl
 	.gsh .pns .px { margin-right: 3px; width: 190px; }
 
 /* 名片 */
-.card { padding: 0; width: 295px; border-color: {SPECIALBORDER}; background: #FDFEFF; }
+.card { padding: 0; width: 295px !important; border-color: {SPECIALBORDER}; background: #FDFEFF; }
 	.card .p_opt { padding: 0; }
 	.card .avt { position: absolute; display: inline; margin-left: -70px; width: 70px; }
 	.card_mn, .card_info { padding: 10px 10px 10px 80px; }
@@ -1483,8 +1563,8 @@ em.hot { position: absolute; left: -2px; top: -2px; text-indent: -9999px; overfl
 			.ie6 .card_mn { height: 56px; }
 		.card_info { border: dashed {COMMONBORDER}; border-width: 1px 0; }
 		.card_msg { width: 95%; height: 4em; }
-	.card a { padding: 0; display: inline !important; white-space: normal; }
-		.card a:hover { background: none; color: {TABLETEXT}; text-shadow: none; }
+	.card a { padding: 0; display: inline !important; white-space: normal; border-bottom: none; }
+		.card a:hover { background-color: transparent !important; color: {TABLETEXT}; text-shadow: none; }
 	.card .o { clear: both; padding: 5px 10px; }
 		.card .o a { float: left; margin: 3px 5px 3px 0; padding: 2px 0; width: 5em; border: 1px solid {SPECIALBORDER}; background: {SPECIALBG} url({IMGDIR}/card_btn.png) repeat-x 0 100%; line-height: 14px; text-align: center; }
 		.ie_all .card .o a { padding: 3px 0 0; }
@@ -1494,7 +1574,7 @@ em.hot { position: absolute; left: -2px; top: -2px; text-indent: -9999px; overfl
 /*
 	Name:			mod_BIUC
 	Level:			Global
-	Explain:		模块中编辑单条数据BIU、颜色选择器其中 colorwd 要配合 pn 使用
+	Explain:		模块中编辑单条数据BIU、颜色选择器其中 colorwd 要配合 pn 使用（不要合并 colorwd 的 background，因为其他配色会受影响）
 	Last Modify:	Pony
 */
 .ss em { display: block; float: left; margin-right: 2px; padding-left: 7px; width: 16px; line-height: 23px; background: #EEE; cursor: pointer; }
@@ -1502,7 +1582,7 @@ em.hot { position: absolute; left: -2px; top: -2px; text-indent: -9999px; overfl
 .dopt a { float: left; margin-right: 3px; width: 21px !important; height: 21px; line-height: 21px; text-align: center; }
 	.dopt_b, .dopt_i, .dopt_l { border: 1px solid #F1F5FA; outline: none; }
 	.dopt .cnt { border: 1px solid #999; background-color: {WRAPBG}; }
-.colorwd { margin-left: 3px; width: 23px !important; background: {MIDTEXT} url({IMGDIR}/pn_color.png) no-repeat 0 0; }
+.colorwd { margin-left: 3px; width: 23px !important; background-color: {MIDTEXT}; background-image: url({IMGDIR}/pn_color.png) !important; background-repeat: no-repeat; background-position: 0 0; }
 	.colorwd:active { background-position: 0 0; }
 	.ie6 .colorwd, .ie7 .colorwd { background-position: -1px -1px; }
 	.ie6 a.colorwd, .ie7 a.colorwd { background-position: 0 0; }

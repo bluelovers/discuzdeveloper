@@ -20,7 +20,9 @@ var fid = parseInt('$_G[fid]');
 						<select name="typeid" id="typeid_fast" width="80">
 						<option value="0" selected="selected">{lang select_thread_catgory}</option>
 						<!--{loop $_G['forum'][threadtypes][types] $typeid $name}-->
+							<!--{if empty($_G['forum']['threadtypes']['moderators'][$typeid]) || $_G['forum']['ismoderator']}-->
 							<option value="$typeid"><!--{echo strip_tags($name);}--></option>
+							<!--{/if}-->
 						<!--{/loop}-->
 						</select>
 					</div>
@@ -36,7 +38,7 @@ var fid = parseInt('$_G[fid]');
 					<div class="tedt">
 						<div class="bar">
 							<span class="y">
-								<!--{hook/forumdisplay_fastpost_func_extra}-->								
+								<!--{hook/forumdisplay_fastpost_func_extra}-->
 								<a href="forum.php?mod=post&action=newthread&fid=$_G[fid]" onclick="switchAdvanceMode(this.href);doane(event);">{lang post_advancemode}</a>
 							</span>
 							<!--{eval $seditor = array('fastpost', array('bold', 'color', 'img', 'link', 'quote', 'code', 'smilies'), !$_G['uid'] ? 1 : 0, $allowpostattach ? '<span class="pipe z">|</span><span onclick="fastUload()" class="cur1 z">{lang e_attach_title}</span>' : '');}-->
@@ -47,18 +49,18 @@ var fid = parseInt('$_G[fid]');
 							<!--{if $fastpost}-->
 								<textarea rows="6" cols="80" name="message" id="fastpostmessage" onKeyDown="seditor_ctlent(event, '$(\'fastpostform\').submit()');" tabindex="12" class="pt"></textarea>
 							<!--{elseif !$_G['uid']}-->
-								<div class="pt hm">{lang login_to_post} <a href="member.php?mod=logging&action=login" onclick="showWindow('login', this.href)" class="xi2">{lang login}</a> | <a href="member.php?mod={$_G[setting][regname]}" class="xi2">$_G['setting']['reglinkname']</a></div>
+								<div class="pt hm">{lang login_to_post} <a href="member.php?mod=logging&action=login" onclick="showWindow('login', this.href)" class="xi2">{lang login}</a> | <a href="member.php?mod={$_G[setting][regname]}" class="xi2">$_G['setting']['reglinkname']</a> <!--{hook/global_login_text}--></div>
 							<!--{/if}-->
 						</div>
 					</div>
 				</div>
 				<!--{if $fastpost && checkperm('seccode') && ($secqaacheck || $seccodecheck)}-->
 					<!--{block sectpl}--><sec> <span id="sec<hash>" onclick="showMenu(this.id)"><sec></span><div id="sec<hash>_menu" class="p_pop p_opt" style="display:none"><sec></div><!--{/block}-->
-					<div class="mtm sec"><!--{template common/seccheck}--></div>
+					<div class="mtm sec"><!--{subtemplate common/seccheck}--></div>
 				<!--{/if}-->
 
 				<input type="hidden" name="formhash" value="{FORMHASH}" />
-				<input type="hidden" name="usesig" value="$usesigcheck" />				
+				<input type="hidden" name="usesig" value="$usesigcheck" />
 			</div>
 
 			<!--{if $allowpostattach}-->
@@ -67,7 +69,7 @@ var fid = parseInt('$_G[fid]');
 				var ATTACHNUM = {'imageused':0,'imageunused':0,'attachused':0,'attachunused':0}, ATTACHUNUSEDAID = new Array(), IMGUNUSEDAID = new Array();
 				</script>
 
-				<input type="hidden" name="posttime" id="posttime" value="{TIMESTAMP}" />				
+				<input type="hidden" name="posttime" id="posttime" value="{TIMESTAMP}" />
 				<div class="upfl{if empty($_G[gp_from]) && $_G[setting][fastsmilies]} hasfsl{/if}">
 					<table cellpadding="0" cellspacing="0" border="0" width="100%" id="attach_tblheader" style="display: none">
 						<tr>
@@ -87,9 +89,15 @@ var fid = parseInt('$_G[fid]');
 				</div>
 			<!--{/if}-->
 
-			<p class="ptm">
-				<button {if $fastpost}type="submit" {elseif !$_G['uid']}type="button" onclick="showWindow('login', 'member.php?mod=logging&action=login&guestmessage=yes')" {/if}name="topicsubmit" id="fastpostsubmit" value="topicsubmit" tabindex="13" class="pn"><strong>{lang post_newthread}</strong></button>
+			<p class="ptm pnpost">
+				<button {if $fastpost}type="submit" {elseif !$_G['uid']}type="button" onclick="showWindow('login', 'member.php?mod=logging&action=login&guestmessage=yes')" {/if}name="topicsubmit" id="fastpostsubmit" value="topicsubmit" tabindex="13" class="pn pnc"><strong>{lang post_newthread}</strong></button>
 				<!--{hook/forumdisplay_fastpost_btn_extra}-->
+				<!--{if !empty($_G['setting']['pluginhooks']['forumdisplay_fastpost_sync_method'])}-->
+					<span>
+						{lang post_sync_method}:
+						<!--{hook/forumdisplay_fastpost_sync_method}-->
+					</span>
+				<!--{/if}-->
 			</p>
 		</form>
 	</div>

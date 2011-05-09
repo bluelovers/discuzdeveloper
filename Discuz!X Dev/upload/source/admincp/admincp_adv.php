@@ -464,7 +464,7 @@ if($operation == 'ad') {
 		updatecache('setting');
 
 		if($operation == 'edit') {
-			cpmsg('adv_succeed', $_G['gp_referer'], 'succeed');
+			cpmsg('adv_succeed', dreferer(), 'succeed');
 		} else {
 			cpmsg('adv_succeed', 'action=adv&operation=edit&advid='.$advid.$extra, 'succeed');
 		}

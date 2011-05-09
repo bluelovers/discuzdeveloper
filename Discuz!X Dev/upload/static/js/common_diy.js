@@ -2,7 +2,7 @@
 	[Discuz!] (C)2001-2009 Comsenz Inc.
 	This is NOT a freeware, use is subject to license terms
 
-	$Id: common_diy.js 21318 2011-03-23 05:14:56Z zhangguosheng $
+	$Id: common_diy.js 21649 2011-04-06 09:29:40Z zhangguosheng $
 */
 
 String.prototype.property2js = function(){
@@ -1276,6 +1276,7 @@ var Util = {
 			this.enableAdvancedStyleSheet();
 			this.showControlPanel();
 			this.initTips();
+			if(this.goonDIY) this.goonDIY();
 			this.openfn();
 		},
 

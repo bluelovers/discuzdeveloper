@@ -1,19 +1,31 @@
 <!--{subtemplate common/header}-->
 
-<!--{if !empty($gid)}-->
-	<div id="pt" class="bm cl">
-		<!--{subtemplate common/simplesearchform}-->
-		<div class="z">
-			<a href="./" class="nvhm" title="{lang homepage}">$_G[setting][bbname]</a><em>&raquo;</em><a href="forum.php">{$_G[setting][navs][2][navname]}</a>$navigation
+
+<div id="pt" class="bm cl">
+	<!--{if empty($gid) && $announcements}-->
+	<div class="y">
+		<div id="an">
+			<dl class="cl">
+				<dt class="z xw1">{lang announcements}:&nbsp;</dt>
+				<dd>
+					<div id="anc" class="xi2"><ul id="ancl">$announcements</ul></div>
+				</dd>
+			</dl>
 		</div>
+		<script type="text/javascript">announcement();</script>
 	</div>
-<!--{/if}-->
+	<!--{/if}-->
+	<div class="z">
+		<a href="./" class="nvhm" title="{lang homepage}">$_G[setting][bbname]</a><em>&raquo;</em><a href="forum.php">{$_G[setting][navs][2][navname]}</a>$navigation
+	</div>
+	<div class="z"><!--{hook/index_status_extra}--></div>
+</div>
+
 
 <!--{if empty($gid)}-->
-	<!--{subtemplate common/pubsearchform}-->
 	<!--{ad/text/wp a_t}-->
 <!--{/if}-->
-	
+
 	<style id="diy_style" type="text/css"></style>
 
 <!--{if empty($gid)}-->
@@ -25,23 +37,11 @@
 <div id="ct" class="wp cl{if $_G['setting']['forumallowside']} ct2{/if}">
 	<!--{if empty($gid)}-->
 		<div id="chart" class="bm bw0 cl">
-			<p class="y">			
-				<!--{if $_G['uid']}--><a href="home.php?mod=space&uid=$_G['uid']&do=thread&view=me" title="{lang my_posts}" class="xi2">{lang my_posts}</a><!--{if !empty($_G['setting']['search']['forum']['status'])}--><span class="pipe">|</span><a href="search.php?mod=forum&srchfrom=$newthreads&searchsubmit=yes" title="{lang show_newthreads}" class="xi2">{lang show_newthreads}</a><!--{/if}--><!--{/if}-->
-				<!--{hook/index_status_extra}-->
-			</p>
-			<p class="chart">{lang index_today}: <em>$todayposts</em><span class="pipe">|</span>{lang index_yesterday}: <em>$postdata[0]</em><span class="pipe">|</span>{lang index_posts}: <em>$posts</em><span class="pipe">|</span>{lang index_members}: <em>$_G['cache']['userstats']['totalmembers']</em><!--{if $_G['setting']['lastmember']}--><span class="pipe">|</span>{lang welcome_new_members}: <em><a href="home.php?mod=space&username={echo rawurlencode($_G['setting']['lastmember'])}" target="_blank" class="xi2">$_G['setting']['lastmember']</a></em><!--{/if}--></p>
-		</div>
-		<!--{if $announcements}-->
-			<div id="an" class="bm bw0">
-				<dl class="cl">
-					<dt class="z xw1">{lang announcements}:&nbsp;</dt>
-					<dd>
-						<div id="anc" class="xi2"><ul id="ancl">$announcements</ul></div>
-					</dd>
-				</dl>
+			<p class="chart z">{lang index_today}: <em>$todayposts</em><span class="pipe">|</span>{lang index_yesterday}: <em>$postdata[0]</em><span class="pipe">|</span>{lang index_posts}: <em>$posts</em><span class="pipe">|</span>{lang index_members}: <em>$_G['cache']['userstats']['totalmembers']</em><!--{if $_G['setting']['lastmember']}--><span class="pipe">|</span>{lang welcome_new_members}: <em><a href="home.php?mod=space&username={echo rawurlencode($_G['setting']['lastmember'])}" target="_blank" class="xi2">$_G['setting']['lastmember']</a></em><!--{/if}--></p>
+			<div class="y">
+				<!--{if $_G['uid']}--><a href="home.php?mod=space&uid=$_G['uid']&do=thread&view=me" title="{lang my_posts}" class="xi2">{lang my_posts}</a><span class="pipe">|</span><!--{/if}--><!--{if !empty($_G['setting']['search']['forum']['status'])}--><a href="search.php?mod=forum&srchfrom=$newthreads&searchsubmit=yes" title="{lang show_newthreads}" class="xi2">{lang show_newthreads}</a><!--{/if}-->
 			</div>
-			<script type="text/javascript">announcement();</script>
-		<!--{/if}-->
+		</div>
 	<!--{/if}-->
 
 	<div class="mn">
@@ -62,9 +62,9 @@
 							</dl>
 						<!--{/loop}-->
 					</div>
-					<ul class="xl heatl">
+					<ul class="xl xl1 heatl">
 					<!--{loop $_G['cache']['heats']['subject'] $data}-->
-						<li><!--{if $_G['adminid'] == 1}--><a class="d" href="forum.php?mod=misc&action=removeindexheats&tid=$data[tid]" onclick="return removeindexheats()">delete</a><!--{/if}--><a href="forum.php?mod=viewthread&tid=$data[tid]" target="_blank" class="xi2">$data[subject]</a></li>
+						<li><!--{if $_G['adminid'] == 1}--><a class="d" href="forum.php?mod=misc&action=removeindexheats&tid=$data[tid]" onclick="return removeindexheats()">delete</a><!--{/if}-->&middot; <a href="forum.php?mod=viewthread&tid=$data[tid]" target="_blank" class="xi2">$data[subject]</a></li>
 					<!--{/loop}-->
 					</ul>
 				</div>

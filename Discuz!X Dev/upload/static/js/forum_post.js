@@ -2,11 +2,11 @@
 	[Discuz!] (C)2001-2009 Comsenz Inc.
 	This is NOT a freeware, use is subject to license terms
 
-	$Id: forum_post.js 21492 2011-03-28 09:03:55Z monkey $
+	$Id: forum_post.js 22290 2011-04-28 05:48:31Z monkey $
 */
 
 var postSubmited = false;
-var AID = 1;
+var AID = {0:1,1:1};
 var UPLOADSTATUS = -1;
 var UPLOADFAILED = UPLOADCOMPLETE = AUTOPOST = 0;
 var CURRENTATTACH = '0';
@@ -135,10 +135,11 @@ function validate(theform) {
 			}
 			if(seccodecheck) {
 				chkv = $('checkseccodeverify_' + theform.sechash.value).innerHTML;
-				if(chkv.indexOf('loading') != -1) {
-					showDialog('验证码校验中，请稍后', 'notice');
+				if(chkv.indexOf('loading') !== -1 || chkv.indexOf('none') !== -1) {
+					$('postsubmit').focus();
+					setTimeout(function () { validate(theform); }, 100);
 					chk = 0;
-				} else if(chkv.indexOf('check_right') == -1) {
+				} else if(chkv.indexOf('check_right') === -1) {
 					showError('验证码错误，请重新填写');
 					chk = 0;
 				}
@@ -206,7 +207,7 @@ function uploadNextAttach() {
 function uploadAttach(curId, statusid, prefix, sizelimit) {
 	prefix = isUndefined(prefix) ? '' : prefix;
 	var nextId = 0;
-	for(var i = 0; i < AID - 1; i++) {
+	for(var i = 0; i < AID[prefix ? 1 : 0] - 1; i++) {
 		if($(prefix + 'attachform_' + i)) {
 			nextId = i;
 			if(curId == 0) {
@@ -231,14 +232,17 @@ function uploadAttach(curId, statusid, prefix, sizelimit) {
 		}
 		$(prefix + 'cpdel_' + curId).innerHTML = '<img src="' + IMGDIR + '/check_' + (statusid == 0 ? 'right' : 'error') + '.gif" alt="' + STATUSMSG[statusid] + '" />';
 		if(nextId == curId || in_array(statusid, [6, 8])) {
-			if(prefix == 'img') updateImageList();
-			else updateAttachList();
+			if(prefix == 'img') {
+				updateImageList();
+			} else {
+				updateAttachList();
+			}
 			if(UPLOADFAILED > 0) {
 				showDialog('附件上传完成！成功 ' + UPLOADCOMPLETE + ' 个，失败 ' + UPLOADFAILED + ' 个:' + FAILEDATTACHS);
 				FAILEDATTACHS = '';
 			}
 			UPLOADSTATUS = 2;
-			for(var i = 0; i < AID - 1; i++) {
+			for(var i = 0; i < AID[prefix ? 1 : 0] - 1; i++) {
 				if($(prefix + 'attachform_' + i)) {
 					reAddAttach(prefix, i)
 				}
@@ -266,7 +270,7 @@ function uploadAttach(curId, statusid, prefix, sizelimit) {
 }
 
 function addAttach(prefix) {
-	var id = AID;
+	var id = AID[prefix ? 1 : 0];
 	var tags, newnode, i;
 	prefix = isUndefined(prefix) ? '' : prefix;
 	newnode = $(prefix + 'attachbtnhidden').firstChild.cloneNode(true);
@@ -302,7 +306,7 @@ function addAttach(prefix) {
 			tags[i].id = prefix + 'deschidden_' + id;
 		}
 	}
-	AID++;
+	AID[prefix ? 1 : 0]++;
 	newnode.style.display = 'none';
 	$(prefix + 'attachbody').appendChild(newnode);
 }
@@ -392,7 +396,7 @@ function appendAttachDel(ids) {
 		aids += '&aids[]=' + id;
 	}
 	var x = new Ajax();
-	x.get('forum.php?mod=ajax&action=deleteattach&inajax=yes' + aids, function() {});
+	x.get('forum.php?mod=ajax&action=deleteattach&inajax=yes&tid=' + tid + '&pid=' + pid + aids, function() {});
 	if($('delattachop')) {
 		$('delattachop').value = 1;
 	}
@@ -462,20 +466,26 @@ function updateDownImageList(msg) {
 	}
 }
 
-function switchButton(btn, btns) {
-	if(!$(editorid + '_btn_' + btn) || !$(editorid + '_' + btn)) {
+function switchButton(btn, type) {
+	var btnpre = editorid + '_btn_';
+	if(!$(btnpre + btn) || !$(editorid + '_' + btn)) {
 		return;
 	}
-	$(editorid + '_btn_' + btn).style.display = '';
+	var tabs = $(editorid + '_' + type + '_ctrl').getElementsByTagName('LI');
+	$(btnpre + btn).style.display = '';
 	$(editorid + '_' + btn).style.display = '';
-	$(editorid + '_btn_' + btn).className = 'current';
-	for(i = 0;i < btns.length;i++) {
-		if(btns[i] != btn) {
-			if(!$(editorid + '_' + btns[i]) || !$(editorid + '_btn_' + btns[i])) {
+	$(btnpre + btn).className = 'current';
+	var btni = '';
+	for(i = 0;i < tabs.length;i++) {
+		if(tabs[i].id.indexOf(btnpre) !== -1) {
+			btni = tabs[i].id.substr(btnpre.length);
+		}
+		if(btni != btn) {
+			if(!$(editorid + '_' + btni) || !$(editorid + '_btn_' + btni)) {
 				continue;
 			}
-			$(editorid + '_' + btns[i]).style.display = 'none';
-			$(editorid + '_btn_' + btns[i]).className = '';
+			$(editorid + '_' + btni).style.display = 'none';
+			$(editorid + '_btn_' + btni).className = '';
 		}
 	}
 }
@@ -692,7 +702,7 @@ function insertAllAttachTag() {
 function selectAllSaveImg(state) {
 	var inputListObj = $('imgattachlist').getElementsByTagName("input");
 	for(i in inputListObj) {
-		if(typeof inputListObj[i] == "object") {
+		if(typeof inputListObj[i] == "object" && inputListObj[i].id) {
 			var inputObj = inputListObj[i];
 			var ids = inputObj.id.split('_');
 			if(ids[0] == 'albumaidchk' && $('image_td_' + ids[1]).className != 'imgdeleted' && inputObj.checked != state) {
@@ -711,7 +721,7 @@ function showExtra(id) {
 		var extraForm = $('post_extra_c').getElementsByTagName('div');
 
 		for (i=0;i<extraButton.length;i++) {
-			extraButton[i].className = 'pn z';
+			extraButton[i].className = '';
 		}
 
 		for (i=0;i<extraForm.length;i++) {
@@ -725,7 +735,7 @@ function showExtra(id) {
 				extraForm[i].style.display = 'none';
 			}
 		}
-		$(id+'_b').className = 'pn z a';
+		$(id+'_b').className = 'a';
 		$(id+'_c').style.display = 'block';
 	}
 }
@@ -758,7 +768,7 @@ function getreplycredit() {
 	var reply_credits_sum = Math.ceil(parseInt(credit_once * times));
 
 	if(real_reply_credit > userextcredit) {
-		$('replycredit').innerHTML = '<b class="xi1">'+real_reply_credit+' 回帖奖励积分总额大于您的积分</b>';
+		$('replycredit').innerHTML = '<b class="xi1">回帖奖励积分总额过大('+real_reply_credit+')</b>';
 	} else {
 		if(have_replycredit > 0 && real_reply_credit < 0) {
 			$('replycredit').innerHTML = "<font class='xi1'>返还"+Math.abs(real_reply_credit)+"</font>";
@@ -772,5 +782,18 @@ function getreplycredit() {
 function extraCheckall() {
 	for(i = 0;i < 5;i++) {
 		extraCheck(i);
+	}
+}
+
+function deleteThread() {
+	if(confirm('确定要删除该帖子吗？') != 0){
+		$('delete').value = '1';
+		$('postform').submit();
+	}
+}
+
+function hideAttachMenu(id) {
+	if($(editorid + '_' + id + '_menu')) {
+		$(editorid + '_' + id + '_menu').style.visibility = 'hidden';
 	}
 }

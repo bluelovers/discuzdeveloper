@@ -33,7 +33,7 @@ $lang = array(
 	'select_category' => '选择分类',
 	'blockstyle_diy' => '自定义模板',
 
-	'article_pushplus_info' => '<p><center><i><a href="{url}" class="xg1 xs1">本文内容由 {author} 提供</a></i><center></p>',
+	'article_pushplus_info' => '<p><center><i><a href="{url}" class="xg1 xs1">本文内容由 {author} 提供</a></i></center></p>',
 
 	'diytemplate_name_null' => '[未填写]',
 	'portal/index' => '门户首页',

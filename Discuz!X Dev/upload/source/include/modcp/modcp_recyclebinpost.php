@@ -169,7 +169,7 @@ if($_G['fid'] && $_G['forum']['ismoderator'] && $modforums['recyclebins'][$_G['f
 				$start = ($page - 1) * $_G['tpp'];
 				$query = DB::query("SELECT $fields
 						FROM ".DB::table(getposttable($posttableid))."
-						WHERE pid IN ($result[pids]) AND fid='$_G[fid]' AND invisible='-5''
+						WHERE pid IN ($result[pids]) AND fid='$_G[fid]' AND invisible='-5'
 						ORDER BY dateline DESC
 						LIMIT $start, $_G[tpp]");
 				while($value = DB::fetch($query)){

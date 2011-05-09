@@ -38,8 +38,7 @@ function my_http_build_query ($data, $key = '', $isEncode = true) {
 }
 
 if (!$_G['setting']['my_siteid']) {
-	header('Location: index.php');
-	exit;
+	dheader('Location: index.php');
 }
 
 require_once DISCUZ_ROOT . './api/manyou/Manyou.php';
@@ -91,13 +90,14 @@ foreach($extra as $v) {
 	}
 }
 $params['charset'] = $_G['charset'];
-if ($_G['setting']['my_search_domain']) {
-	$domain = $_G['setting']['my_search_domain'];
+$mySearchData = unserialize($_G['setting']['my_search_data']);
+if ($mySearchData['domain']) {
+	$domain = $mySearchData['domain'];
 } else {
-	$domain = 'search.manyou.com';
+	$domain = 'search.discuz.qq.com';
 }
 $url = 'http://' . $domain . '/f/discuz?' . my_http_build_query($params);
 
-header('Location: ' . $url);
+dheader('Location: ' . $url);
 
 ?>

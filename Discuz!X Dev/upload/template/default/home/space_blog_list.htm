@@ -94,7 +94,8 @@
 		<div class="mn">
 			<div class="bm">
 				<div class="bm_h cl">
-					<h1 class="mt"><span class="z">{lang blog}</span> <!--{if $space[self]}--><span class="xs1 xw0 y"> <a href="home.php?mod=spacecp&ac=blog">{lang post_new_blog}</a> </span><!--{/if}--></h1>
+					<!--{if $space[self]}--><span class="xi2 y"> <a href="home.php?mod=spacecp&ac=blog" class="addnew">{lang post_new_blog}</a></span><!--{/if}-->
+					<h1 class="mt">{lang blog}</h1>
 				</div>
 				<!--{if $classarr}-->
 					<div class="tbmu">
@@ -133,7 +134,6 @@
 						<!--{if $value['friend']}-->
 						<span class="y"><a href="$theurl&friend=$value[friend]" class="xg1">{$friendsname[$value[friend]]}</a></span>
 						<!--{/if}-->
-						<!--{if $value['hot']}--><span class="hot">{lang hot} <em>$value[hot]</em> </span><!--{/if}-->
 						<!--{if empty($diymode)}--><a href="home.php?mod=space&uid=$value[uid]">$value[username]</a> <!--{/if}--><span class="xg1">$value[dateline]</span>
 					</dd>
 					<dd class="cl" id="blog_article_$value[blogid]">
@@ -154,6 +154,7 @@
 							<a href="home.php?mod=spacecp&ac=blog&blogid=$value[blogid]&op=stick&stickflag=$stickflag&handlekey=stickbloghk_{$value[blogid]}" id="blog_stick_$value[blogid]" onclick="showWindow(this.id, this.href, 'get', 0);"><!--{if $stickflag}-->{lang stick}<!--{else}-->{lang cancel_stick}<!--{/if}--></a>
 							<!--{/if}-->
 						<!--{/if}-->
+						<!--{if $value['hot']}--><span class="hot">{lang hot} <em>$value[hot]</em> </span><!--{/if}-->
 					</dd>
 				</dl>
 			<!--{/loop}-->

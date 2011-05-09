@@ -310,7 +310,7 @@ class block_groupactivity {
 			);
 		require_once libfile('block_thread', 'class/block/forum');
 		$bt = new block_thread();
-		$listtids = $threadtids = $threads = array();
+		$listtids = $threadtids = $threads = $aid2tid = $attachtables = array();
 		while($data = DB::fetch($query)) {
 			$data['time'] = dgmdate($data['starttimefrom']);
 			if($data['starttimeto']) {
@@ -319,13 +319,18 @@ class block_groupactivity {
 			if($style['getsummary']) {
 				$threadtids[$data['posttableid']][] = $data['tid'];
 			}
+			if($data['aid']) {
+				$aid2tid[$data['aid']] = $data['tid'];
+				$attachtable = getattachtableid($data['tid']);
+				$attachtables[$attachtable][] = $data['aid'];
+			}
 			$listtids[] = $data['tid'];
 			$list[$data['tid']] = array(
 				'id' => $data['tid'],
 				'idtype' => 'tid',
 				'title' => cutstr(str_replace('\\\'', '&#39;', addslashes($data['subject'])), $titlelength, ''),
 				'url' => 'forum.php?mod=viewthread&tid='.$data['tid'],
-				'pic' => ($data['aid'] ? getforumimg($data['aid']) : $_G['style']['imgdir'].'/nophoto.gif'),
+				'pic' => ($data['aid'] ? '' : $_G['style']['imgdir'].'/nophoto.gif'),
 				'picflag' => '0',
 				'fields' => array(
 					'fulltitle' => str_replace('\\\'', '&#39;', addslashes($data['subject'])),
@@ -356,6 +361,14 @@ class block_groupactivity {
 			if($threads) {
 				foreach($threads as $tid => $var) {
 					$list[$tid]['summary'] = $var;
+				}
+			}
+
+			foreach($attachtables as $tableid => $taids) {
+				$query = DB::query('SELECT aid, attachment, remote FROM '.DB::table('forum_attachment_'.$tableid).' WHERE aid IN ('.dimplode($taids).')');
+				while($avalue = DB::fetch($query)) {
+					$list[$aid2tid[$avalue['aid']]]['pic'] = 'forum/'.$avalue['attachment'];
+					$list[$aid2tid[$avalue['aid']]]['picflag'] = $avalue['remote'] ? '2' : '1';
 				}
 			}
 

@@ -39,12 +39,12 @@
 			<form method="post" autocomplete="off" name="delform" id="delform" action="home.php?mod=spacecp&ac=favorite&op=delete&type=$_G[gp_type]&checkall=1" onsubmit="showDialog('{lang del_select_favorite_confirm}', 'confirm', '', '$(\'delform\').submit();'); return false;">
 			<input type="hidden" name="formhash" value="{FORMHASH}" />
 			<input type="hidden" name="delfavorite" value="true" />
-			<ul id="favorite_ul" class="el favl">
+			<ul id="favorite_ul" class="">
 				<!--{loop $list $k $value}-->
-				<li id="fav_$k">
-					<a class="o" id="a_delete_$k" href="home.php?mod=spacecp&ac=favorite&op=delete&favid=$k" onclick="showWindow(this.id, this.href, 'get', 0);">{lang delete}</a>
-					<input type="checkbox" name="favorite[]" class="pc t" value="$k" />&nbsp;&nbsp;&nbsp;&nbsp;
-					$value[icon]
+				<li id="fav_$k" class="bbda ptm pbm">
+					<a class="y" id="a_delete_$k" href="home.php?mod=spacecp&ac=favorite&op=delete&favid=$k" onclick="showWindow(this.id, this.href, 'get', 0);">{lang delete}</a>
+					<input type="checkbox" name="favorite[]" class="pc" value="$k" />
+					<!--{if $_GET['type'] == 'all'}--><span>$value[icon]</span><!--{/if}-->
 					<a href="$value[url]" target="_blank">$value[title]</a> <span class="xg1"><!--{date($value[dateline], 'u')}--></span>
 					<!--{if $value[description]}-->
 					<div class="quote">

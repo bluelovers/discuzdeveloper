@@ -24,7 +24,7 @@ if($_G['uid']) {
 	$_G['session']['invisible'] = $_G['session']['invisible'] ? 0 : 1;
 	$language = lang('forum/misc');
 	$msg = $_G['session']['invisible'] ? $language['login_invisible_mode'] : $language['login_normal_mode'];
-	showmessage('<a href="member.php?mod=switchstatus" title="'.$language['login_switch_invisible_mode'].'" ajaxtarget="loginstatus">'.$msg.'</a>', dreferer(), array(), array('msgtype' => 3, 'showmsg' => 1));
+	showmessage('<a href="member.php?mod=switchstatus" title="'.$language['login_switch_invisible_mode'].'" onclick="ajaxget(this.href, \'loginstatus\');return false;" class="xi2">'.$msg.'</a>', dreferer(), array(), array('msgtype' => 3, 'showmsg' => 1));
 
 }
 

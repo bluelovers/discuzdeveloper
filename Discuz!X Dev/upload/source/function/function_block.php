@@ -140,7 +140,7 @@ function block_fetch_content($bid, $isjscall=false, $forceupdate=false) {
 		}
 	}
 
-	if($isjscall) {
+	if($isjscall || $block['blocktype']) {
 		if($block['summary']) $str .= $block['summary'];
 		$str .= block_template($bid);
 	} else {
@@ -572,7 +572,7 @@ function block_updateitem($bid, $items=array()) {
 	$archivelist = array();
 	$prelist = array();
 	$query = DB::query('SELECT * FROM '.DB::table('common_block_item')." WHERE bid='$bid' ORDER BY displayorder, itemtype DESC");
-	$oldvalue = $fixedvalue = $fixedkeys = array(); //原显示数据、固定的数据、固定数据有KEY
+	$oldvalue = $fixedvalue = $fixedkeys = array();
 	while($value=DB::fetch($query)) {
 		$key = $value['idtype'].'_'.$value['id'];
 		if($value['itemtype'] == '1') {
@@ -592,20 +592,19 @@ function block_updateitem($bid, $items=array()) {
 			$items[$k] = null;
 		} elseif(isset($oldvalue[$key])) {
 			if($oldvalue[$key]['itemtype'] == '2') {
-				$items[$k] = $oldvalue[$key];//保存修改过的值
+				$items[$k] = $oldvalue[$key];
 			} else {
-				$items[$k]['itemid'] = $oldvalue[$key]['itemid'];//保留自增itemid
-				}
-			unset($oldvalue[$key]);//清空此值，$oldvalue数组中最终保留的数据将删除
+				$items[$k]['itemid'] = $oldvalue[$key]['itemid'];
 			}
+			unset($oldvalue[$key]);
 		}
-	
+	}
+
 	$items = array_filter($items);
 
 	foreach($oldvalue as $value) {
 		$archivelist[$value['itemid']] = 1;
 	}
-	//按位置循环填充数据
 	for($i = 1; $i <= $block['shownum']; $i++) {
 		$jump = false;
 		if(isset($fixedvalue[$i])) {

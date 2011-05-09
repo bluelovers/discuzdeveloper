@@ -59,7 +59,9 @@ function dshowmessage($message, $url_forward = '', $values = array(), $extrapara
 
 	if(defined('IN_MOBILE')) {
 		$_G['inajax'] = 0;
-		$_G['gp_referer'] && $url_forward = $_G['gp_referer'];
+		if(!$url_forward && dreferer()) {
+			$url_forward = $referer = dreferer();
+		}
 		if(!empty($url_forward) && strpos($url_forward, 'mobile') === false) {
 			$url_forward_arr = explode("#", $url_forward);
 			if(strpos($url_forward_arr[0], '?') !== false) {
@@ -181,17 +183,13 @@ function dshowmessage($message, $url_forward = '', $values = array(), $extrapara
 	}
 	if($param['closetime'] !== null) {
 		$param['closetime'] = $param['closetime'] === true ? $timedefault : $param['closetime'];
-		$leftmsg = $param['closetime'].lang('message', 'showmessage_closetime');
 	}
 	if($param['locationtime'] !== null) {
 		$param['locationtime'] = $param['locationtime'] === true ? $timedefault : $param['locationtime'];
-		$leftmsg = $param['locationtime'].lang('message', 'showmessage_locationtime');
 	}
 	if($handlekey) {
 		if($param['showdialog']) {
-			$st = $param['closetime'] !== null ? 'setTimeout("hideMenu(\'fwin_dialog\', \'dialog\')", '.($param['closetime'] * 1000).');' : '';
-			$st .= $param['locationtime'] !== null ?'setTimeout("window.location.href =\''.$url_forward.'\';", '.($param['locationtime'] * 1000).');' : '';
-			$extra .= 'hideWindow(\''.$handlekey.'\');showDialog(\''.$show_jsmessage.'\', \'notice\', null, '.($param['locationtime'] !== null ? 'function () { window.location.href =\''.$url_forward.'\'; }' : 'null').', 0, null, \''.$leftmsg.'\');'.$st;
+			$extra .= 'hideWindow(\''.$handlekey.'\');showDialog(\''.$show_jsmessage.'\', \'notice\', null, '.($param['locationtime'] !== null ? 'function () { window.location.href =\''.$url_forward.'\'; }' : 'null').', 0, null, null, null, null, '.($param['closetime'] ? $param['closetime'] : 'null').', '.($param['locationtime'] ? $param['locationtime'] : 'null').');';
 			$param['closetime'] = null;
 			$st = '';
 		}

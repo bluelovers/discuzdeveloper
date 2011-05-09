@@ -6,7 +6,7 @@
 	<!--{if $_G[inajax]}--><span><a href="javascript:;" onclick="hideWindow('$_G[gp_handlekey]');" class="flbc" title="{lang close}">{lang close}</a></span><!--{/if}-->
 </h3>
 <form id="resendform_{$id}" name="resendform_{$id}" method="post" autocomplete="off" action="home.php?mod=spacecp&ac=invite&op=resend&id=$id" {if $_G[inajax]}onsubmit="ajaxpost(this.id, 'return_$_G[gp_handlekey]');"{/if}>
-	<input type="hidden" name="referer" value="$_G[referer]" />
+	<input type="hidden" name="referer" value="{echo dreferer()}" />
 	<input type="hidden" name="resendsubmit" value="true" />
 	<!--{if $_G[inajax]}--><input type="hidden" name="handlekey" value="$_G[gp_handlekey]" /><!--{/if}-->
 	<input type="hidden" name="formhash" value="{FORMHASH}" />
@@ -28,7 +28,7 @@
 	<!--{if $_G[inajax]}--><span><a href="javascript:;" onclick="hideWindow('$_G[gp_handlekey]');" class="flbc" title="{lang close}">{lang close}</a></span><!--{/if}-->
 </h3>
 <form id="deleteform_{$id}" name="deleteform_{$id}" method="post" autocomplete="off" action="home.php?mod=spacecp&ac=invite&op=delete&id=$id" {if $_G[inajax]}onsubmit="ajaxpost(this.id, 'return_$_G[gp_handlekey]');"{/if}>
-	<input type="hidden" name="referer" value="$_G[referer]" />
+	<input type="hidden" name="referer" value="{echo dreferer()}" />
 	<input type="hidden" name="deletesubmit" value="true" />
 	<!--{if $_G[inajax]}--><input type="hidden" name="handlekey" value="$_G[gp_handlekey]" /><!--{/if}-->
 	<input type="hidden" name="formhash" value="{FORMHASH}" />

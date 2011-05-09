@@ -41,16 +41,11 @@ $cachelife_time = 300;		// Life span for cache of searching in specified range o
 $cachelife_text = 3600;		// Life span for cache of text searching
 
 $srchtype = empty($_G['gp_srchtype']) ? '' : trim($_G['gp_srchtype']);
-$checkarray = array('posts' => '');
-
 $searchid = isset($_G['gp_searchid']) ? intval($_G['gp_searchid']) : 0;
 $seltableid = intval($_G['gp_seltableid']);
 
-if($srchtype == 'title' || $srchtype == 'fulltext') {
-	$checkarray['posts'] = 'checked';
-} else {
+if($srchtype != 'title' && $srchtype != 'fulltext') {
 	$srchtype = '';
-	$checkarray['posts'] = 'checked';
 }
 
 $srchtxt = $_G['gp_srchtxt'];
@@ -68,8 +63,27 @@ if(!empty($srchfid) && !is_numeric($srchfid)) {
 	$forumselect = str_replace('<option value="'.$srchfid.'">', '<option value="'.$srchfid.'" selected="selected">', $forumselect);
 }
 
-if($_G['setting']['my_search_status'] && $_G['setting']['my_search_progress'] && !$srchfrom && !$searchid) {
-	header("Location: search.php?mod=my&q=".urlencode($keyword).(intval($srhfid) ? "&fId=$srhfid" : '')."&module=forum".($_G['gp_adv'] ? "&isAdv=1" : ''));
+$my_search_data = unserialize($_G['setting']['my_search_data']);
+require_once libfile('function/cloud');
+if($my_search_data['status'] && getcloudappstatus('search') && !$srchfrom && !$searchid) {
+	$source = '';
+	if(!empty($_G['gp_srhlocality'])) {
+		$sourcetype = explode('::', $_G['gp_srhlocality']);
+		if($sourcetype[0] == 'forum') {
+			$source = $sourcetype[1] == 'index' ? 'forum' : ($sourcetype[1] == 'forumdisplay' ? 'forum_forum' : 'forum_thread');
+		} elseif($sourcetype[0] == 'portal') {
+			$source = $sourcetype[1] == 'view' ? 'article' : ($sourcetype[1] == 'list' ? 'portal_list': 'portal');
+		} elseif($sourcetype[0] == 'group') {
+			$source = $sourcetype[1] == 'viewthread' ? 'group_thread' : ($sourcetype[1] == 'group' ? 'group_forum' : 'group');
+		} elseif($sourcetype[0] == 'home') {
+			$source = 'home'.(empty($sourcetype[1]) ? '' : '_'.$sourcetype[1]);
+		} elseif($sourcetype[0] == 'misc' && $sourcetype[1] == 'ranklist') {
+			$source = 'toplist';
+		}
+	} elseif($_G['gp_source'] == 'hotsearch') {
+		$source = 'hotsearch';
+	}
+	dheader("Location: search.php?mod=my&q=".urlencode($keyword).(intval($srhfid) ? "&fId=$srhfid" : '')."&module=forum".($_G['gp_adv'] ? "&isAdv=1" : '').(!empty($source) ? "&source=$source" : ''));
 	die;
 }
 
@@ -120,6 +134,7 @@ if(!submitcheck('searchsubmit', 1)) {
 		$query = DB::query("SELECT * FROM ".DB::table('forum_thread')." WHERE tid IN ($index[ids]) AND displayorder>='0' ORDER BY $orderby $ascdesc LIMIT $start_limit, $_G[tpp]");
 		while($thread = DB::fetch($query)) {
 			$thread['subject'] = bat_highlight($thread['subject'], $keyword);
+			$thread['realtid'] = $thread['isgroup'] == 1 ? $thread['closed'] : $thread['tid'];
 			$threadlist[$thread['tid']] = procthread($thread, 'dt');
 			$posttables[$thread['posttableid']][] = $thread['tid'];
 		}
@@ -345,7 +360,7 @@ if(!submitcheck('searchsubmit', 1)) {
 				} else {
 					$sqlsrch = $srchtype == 'fulltext' ?
 					"FROM ".DB::table(getposttable($seltableid))." p, ".DB::table('forum_thread')." t WHERE $digestltd t.fid IN ($fids) $topltd AND p.tid=t.tid AND p.invisible='0'" :
-					"FROM ".DB::table('forum_thread')." t WHERE isgroup='0' AND $digestltd t.fid IN ($fids) $topltd";
+					"FROM ".DB::table('forum_thread')." t WHERE $digestltd t.fid IN ($fids) $topltd";
 					if($srchuname) {
 						$srchuid = $comma = '';
 						$srchuname = str_replace('*', '%', addcslashes($srchuname, '%_'));
@@ -389,10 +404,8 @@ if(!submitcheck('searchsubmit', 1)) {
 				$_G['setting']['search']['forum']['maxsearchresults'] = $_G['setting']['search']['forum']['maxsearchresults'] ? intval($_G['setting']['search']['forum']['maxsearchresults']) : 500;
 				$query = DB::query("SELECT ".($srchtype == 'fulltext' ? 'DISTINCT' : '')." t.tid, t.closed, t.author, t.authorid $sqlsrch ORDER BY tid DESC LIMIT ".$_G['setting']['search']['forum']['maxsearchresults']);
 				while($thread = DB::fetch($query)) {
-					if($thread['closed'] <= 1) {
-						$ids .= ','.$thread['tid'];
-						$num++;
-					}
+					$ids .= ','.$thread['tid'];
+					$num++;
 				}
 				DB::free_result($query);
 			}
@@ -404,7 +417,7 @@ if(!submitcheck('searchsubmit', 1)) {
 			!($_G['group']['exempt'] & 2) && updatecreditbyaction('search');
 		}
 
-		dheader("location: search.php?mod=forum&searchid=$searchid&orderby=$orderby&ascdesc=$ascdesc&searchsubmit=yes");
+		dheader("location: search.php?mod=forum&searchid=$searchid&orderby=$orderby&ascdesc=$ascdesc&searchsubmit=yes&kw=".urlencode($keyword));
 
 	}
 

@@ -92,6 +92,7 @@ class block_activity {
 					array('monthexp', 'activitylist_orderby_monthexp'),
 					array('weekhot', 'activitylist_orderby_weekhot'),
 					array('monthhot', 'activitylist_orderby_monthhot'),
+					array('alltimehot', 'activitylist_orderby_alltimehot'),
 				),
 				'default' => 'dateline'
 			),
@@ -192,7 +193,7 @@ class block_activity {
 		$items		= !empty($parameter['items']) ? intval($parameter['items']) : 10;
 		$digest		= isset($parameter['digest']) ? $parameter['digest'] : 0;
 		$stick		= isset($parameter['stick']) ? $parameter['stick'] : 0;
-		$orderby	= isset($parameter['orderby']) ? (in_array($parameter['orderby'],array('dateline','weekstart','monthstart','weekexp','monthexp','weekhot','monthhot')) ? $parameter['orderby'] : 'dateline') : 'dateline';
+		$orderby	= isset($parameter['orderby']) ? (in_array($parameter['orderby'],array('dateline','weekstart','monthstart','weekexp','monthexp','weekhot','monthhot','alltimehot')) ? $parameter['orderby'] : 'dateline') : 'dateline';
 		$titlelength	= !empty($parameter['titlelength']) ? intval($parameter['titlelength']) : 40;
 		$summarylength	= !empty($parameter['summarylength']) ? intval($parameter['summarylength']) : 80;
 		$recommend	= !empty($parameter['recommend']) ? 1 : 0;
@@ -216,7 +217,7 @@ class block_activity {
 		require_once libfile('function/post');
 		require_once libfile('function/search');
 
-		$datalist = $list = $threadtids = $threads = array();
+		$datalist = $list = array();
 		$keyword = $keyword ? searchkey($keyword, "t.subject LIKE '%{text}%'") : '';
 		$sql = ($fids ? ' AND t.fid IN ('.dimplode($fids).')' : '')
 			.$keyword
@@ -262,6 +263,9 @@ class block_activity {
 			}
 			$where = ' WHERE a.expiration>='.TIMESTAMP.' AND a.expiration<='.$historytime;
 			$orderby = 'a.applynumber DESC';
+		} elseif($orderby == 'alltimehot') {
+			$where = ' WHERE (a.expiration>='.TIMESTAMP." OR a.expiration='0')";
+			$orderby = 'a.applynumber DESC';
 		} else {
 			$orderby = 't.dateline DESC';
 		}
@@ -284,7 +288,7 @@ class block_activity {
 			);
 		require_once libfile('block_thread', 'class/block/forum');
 		$bt = new block_thread();
-		$listtids = array();
+		$listtids = $threadtids = $threads = $aid2tid = $attachtables = array();
 		while($data = DB::fetch($query)) {
 			$data['time'] = dgmdate($data['starttimefrom']);
 			if($data['starttimeto']) {
@@ -293,13 +297,18 @@ class block_activity {
 			if($style['getsummary']) {
 				$threadtids[$data['posttableid']][] = $data['tid'];
 			}
+			if($data['aid']) {
+				$aid2tid[$data['aid']] = $data['tid'];
+				$attachtable = getattachtableid($data['tid']);
+				$attachtables[$attachtable][] = $data['aid'];
+			}
 			$listtids[] = $data['tid'];
 			$list[$data['tid']] = array(
 				'id' => $data['tid'],
 				'idtype' => 'tid',
 				'title' => cutstr(str_replace('\\\'', '&#39;', $data['subject']), $titlelength, ''),
 				'url' => 'forum.php?mod=viewthread&tid='.$data['tid'].($viewmod ? '&from=portal' : ''),
-				'pic' => ($data['aid'] ? getforumimg($data['aid']) : $_G['style']['imgdir'].'/nophoto.gif'),
+				'pic' => ($data['aid'] ? '' : $_G['style']['imgdir'].'/nophoto.gif'),
 				'picflag' => '0',
 				'fields' => array(
 					'fulltitle' => str_replace('\\\'', '&#39;', addslashes($data['subject'])),
@@ -330,6 +339,14 @@ class block_activity {
 			if($threads) {
 				foreach($threads as $tid => $var) {
 					$list[$tid]['summary'] = $var;
+				}
+			}
+
+			foreach($attachtables as $tableid => $taids) {
+				$query = DB::query('SELECT aid, attachment, remote FROM '.DB::table('forum_attachment_'.$tableid).' WHERE aid IN ('.dimplode($taids).')');
+				while($avalue = DB::fetch($query)) {
+					$list[$aid2tid[$avalue['aid']]]['pic'] = 'forum/'.$avalue['attachment'];
+					$list[$aid2tid[$avalue['aid']]]['picflag'] = $avalue['remote'] ? '2' : '1';
 				}
 			}
 

@@ -2,13 +2,14 @@
 	[Discuz!] (C)2001-2009 Comsenz Inc.
 	This is NOT a freeware, use is subject to license terms
 
-	$Id: home_friendselector.js 20888 2011-03-07 07:42:56Z svn_project_zhangjie $
+	$Id: home_friendselector.js 22000 2011-04-19 14:35:46Z svn_project_zhangjie $
 */
 
 (function() {
 	friendSelector = function(parameter) {
 		this.dataSource = {};
 		this.selectUser = {};
+		this.prompterUser = [];
 		this.showObj = $(isUndefined(parameter['showId']) ? 'selectorBox' : parameter['showId']);
 		if(!this.showObj) return;
 		this.handleObj = $(isUndefined(parameter['searchId']) ? 'valueId' : parameter['searchId']);
@@ -46,6 +47,8 @@
 					if(this.showType == 3) {
 						this.selBoxObj.innerHTML = '';
 					}
+					this.allNumber = 0;
+					this.dataSource = {};
 				}
 				for(var i in userData) {
 					if(typeof this.filterUser[i] != 'undefined') {
@@ -96,48 +99,57 @@
 			this.handover = !this.handover;
 		},
 		handleEvent : function(key, event) {
-			this.showObj.innerHTML = "";
 			var username = '';
 			this.searchStr = '';
 			if(key != '') {
-				if(event.keyCode == 32 || event.keyCode == 188 || event.keyCode == 13 || event.keyCode == 59) {
+				if(event.keyCode == 188 || event.keyCode == 13 || event.keyCode == 59) {
 					if(this.showType == 3) {
+						if(event.keyCode == 13) {
+							var currentnum = this.getCurrentPrompterUser();
+							if(currentnum != -1) {
+								key = this.dataSource[this.prompterUser[currentnum]]['username'];
+							}
+						}
 						if(this.parentKeyCode != 229) {
 							this.selectUserName(this.trim(key));
 							this.showObj.style.display = 'none';
 							$(this.handleObj.id+'_menu').style.display = 'none';
+							this.showObj.innerHTML = "";
 						}
 					}
+				} else if(event.keyCode == 38 || event.keyCode == 40) {
 				} else {
 					if(this.showType == 3) {
-						showMenu({'showid':this.handleObj.id, 'duration':3, 'pos':'43'});
-					}
-				}
-				var result = false;
-				var reg = new RegExp(key, "ig");
-				this.searchStr = key;
-				for(var uid in this.dataSource) {
-					username = this.dataSource[uid]['username'];
-					if(username.match(reg)) {
-						this.append(uid, 1);
-						result = true;
-					}
-				}
-				if(this.showType == 3) {
-					if(!result) {
-						$(this.handleObj.id+'_menu').style.display = 'none';
-					} else {
-						showMenu({'showid':this.handleObj.id, 'duration':3, 'pos':'43'});
+						this.showObj.innerHTML = "";
+						var result = false;
+						var reg = new RegExp(key, "ig");
+						this.searchStr = key;
+						this.prompterUser = [];
+						for(var uid in this.dataSource) {
+							username = this.dataSource[uid]['username'];
+							if(username.match(reg)) {
+								this.prompterUser.push(uid);
+								this.append(uid, 1);
+								result = true;
+							}
+						}
+						if(!result) {
+							$(this.handleObj.id+'_menu').style.display = 'none';
+						} else {
+							showMenu({'showid':this.showObj.id, 'duration':3, 'pos':'43'});
+							showMenu({'showid':this.handleObj.id, 'duration':3, 'pos':'43'});
+						}
 					}
 				}
 			} else if(this.showType != 3) {
+				this.showObj.innerHTML = "";
 				for(var uid in this.dataSource) {
 					this.append(uid);
 				}
 			} else {
 				$(this.handleObj.id+'_menu').style.display = 'none';
+				this.showObj.innerHTML = "";
 			}
-
 		},
 		selectUserName:function(userName) {
 			this.handleObj.value = '';
@@ -258,7 +270,7 @@
 					this.selBoxObj.appendChild(liObj);
 					return true;
 				} else {
-					liObj.innerHTML = '<a href="javascript:;" username="' + this.dataSource[uid]['username'] + '" onclick="' + this.handleKey + '.selectUserName(this.getAttribute(\'username\'));$(\'username\').focus();" class="cl">' + username + '</a>';
+					liObj.innerHTML = '<a href="javascript:;" username="' + this.dataSource[uid]['username'] + '" onmouseover="' + this.handleKey + '.mouseOverPrompter(this);" onclick="' + this.handleKey + '.selectUserName(this.getAttribute(\'username\'));$(\'username\').focus();" class="cl" id="prompter_' + uid + '">' + username + '</a>';
 				}
 
 			}
@@ -319,6 +331,28 @@
 			}
 
 		},
+		getCurrentPrompterUser:function() {
+			var len = this.prompterUser.length;
+			var selectnum = -1;
+			if(len) {
+				for(var i = 0; i < len; i++) {
+					var obj = $('prompter_' + this.prompterUser[i]);
+					if(obj != null && obj.className == 'a') {
+						selectnum = i;
+					}
+				}
+			}
+			return selectnum;
+		},
+		mouseOverPrompter:function(obj) {
+			var len = this.prompterUser.length;
+			if(len) {
+				for(var i = 0; i < len; i++) {
+					$('prompter_' + this.prompterUser[i]).className = 'cl';
+				}
+				obj.className = 'a';
+			}
+		},
 		initialize:function() {
 			var instance = this;
 			this.handleObj.onkeyup = function(event) {
@@ -341,6 +375,30 @@
 								instance.selectNumber--;
 								this.parentNode.removeChild(preNode);
 							}
+						}
+					} else if(event.keyCode == 38) {
+						if(!instance.prompterUser.length) {
+							doane(event);
+						}
+						var currentnum = instance.getCurrentPrompterUser();
+						if(currentnum != -1) {
+							var nextnum = (currentnum == 0) ? (instance.prompterUser.length-1) : currentnum - 1;
+							$('prompter_' + instance.prompterUser[currentnum]).className = "cl";
+							$('prompter_' + instance.prompterUser[nextnum]).className = "a";
+						} else {
+							$('prompter_' + instance.prompterUser[0]).className = "a";
+						}
+					} else if(event.keyCode == 40) {
+						if(!instance.prompterUser.length) {
+							doane(event);
+						}
+						var currentnum = instance.getCurrentPrompterUser();
+						if(currentnum != -1) {
+							var nextnum = (currentnum == (instance.prompterUser.length - 1)) ? 0 : currentnum + 1;
+							$('prompter_' + instance.prompterUser[currentnum]).className = "cl";
+							$('prompter_' + instance.prompterUser[nextnum]).className = "a";
+						} else {
+							$('prompter_' + instance.prompterUser[0]).className = "a";
 						}
 					} else if(event.keyCode == 13) {
 						doane(event);

@@ -198,10 +198,13 @@ if($article['allowcomment']) {
 		$form_url = "portal.php?mod=portalcp&ac=comment";
 
 		$query = DB::query("SELECT * FROM ".DB::table('portal_comment')." WHERE id='$aid' AND idtype='aid' ORDER BY dateline DESC LIMIT 0,20");
+		$pricount = 0;
 		while ($value = DB::fetch($query)) {
 			if($value['status'] == 0 || $value['uid'] == $_G['uid'] || $_G['adminid'] == 1) {
 				$value['allowop'] = 1;
 				$commentlist[] = $value;
+			} else {
+				$pricount += 1;
 			}
 		}
 	}

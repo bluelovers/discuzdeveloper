@@ -10,17 +10,14 @@
  */
 
 $lang = array (
-
   'activity_about_member' => '剩余名额',
   'activity_already' => '已参加人数',
   'additional' => '附加',
   'debate_opponent' => '反方',
   'debate_square' => '正方',
   'thread_poll' => '投票',
-
   'credits' => '积分',
   'login' => '登录',
-
   'active_email' => '接收邮箱',
   'active_email_comment' => '必填，用来接收邀请码的邮箱地址',
   'apitype_alipay' => '支付宝',
@@ -37,15 +34,13 @@ $lang = array (
   'need_money' => '需支付',
   'reg_continue' => '继续注册',
   'trade_type' => '付款方式',
-
-  'e_fontoptions' => '"仿宋_GB2312", "黑体", "楷体_GB2312", "宋体", "新宋体", "微软雅黑", "Trebuchet MS", "Tahoma", "Arial", "Impact", "Verdana", "Times New Roman"',
+  'e_fontoptions' => '"仿宋", "黑体", "楷体", "宋体", "新宋体", "微软雅黑", "Trebuchet MS", "Tahoma", "Arial", "Impact", "Verdana", "Times New Roman"',
   'editor_increase' => '加大编辑框',
   'editor_narrow' => '缩小编辑框',
   'post_autosave_restore' => '恢复数据',
   'post_check_length' => '字数检查',
   'post_savedata' => '保存数据',
   'post_topicreset' => '清除内容',
-
   'all' => '全部',
   'faq' => '帮助',
   'faq_search_nomatch' => '对不起，没有找到匹配结果',
@@ -53,14 +48,12 @@ $lang = array (
   'keyword_faq' => '关键字为“<span class="xi1">$keyword</span>”的帮助',
   'open' => '展开',
   'search' => '搜索',
-
   'close' => '关闭',
   'focus_hottopics' => '站长推荐',
   'focus_show' => '查看',
   'scrolltop' => '回顶部',
   'thread_groupupgrade' => '距离下一级还需',
   'time_now' => 'GMT{$_G[timenow][offset]}, {$_G[timenow][time]}',
-
   'activation' => '激活',
   'admincp' => '管理中心',
   'changestyle' => '切换风格',
@@ -72,6 +65,7 @@ $lang = array (
   'login_switch_invisible_mode' => '切换在线状态',
   'logout' => '退出',
   'my_nav' => '快捷导航',
+  'my_nav_login' => '请 <a href="javascript:;" class="xi2" onclick="lsSubmit()"><strong>登录</strong></a> 后使用快捷导航<br />没有帐号？<a href="member.php?mod={$_G[setting][regname]}" class="xi2 xw1">$_G[\'setting\'][\'reglinkname\']</a>',
   'open_diy' => '打开 DIY 面板',
   'pm_center' => '消息',
   'portal_manage' => '门户管理',
@@ -84,7 +78,6 @@ $lang = array (
   'usergroup' => '用户组',
   'visit_my_space' => '访问我的空间',
   'your_mobile_browser' => '请选择 ',
-
   'e_redo' => '重做',
   'e_undo' => '撤销',
   'header_add_frame' => '添加框架',
@@ -94,7 +87,7 @@ $lang = array (
   'header_diy' => '自定义',
   'header_diy_backup_tip' => '你可以通过导出进行模板备份',
   'header_diy_i_know' => '我知道了',
-  'header_diy_sample_mode' => '当前为<strong>简洁模式</strong>，您可以更新模块，修改模块属性和数据，要使用完整的拖拽功能，<a href="javascript:;" onclick="spaceDiy.goonDIY();spaceDiy.init();" class="xw1 xi2">请点击进入高级模式</a>',
+  'header_diy_sample_mode' => '当前为<strong>简洁模式</strong>，您可以更新模块，修改模块属性和数据，要使用完整的拖拽功能，<a href="javascript:;" onclick="spaceDiy.init();" class="xw1 xi2">请点击进入高级模式</a>',
   'header_export' => '导出',
   'header_export_desc' => '导出当前页面中所有DIY数据',
   'header_frame' => '框架',
@@ -111,7 +104,6 @@ $lang = array (
   'header_update_desc' => '更新当前页面所有模块的数据',
   'save' => '保存',
   'style' => '风格',
-
   'invite' => '邀请',
   'invite_all_friend' => '全部好友',
   'invite_friend' => '邀请好友',
@@ -122,7 +114,6 @@ $lang = array (
   'selected' => '已选',
   'unit' => '个',
   'unselected' => '未选',
-
   'preview_footertext' => '版权及页脚信息',
   'preview_highlightlink' => '高亮链接',
   'preview_lighttext' => '浅色文字',
@@ -133,32 +124,27 @@ $lang = array (
   'preview_text' => '普通文本',
   'preview_threadtext' => '主题列表字体',
   'table_header' => '表头',
-
   'album' => '相册',
   'article' => '文章',
   'blog' => '日志',
   'enter_content' => '请输入搜索内容',
   'hot_search' => '热搜',
-  'search_friends' => '搜索好友',
+  'search_this_forum' => '本版',
   'thread' => '帖子',
   'users' => '用户',
-
   'input_message1' => '还可输入',
   'input_message2' => '个字符',
   'report' => '举报',
   'report_reason' => '可选举报理由',
-
   'seccode' => '验证码',
   'seccode_change' => '换一个',
   'secqaa' => '验证问答',
-
   'e_bold' => '文字加粗',
   'e_code' => '代码',
   'e_forecolor' => '设置文字颜色',
   'e_image' => '图片',
   'e_quote' => '引用',
   'e_url' => '添加链接',
-
   'attach_forward' => '如果 {$refreshsecond} 秒后下载仍未开始，请点击此链接',
   'board_message' => '提示信息',
   'cancel' => '取消',
@@ -166,43 +152,22 @@ $lang = array (
   'message_forward' => '如果你的浏览器没有自动跳转，请点击此链接',
   'message_go_back' => '[ 点击这里返回上一页 ]',
   'message_locationtime' => '秒后页面跳转',
-
-  'search_this_forum' => '搜索本版',
-  'search_user' => '搜索用户',
-
   'basic_situation' => '基本概况',
   'forum_stat' => '版块统计',
   'manage_team' => '管理团队',
   'member_list' => '会员列表',
   'mod_works' => '管理统计',
+  'stats' => '站点统计',
   'trend' => '趋势统计',
-
   'app_add' => '添加$_G[setting][navs][5][navname]',
   'app_management' => '管理$_G[setting][navs][5][navname]',
-
-  'e_attach_del' => '删除',
-  'e_attach_mediacode' => '添加附件媒体播放代码',
-  'e_attach_url' => '添加附件地址',
-  'update' => '更新',
-  'none_newthread' => '暂时没有有新回复的主题',
-
-  'author' => '作者',
-
-  'username' => '用户名',
-
-  'more' => '更多',
-  'publish' => '发布',
-
-  'delete' => '删除',
-  'guest' => '游客',
-
-  'submit' => '提交',
-
-  'upload' => '上传',
-
+  'e_audio' => '音乐',
+  'e_audio_title' => '添加音乐',
   'e_autotypeset' => '自动排版',
   'e_center' => '居中',
   'e_code_title' => '添加代码文字',
+  'e_flash' => 'Flash',
+  'e_flash_title' => '添加 Flash',
   'e_font' => '字体',
   'e_fontname' => '设置字体',
   'e_fontsize' => '设置文字大小',
@@ -225,119 +190,88 @@ $lang = array (
   'e_underline' => '文字加下划线',
   'e_unlink' => '移除链接',
   'e_unorderedlist' => '未排序列表',
-
+  'e_video' => '视频',
+  'e_video_title' => '添加视频',
+  'submit' => '提交',
+  'e_attach_del' => '删除',
+  'e_attach_mediacode' => '添加附件媒体播放代码',
+  'e_attach_url' => '添加附件地址',
+  'update' => '更新',
+  'none_newthread' => '暂时没有有新回复的主题',
+  'author' => '作者',
+  'username' => '用户名',
+  'more' => '更多',
+  'publish' => '发布',
+  'delete' => '删除',
+  'guest' => '游客',
+  'upload' => '上传',
   'e_attach_insert' => '点击附件文件名添加到帖子内容中',
   'e_attach_inserturl' => '，"attach://" 开头的附件地址支持任何人下载请谨慎添加',
   'e_img_albumlist' => '相册图片',
   'e_img_attach' => '图片列表',
   'e_img_insertphoto' => '点击图片添加到帖子内容中',
   'e_img_www' => '网络图片',
-
   'e_attach_title' => '添加附件',
-
+  'target_blank' => '新窗口打开',
   'thread_activity' => '活动',
   'thread_debate' => '辩论',
   'thread_reward' => '悬赏',
   'thread_trade' => '商品',
-
   'edit' => '编辑',
   'return' => '返回',
-
   'discuzcode' => 'Discuz 代码',
-
   'member' => '会员',
-
   'panel_login' => '登录管理面板',
   'panel_login_password' => '密码',
   'panel_login_username' => '用户名',
   'panel_notice_login' => '首次进入管理面板或空闲时间过长, 你输入密码才能进入。如果密码输入错误超过 5 次，管理面板将会锁定 15 分钟。',
-
   'anonymous' => '匿名',
-
   'select_all' => '全选',
-
   'e_attach' => '附件',
-  'e_audio' => '音乐',
-  'e_audio_title' => '添加音乐',
   'e_downremoteimg' => '下载图片',
   'e_downremoteimg_title' => '下载远程图片',
-  'e_flash' => 'Flash',
-  'e_flash_title' => '添加 Flash',
   'e_free' => '添加免费信息',
   'e_hide' => '添加隐藏内容',
   'e_pasteword' => 'Word 粘贴',
   'e_pasteword_title' => '从 Word 粘贴内容',
-  'e_video' => '视频',
-  'e_video_title' => '添加视频',
-
   'smilies' => '表情',
-
-  'stats' => '站点统计',
-
   'uid' => 'UID',
-
   'recommend' => '模块推送',
-
   'trade' => '商品',
-
   'manage' => '管理',
   'not_enough' => '不足',
-
   'moderate_need' => '待审核',
-
   'portal' => '门户',
-
   'reward_answer' => '我来回答',
-
   'favorite' => '收藏',
-
   'choose_please' => '请选择',
   'create' => '创建',
   'option_required' => '必选项',
-
   'finished' => '完成',
-
   'ignore_all' => '忽略全部',
   'pass_all' => '全部通过',
-
   'create_on' => '创建于',
-
   'add' => '添加',
-
   'activity' => '活动',
-
   'blockdata_recommend' => '模块推送',
   'share' => '分享',
-
   'article_push' => '生成文章',
-
   'debate' => '辩论',
-
   'doing' => '记录',
-
   'friends' => '好友',
   'online_member' => '在线成员',
-
   'my_space' => '我的中心',
-
   'magic' => '道具',
   'medals' => '勋章',
   'task' => '任务',
-
   'notice' => '提醒',
-
   'you' => '您',
-
   'poll' => '投票',
-
   'group_expiry_type_ext' => '扩展用户组',
-
   'reward' => '悬赏',
-
   'task_done' => '已完成的任务',
   'task_failed' => '失败的任务',
   'task_new' => '新任务',
-
   'task_admins' => '管理人员',
   'task_applicants' => '已有 $task[applicants] 位会员参与此任务',
   'task_applies_full' => '人数已满',
@@ -361,17 +295,12 @@ $lang = array (
   'task_reapply_now' => '现在可以重新申请',
   'task_relatedtask' => '必须完成指定任务',
   'task_reward' => '奖励',
-
   'task_applies' => '人气',
   'task_nodoing' => '暂无进行中的任务，请到新任务中申请！',
   'task_nonew' => '暂无新任务，周期性任务完成后可以再次申请，敬请关注！',
-
   'password_security' => '密码安全',
-
   'increase' => '增加',
-
   'friend_top' => '排行榜',
-
   'connect_config_newpassword_comment' => '你目前使用的是QQ帐号绑定本站，你可以在这里设置独立密码，只有设置了独立密码后本站需要填写密码的相应功能才可使用',
   'email' => 'Email',
   'security_question' => '安全提问(未设置请忽略)',
@@ -383,23 +312,17 @@ $lang = array (
   'security_question_5' => '你个人计算机的型号',
   'security_question_6' => '你最喜欢的餐馆名称',
   'security_question_7' => '驾驶执照最后四位数字',
-
   'group_expiry_time' => '到期时间',
-
-  'login_id' => '帐　号　：',
-  'login_password' => '密　码　：',
+  'login_id' => '帐号',
+  'login_password' => '密码',
   'login_permanent' => '自动登录',
-
+  'security_a' => '答案',
+  'security_q' => '安全提问',
   'forgotpw' => '找回密码',
-
   'image' => '图片',
-
   'remote' => '远程',
-
   'find' => '查找',
-
   'credit_ranking' => '积分排行',
-
   'auction_ranking' => '竞价排行',
   'close_ranking_note' => '管理员已关闭竞价,暂时无法继续上榜',
   'credit_is_not_number' => '你所填写的{$extcredits[$creditid][title]}不是一个合法数值',
@@ -425,13 +348,10 @@ $lang = array (
   'self_current_friend_num' => '你当前的好友数',
   'top_100_update' => '下面列出的为排行前100名，数据每 $cache_time 分钟更新一次。',
   'your_current_bid' => '自己当前的竞价',
-
   'top_orderby_blogs' => '按日志总数',
   'top_orderby_credits' => '按积分总数',
   'top_orderby_posts' => '按发帖总数',
   'top_orderby_uid' => '按注册时间',
-
-  'target_blank' => '新窗口打开',
 );
 
 ?>

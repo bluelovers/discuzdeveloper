@@ -2,7 +2,7 @@
 	[Discuz!] (C)2001-2009 Comsenz Inc.
 	This is NOT a freeware, use is subject to license terms
 
-	$Id: common.js 21505 2011-03-29 05:52:48Z monkey $
+	$Id: common.js 22337 2011-05-03 04:03:07Z monkey $
 */
 
 var BROWSER = {};
@@ -15,7 +15,8 @@ BROWSER.opera = BROWSER.opera ? opera.version() : 0;
 
 HTMLNODE = document.getElementsByTagName('head')[0].parentNode;
 if(BROWSER.ie) {
-	HTMLNODE.className = 'ie_all ie' + parseInt(BROWSER.ie);
+	BROWSER.iemode = parseInt(typeof document.documentMode != 'undefined' ? document.documentMode : BROWSER.ie);
+	HTMLNODE.className = 'ie_all ie' + BROWSER.iemode;
 }
 
 var CSSLOADED = [];
@@ -36,6 +37,7 @@ var creditnotice = isUndefined(creditnotice) ? '' : creditnotice;
 var cookiedomain = isUndefined(cookiedomain) ? '' : cookiedomain;
 var cookiepath = isUndefined(cookiepath) ? '' : cookiepath;
 var EXTRAFUNC = [], EXTRASTR = '';
+EXTRAFUNC['showmenu'] = [];
 
 var DISCUZCODE = [];
 DISCUZCODE['num'] = '-1';
@@ -404,7 +406,7 @@ function getHost(url) {
 	if(typeof url == "undefined"|| null == url) {
 		url = window.location.href;
 	}
-	var regex = /.*\:\/\/([^\/]*).*/;
+	var regex = /^\w+\:\/\/([^\/]*).*/;
 	var match = url.match(regex);
 	if(typeof match != "undefined" && null != match) {
 		host = match[1];
@@ -544,19 +546,21 @@ function appendscript(src, text, reload, charset) {
 	try {
 		if(src) {
 			scriptNode.src = src;
-			if(BROWSER.ie) {
-				scriptNode.onreadystatechange = function () {
+			scriptNode.onloadDone = false;
+			scriptNode.onload = function () {
+				scriptNode.onloadDone = true;
+				JSLOADED[src] = 1;
+			};
+			scriptNode.onreadystatechange = function () {
+				if((scriptNode.readyState == 'loaded' || scriptNode.readyState == 'complete') && !scriptNode.onloadDone) {
+					scriptNode.onloadDone = true;
 					JSLOADED[src] = 1;
-				};
-			} else {
-				scriptNode.onload = function () {
-					JSLOADED[src] = 1;
-				};
-			}
+				}
+			};
 		} else if(text){
 			scriptNode.text = text;
 		}
-		$('append_parent').appendChild(scriptNode);
+		document.getElementsByTagName('head')[0].appendChild(scriptNode);
 	} catch(e) {}
 }
 
@@ -595,7 +599,6 @@ function ajaxget(url, showid, waitid, loading, display, recall) {
 	x.setWaitId(waitid);
 	x.display = typeof display == 'undefined' || display == null ? '' : display;
 	x.showId = $(showid);
-	if(x.showId) x.showId.orgdisplay = typeof x.showId.orgdisplay === 'undefined' ? x.showId.style.display : x.showId.orgdisplay;
 
 	if(url.substr(strlen(url) - 1) == '#') {
 		url = url.substr(0, strlen(url) - 1);
@@ -611,9 +614,7 @@ function ajaxget(url, showid, waitid, loading, display, recall) {
 		}
 		if(!evaled && (typeof ajaxerror == 'undefined' || !ajaxerror)) {
 			if(x.showId) {
-				x.showId.style.display = x.showId.orgdisplay;
 				x.showId.style.display = x.display;
-				x.showId.orgdisplay = x.showId.style.display;
 				ajaxinnerhtml(x.showId, s);
 				ajaxupdateevents(x.showId);
 				if(x.autogoto) scroll(0, x.showId.offsetTop);
@@ -785,6 +786,13 @@ function stringxor(s1, s2) {
 	return s;
 }
 
+function showPreview(val, id) {
+	var showObj = $(id);
+	if(showObj) {
+		showObj.innerHTML = val.replace(/\n/ig, "<bupdateseccoder />");
+	}
+}
+
 function showloading(display, waiting) {
 	var display = display ? display : 'block';
 	var waiting = waiting ? waiting : '请稍候...';
@@ -817,16 +825,31 @@ function ajaxinnerhtml(showid, s) {
 	}
 }
 
-function doane(event) {
+function doane(event, preventDefault, stopPropagation) {
+	var preventDefault = isUndefined(preventDefault) ? 1 : preventDefault;
+	var stopPropagation = isUndefined(stopPropagation) ? 1 : stopPropagation;
 	e = event ? event : window.event;
-	if(!e) e = getEvent();
-	if(e && BROWSER.ie) {
-		e.returnValue = false;
-		e.cancelBubble = true;
-	} else if(e) {
-		e.stopPropagation();
-		e.preventDefault();
+	if(!e) {
+		e = getEvent();
 	}
+	if(!e) {
+		return null;
+	}
+	if(preventDefault) {
+		if(e.preventDefault) {
+			e.preventDefault();
+		} else {
+			e.returnValue = false;
+		}
+	}
+	if(stopPropagation) {
+		if(e.stopPropagation) {
+			e.stopPropagation();
+		} else {
+			e.cancelBubble = true;
+		}
+	}
+	return e;
 }
 
 function loadcss(cssname) {
@@ -871,6 +894,12 @@ function showMenu(v) {
 	zindex = cover ? zindex + 500 : zindex;
 	if(typeof JSMENU['active'][layer] == 'undefined') {
 		JSMENU['active'][layer] = [];
+	}
+
+	for(i in EXTRAFUNC['showmenu']) {
+		try {
+			eval(EXTRAFUNC['showmenu'][i] + '()');
+		} catch(e) {}
 	}
 
 	if(evt == 'click' && in_array(menuid, JSMENU['active'][layer]) && mtype != 'win') {
@@ -925,13 +954,7 @@ function showMenu(v) {
 		menuObj.style.position = 'absolute';
 		menuObj.style.zIndex = zindex + layer;
 		menuObj.onclick = function(e) {
-			if(!e || BROWSER.ie) {
-				window.event.cancelBubble = true;
-				return window.event;
-			} else {
-				e.stopPropagation();
-				return e;
-			}
+			return doane(e, 0, 1);
 		};
 		if(duration < 3) {
 			if(duration > 1) {
@@ -1024,11 +1047,19 @@ function showMenu(v) {
 	}
 }
 var delayShowST = null;
-function delayShow(ctrlObj, menuid, func, time) {
-	var v = menuid ? {'ctrlObj':ctrlObj.id, 'menuid':menuid} : ctrlObj.id;
-	var fn = func || window['showMenu'];
-	time = time || 500;
-	delayShowST = setTimeout(function () {fn(v);}, time);
+function delayShow(ctrlObj, call, time) {
+	if(typeof ctrlObj == 'object') {
+		var ctrlid = ctrlObj.id;
+		call = call || function () { showMenu(ctrlid); };
+	}
+	var time = isUndefined(time) ? 500 : time;
+	delayShowST = setTimeout(function () {
+		if(typeof call == 'function') {
+			call();
+		} else {
+			eval(call);
+		}
+	}, time);
 	if(!ctrlObj.delayinit) {
 		_attachEvent(ctrlObj, 'mouseout', function() {clearTimeout(delayShowST);});
 		ctrlObj.delayinit = 1;
@@ -1039,7 +1070,7 @@ var dragMenuDisabled = false;
 function dragMenu(menuObj, e, op) {
 	e = e ? e : window.event;
 	if(op == 1) {
-		if(dragMenuDisabled || in_array(BROWSER.ie ? e.srcElement.tagName : e.target.tagName, ['TEXTAREA', 'INPUT', 'BUTTON', 'SELECT'])) {
+		if(dragMenuDisabled || in_array(e.target ? e.target.tagName : e.srcElement.tagName, ['TEXTAREA', 'INPUT', 'BUTTON', 'SELECT'])) {
 			return;
 		}
 		JSMENU['drag'] = [e.clientX, e.clientY];
@@ -1194,8 +1225,10 @@ function hideMenu(attr, mtype) {
 		clearTimeout(JSMENU['timer'][attr]);
 		var hide = function() {
 			if(menuObj.cache) {
-				menuObj.style.display = 'none';
-				if(menuObj.cover) $(attr + '_cover').style.display = 'none';
+				if(menuObj.style.visibility != 'hidden') {
+					menuObj.style.display = 'none';
+					if(menuObj.cover) $(attr + '_cover').style.display = 'none';
+				}
 			}else {
 				menuObj.parentNode.removeChild(menuObj);
 				if(menuObj.cover) $(attr + '_cover').parentNode.removeChild($(attr + '_cover'));
@@ -1293,22 +1326,26 @@ function showDialog(msg, mode, t, func, cover, funccancel, leftmsg, confirmtxt, 
 	mode = in_array(mode, ['confirm', 'notice', 'info', 'right']) ? mode : 'alert';
 	var menuid = 'fwin_dialog';
 	var menuObj = $(menuid);
-	confirmtxt = confirmtxt ? confirmtxt : '确定';
-	canceltxt = canceltxt ? canceltxt : '取消';
+	confirmtxtdefault = '确定';
 	closetime = isUndefined(closetime) ? '' : closetime;
+	closefunc = function () {
+		if(typeof func == 'function') func();
+		else eval(func);
+		hideMenu(menuid, 'dialog');
+	};
 	if(closetime) {
 		leftmsg = closetime + ' 秒后窗口关闭';
-		setTimeout("hideMenu('" + menuid + "', 'dialog')", closetime * 1000);
+		setTimeout(closefunc, closetime * 1000);
+		confirmtxtdefault = '关闭';
 	}
 	locationtime = isUndefined(locationtime) ? '' : locationtime;
 	if(locationtime) {
 		leftmsg = locationtime + ' 秒后页面跳转';
-		setTimeout(function () {
-			if(typeof func == 'function') func();
-			else eval(func);
-			hideMenu(menuid, 'dialog');
-		}, locationtime * 1000);
+		setTimeout(closefunc, locationtime * 1000);
+		confirmtxtdefault = '立即跳转';
 	}
+	confirmtxt = confirmtxt ? confirmtxt : confirmtxtdefault;
+	canceltxt = canceltxt ? canceltxt : '取消';
 
 	if(menuObj) hideMenu('fwin_dialog', 'dialog');
 	menuObj = document.createElement('div');
@@ -1664,6 +1701,7 @@ function thumbImg(obj, method) {
 	obj.height = zh;
 }
 
+var zoomstatus = 1;
 function zoom(obj, zimg, nocover, pn) {
 	$F('_zoom', arguments);
 }
@@ -1781,41 +1819,43 @@ function setDoodle(fid, oid, url, tid, from) {
 }
 
 
-function initSearchmenu(searchtxt) {
-	$(searchtxt).onfocus = function () {
-		if($(searchtxt).value == '请输入搜索内容') {
-			$(searchtxt).value = '';
+function initSearchmenu(searchform) {
+	var searchtxt = $(searchform + '_txt');
+	if(!searchtxt) {
+		searchtxt = $(searchform);
+	}
+	var tclass = searchtxt.className;
+	searchtxt.className = tclass + ' xg1';
+	searchtxt.onfocus = function () {
+		if(searchtxt.value == '请输入搜索内容') {
+			searchtxt.value = '';
+			searchtxt.className = tclass;
 		}
 	};
-	$(searchtxt).onblur = function () {
-		if($(searchtxt).value == '' ) {
-			$(searchtxt).value = '请输入搜索内容';
+	searchtxt.onblur = function () {
+		if(searchtxt.value == '' ) {
+			searchtxt.value = '请输入搜索内容';
+			searchtxt.className = tclass + ' xg1';
 		}
 	};
-	if(!$('sctype') || !$('sctype_menu')) return false;
-	var o = $('sctype');
-	var s = o.getAttribute('href');
-	var a = $('sctype_menu').getElementsByTagName('label');
-	var r = $('sctype_menu').getElementsByTagName('input');
-	var attr = 'for';
-	if(BROWSER.ie && BROWSER.ie < 8) attr = 'htmlFor';
+	if(!$(searchform + '_type_menu')) return false;
+	var o = $(searchform + '_type');
+	var a = $(searchform + '_type_menu').getElementsByTagName('a');
 	for(var i=0; i<a.length; i++){
-		a[i].onmouseover = function(){
-			this.className = 'sca';
-		};
-		a[i].onmouseout = function(){
-			this.className = '';
-		};
-		a[i].onclick = function(){
-			o.innerHTML = this.title;
-			o.setAttribute('href', s + '?mod=' + $(this.getAttribute(attr)).value);
-		};
-		r[i].onclick = function(){
-			$('sctype_menu').style.display = 'none';
-		};
-		if(r[i].checked) {
-			o.innerHTML = a[i].title;
+		if(a[i].className == 'curtype'){
+			o.innerHTML = a[i].innerHTML;
+			$(searchform + '_mod').value = a[i].rel;
 		}
+		a[i].onclick = function(){
+			o.innerHTML = this.innerHTML;
+			$(searchform + '_mod').value = this.rel;
+		};
+	}
+}
+
+function searchFocus(obj) {
+	if(obj.value == '请输入搜索内容') {
+		obj.value = '';
 	}
 }
 
@@ -1956,11 +1996,25 @@ function showUpgradeinfo() {
 }
 
 function addFavorite(url, title) {
-	$F('_addFavorite', arguments);
+	try {
+		window.external.addFavorite(url, title);
+	} catch (e){
+		try {
+			window.sidebar.addPanel(title, url, '');
+        	} catch (e) {
+			showDialog("请按 Ctrl+D 键添加到收藏夹", 'notice');
+		}
+	}
 }
 
 function setHomepage(sURL) {
-	$F('_setHomepage', arguments);
+	if(BROWSER.ie){
+		document.body.style.behavior = 'url(#default#homepage)';
+		document.body.setHomePage(sURL);
+	} else {
+		showDialog("非 IE 浏览器请手动将本站设为首页", 'notice');
+		doane();
+	}
 }
 
 function smilies_show(id, smcols, seditorkey) {

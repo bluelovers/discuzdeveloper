@@ -37,15 +37,17 @@ if(!submitcheck('settingsubmit')) {
 
 	if($operation == 'ec') {
 		shownav('extended', 'nav_ec', 'nav_ec_config');
-	} elseif(in_array($operation, array('seo', 'cachethread', 'serveropti'))) {
-		shownav('global', 'setting_optimize', 'setting_'.$operation);
+	} elseif(in_array($operation, array('memory', 'cachethread', 'serveropti'))) {
+		shownav('global', 'setting_optimize');
+	} elseif($operation == 'seo') {
+		shownav('global', 'nav_seo');
 	} elseif($operation == 'styles') {
 		shownav('style', 'setting_styles');
 	} elseif($operation == 'editor') {
 		shownav('style', 'setting_editor');
 	} elseif($operation == 'profile') {
 		shownav('user', 'nav_members_profile_group');
-	} elseif(in_array($operation, array('mail', 'uc', 'manyou'))) {
+	} elseif(in_array($operation, array('mail', 'uc'))) {
 		shownav('founder', 'setting_'.$operation);
 	} else {
 		shownav('global', 'setting_'.$operation);
@@ -90,18 +92,6 @@ if(!submitcheck('settingsubmit')) {
 			array('setting_home_base', 'base', $_G['gp_anchor'] == 'base'),
 			array('setting_home_privacy', 'privacy', $_G['gp_anchor'] == 'privacy')
 		));
-	} elseif($operation == 'manyou') {
-		$_G['gp_anchor'] = in_array($_G['gp_anchor'], array('base', 'manage', 'search')) ? $_G['gp_anchor'] : 'base';
-		$current = array($_G['gp_anchor'] => 1);
-
-		$manyounav[0] = array('setting_manyou_base', 'setting&operation=manyou&anchor=base', $current['base']);
-		if($setting['my_app_status']) {
-			$manyounav[1] = array('setting_manyou_manage', 'setting&operation=manyou&anchor=manage', $current['manage']);
-		}
-		if($setting['my_search_status']) {
-			$manyounav[2] = array('setting_manyou_search_manage', 'setting&operation=manyou&anchor=search', $current['search']);
-		}
-		showsubmenu('setting_manyou', $manyounav);
 	} elseif($operation == 'profile') {
 		$_G['gp_anchor'] = in_array($_G['gp_anchor'], array('base', 'edit')) ? $_G['gp_anchor'] : 'base';
 	} elseif($operation == 'mail') {
@@ -295,10 +285,6 @@ if(!submitcheck('settingsubmit')) {
 			)), $setting['privacy']['feed'], 'omcheckbox');
 		showtablefooter();
 		showtableheader();
-
-	} elseif($operation == 'manyou') {
-
-		require_once DISCUZ_ROOT.'./source/admincp/admincp_manyou.php';
 	} elseif($operation == 'profile') {
 
 		$profilegroup = unserialize($setting['profilegroup']);
@@ -357,22 +343,19 @@ if(!submitcheck('settingsubmit')) {
 		$wmsgcheck = array($setting['welcomemsg'] =>'checked');
 		$setting['inviteconfig'] = unserialize($setting['inviteconfig']);
 		$setting['extcredits'] = unserialize($setting['extcredits']);
-		$setting['connect'] = unserialize($setting['connect']);
-		$buycredits = $rewardcredits = $connectrewardcredits = '';
+		$buycredits = $rewardcredits = '';
 		for($i = 0; $i <= 8; $i++) {
 			if($setting['extcredits'][$i]['available']) {
 				$extcredit = 'extcredits'.$i.' ('.$setting['extcredits'][$i]['title'].')';
 				$buycredits .= '<option value="'.$i.'" '.($i == intval($setting['inviteconfig']['invitecredit']) ? 'selected' : '').'>'.($i ? $extcredit : $lang['none']).'</option>';
 				$rewardcredits .= '<option value="'.$i.'" '.($i == intval($setting['inviteconfig']['inviterewardcredit']) ? 'selected' : '').'>'.($i ? $extcredit : $lang['none']).'</option>';
-				$connectrewardcredits .= '<option value="'.$i.'" '.($i == intval($setting['connect']['register_rewardcredit']) ? 'selected' : '').'>'.($i ? $extcredit : $lang['none']).'</option>';
 			}
 		}
 
-		$groupselect = $connectgroup = '';
+		$groupselect = '';
 		$query = DB::query("SELECT groupid, grouptitle FROM ".DB::table('common_usergroup')." WHERE type='special'");
 		while($group = DB::fetch($query)) {
 			$groupselect .= "<option value=\"$group[groupid]\" ".($group['groupid'] == $setting['inviteconfig']['invitegroupid'] ? 'selected' : '').">$group[grouptitle]</option>\n";
-			$connectgroup .= "<option value=\"$group[groupid]\" ".($group['groupid'] == $setting['connect']['register_groupid'] ? 'selected' : '').">$group[grouptitle]</option>\n";
 		}
 
 		$taskarray = array(array('', cplang('select')));
@@ -409,19 +392,7 @@ if(!submitcheck('settingsubmit')) {
 		showsetting('setting_access_register_invite_areawhite', 'settingnew[inviteconfig][inviteareawhite]', $setting['inviteconfig']['inviteareawhite'], 'textarea');
 		showsetting('setting_access_register_invite_ipwhite', 'settingnew[inviteconfig][inviteipwhite]', $setting['inviteconfig']['inviteipwhite'], 'textarea');
 		showtagfooter('tbody');
-		if($_G['setting']['connect']['allow']) {
-			showtagheader('tbody', 'showconnect', in_array('connect', $regstatus), 'sub');
-			showsetting('setting_access_register_connect_birthday', 'settingnew[connect][register_birthday]', $setting['connect']['register_birthday'], 'radio');
-			showsetting('setting_access_register_connect_gender', 'settingnew[connect][register_gender]', $setting['connect']['register_gender'], 'radio');
-			showsetting('setting_access_register_connect_uinlimit', 'settingnew[connect][register_uinlimit]', $setting['connect']['register_uinlimit'], 'text');
-			showsetting('setting_access_register_connect_credit', '', '', '<select name="settingnew[connect][register_rewardcredit]">'.$connectrewardcredits.'</select>');
-			showsetting('setting_access_register_connect_addcredit', 'settingnew[connect][register_addcredit]', $setting['connect']['register_addcredit'], 'text');
-			showsetting('setting_access_register_connect_group', '', '', '<select name="settingnew[connect][register_groupid]"><option value="0">'.$lang['usergroups_system_0'].'</option>'.$connectgroup.'</select>');
-			showsetting('setting_access_register_connect_regverify', 'settingnew[connect][register_regverify]', $setting['connect']['register_regverify'], 'radio');
-			showsetting('setting_access_register_connect_invite', 'settingnew[connect][register_invite]', $setting['connect']['register_invite'], 'radio');
-			showsetting('setting_access_register_connect_newbiespan', 'settingnew[connect][newbiespan]', $setting['connect']['newbiespan'], 'text');
-			showtagfooter('tbody');
-		}
+
 		showsetting('setting_access_register_regclosemessage', 'settingnew[regclosemessage]', $setting['regclosemessage'], 'textarea');
 		showsetting('setting_access_register_name', 'settingnew[regname]', $setting['regname'], 'text');
 		showsetting('setting_access_register_link_name', 'settingnew[reglinkname]', $setting['reglinkname'], 'text');
@@ -505,7 +476,7 @@ if(!submitcheck('settingsubmit')) {
 		showsetting('setting_styles_global_navsubhover', array('settingnew[navsubhover]', array(
 			array(0, $lang['setting_styles_global_navsubhover_0']),
 			array(1, $lang['setting_styles_global_navsubhover_1']),
-		    )), $setting['navsubhover'], 'mradio');
+		)), $setting['navsubhover'], 'mradio');
 		showsetting('setting_styles_index_allowwidthauto', array('settingnew[allowwidthauto]', array(
 			array(1, $lang['setting_styles_index_allowwidthauto_1']),
 			array(0, $lang['setting_styles_index_allowwidthauto_0']),
@@ -612,8 +583,13 @@ if(!submitcheck('settingsubmit')) {
 		}
 		$query = DB::query("SELECT fieldid,title FROM ".DB::table('common_member_profile_setting')." WHERE available='1' ORDER BY displayorder");
 		while($profilefields = DB::fetch($query)) {
-			if($profilefields['fieldid'] == 'birthyear' || $profilefields['fieldid'] == 'birthmonth' || $profilefields['fieldid'] == 'realname') {
+			if($profilefields['fieldid'] == 'birthyear' || $profilefields['fieldid'] == 'birthmonth') {
 				continue;
+			} elseif($profilefields['fieldid'] == 'realname') {
+				$setting['verify'] = unserialize($setting['verify']);
+				if($setting['verify'][6]['available'] && !$setting['verify'][6]['viewrealname']) {
+					continue;
+				}
 			}
 			$authorinfoitems['field_'.$profilefields['fieldid']] = $profilefields['title'];
 		}
@@ -677,10 +653,10 @@ if(!submitcheck('settingsubmit')) {
 			foreach($rewritedata['rulesearch'] as $k => $v) {
 				$v = !$setting['rewriterule'][$k] ? $v : $setting['rewriterule'][$k];
 				showtablerow('', array('class="td24"', 'class="td31"', 'class="longtxt"', 'class="td25"'), array(
-				    cplang('setting_seo_rewritestatus_'.$k),
-				    implode(', ', array_keys($rewritedata['rulevars'][$k])),
-				    '<input onclick="doane(event)" name="settingnew[rewriterule]['.$k.']" class="txt" value="'.htmlspecialchars($v).'"/>',
-				    '<input type="checkbox" name="settingnew[rewritestatus][]" class="checkbox" value="'.$k.'" '.(in_array($k, $setting['rewritestatus']) ? 'checked="checked"' : '').'/>'
+					cplang('setting_seo_rewritestatus_'.$k),
+					implode(', ', array_keys($rewritedata['rulevars'][$k])),
+					'<input onclick="doane(event)" name="settingnew[rewriterule]['.$k.']" class="txt" value="'.htmlspecialchars($v).'"/>',
+					'<input type="checkbox" name="settingnew[rewritestatus][]" class="checkbox" value="'.$k.'" '.(in_array($k, $setting['rewritestatus']) ? 'checked="checked"' : '').'/>'
 				));
 			}
 			showtablefooter();
@@ -734,9 +710,9 @@ if(!submitcheck('settingsubmit')) {
 			'home' => 'bbname',
 			'blog' => 'bbname,subject,summary,tags,user',
 			'album' => 'bbname,album,depict,user',
-			'group' => 'bbname,forum,first,secoond',
-			'grouppage' => 'bbname,forum,first,secoond,gdes,page',
-			'viewthread_group' => 'bbname,forum,first,secoond,gdes,subject,summary,tags,page',
+			'group' => 'bbname,forum,first,second',
+			'grouppage' => 'bbname,forum,first,second,gdes,page',
+			'viewthread_group' => 'bbname,forum,first,second,gdes,subject,summary,tags,page',
 		);
 		foreach($codetypes as $key => $val) {
 			$jscodetypes .= "codetypes['{$key}'] = '{$val}';\r\n";
@@ -898,7 +874,7 @@ EOF;
 
 	} elseif($operation == 'editor') {
 
-		$_G['setting']['editoroptions'] = str_pad(decbin($setting['editoroptions']), 2, 0, STR_PAD_LEFT);
+		$_G['setting']['editoroptions'] = str_pad(decbin($setting['editoroptions']), 3, 0, STR_PAD_LEFT);
 		$setting['defaulteditormode'] = $_G['setting']['editoroptions']{0};
 		$setting['allowswitcheditor'] = $_G['setting']['editoroptions']{1};
 		$setting['simplemode'] = $_G['setting']['editoroptions']{2};
@@ -1274,7 +1250,7 @@ EOF;
 							[1,'', 'td25'],
 							[1,'<input type="text" class="txt" name="newsmtp[server][]" style="width: 90%;">', 'td28'],
 							[1,'<input type="text" class="txt" name="newsmtp[port][]" value="25">', 'td28'],
-							[1,'<input type="checkbox" name="newsmtp[auth][]" value="1">'],
+							[1,'<input type="checkbox" name="newsmtp[auth][]" value="1">', 'td25'],
 							[1,'<input type="text" class="txt" name="newsmtp[from][]" style="width: 90%;">'],
 							[1,'<input type="text" class="txt" name="newsmtp[auth_username][]" style="width: 90%;">'],
 							[1,'<input type="text" class="txt" name="newsmtp[auth_password][]" style="width: 90%;">'],
@@ -1334,7 +1310,7 @@ EOF;
 			$checkauth = $smtp['auth'] ? 'checked' : '';
 			$smtp['auth_password'] = $smtp['auth_password'] ? $smtp['auth_password']{0}.'********'.substr($smtp['auth_password'], -2) : '';
 
-			showtablerow('', array('class="td25"', 'class="td28"', 'class="td28"'), array(
+			showtablerow('', array('class="td25"', 'class="td28"', 'class="td28"', 'class="td25"'), array(
 			"<input class=\"checkbox\" type=\"checkbox\" name=\"settingnew[mail][esmtp][delete][]\" value=\"$id\">",
 			"<input type=\"text\" class=\"txt\" name=\"settingnew[mail][esmtp][$id][server]\" value=\"$smtp[server]\" style=\"width: 90%;\">",
 			"<input type=\"text\" class=\"txt\" name=\"settingnew[mail][esmtp][$id][port]\" value=\"$smtp[port]\">",
@@ -1401,7 +1377,7 @@ EOF;
 			cplang('setting_sec_seccode_status_login'),
 			cplang('setting_sec_seccode_status_post'),
 			cplang('setting_sec_seccode_status_password'),
-                        cplang('setting_sec_seccode_status_card')
+			cplang('setting_sec_seccode_status_card')
 		)), $setting['seccodestatus'], 'binmcheckbox');
 		showsetting('setting_sec_seccode_minposts', 'settingnew[seccodedata][minposts]', $setting['seccodedata']['minposts'], 'text');
 		showsetting('setting_sec_seccode_type', array('settingnew[seccodedata][type]', $seccodetypearray), $setting['seccodedata']['type'], 'mradio', '', 0, cplang('setting_sec_seccode_type_comment').$seccheckhtml);
@@ -1787,7 +1763,12 @@ EOT;
 		showtablefooter();
 
 		showtableheader('setting_search_srchhotkeywords');
-		showsetting('setting_search_srchhotkeywords', 'settingnew[srchhotkeywords]', $setting['srchhotkeywords'], 'textarea');
+		require_once libfile('function/cloud');
+		if (getcloudappstatus('search')) {
+			showsetting('setting_search_srchhotkeywords_disabled', 'settingnew[srchhotkeywords]', $setting['srchhotkeywords'], 'textarea', true);
+		} else {
+			showsetting('setting_search_srchhotkeywords', 'settingnew[srchhotkeywords]', $setting['srchhotkeywords'], 'textarea');
+		}
 		showtablefooter();
 
 		showtableheader('settings_sphinx', 'fixpadding');
@@ -1802,7 +1783,7 @@ EOT;
 		$selectspxrank = '';
 		$selectspxrank = '<select name="settingnew[sphinxrank]">';
 		foreach($spx_ranks as $spx_rank) {
-		    $selectspxrank.= '<option value="'.$spx_rank.'"'.($spx_rank == $setting['sphinxrank'] ? 'selected="selected"' : '').'>'.$spx_rank.'</option>';
+			$selectspxrank.= '<option value="'.$spx_rank.'"'.($spx_rank == $setting['sphinxrank'] ? 'selected="selected"' : '').'>'.$spx_rank.'</option>';
 		}
 		$selectspxrank .='</select>';
 		showsetting('settings_sphinx_sphinxrank', '', '', $selectspxrank);
@@ -1865,6 +1846,11 @@ EOT;
 			$discuz->mem->config['eaccelerator'] ? cplang('open') : cplang('closed'),
 			$discuz->mem->type == 'eaccelerator' ? $do_clear_link : '--'
 			);
+		$apc = array('APC',
+			$discuz->mem->extension['apc'] ? cplang('setting_memory_php_enable') : cplang('setting_memory_php_disable'),
+			$discuz->mem->config['apc'] ? cplang('open') : cplang('closed'),
+			$discuz->mem->type == 'apc' ? $do_clear_link : '--'
+			);
 		$memcache = array('memcache',
 			$discuz->mem->extension['memcache'] ? cplang('setting_memory_php_enable') : cplang('setting_memory_php_disable'),
 			$discuz->mem->config['memcache']['server'] ? cplang('open') : cplang('closed'),
@@ -1878,6 +1864,7 @@ EOT;
 
 		showtablerow('', array('width="100"', 'width="120"', 'width="120"'), $memcache);
 		showtablerow('', '', $ea);
+		showtablerow('', '', $apc);
 		showtablerow('', '', $xcache);
 		showtablefooter();
 
@@ -2077,73 +2064,6 @@ EOT;
 		@fclose($fp);
 	}
 
-	if($operation == 'manyou' && ($settingnew['my_app_status'] != $setting['my_app_status'] || $settingnew['my_search_status'] != $setting['my_search_status'] || $settingnew['my_refresh'])) {
-
-		$my_url = 'http://api.manyou.com/uchome.php';
-		$my_register_url = 'http://api.manyou.com/uchome.php';
-
-		$mySiteId = empty($_G['setting']['my_siteid'])?'':$_G['setting']['my_siteid'];
-		$siteName = $_G['setting']['bbname'];
-		$siteUrl = $_G['siteurl'];
-		$ucUrl = $_G['setting']['ucenterurl'];
-		$siteCharset = $_G['charset'];
-		$siteTimeZone = $_G['setting']['timeoffset'];
-		$mySiteKey = empty($_G['setting']['my_sitekey'])?'':$_G['setting']['my_sitekey'];
-		$siteKey = DB::result_first("SELECT svalue FROM ".DB::table('common_setting')." WHERE skey='siteuniqueid'");
-		$siteLanguage = $_G['config']['output']['language'];
-		$siteVersion = $_G['setting']['version'];
-		$myVersion = '0.2';
-		$productType = 'DISCUZX';
-		$siteRealNameEnable = '';
-		$siteRealAvatarEnable = '';
-		$siteEnableSearch = intval($settingnew['my_search_status']);
-		$siteSearchInvitationCode = $settingnew['my_search_invite'];
-		$siteEnableApp = intval($settingnew['my_app_status']);
-		loadcache('max_post_id');
-		$maxPostId = intval($_G['cache']['max_post_id']);
-		$oldSiteId = empty($_G['setting']['my_siteid_old'])?'':$_G['setting']['my_siteid_old'];
-		$oldSitekeySign = empty($_G['setting']['my_sitekey_sign_old'])?'':$_G['setting']['my_sitekey_sign_old'];
-
-		$key = $mySiteId . $siteName . $siteUrl . $ucUrl . $siteCharset . $siteTimeZone . $siteRealNameEnable . $mySiteKey . $siteKey;
-		$key = md5($key);
-		$siteTimeZone = urlencode($siteTimeZone);
-		$siteName = urlencode($siteName);
-
-		$register = true;
-		if($mySiteId) {
-			$register = false;
-			$postString = sprintf('action=%s&productType=%s&key=%s&mySiteId=%d&siteName=%s&siteUrl=%s&ucUrl=%s&siteCharset=%s&siteTimeZone=%s&siteEnableRealName=%s&siteEnableRealAvatar=%s&siteKey=%s&siteLanguage=%s&siteVersion=%s&myVersion=%s&siteEnableSearch=%s&siteSearchInvitationCode=%s&siteEnableApp=%s', 'siteRefresh', $productType, $key, $mySiteId, $siteName, $siteUrl, $ucUrl, $siteCharset, $siteTimeZone, $siteRealNameEnable, $siteRealAvatarEnable, $siteKey, $siteLanguage, $siteVersion, $myVersion, $siteEnableSearch, $siteSearchInvitationCode, $siteEnableApp);
-			if(!empty($oldSiteId) && !empty($oldSitekeySign)) {
-				$postString .= '&oldSiteId='.$oldSiteId.'&oldSitekeySign='.$oldSitekeySign;
-			}
-		} else {
-			$postString = sprintf('action=%s&productType=%s&siteKey=%s&siteName=%s&siteUrl=%s&ucUrl=%s&siteCharset=%s&siteTimeZone=%s&siteRealNameEnable=%s&siteRealAvatarEnable=%s&siteLanguage=%s&siteVersion=%s&myVersion=%s&siteEnableSearch=%s&siteSearchInvitationCode=%s&siteEnableApp=%s', 'siteRegister', $productType, $siteKey, $siteName, $siteUrl, $ucUrl, $siteCharset, $siteTimeZone, $siteRealNameEnable, $siteRealAvatarEnable, $siteLanguage, $siteVersion, $myVersion, $siteEnableSearch, $siteSearchInvitationCode, $siteEnableApp);
-		}
-
-		if($settingnew['my_search_status']) {
-			$postString .= '&maxPostId='.$maxPostId;
-		}
-
-		$response = dfsockopen($my_register_url, 0, $postString, '', false, $settingnew['my_ip']);
-		$res = unserialize($response);
-		if (!$response) {
-			$res['errCode'] = 111;
-			$res['errMessage'] = 'Empty Response';
-			$res['result'] = $response;
-		} elseif(!$res) {
-			$res['errCode'] = 110;
-			$res['errMessage'] = 'Error Response';
-			$res['result'] = $response;
-		}
-		if($res['errCode']) {
-			cpmsg('my_register_error', '', 'error', array('errCode'=>$res['errCode'], 'errMessage'=>$res['errMessage']));
-		} elseif($register) {
-			$settingnew['my_siteid'] = $res['result']['mySiteId'];
-			$settingnew['my_sitekey'] = $res['result']['mySiteKey'];
-		}
-
-	}
-
 	isset($settingnew['regname']) && empty($settingnew['regname']) && $settingnew['regname'] = 'register';
 	isset($settingnew['reglinkname']) && empty($settingnew['reglinkname']) && $settingnew['reglinkname'] = cplang('reglinkname_default');
 	$nohtmlarray = array('bbname', 'regname', 'reglinkname', 'icp', 'sitemessage');
@@ -2177,12 +2097,6 @@ EOT;
 		} else {
 			$settingnew['welcomemsg'] = 0;
 		}
-	}
-
-	if($_G['setting']['connect']['allow'] && isset($settingnew['connect'])) {
-		$setting['connect'] = unserialize($setting['connect']);
-		$settingnew['connect'] = array_merge($setting['connect'], $settingnew['connect']);
-		$settingnew['connect'] = addslashes(serialize($settingnew['connect']));
 	}
 
 	if(isset($settingnew['censoruser'])) {
@@ -2744,17 +2658,17 @@ EOT;
 	}
 
 	if($operation == 'mobile') {
-		$settingnew['mobile_arr']['allowmobile'] = dintval($settingnew['mobile']['allowmobile']);
-		$settingnew['mobile_arr']['mobileforward'] = dintval($settingnew['mobile']['mobileforward']);
-		$settingnew['mobile_arr']['mobileregister'] = dintval($settingnew['mobile']['mobileregister']);
-		$settingnew['mobile_arr']['mobileseccode'] = dintval($settingnew['mobile']['mobileseccode']);
-		$settingnew['mobile_arr']['mobilesimpletype'] = dintval($settingnew['mobile']['mobilesimpletype']);
-		$settingnew['mobile_arr']['mobiletopicperpage'] = dintval($settingnew['mobile']['mobiletopicperpage']) > 0 ? dintval($settingnew['mobile']['mobiletopicperpage']) : 1 ;
-		$settingnew['mobile_arr']['mobilepostperpage'] = dintval($settingnew['mobile']['mobilepostperpage']) > 0 ? dintval($settingnew['mobile']['mobilepostperpage']) : 1 ;
-		$settingnew['mobile_arr']['mobilecachetime'] = dintval($settingnew['mobile']['mobilecachetime']);
-		$settingnew['mobile_arr']['mobileforumview'] = dintval($settingnew['mobile']['mobileforumview']);
+		$settingnew['mobile_arr']['allowmobile'] = intval($settingnew['mobile']['allowmobile']);
+		$settingnew['mobile_arr']['mobileforward'] = intval($settingnew['mobile']['mobileforward']);
+		$settingnew['mobile_arr']['mobileregister'] = intval($settingnew['mobile']['mobileregister']);
+		$settingnew['mobile_arr']['mobileseccode'] = intval($settingnew['mobile']['mobileseccode']);
+		$settingnew['mobile_arr']['mobilesimpletype'] = intval($settingnew['mobile']['mobilesimpletype']);
+		$settingnew['mobile_arr']['mobiletopicperpage'] = intval($settingnew['mobile']['mobiletopicperpage']) > 0 ? intval($settingnew['mobile']['mobiletopicperpage']) : 1 ;
+		$settingnew['mobile_arr']['mobilepostperpage'] = intval($settingnew['mobile']['mobilepostperpage']) > 0 ? intval($settingnew['mobile']['mobilepostperpage']) : 1 ;
+		$settingnew['mobile_arr']['mobilecachetime'] = intval($settingnew['mobile']['mobilecachetime']);
+		$settingnew['mobile_arr']['mobileforumview'] = intval($settingnew['mobile']['mobileforumview']);
 		$settingnew['mobile_arr']['mobilecomefrom'] = preg_replace(array("/\son(.*)=[\'\"](.*?)[\'\"]/i"), '', stripslashes(strip_tags($settingnew['mobile']['mobilecomefrom'], '<a><font><img><span><strong><b>')));
-		$settingnew['mobile_arr']['mobilepreview'] = dintval($settingnew['mobile']['mobilepreview']);
+		$settingnew['mobile_arr']['mobilepreview'] = intval($settingnew['mobile']['mobilepreview']);
 		$settingnew['mobile'] = array();
 		$settingnew['mobile'] = daddslashes(serialize($settingnew['mobile_arr']));
 		$mobilenav = array();
@@ -2897,11 +2811,11 @@ EOT;
 		if(isset($settingnew['domainwhitelist'])) {
 			updatecache('domainwhitelist');
 		}
-		if(isset($settingnew['connect'])) {
-			updatecache(array('fields_register', 'fields_connect_register'));
-		}
 		if(isset($settingnew['modreasons'])) {
 			updatecache('modreasons');
+		}
+		if(isset($settingnew['groupstatus'])) {
+			updatecache('heats');
 		}
 	}
 

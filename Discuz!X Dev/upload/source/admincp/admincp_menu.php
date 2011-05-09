@@ -41,9 +41,9 @@ $menu['index'] = array_merge($menu['index'], $custommenu);
 $menu['global'] = array(
 	array('menu_setting_basic', 'setting_basic'),
 	array('menu_setting_access', 'setting_access'),
+	array('menu_setting_functions', 'setting_functions'),
 	array('menu_setting_optimize', 'setting_cachethread'),
 	array('menu_setting_seo', 'setting_seo'),
-	array('menu_setting_functions', 'setting_functions'),
 	array('menu_setting_domain', 'domain'),
 	array('menu_setting_home', 'setting_home'),
 	array('menu_setting_user', 'setting_permissions'),
@@ -157,6 +157,7 @@ $menu['group'] = array(
 );
 
 $menu['extended'] = array(
+	array('menu_misc_announce', 'announce'),
 	array('menu_adv_custom', 'adv'),
 	array('menu_tasks', 'tasks'),
 	array('menu_magics', 'magics'),
@@ -209,7 +210,6 @@ if(!$menu['plugin']) {
 
 $menu['tools'] = array(
 	array('menu_tools_updatecaches', 'tools_updatecache'),
-	array('menu_misc_announce', 'announce'),
 	array('menu_tools_updatecounters', 'counter'),
 	array('menu_logs', 'logs'),
 	array('menu_misc_cron', 'misc_cron'),
@@ -223,8 +223,6 @@ if($isfounder) {
 		array('menu_founder_perm', 'founder_perm'),
 		array('menu_setting_mail', 'setting_mail'),
 		array('menu_setting_uc', 'setting_uc'),
-		array('menu_setting_manyou', 'setting_manyou'),
-		array('menu_setting_qqconnect', 'connect_setting'),
 		array('menu_db', 'db_export'),
 		array('menu_postsplit', 'postsplit_manage'),
 		array('menu_threadsplit', 'threadsplit_manage'),

@@ -1,6 +1,5 @@
 <!--{subtemplate common/header}-->
 <div id="pt" class="bm cl">
-	<!--{subtemplate common/simplesearchform}-->
 	<div class="z">
 		<a href="./" class="nvhm" title="{lang homepage}">$_G[setting][bbname]</a> <em>&rsaquo;</em>
 		<a href="$_G[setting][navs][8][filename]">$_G[setting][navs][8][navname]</a> <em>&rsaquo;</em>
@@ -31,33 +30,35 @@
 			<!--{if $polllist}-->
 				<ul class="el pll">
 				<!--{loop $polllist $poll}-->
-					<li class="cl">
+					<li>
 						<div class="t"><!--{if $poll['rank'] <= 3}--><img src="{IMGDIR}/rank_$poll['rank'].gif" alt="$poll['rank']" /><!--{else}-->$poll['rank']<!--{/if}--></div>
-						<div class="u z">
-							<a href="home.php?mod=space&uid=$poll['authorid']" class="avt" target="_blank">$poll['avatar']</a>
-							<p class="mtn"><a href="home.php?mod=space&uid=$poll['authorid']" target="_blank">$poll['author']</a></p>
-						</div>
-						<div class="c z">
-							<h4 class="h"><a href="forum.php?mod=viewthread&tid=$poll['tid']" target="_blank">$poll['subject']</a></h4>
-							<ol>
-								<!--{loop $poll['pollpreview'] $item}-->
-								<li>$item</li>
-								<!--{/loop}-->
-								<li style="list-style-type: none;">...</li>
-							</ol>
-							<div class="mtn xg1">
-								<!--{if $_G[gp_view] == 'favtimes'}-->{lang ranklist_thread_favorite} $poll['favtimes']
-								<!--{elseif $_G[gp_view] == 'sharetimes'}-->{lang ranklist_thread_share} $poll['sharetimes']
-								<!--{else}-->{lang hot} $poll['heats']<!--{/if}-->
-								<span class="pipe">|</span>
-								$poll['dateline']
+						<div class="cl">
+							<div class="u z">
+								<a href="home.php?mod=space&uid=$poll['authorid']" class="avt" target="_blank">$poll['avatar']</a>
+								<p class="mtn"><a href="home.php?mod=space&uid=$poll['authorid']" target="_blank">$poll['author']</a></p>
 							</div>
-						</div>
-						<div class="s z">
-							<a href="forum.php?mod=viewthread&tid=$poll['tid']" class="joins" target="_blank">
-								<span>$poll['voters']</span>{lang people_join}
-							</a>
-							<a href="forum.php?mod=viewthread&tid=$poll['tid']" class="go" target="_blank">{lang to_poll}</a>
+							<div class="s y">
+								<a href="forum.php?mod=viewthread&tid=$poll['tid']" class="joins" target="_blank">
+									<span>$poll['voters']</span>{lang people_join}
+								</a>
+								<a href="forum.php?mod=viewthread&tid=$poll['tid']" class="go" target="_blank">{lang to_poll}</a>
+							</div>
+							<div class="c">
+								<h4 class="h"><a href="forum.php?mod=viewthread&tid=$poll['tid']" target="_blank">$poll['subject']</a></h4>
+								<ol>
+									<!--{loop $poll['pollpreview'] $item}-->
+									<li>$item</li>
+									<!--{/loop}-->
+									<li style="list-style-type: none;">...</li>
+								</ol>
+								<div class="mtn xg1">
+									<!--{if $_G[gp_view] == 'favtimes'}-->{lang ranklist_thread_favorite} $poll['favtimes']
+									<!--{elseif $_G[gp_view] == 'sharetimes'}-->{lang ranklist_thread_share} $poll['sharetimes']
+									<!--{else}-->{lang hot} $poll['heats']<!--{/if}-->
+									<span class="pipe">|</span>
+									$poll['dateline']
+								</div>
+							</div>
 						</div>
 					</li>
 				<!--{/loop}-->

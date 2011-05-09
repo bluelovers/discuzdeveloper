@@ -64,6 +64,7 @@ class magic_sofa {
 
 		$sofamessage = lang('magic/sofa', 'sofa_text', array('actor' => $_G['member']['username'], 'time' => dgmdate(TIMESTAMP), 'magicname' => $this->magic['name']));
 		$dateline = $thread['dateline'] + 1;
+		require_once libfile('function/forum');
 
 		insertpost(array(
 			'fid' => $thread['fid'],

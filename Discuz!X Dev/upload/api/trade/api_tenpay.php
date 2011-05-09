@@ -8,6 +8,9 @@
  */
 
 
+define('IN_API', true);
+define('CURSCRIPT', 'api');
+
 if(!defined('IN_DISCUZ')) {
 	exit('Access Denied');
 }
@@ -141,12 +144,10 @@ class ResponseHandler  {
 		$this->debugInfo = "";
 
 		foreach($_GET as $k => $v) {
-			$value = urldecode($v);
-			$this->setParameter($k, $value);
+			$this->setParameter($k, $v);
 		}
 		foreach($_POST as $k => $v) {
-			$value = urldecode($v);
-			$this->setParameter($k, $value);
+			$this->setParameter($k, $v);
 		}
 	}
 
@@ -500,7 +501,7 @@ function invite_payurl($amount, $price, &$orderid) {
 function trade_notifycheck($type) {
 	global $_G;
 
-	if(DISCUZ_TENPAY_DIRECT && $type == 'credit') {
+	if(DISCUZ_TENPAY_DIRECT && ($type == 'credit' || $type == 'invite')) {
 		$resHandler = new ResponseHandler();
 		$resHandler->setKey(DISCUZ_SECURITYCODE);
 

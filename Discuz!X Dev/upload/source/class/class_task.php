@@ -367,16 +367,20 @@ class task {
 
 			if($this->task['reward']) {
 				$rewards = $this->reward();
+				$notification = $this->task['reward'];
 				if($this->task['reward'] == 'magic') {
 					$rewardtext = DB::result_first("SELECT name FROM ".DB::table('common_magic')." WHERE magicid='".$this->task['prize']."'");
 				} elseif($this->task['reward'] == 'medal') {
 					$rewardtext = DB::result_first("SELECT name FROM ".DB::table('forum_medal')." WHERE medalid='".$this->task['prize']."'");
+					if(!$this->task['bonus']) {
+						$notification = 'medal_forever';
+					}
 				} elseif($this->task['reward'] == 'group') {
 					$rewardtext = DB::result_first("SELECT grouptitle FROM ".DB::table('common_usergroup')." WHERE groupid='".$this->task['prize']."'");
 				} elseif($this->task['reward'] == 'invite') {
 					$rewardtext = $this->task['prize'];
 				}
-				notification_add($_G[uid], 'task', 'task_reward_'.$this->task['reward'], array(
+				notification_add($_G[uid], 'task', 'task_reward_'.$notification, array(
 					'taskid' => $this->task['taskid'],
 					'name' => $this->task['name'],
 					'creditbonus' => $_G['setting']['extcredits'][$this->task['prize']]['title'].' '.$this->task['bonus'].' '.$_G['setting']['extcredits'][$this->task['prize']]['unit'],

@@ -11,7 +11,7 @@ if(!defined('IN_DISCUZ')) {
 	exit('Access Denied');
 }
 
-function plugininstall($pluginarray) {
+function plugininstall($pluginarray, $installtype = '') {
 	if(!$pluginarray || !$pluginarray['plugin']['identifier']) {
 		return false;
 	}
@@ -24,6 +24,7 @@ function plugininstall($pluginarray) {
 
 	if(!empty($pluginarray['intro']) || $langexists) {
 		$pluginarray['plugin']['modules'] = unserialize(dstripslashes($pluginarray['plugin']['modules']));
+		$pluginarray['plugin']['modules']['extra']['installtype'] = $installtype;
 		if(!empty($pluginarray['intro'])) {
 			require_once libfile('function/discuzcode');
 			$pluginarray['plugin']['modules']['extra']['intro'] = discuzcode(dstripslashes(strip_tags($pluginarray['intro'])), 1, 0);
@@ -74,6 +75,65 @@ function plugininstall($pluginarray) {
 	return true;
 }
 
+function pluginupgrade($pluginarray) {
+	if(!$pluginarray || !$pluginarray['plugin']['identifier']) {
+		return false;
+	}
+	$plugin = DB::fetch_first("SELECT name, pluginid FROM ".DB::table('common_plugin')." WHERE identifier='{$pluginarray[plugin][identifier]}' LIMIT 1");
+	if(!$plugin) {
+		return false;
+	}
+	if(is_array($pluginarray['var'])) {
+		$query = DB::query("SELECT variable FROM ".DB::table('common_pluginvar')." WHERE pluginid='$plugin[pluginid]'");
+		$pluginvars = $pluginvarsnew = array();
+		while($pluginvar = DB::fetch($query)) {
+			$pluginvars[] = $pluginvar['variable'];
+		}
+		foreach($pluginarray['var'] as $config) {
+			if(!in_array($config['variable'], $pluginvars)) {
+				$data = array('pluginid' => $plugin[pluginid]);
+				foreach($config as $key => $val) {
+					$data[$key] = $val;
+				}
+				DB::insert('common_pluginvar', $data);
+			} else {
+				$sql = $comma = '';
+				foreach($config as $key => $val) {
+					if($key != 'value') {
+						$sql .= $comma.$key.'=\''.$val.'\'';
+						$comma = ',';
+					}
+				}
+				if($sql) {
+					DB::query("UPDATE ".DB::table('common_pluginvar')." SET $sql WHERE pluginid='$plugin[pluginid]' AND variable='$config[variable]'");
+				}
+			}
+			$pluginvarsnew[] = $config['variable'];
+		}
+		$pluginvardiff = array_diff($pluginvars, $pluginvarsnew);
+		if($pluginvardiff) {
+			DB::query("DELETE FROM ".DB::table('common_pluginvar')." WHERE pluginid='$plugin[pluginid]' AND variable IN (".dimplode($pluginvardiff).")");
+		}
+	}
+
+	$langexists = updatepluginlanguage($pluginarray);
+
+	if(!empty($pluginarray['intro']) || $langexists) {
+		$pluginarray['plugin']['modules'] = unserialize(dstripslashes($pluginarray['plugin']['modules']));
+		if(!empty($pluginarray['intro'])) {
+			require_once libfile('function/discuzcode');
+			$pluginarray['plugin']['modules']['extra']['intro'] = discuzcode(dstripslashes(strip_tags($pluginarray['intro'])), 1, 0);
+		}
+		$langexists && $pluginarray['plugin']['modules']['extra']['langexists'] = 1;
+		$pluginarray['plugin']['modules'] = addslashes(serialize($pluginarray['plugin']['modules']));
+	}
+
+	DB::query("UPDATE ".DB::table('common_plugin')." SET version='{$pluginarray[plugin][version]}', modules='{$pluginarray[plugin][modules]}' WHERE pluginid='$plugin[pluginid]'");
+
+	updatecache(array('plugin', 'setting', 'styles'));
+	return true;
+}
+
 function modulecmp($a, $b) {
 	return $a['displayorder'] > $b['displayorder'] ? 1 : -1;
 }
@@ -83,6 +143,7 @@ function updatepluginlanguage($pluginarray) {
 	if(!$pluginarray['language']) {
 		return false;
 	}
+	$pluginarray['language'] = dstripslashes($pluginarray['language']);
 	foreach(array('script', 'template', 'install') as $type) {
 		loadcache('pluginlanguage_'.$type, 1);
 		if(!empty($pluginarray['language'][$type.'lang'])) {

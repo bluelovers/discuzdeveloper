@@ -19,15 +19,15 @@
 	<label><strong>{lang invite_code}<!--{if $_G['setting']['regstatus'] == 2}-->*<!--{/if}--></strong><input type="text" name="invitecode" autocomplete="off" size="25" id="invitecode" class="txt" /></label>
 <!--{/if}-->
 <!--{if $_G['setting']['regverify'] == 2}-->
-    <label><strong>{lang register_message}*:</strong><input type="text" id="regmessage" name="regmessage" autocomplete="off" size="25" tabindex="1" class="txt" /> </label>
-    <p class="xg1">{lang register_message1}</p>
+	<label><strong>{lang register_message}*:</strong><input type="text" id="regmessage" name="regmessage" autocomplete="off" size="25" tabindex="1" class="txt" /> </label>
+	<p class="xg1">{lang register_message1}</p>
 <!--{/if}-->
 <!--
 <!--{loop $_G['cache']['fields_register'] $field}-->
 <!--{if $htmls[$field['fieldid']]}-->
-    <p><strong>$field[title]*</strong>
-    <br />
-    $htmls[$field['fieldid']]<!--{if $field['required']}--><!--{/if}--></p>
+	<p><strong>$field[title]*</strong>
+	<br />
+	$htmls[$field['fieldid']]<!--{if $field['required']}--><!--{/if}--></p>
 <!--{/if}-->
 <!--{/loop}-->
 -->

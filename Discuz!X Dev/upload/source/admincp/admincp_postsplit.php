@@ -128,7 +128,7 @@ if($operation == 'manage') {
 				foreach($posttable_info as $tid => $info) {
 					if($tableid != $tid) {
 						$tablestatus = gettablestatus(DB::table(getposttable($tid)));
-						$tablelist .= '<option value="'.$tid.'">'.($info['memo'] ? $info['memo'] : 'forum_post_'.$tid).'('.$tablestatus['Data_length'].')'.'</option>';
+						$tablelist .= '<option value="'.$tid.'">'.($info['memo'] ? $info['memo'] : 'forum_post'.($tid ? '_'.$tid : '')).'('.$tablestatus['Data_length'].')'.'</option>';
 					}
 				}
 				showsetting('postsplit_to', '', '', '<select onchange="if(this.value >= 0) {$(\'tableinfo\').style.display = \'none\';} else {$(\'tableinfo\').style.display = \'\';}" name="targettable">'.$tablelist.'</select>');

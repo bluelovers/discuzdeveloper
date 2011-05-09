@@ -1,7 +1,4 @@
 <div class="pcb">
-	<!--{if $post['warned']}-->
-		<span class="y"><a href="forum.php?mod=misc&action=viewwarning&tid=$_G[tid]&uid=$post[authorid]" title="{lang warn_get}" onclick="showWindow('viewwarning', this.href)"><img src="{IMGDIR}/warning.gif" alt="{lang warn_get}" /></a></span>
-	<!--{/if}-->
 	<!--{if !$post['first'] && !empty($post[subject])}-->
 		<h2>$post[subject]</h2>
 	<!--{/if}-->
@@ -23,7 +20,7 @@
 	<!--{/if}-->
 	<!--{if $post['first']}-->
 		<!--{if $_G['forum_thread']['price'] > 0 && $_G['forum_thread']['special'] == 0}-->
-			<div class="locked"><em class="y"><a href="forum.php?mod=misc&action=viewpayments&tid=$_G[tid]" onclick="showWindow('pay', this.href)">{lang pay_view}</a></em>{lang pay_threads}: <strong>{$_G['setting']['extcredits'][$_G['setting']['creditstransextra'][1]][title]} $_G[forum_thread][price] {$_G['setting']['extcredits'][$_G['setting']['creditstransextra'][1]][unit]} </strong></div>
+			<div class="locked"><em class="y"><a href="forum.php?mod=misc&action=viewpayments&tid=$_G[tid]" onclick="showWindow('pay', this.href)">{lang pay_view}</a></em>{lang pay_threads}: <strong>$_G[forum_thread][price] {$_G['setting']['extcredits'][$_G['setting']['creditstransextra'][1]][unit]}{$_G['setting']['extcredits'][$_G['setting']['creditstransextra'][1]][title]} </strong></div>
 		<!--{/if}-->
 		<!--{if $threadsort && $threadsortshow}-->
 			<!--{if $threadsortshow['typetemplate']}-->
@@ -86,7 +83,7 @@
 		<!--{/if}-->
 
 		<!--{if $post['attachment']}-->
-			<div class="locked">{lang attachment}: <em><!--{if $_G['uid']}-->{lang attach_nopermission}<!--{else}-->{lang attach_nopermission_login}<!--{/if}--></em></div>
+			<div class="locked">{lang attachment}: <em><!--{if $_G['uid']}-->{lang attach_nopermission}<!--{else}-->{lang attach_nopermission_login} <!--{hook/global_login_text}--><!--{/if}--></em></div>
 		<!--{elseif $post['imagelist'] || $post['attachlist']}-->
 			<div class="pattl">
 				<!--{if $post['imagelist'] && $_G['setting']['imagelistthumb'] && $post['imagelistcount'] >= $_G['setting']['imagelistthumb']}-->

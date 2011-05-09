@@ -184,9 +184,6 @@ function recommendupdate($fid, &$modrecommend, $force = '', $position = 0) {
 	if($modrecommend['sort'] && (TIMESTAMP - $modrecommend['updatetime'] > $modrecommend['cachelife'] || $force)) {
 		$query = DB::query("SELECT tid, moderatorid, aid FROM ".DB::table('forum_forumrecommend')." WHERE fid='$fid'");
 		while($row = DB::fetch($query)) {
-			if($row['aid'] && $modrecommend['sort'] == 2 || $modrecommend['sort'] == 1) {
-				@unlink(DISCUZ_ROOT.'./data/imagecache/'.intval($row['aid']).'_'.$imgw.'_'.$imgh.'.jpg');
-			}
 			if($modrecommend['sort'] == 2 && $row['moderatorid']) {
 				$modedtids[] = $row['tid'];
 			}
@@ -230,7 +227,7 @@ function recommendupdate($fid, &$modrecommend, $force = '', $position = 0) {
 					if(isset($recommendimagelist[$attachment['tid']])) {
 						continue;
 					}
-					$key = authcode($attachment['aid']."\t".$imgw."\t".$imgh, 'ENCODE', $_G['config']['security']['authkey']);
+					$key = md5($attachment['aid'].'|'.$imgw.'|'.$imgh);
 					$recommendlist[$attachment['tid']]['filename'] = $attachment['aid']."\t".$imgw."\t".$imgh."\t".$key;
 					$recommendimagelist[$attachment['tid']] = $recommendlist[$attachment['tid']];
 					$addimg[$attachment['tid']] = ",'', '".addslashes($recommendlist[$attachment['tid']]['filename'])."', '1'";

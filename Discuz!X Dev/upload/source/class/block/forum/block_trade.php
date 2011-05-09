@@ -177,7 +177,7 @@ class block_trade {
 		require_once libfile('function/post');
 		require_once libfile('function/search');
 
-		$datalist = $list = $listtids = $threadtids = $threads = array();
+		$datalist = $list = $listpids = $threadpids = $aid2pid = $attachtables = array();
 		$keyword = $keyword ? searchkey($keyword, "t.subject LIKE '%{text}%'") : '';
 		$sql = ($fids ? ' AND t.fid IN ('.dimplode($fids).')' : '')
 			.($tids ? ' AND t.tid IN ('.dimplode($tids).')' : '')
@@ -219,15 +219,20 @@ class block_trade {
 		$bt = new block_thread();
 		while($data = DB::fetch($query)) {
 			if($style['getsummary']) {
-				$threadtids[$data['posttableid']][] = $data['tid'];
+				$threadpids[$data['posttableid']][] = $data['pid'];
 			}
-			$listtids[] = $data['tid'];
-			$list[$data['tid']] = array(
+			if($data['aid']) {
+				$aid2pid[$data['aid']] = $data['pid'];
+				$attachtable = getattachtableid($data['tid']);
+				$attachtables[$attachtable][] = $data['aid'];
+			}
+			$listpids[] = $data['pid'];
+			$list[$data['pid']] = array(
 				'id' => $data['pid'],
 				'idtype' => 'pid',
 				'title' => cutstr(str_replace('\\\'', '&#39;', addslashes($data['subject'])), $titlelength, ''),
 				'url' => 'forum.php?mod=viewthread&do=tradeinfo&tid='.$data['tid'].'&pid='.$data['pid'].($viewmod ? '&from=portal' : ''),
-				'pic' => ($data['aid'] ? getforumimg($data['aid']) : $_G['style']['imgdir'].'/nophoto.gif'),
+				'pic' => ($data['aid'] ? '' : $_G['style']['imgdir'].'/nophoto.gif'),
 				'picflag' => '0',
 				'fields' => array(
 					'fulltitle' => str_replace('\\\'', '&#39;', addslashes($data['subject'])),
@@ -241,14 +246,24 @@ class block_trade {
 				$list[$data['tid']]['fields']['showstyle'] = $bt->getthreadstyle($data['highlight']);
 			}
 		}
-		if(!empty($listtids)) {
-			$threads = $bt->getthread($threadtids, $summarylength, true);
-			if($threads) {
-				foreach($threads as $tid => $var) {
-					$list[$tid]['summary'] = $var;
+		if(!empty($listpids)) {
+			foreach($threadpids as $key => $var) {
+				$posttable = $key == 0 ? 'forum_post' : 'forum_post_'.$key;
+				$query = DB::query("SELECT pid, message FROM ".DB::table($posttable)." WHERE pid IN  (".dimplode($var).")");
+				while($result = DB::fetch($query)) {
+					$list[$result['pid']]['summary'] = messagecutstr($result['message'], $messagelength);
 				}
 			}
-			foreach($listtids as $key => $value) {
+
+			foreach($attachtables as $tableid => $taids) {
+				$query = DB::query('SELECT aid, attachment, remote FROM '.DB::table('forum_attachment_'.$tableid).' WHERE aid IN ('.dimplode($taids).')');
+				while($avalue = DB::fetch($query)) {
+					$list[$aid2pid[$avalue['aid']]]['pic'] = 'forum/'.$avalue['attachment'];
+					$list[$aid2pid[$avalue['aid']]]['picflag'] = $avalue['remote'] ? '2' : '1';
+				}
+			}
+
+			foreach($listpids as $key => $value) {
 				$datalist[] = $list[$value];
 			}
 		}

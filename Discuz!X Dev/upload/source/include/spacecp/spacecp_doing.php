@@ -191,7 +191,7 @@ if($_GET['op'] == 'delete') {
 			deletedoings(array($doid));
 		}
 
-		header('location: '.dreferer());
+		dheader('location: '.dreferer());
 		exit();
 	}
 

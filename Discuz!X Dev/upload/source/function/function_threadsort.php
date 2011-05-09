@@ -157,13 +157,31 @@ function sortsearch($sortid, $sortoptionarray, $searchoption = array(), $selectu
 		foreach($searchoption as $optionid => $option) {
 			$fieldname = $sortoptionarray[$sortid][$optionid]['identifier'] ? $sortoptionarray[$sortid][$optionid]['identifier'] : 1;
 			if($option['value']) {
-				if(in_array($option['type'], array('number', 'radio', 'select'))) {
+				if(in_array($option['type'], array('number', 'radio'))) {
 					$option['value'] = intval($option['value']);
 					$exp = '=';
 					if($option['condition']) {
 						$exp = $option['condition'] == 1 ? '>' : '<';
 					}
 					$sql = "$fieldname$exp'$option[value]'";
+				} elseif($option['type'] == 'select') {
+					$subvalues = $currentchoices = array();
+					if(!empty($_G['forum_optionlist'])) {
+						foreach($_G['forum_optionlist'] as $subkey => $subvalue) {
+							if($subvalue['identifier'] == $fieldname) {
+								$currentchoices = $subvalue['choices'];
+								break;
+							}
+						}
+					}
+					if(!empty($currentchoices)) {
+						foreach($currentchoices as $subkey => $subvalue) {
+							if(preg_match('/^'.$option['value'].'/i', $subkey)) {
+								$subvalues[] = $subkey;
+							}
+						}
+					}
+					$sql = "$fieldname IN (".dimplode($subvalues).")";
 				} elseif($option['type'] == 'checkbox') {
 					$sql = "$fieldname LIKE '%".(implode("%", $option['value']))."%'";
 				} elseif($option['type'] == 'range') {
@@ -583,18 +601,18 @@ function getsortedoptionlist() {
 		uksort($choicesarr, 'cmpchoicekey');
 		$forum_optionlist[$key]['choices'] = $choicesarr;
 	}
-	$forum_optionlist = array2xml($forum_optionlist, 's');
+	$forum_optionlist = optionlistxml($forum_optionlist, 's');
 	$forum_optionlist = '<?xml version="1.0" encoding="'.CHARSET.'"?>'."".'<forum_optionlist>'.$forum_optionlist.'</forum_optionlist>';
 	return $forum_optionlist;
 }
 
-function array2xml($input, $pre = '') {
+function optionlistxml($input, $pre = '') {
 	$str = '';
 	foreach($input as $key => $value) {
 		$key = $pre.strval($key);
 		if(is_array($value)) {
 			$str .= "<$key>";
-			$str .= array2xml($value, $pre);
+			$str .= optionlistxml($value, $pre);
 			$str .="</$key>";
 		} else {
 			if(is_bool($value)) {

@@ -2,7 +2,7 @@
 	[Discuz!] (C)2001-2009 Comsenz Inc.
 	This is NOT a freeware, use is subject to license terms
 
-	$Id: home.js 20524 2011-02-25 04:10:17Z monkey $
+	$Id: home.js 22251 2011-04-26 11:08:57Z svn_project_zhangjie $
 */
 
 var note_step = 0;
@@ -1125,13 +1125,6 @@ function changeOrderRange(id) {
 			window.location = url;
 			return false;
 		}
-	}
-}
-
-function showPreview(val, id) {
-	var showObj = $(id);
-	if(showObj) {
-		showObj.innerHTML = val.replace(/\n/ig, "<bupdateseccoder />");
 	}
 }
 

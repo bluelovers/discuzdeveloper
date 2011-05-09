@@ -7,6 +7,7 @@
  *      $Id$
  */
 
+define('IN_API', true);
 define('CURSCRIPT', 'api');
 define('X_LANGUAGE', 'zh_cn');
 
@@ -366,7 +367,7 @@ class connect extends server {
 	function _parseBbcode($bbcode, $fId, $pId, $isHtml, &$attachImages = array()) {
 		include_once libfile('function/discuzcode');
 
-		$result = preg_replace('/\[hide(=\d+)?\].+?\[\/hide\](\r\n|\n|\r)/i', '', $bbcode);
+		$result = preg_replace('/\[hide(=\d+)?\].*?\[\/hide\](\r\n|\n|\r)/i', '', $bbcode);
 		$result = preg_replace('/\[payto(=\d+)?\].+?\[\/payto\](\r\n|\n|\r)/i', '', $result);
 		$result = discuzcode($result, 0, 0, $isHtml, 1, 2, 1, 0, 0, 0, 0, 1, 0);
 		$result = preg_replace('/<img src="images\//i', "<img src=\"".X_BOARDURL."/images/", $result);

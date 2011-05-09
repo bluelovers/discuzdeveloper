@@ -73,7 +73,7 @@ if($_GET['op'] == 'edit') {
 			}
 		}
 
-		DB::update('home_album', array('albumname'=>$_POST['albumname'], 'catid'=>$_POST['catid'], 'friend'=>$_POST['friend'], 'password'=>$_POST['password'], 'target_ids'=>$_POST['target_ids'], 'depict'=>$_POST['depict']), array('albumid'=>$albumid));
+		DB::update('home_album', array('albumname'=>$_POST['albumname'], 'catid'=>$_POST['catid'], 'friend'=>$_POST['friend'], 'password'=>$_POST['password'], 'target_ids'=>$_POST['target_ids'], 'depict'=>dhtmlspecialchars($_POST['depict'])), array('albumid'=>$albumid));
 		showmessage('spacecp_edit_ok', "home.php?mod=spacecp&ac=album&op=edit&albumid=$albumid");
 	}
 

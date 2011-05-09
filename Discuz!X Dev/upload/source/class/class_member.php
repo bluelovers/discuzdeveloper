@@ -44,7 +44,6 @@ class logging_ctl {
 
 		if(!submitcheck('loginsubmit', 1, $seccodestatus)) {
 
-			$_G['referer'] = dreferer();
 			$auth = '';
 			$username = !empty($_G['cookie']['loginuser']) ? htmlspecialchars($_G['cookie']['loginuser']) : '';
 
@@ -149,7 +148,7 @@ class logging_ctl {
 
 				setloginstatus($result['member'], $_G['gp_cookietime'] ? 2592000 : 0);
 
-				DB::query("UPDATE ".DB::table('common_member_status')." SET lastip='".$_G['clientip']."', lastvisit='".time()."' WHERE uid='$_G[uid]'");
+				DB::query("UPDATE ".DB::table('common_member_status')." SET lastip='".$_G['clientip']."', lastvisit='".time()."', lastactivity='".TIMESTAMP."' WHERE uid='$_G[uid]'");
 				$ucsynlogin = $this->setting['allowsynlogin'] ? uc_user_synlogin($_G['uid']) : '';
 
 				if($invite['id']) {
@@ -170,31 +169,49 @@ class logging_ctl {
 					}
 				}
 
-				$location = $invite || $_G['groupid'] == 8 ? 'home.php?mod=space&do=home' : dreferer();
-				if(empty($_G['gp_handlekey']) || !empty($_G['gp_lssubmit']) && !$ucsynlogin) {
-					if(defined('IN_MOBILE')) {
-						showmessage('location_login_succeed_mobile', $location, array('username' => $result['ucresult']['username']), array('location' => true));
-					} else {
-						showmessage('location_login_succeed', $location, array('username' => $result['ucresult']['username']), array('location' => true));
-					}
-				}
-
 				$param = array(
-					'username' => $_G['member']['username'],
+					'username' => $result['ucresult']['username'],
 					'usergroup' => $_G['group']['grouptitle'],
 					'uid' => $_G['member']['uid'],
 					'groupid' => $_G['groupid'],
 					'syn' => $ucsynlogin ? 1 : 0
 				);
+
 				$extra = array(
 					'showdialog' => true,
 					'locationtime' => true,
 					'extrajs' => $ucsynlogin
 				);
-				if($_G['groupid'] == 8) {
-					showmessage('login_succeed_inactive_member', $location, $param, $extra);
+				$loginmessage = $_G['groupid'] == 8 ? 'login_succeed_inactive_member' : 'login_succeed';
+
+				$location = $invite || $_G['groupid'] == 8 ? 'home.php?mod=space&do=home' : dreferer();
+				if(empty($_G['gp_handlekey']) || !empty($_G['gp_lssubmit'])) {
+					if(defined('IN_MOBILE')) {
+						showmessage('location_login_succeed_mobile', $location, array('username' => $result['ucresult']['username']), array('location' => true));
+					} else {
+						if(!empty($_G['gp_lssubmit'])) {
+							if(!$ucsynlogin) {
+								$extra['location'] = true;
+							}
+							showmessage($loginmessage, $location, $param, $extra);
+						} else {
+							$href = str_replace("'", "\'", $location);
+							showmessage('location_login_succeed', $location, array(),
+								array(
+									'showid' => 'succeedmessage',
+									'extrajs' => '<script type="text/javascript">'.
+										'setTimeout("window.location.href =\''.$href.'\';", 3000);'.
+										'$(\'succeedmessage_href\').href = \''.$href.'\';'.
+										'$(\'main_message\').style.display = \'none\';'.
+										'$(\'main_succeed\').style.display = \'\';'.
+										'$(\'succeedlocation\').innerHTML = \''.lang('message', $loginmessage, $param).'\';</script>'.$ucsynlogin,
+									'striptags' => false,
+								)
+							);
+						}
+					}
 				} else {
-					showmessage('login_succeed', $location, $param, $extra);
+					showmessage($loginmessage, $location, $param, $extra);
 				}
 			} else {
 				$password = preg_replace("/^(.{".round(strlen($_G['gp_password']) / 4)."})(.+?)(.{".round(strlen($_G['gp_password']) / 6)."})$/s", "\\1***\\3", $_G['gp_password']);
@@ -235,6 +252,8 @@ class logging_ctl {
 }
 
 class register_ctl {
+
+	var $showregisterform = 1;
 
 	function register_ctl() {
 		global $_G;
@@ -365,8 +384,6 @@ class register_ctl {
 				$activationauth = authcode("$auth[0]\t".FORMHASH, 'ENCODE');
 			}
 
-			$_G['referer'] = isset($_G['referer']) ? dhtmlspecialchars($_G['referer']) : dreferer();
-
 			if($fromuid) {
 				$query = DB::query("SELECT username FROM ".DB::table('common_member')." WHERE uid='$fromuid'");
 				if(DB::num_rows($query)) {
@@ -403,7 +420,7 @@ class register_ctl {
 				require_once libfile('member/'.$this->extrafile, 'module');
 			}
 
-			$dreferer = str_replace('&amp;', '&', dreferer());
+			$dreferer = dreferer();
 
 			include template($this->template);
 
@@ -796,7 +813,7 @@ class register_ctl {
 					break;
 			}
 			$param = array('bbname' => $this->setting['bbname'], 'username' => $_G['username'], 'usergroup' => $_G['group']['grouptitle'], 'uid' => $_G['uid']);
-			if(strpos($url_forward, $this->setting['regname']) !== false) {
+			if(strpos($url_forward, $this->setting['regname']) !== false || strpos($url_forward, 'buyinvitecode') !== false) {
 				$url_forward = 'forum.php';
 			}
 			$href = str_replace("'", "\'", $url_forward);
@@ -805,8 +822,8 @@ class register_ctl {
 				'extrajs' => '<script type="text/javascript">'.
 					'setTimeout("window.location.href =\''.$href.'\';", 3000);'.
 					'$(\'succeedmessage_href\').href = \''.$href.'\';'.
-					'$(\'main_regmessage\').style.display = \'none\';'.
-					'$(\'main_regsucceed\').style.display = \'\';'.
+					'$(\'main_message\').style.display = \'none\';'.
+					'$(\'main_succeed\').style.display = \'\';'.
 					'$(\'succeedlocation\').innerHTML = \''.lang('message', $locationmessage).'\';'.
 				'</script>',
 				'striptags' => false,

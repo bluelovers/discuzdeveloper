@@ -639,17 +639,12 @@ CREATE TABLE pre_common_member (
   accessmasks tinyint(1) NOT NULL DEFAULT '0',
   allowadmincp tinyint(1) NOT NULL DEFAULT '0',
   onlyacceptfriendpm tinyint(1) NOT NULL DEFAULT '0',
-  conuin char(40) NOT NULL DEFAULT '',
-  conisbind tinyint(1) unsigned NOT NULL DEFAULT '0',
-  conispublishfeed tinyint(1) unsigned NOT NULL DEFAULT '0',
-  conispublisht tinyint(1) unsigned NOT NULL DEFAULT '0',
-  conisregister tinyint(1) unsigned NOT NULL DEFAULT '0',
-  conisqzoneavatar tinyint(1) unsigned NOT NULL DEFAULT '0',
+  conisbind tinyint(1) unsigned NOT NULL default '0',
   PRIMARY KEY (uid),
   UNIQUE KEY username (username),
   KEY email (email),
   KEY groupid (groupid),
-  KEY conuin (conuin,conisbind)
+  KEY conisbind (conisbind)
 ) TYPE=MyISAM;
 
 DROP TABLE IF EXISTS pre_common_member_action_log;
@@ -737,6 +732,22 @@ CREATE TABLE pre_common_member_grouppm (
   dateline int(10) unsigned NOT NULL DEFAULT '0',
   PRIMARY KEY (uid,gpmid)
 ) TYPE=MyISAM;
+
+DROP TABLE IF EXISTS pre_common_member_connect;
+CREATE TABLE pre_common_member_connect (
+  `uid` mediumint(8) unsigned NOT NULL default '0',
+  `conuin` char(40) NOT NULL default '',
+  `conuinsecret` char(16) NOT NULL default '',
+  `conopenid` char(32) NOT NULL default '',
+  `conisfeed` tinyint(1) unsigned NOT NULL default '0',
+  `conispublishfeed` tinyint(1) unsigned NOT NULL default '0',
+  `conispublisht` tinyint(1) unsigned NOT NULL default '0',
+  `conisregister` tinyint(1) unsigned NOT NULL default '0',
+  `conisqzoneavatar` tinyint(1) unsigned NOT NULL default '0',
+  PRIMARY KEY  (`uid`),
+  KEY `conuin` (`conuin`),
+  KEY `conopenid` (`conopenid`)
+) ENGINE=MyISAM COMMENT='QC”√ªß±Ì';
 
 DROP TABLE IF EXISTS pre_common_member_log;
 CREATE TABLE pre_common_member_log (

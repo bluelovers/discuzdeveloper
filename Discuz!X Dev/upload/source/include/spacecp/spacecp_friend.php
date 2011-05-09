@@ -478,14 +478,14 @@ if($op == 'add') {
 	$json = array();
 	$wheresql = '';
 	if($gid > -1) {
-		$wheresql = " AND gid='$gid'";
+		$wheresql = " AND f.gid='$gid'";
 	}
 	$singlenum = 0;
-	$count = DB::result_first("SELECT COUNT(*) FROM ".DB::table('home_friend')." WHERE uid='$_G[uid]' $wheresql");
+	$count = DB::result_first("SELECT COUNT(*) FROM ".DB::table('home_friend')." f WHERE f.uid='$_G[uid]' $wheresql");
 	if($count) {
-		$query = DB::query("SELECT * FROM ".DB::table('home_friend')." WHERE uid='$_G[uid]' $wheresql ORDER BY num DESC, dateline DESC LIMIT $start,$perpage");
+		$query = DB::query("SELECT f.*, m.username FROM ".DB::table('home_friend')." f LEFT JOIN ".DB::table('common_member')." m ON f.fuid=m.uid WHERE f.uid='$_G[uid]' $wheresql ORDER BY f.num DESC, f.dateline DESC LIMIT $start,$perpage");
 		while($value = DB::fetch($query)) {
-			$value['fusername'] = daddslashes($value['fusername']);
+			$value['fusername'] = daddslashes($value['username']);
 			$value['avatar'] = avatar($value['fuid'], 'small', true);
 			$singlenum++;
 			$json[$value['fuid']] = "$value[fuid]:{'uid':$value[fuid], 'username':'$value[fusername]', 'avatar':'$value[avatar]'}";

@@ -153,6 +153,7 @@ $lang = array (
   'blogcategory_catgory_not_found' => '指定的日志分类不存在',
 
   'card_config_succeed' => '充值卡密设置成功 ',
+  'card_make_cleardateline_early' => '抱歉，请选择一个有效期大于现在的时间，以正确生成有效卡片',
   'card_make_rule_empty' => '生成规则为空',
   'card_make_num_error' => '生成张数不能为 0',
   'card_make_rule_error' => '卡片规则中不能使用中文或其他特殊字符',
@@ -168,11 +169,7 @@ $lang = array (
   'imagepreview_errorcode_-3' => '系统设置错误，无法处理图片',
   'imagepreview_errorcode_-4' => '服务器缺少处理图片所需的功能，无法处理',
   'watermarkpreview_error' => '水印功能未启用，无法预览',
-  'robots_output' => '请下载此文件，并上传至您站点的根目录下 <a href="http://127.0.0.1/robots.txt" target="_blank">http://127.0.0.1/robots.txt</a> 位置处',
-
-  'connect_like_url_error' => 'QQ空间喜欢的链接必须是 qq.com 域名',
-  'connect_like_url_miss' => '您没有填写QQ空间喜欢链接 URL',
-  'connect_update_succeed' => 'QQ绑定设置更新成功 ',
+  'robots_output' => '请下载此文件，并上传至您站点的根目录下 <a href="{siteurl}robots.txt" target="_blank">{siteurl}robots.txt</a> 位置处',
 
   'counter_forum_succeed' => '论坛帖数重建完成',
   'counter_digest_succeed' => '精华帖数重建完成',
@@ -288,8 +285,6 @@ $lang = array (
   'magics_parameter_invalid' => '道具参数填写不全',
   'magics_identifier_invalid' => '道具唯一标识重复',
 
-  'my_app_status_off' => '请先正常开启漫游功能',
-
   'medals_invalidate_succeed' => '勋章申请已被否决',
   'medals_validate_succeed' => '勋章申请审核通过',
 
@@ -310,7 +305,7 @@ $lang = array (
   'members_edit_groups_succeed' => '用户的用户组属性编辑成功 ',
   'members_edit_credits_succeed' => '用户积分编辑成功 ',
   'members_edit_medals_succeed' => '用户勋章编辑成功 ',
-  'members_edit_illegal' => '您不能直接禁止该用户，请<a href="'.ADMINSCRIPT.'?action=members&operation=search&uid={uid}&submit=yes&frames=yes" target="_blank">编辑</a>去掉其“{grouptitle}”身份',
+  'members_edit_illegal' => '您不能直接禁止该用户，请<a href="{ADMINSCRIPT}?action=members&operation=search&uid={uid}&submit=yes&frames=yes" target="_blank">编辑</a>去掉其“{grouptitle}”身份',
   'members_edit_reason_invalid' => '您没有输入执行此变更的理由',
   'members_not_found' => '指定用户未找到',
   'members_access_succeed' => '指定用户站点权限更新成功 ',
@@ -358,7 +353,7 @@ $lang = array (
   'focus_topic_noexists' => '指定的站长推荐不存在',
   'focus_edit_succeed' => '站长推荐编辑成功 ',
   'focus_conf_succeed' => '站长推荐设置成功 ',
-  'custommenu_add_succeed' => '菜单 {title} 已成功添加到常用操作，即将返回上一页，您可以<a href="'.ADMINSCRIPT.'?action=misc&operation=custommenu">点这里编辑常用操作</a>',
+  'custommenu_add_succeed' => '菜单 {title} 已成功添加到常用操作，即将返回上一页，您可以<a href="{ADMINSCRIPT}?action=misc&operation=custommenu">点这里编辑常用操作</a>',
 
   'plugins_enable_succeed' => '插件已启用',
   'plugins_conflict' => '插件已启用</h4><br />友情提示：您刚刚启用的插件与某些插件存在共用嵌入点，如遇到运行不正常的情况请及时联系插件作者。<a href="javascript:;" onclick="display(\'conflict\')">[点击查看]</a><br /><div id="conflict" style="display:none"><br />{plugins}<br /></div><br />',
@@ -415,7 +410,6 @@ $lang = array (
   'setting_extcredits_must_available' => '您需要开启至少一种扩展积分',
   'uc_database_connect_error' => '连接用户中心数据库服务器失败检查设置',
   'uc_config_write_error' => '配置文件写入失败，请检查设置',
-  'my_register_error' => '开启漫游应用服务失败，原因：<br />{errMessage} (ERRCODE:{errCode})<br /><br /><a href="http://www.discuz.net/index.php?gid=141" target="_blank">如果有疑问，请访问官方论坛寻求帮助</a>',
   'setting_ipaccess_invalid' => '操作错误！您必须将自己的 IP 加入到允许访问站点的 IP 列表中',
   'setting_adminipaccess_invalid' => '操作错误！您必须将自己的 IP 加入到允许访问后台的 IP 列表中',
   'setting_creditsformula_invalid' => '积分公式包含无效变量或运算符',
@@ -538,6 +532,12 @@ $lang = array (
   'members_verify_add_user_succeed' => '认证用户添加完成',
   'members_verify_update_title_error' => '认证启用时认证名称不能为空修改',
   'members_verify_title_invalid' => '您没有为启用的认证设置认证名称',
+
+  'connect_like_url_error' => 'QQ空间喜欢的链接必须是 qq.com 域名',
+  'connect_like_url_miss' => '您没有填写QQ空间喜欢链接 URL',
+  'connect_update_succeed' => 'QQ绑定设置更新成功 ',
+
+  'my_app_status_off' => '请先正常开启漫游功能',
 
   'moderate_articles_succeed' => '审核操作成功，共 {validates} 个文章被通过，{ignores} 个文章被忽略，{deletes} 个文章被删除',
 

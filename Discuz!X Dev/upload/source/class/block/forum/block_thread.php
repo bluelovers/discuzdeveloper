@@ -404,7 +404,7 @@ class block_thread {
 		}
 
 		if($listtids) {
-			$threads = $this->getthread($threadtids, $summarylength, true);
+			$threads = $this->getthread($threadtids, $summarylength);
 			if($threads) {
 				foreach($threads as $tid => $var) {
 					$list[$tid]['summary'] = $var;
@@ -459,6 +459,7 @@ class block_thread {
 					$thread['special'] = 0;
 				}
 				if($thread['special'] == 1) {
+					$polloptions = array();
 					$multiple = DB::result_first("SELECT multiple FROM ".DB::table('forum_poll')." WHERE tid='$tid'");
 					$optiontype = $multiple ? 'checkbox' : 'radio';
 					$query = DB::query("SELECT polloptionid, polloption FROM ".DB::table('forum_polloption')." WHERE tid='$tid' ORDER BY displayorder");

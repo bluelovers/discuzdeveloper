@@ -43,6 +43,11 @@ class block_attachmentdigest extends block_attachment {
 				),
 				'default' => 0,
 			),
+			'threadmethod' => array(
+				'title' => 'attachmentlist_threadmethod',
+				'type' => 'radio',
+				'default' => 0
+			),
 			'digest' => array(
 				'title' => 'attachmentlist_digest',
 				'type' => 'mcheckbox',

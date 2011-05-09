@@ -7,7 +7,7 @@
  *      $Id$
  */
 
-if(!defined('IN_DISCUZ') || !defined('IN_ADMINCP')) {
+if(!defined('IN_DISCUZ')) {
 	exit('Access Denied');
 }
 
@@ -263,6 +263,7 @@ function cpmsg_error($message, $url = '', $extra = '', $halt = TRUE) {
 function cpmsg($message, $url = '', $type = '', $values = array(), $extra = '', $halt = TRUE) {
 	global $_G;
 	$vars = explode(':', $message);
+	$values['ADMINSCRIPT'] = ADMINSCRIPT;
 	if(count($vars) == 2) {
 		$message = lang('plugin/'.$vars[0], $vars[1], $values);
 	} else {
@@ -462,7 +463,7 @@ function showtips($tips, $id = 'tips', $display = TRUE, $title = '') {
 	unset($tmp);
 	$title = $title ? $title : 'tips';
 	showtableheader($title, '', 'id="'.$id.'"'.(!$display ? ' style="display: none;"' : ''), 0);
-	showtablerow('', 'class="tipsblock"', '<ul id="'.$id.'lis">'.$tips.'</ul>');
+	showtablerow('', 'class="tipsblock" s="1"', '<ul id="'.$id.'lis">'.$tips.'</ul>');
 	showtablefooter();
 }
 
@@ -748,7 +749,7 @@ function showsetting($setname, $varname, $value, $type = 'radio', $disabled = ''
 	}
 	if(!isset($_G['showsetting_multi'])) {
 		$faqurl = 'http://faq.comsenz.com?type=admin&ver='.$_G['setting']['version'].'&action='.rawurlencode($_GET['action']).'&operation='.rawurlencode($_GET['operation']).'&key='.rawurlencode($setname);
-		showtablerow('onmouseover="setfaq(this, \'faq'.$setid.'\')"', 'colspan="2" class="td27"', $name.'<a id="faq'.$setid.'" class="faq" href="'.$faqurl.'" target="_blank" style="display:none">&nbsp;&nbsp;&nbsp;</a>');
+		showtablerow('onmouseover="setfaq(this, \'faq'.$setid.'\')"', 'colspan="2" class="td27" s="1"', $name.'<a id="faq'.$setid.'" class="faq" title="'.cplang('setting_faq_title').'" href="'.$faqurl.'" target="_blank" style="display:none">&nbsp;&nbsp;&nbsp;</a>');
 	} else {
 		if(empty($_G['showsetting_multijs'])) {
 			$_G['setting_JS'] .= 'var ss = new Array();';
@@ -763,7 +764,7 @@ function showsetting($setname, $varname, $value, $type = 'radio', $disabled = ''
 	}
 	if(!$nocomment && ($type != 'omcheckbox' || $varname[2] != 'isfloat')) {
 		if(!isset($_G['showsetting_multi'])) {
-			showtablerow('class="noborder" onmouseover="setfaq(this, \'faq'.$setid.'\')"', array('class="vtop rowform"', 'class="vtop tips2"'), array(
+			showtablerow('class="noborder" onmouseover="setfaq(this, \'faq'.$setid.'\')"', array('class="vtop rowform"', 'class="vtop tips2" s="1"'), array(
 				$s,
 				($comment ? $comment : cplang($setname.'_comment', false)).($type == 'textarea' ? '<br />'.cplang('tips_textarea') : '').
 				($disabled ? '<br /><span class="smalltxt" style="color:#F00">'.cplang($setname.'_disabled', false).'</span>' : NULL)
@@ -961,7 +962,11 @@ function getimportdata($name = '', $addslashes = 1, $ignoreerror = 0) {
 	require_once libfile('class/xml');
 	$xmldata = xml2array($data);
 	if(!is_array($xmldata) || !$xmldata) {
-		cpmsg(cplang('import_data_invalid').cplang($data), '', 'error');
+		if(!$ignoreerror) {
+			cpmsg(cplang('import_data_invalid').cplang($data), '', 'error');
+		} else {
+			return array();
+		}
 	} else {
 		if($name && $name != $xmldata['Title']) {
 			if(!$ignoreerror) {
@@ -1238,6 +1243,93 @@ function getposttableselect() {
 		$posttableselect = '';
 	}
 	return $posttableselect;
+}
+
+function rewritedata($alldata = 1) {
+	global $_G;
+	$data = array();
+	if(!$alldata) {
+		if(in_array('portal_topic', $_G['setting']['rewritestatus'])) {
+			$data['search']['portal_topic'] = "/".$_G['domain']['pregxprw']['portal']."\?mod\=topic&(amp;)?topic\=(.+?)?\"([^\>]*)\>/e";
+			$data['replace']['portal_topic'] = "rewriteoutput('portal_topic', 0, '\\1', '\\3', '\\4')";
+		}
+
+		if(in_array('portal_article', $_G['setting']['rewritestatus'])) {
+			$data['search']['portal_article'] = "/".$_G['domain']['pregxprw']['portal']."\?mod\=view&(amp;)?aid\=(\d+)(&amp;page\=(\d+))?\"([^\>]*)\>/e";
+			$data['replace']['portal_article'] = "rewriteoutput('portal_article', 0, '\\1', '\\3', '\\5', '\\6')";
+		}
+
+		if(in_array('forum_forumdisplay', $_G['setting']['rewritestatus'])) {
+			$data['search']['forum_forumdisplay'] = "/".$_G['domain']['pregxprw']['forum']."\?mod\=forumdisplay&(amp;)?fid\=(\w+)(&amp;page\=(\d+))?\"([^\>]*)\>/e";
+			$data['replace']['forum_forumdisplay'] = "rewriteoutput('forum_forumdisplay', 0, '\\1', '\\3', '\\5', '\\6')";
+		}
+
+		if(in_array('forum_viewthread', $_G['setting']['rewritestatus'])) {
+			$data['search']['forum_viewthread'] = "/".$_G['domain']['pregxprw']['forum']."\?mod\=viewthread&(amp;)?tid\=(\d+)(&amp;extra\=(page\%3D(\d+))?)?(&amp;page\=(\d+))?\"([^\>]*)\>/e";
+			$data['replace']['forum_viewthread'] = "rewriteoutput('forum_viewthread', 0, '\\1', '\\3', '\\8', '\\6', '\\9')";
+		}
+
+		if(in_array('group_group', $_G['setting']['rewritestatus'])) {
+			$data['search']['group_group'] = "/".$_G['domain']['pregxprw']['forum']."\?mod\=group&(amp;)?fid\=(\d+)(&amp;page\=(\d+))?\"([^\>]*)\>/e";
+			$data['replace']['group_group'] = "rewriteoutput('group_group', 0, '\\1', '\\3', '\\5', '\\6')";
+		}
+
+		if(in_array('home_space', $_G['setting']['rewritestatus'])) {
+			$data['search']['home_space'] = "/".$_G['domain']['pregxprw']['home']."\?mod=space&(amp;)?(uid\=(\d+)|username\=([^&]+?))\"([^\>]*)\>/e";
+			$data['replace']['home_space'] = "rewriteoutput('home_space', 0, '\\1', '\\4', '\\5', '\\6')";
+		}
+
+		if(in_array('home_blog', $_G['setting']['rewritestatus'])) {
+			$data['search']['home_blog'] = "/".$_G['domain']['pregxprw']['home']."\?mod=space&(amp;)?uid\=(\d+)&(amp;)?do=blog&(amp;)?id=(\d+)\"([^\>]*)\>/e";
+			$data['replace']['home_blog'] = "rewriteoutput('home_blog', 0, '\\1', '\\3', '\\6', '\\7')";
+		}
+
+		if(in_array('forum_archiver', $_G['setting']['rewritestatus'])) {
+			$data['search']['forum_archiver'] = "/<a href\=\"\?(fid|tid)\-(\d+)\.html(&page\=(\d+))?\"([^\>]*)\>/e";
+			$data['replace']['forum_archiver'] = "rewriteoutput('forum_archiver', 0, '\\1', '\\2', '\\4', '\\5')";
+		}
+	} else {
+		$data['rulesearch']['portal_topic'] = 'topic-{name}.html';
+		$data['rulereplace']['portal_topic'] = 'portal.php?mod=topic&topic={name}';
+		$data['rulevars']['portal_topic']['{name}'] = '(.+)';
+
+		$data['rulesearch']['portal_article'] = 'article-{id}-{page}.html';
+		$data['rulereplace']['portal_article'] = 'portal.php?mod=view&aid={id}&page={page}';
+		$data['rulevars']['portal_article']['{id}'] = '([0-9]+)';
+		$data['rulevars']['portal_article']['{page}'] = '([0-9]+)';
+
+		$data['rulesearch']['forum_forumdisplay'] = 'forum-{fid}-{page}.html';
+		$data['rulereplace']['forum_forumdisplay'] = 'forum.php?mod=forumdisplay&fid={fid}&page={page}';
+		$data['rulevars']['forum_forumdisplay']['{fid}'] = '(\w+)';
+		$data['rulevars']['forum_forumdisplay']['{page}'] = '([0-9]+)';
+
+		$data['rulesearch']['forum_viewthread'] = 'thread-{tid}-{page}-{prevpage}.html';
+		$data['rulereplace']['forum_viewthread'] = 'forum.php?mod=viewthread&tid={tid}&extra=page\%3D{prevpage}&page={page}';
+		$data['rulevars']['forum_viewthread']['{tid}'] = '([0-9]+)';
+		$data['rulevars']['forum_viewthread']['{page}'] = '([0-9]+)';
+		$data['rulevars']['forum_viewthread']['{prevpage}'] = '([0-9]+)';
+
+		$data['rulesearch']['group_group'] = 'group-{fid}-{page}.html';
+		$data['rulereplace']['group_group'] = 'forum.php?mod=group&fid={fid}&page={page}';
+		$data['rulevars']['group_group']['{fid}'] = '([0-9]+)';
+		$data['rulevars']['group_group']['{page}'] = '([0-9]+)';
+
+		$data['rulesearch']['home_space'] = 'space-{user}-{value}.html';
+		$data['rulereplace']['home_space'] = 'home.php?mod=space&{user}={value}';
+		$data['rulevars']['home_space']['{user}'] = '(username|uid)';
+		$data['rulevars']['home_space']['{value}'] = '(.+)';
+
+		$data['rulesearch']['home_blog'] = 'blog-{uid}-{blogid}.html';
+		$data['rulereplace']['home_blog'] = 'home.php?mod=space&uid={uid}&do=blog&id={blogid}';
+		$data['rulevars']['home_blog']['{uid}'] = '([0-9]+)';
+		$data['rulevars']['home_blog']['{blogid}'] = '([0-9]+)';
+
+		$data['rulesearch']['forum_archiver'] = '{action}-{value}.html';
+		$data['rulereplace']['forum_archiver'] = 'index.php?action={action}&value={value}';
+		$data['rulevars']['forum_archiver']['{action}'] = '(fid|tid)';
+		$data['rulevars']['forum_archiver']['{value}'] = '([0-9]+)';
+	}
+	return $data;
 }
 
 ?>

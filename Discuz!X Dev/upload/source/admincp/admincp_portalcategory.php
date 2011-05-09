@@ -61,7 +61,7 @@ var rowtypedata = [
 SCRIPT;
 
 	} else {
-
+		$cachearr = array('portalcategory');
 		if($_POST['name']) {
 			$openarr = $closearr = array();
 			foreach($_POST['name'] as $key=>$value) {
@@ -76,15 +76,17 @@ SCRIPT;
 				if($sets) {
 					DB::query('UPDATE '.DB::table('portal_category')." SET ".implode(',',$sets)." WHERE catid = '$key'");
 					DB::update('common_diy_data',array('name'=>$value),array('targettplname'=>'portal/list_'.$key));
+					$cachearr[] = 'diytemplatename';
 				}
 			}
 		}
 
 		if($_G['gp_newsetindex']) {
 			DB::insert('common_setting', array('skey' => 'defaultindex', 'svalue' => $portalcategory[$_G['gp_newsetindex']]['caturl']), 0, 1);
+			$cachearr[] = 'setting';
 		}
 		include_once libfile('function/cache');
-		updatecache(array('portalcategory','diytemplatename'));
+		updatecache($cachearr);
 
 		cpmsg('portalcategory_update_succeed', 'action=portalcategory', 'succeed');
 	}
@@ -364,6 +366,7 @@ SCRIPT;
 		DB::update('portal_category', array('articles'=>0), array('catid'=>$_GET['catid']));
 		$num = DB::result_first('SELECT COUNT(*) FROM '.DB::table('portal_article_title')." WHERE catid = '$_POST[tocatid]'");
 		DB::update('portal_category', array('articles'=>$num), array('catid'=>$_POST['tocatid']));
+		updatecache('portalcategory');
 
 		cpmsg('portalcategory_move_succeed', 'action=portalcategory', 'succeed');
 	}
@@ -548,7 +551,7 @@ SCRIPT;
 				$editcat['domain'] = $domain;
 			}
 		}
-		$cachearr = array();
+		$cachearr = array('portalcategory');
 		if($_G['gp_catid']) {
 			DB::update('portal_category', $editcat, array('catid'=>$cate['catid']));
 			if($cate['catname'] != $_G['gp_catname']) {
@@ -566,6 +569,7 @@ SCRIPT;
 
 		if(!empty($domain)) {
 			DB::insert('common_domain', array('domain' => $domain, 'domainroot' => addslashes($_G['setting']['domain']['root']['channel']), 'id' => $_G['gp_catid'], 'idtype' => 'channel'));
+			$cachearr[] = 'setting';
 		}
 		if($_G['gp_listprimaltplname'] && (empty($cate['primaltplname']) || $cate['primaltplname'] != $primaltplname)) {
 			remakediytemplate($primaltplname, 'portal/list_'.$_G['gp_catid'], stripslashes($_G['gp_catname']));
@@ -679,6 +683,7 @@ SCRIPT;
 						}
 					}
 				}
+				$cachearr[] = 'setting';
 			} else {
 				if(!empty($nav)) {
 					DB::delete('common_nav', array('id'=>$nav['id']));
@@ -686,17 +691,20 @@ SCRIPT;
 						DB::delete('common_nav', array('parentid'=>$nav['id']));
 						DB::update('portal_category', array('shownav'=>'0'), ' catid IN ('.dimplode($portalcategory[$_G['gp_catid']]['children']).')');
 					}
+					$cachearr[] = 'setting';
 				}
 			}
 		}
 
 		if($_G['gp_setindex']) {
 			DB::insert('common_setting', array('skey' => 'defaultindex', 'svalue' => $portalcategory[$_G['gp_catid']]['caturl']), 0, 1);
+			$cachearr[] = 'setting';
 		} elseif($oldsetindex) {
 			DB::insert('common_setting', array('skey' => 'defaultindex', 'svalue' => ''), 0, 1);
+			$cachearr[] = 'setting';
 		}
 
-		updatecache($cachearr);
+		updatecache(array_unique($cachearr));
 
 		cpmsg('portalcategory_edit_succeed', 'action=portalcategory#cat'.$_G['gp_catid'], 'succeed');
 	}

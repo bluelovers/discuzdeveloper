@@ -170,7 +170,7 @@ if($operation=='perm') {
 
 		$intkeys = array('bid');
 		$strkeys = array('blockclass');
-		if($operation!='jscall') $strkeys[] = 'targettplname';
+		$strkeys[] = 'targettplname';
 		$randkeys = array();
 		$likekeys = array('name');
 		$results = getwheres($intkeys, $strkeys, $randkeys, $likekeys);
@@ -236,7 +236,7 @@ if($operation=='perm') {
 		}
 		$blockclass_sel .= '</select>';
 		$addjscall = $operation == 'jscall' ? '<input type="button" class="btn" onclick="addjscall()" value="'.$searchlang['block_add_jscall'].'" />' : '';
-		$firstrow = $operation == 'jscall' ? "<th>$searchlang[block_blockclass]</th><td colspan=\"3\">$blockclass_sel $addjscall</td>" : "<th>$searchlang[block_diytemplate]</th><td>$diytemplatename_sel</td><th>$searchlang[block_blockclass]</th><td colspan=\"2\">$blockclass_sel $addjscall</td>";
+		$firstrow = "<th>$searchlang[block_diytemplate]</th><td>$diytemplatename_sel</td><th>$searchlang[block_blockclass]</th><td colspan=\"2\">$blockclass_sel $addjscall</td>";
 		$adminscript = ADMINSCRIPT;
 		echo <<<SEARCH
 			<script>disallowfloat = '{$_G[setting][disallowfloat]}';</script>
@@ -324,6 +324,7 @@ SEARCH;
 							!empty($value['dateline']) ? dgmdate($value['dateline']) : cplang('block_dateline_null'),
 							$inpage,
 							"<a href=\"portal.php?mod=portalcp&ac=block&op=block&bid=$value[bid]&blocktype=1&from=cp\" target=\"_blank\" onclick=\"showWindow('showblock',this.href);return false;\">".cplang('block_setting')."</a> &nbsp;&nbsp".
+							"<a href=\"portal.php?mod=portalcp&ac=block&op=getblock&forceupdate=1&inajax=1&bid=$value[bid]&from=cp\" onclick=\"ajaxget(this.href,'','','','',function(){location.reload();});return false;\">".cplang('block_update')."</a> &nbsp;&nbsp".
 							"<a href=\"portal.php?mod=portalcp&ac=block&op=data&bid=$value[bid]&blocktype=1&from=cp\" target=\"_blank\" onclick=\"showWindow('showblock',this.href);return false;\">".cplang('block_data')."</a> &nbsp;&nbsp".
 							"<a href=\"javascript:;\" onclick=\"prompt('".cplang('block_copycode_message')."', '<!--{block/$value[bid]}-->')\">".cplang('block_copycode_inner')."</a> &nbsp;&nbsp".
 							"<a href=\"javascript:;\" onclick=\"prompt('".cplang('block_copycode_jsmessage')."', '&lt;script type=&quot;text/javascript&quot; src=&quot;$_G[siteurl]api.php?mod=js&bid=$value[bid]&quot;&gt;&lt;/script&gt;')\">".cplang('block_copycode_outer')."</a>&nbsp;&nbsp;<a href=\"".ADMINSCRIPT."?action=block&operation=perm&bid=$value[bid]\">".cplang('portalcategory_perm').'</a>'

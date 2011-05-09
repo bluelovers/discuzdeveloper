@@ -7,6 +7,9 @@
  *      $Id$
  */
 
+define('IN_API', true);
+define('CURSCRIPT', 'api');
+
 if(!defined('IN_DISCUZ')) {
 	exit('Access Denied');
 }
@@ -158,7 +161,8 @@ function trade_notifycheck($type) {
 		ksort($notify);
 		$sign = '';
 		foreach($notify as $key => $val) {
-			if($key != 'sign' and $key != 'sign_type') $sign .= "&$key=$val";
+			$val = stripslashes($val);
+			if($key != 'sign' && $key != 'sign_type') $sign .= "&$key=$val";
 		}
 
 		if($notify['sign'] != md5(substr($sign,1).DISCUZ_SECURITYCODE)) {

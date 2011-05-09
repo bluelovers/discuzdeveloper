@@ -2,7 +2,7 @@
 	[Discuz!] (C)2001-2009 Comsenz Inc.
 	This is NOT a freeware, use is subject to license terms
 
-	$Id: admincp.js 21470 2011-03-28 05:40:39Z monkey $
+	$Id: admincp.js 22381 2011-05-05 03:05:16Z monkey $
 */
 
 function redirect(url) {
@@ -197,16 +197,24 @@ function entersubmit(e, name) {
 }
 
 function parsetag(tag) {
-	var str = document.body.innerHTML.replace(/(^|>)([^<]+)(?=<|$)/ig, function($1, $2, $3) {
-		if(tag && $3.indexOf(tag) != -1) {
-			re = new RegExp(tag, "g");
-			$3 = $3.replace(re, '<h_>');
+	var parse = function (tds) {
+		for(var i = 0; i < tds.length; i++) {
+			if(tds[i].getAttribute('s') == '1') {
+				var str = tds[i].innerHTML.replace(/(^|>)([^<]+)(?=<|$)/ig, function($1, $2, $3) {
+					if(tag && $3.indexOf(tag) != -1) {
+						re = new RegExp(tag, "g");
+						$3 = $3.replace(re, '<h_>');
+					}
+					return $2 + $3;
+					});
+				tds[i].innerHTML = str.replace(/<h_>/ig, function($1, $2) {
+					return '<font class="highlight">' + tag + '</font>';
+					});
+			}
 		}
-		return $2 + $3;
-		});
-	document.body.innerHTML = str.replace(/<h_>/ig, function($1, $2) {
-		return '<font class="highlight">' + tag + '</font>';
-		});
+	}
+	parse(document.body.getElementsByTagName('td'));
+	parse(document.body.getElementsByTagName('span'));
 }
 
 function sdisplay(id, obj) {

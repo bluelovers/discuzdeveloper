@@ -13,7 +13,7 @@ define('CURSCRIPT', 'portal');
 require './source/class/class_core.php';
 $discuz = & discuz_core::instance();
 
-$cachelist = array('userapp', 'portalcategory');
+$cachelist = array('userapp', 'portalcategory', 'diytemplatenameportal');
 $discuz->cachelist = $cachelist;
 $discuz->init();
 

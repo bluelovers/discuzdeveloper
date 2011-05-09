@@ -1,7 +1,20 @@
 <!--{if !$_G['inajax']}-->
 	<!--{template common/header}-->
 	<div id="ct" class="wp cl w">
-		<div class="nfl">
+		<!--{if !$param[login]}-->
+			<div class="nfl">
+		<!--{else}-->
+			<div class="nfl" id="main_succeed" style="display: none">
+				<div class="f_c altw">
+					<div class="alert_right">
+						<p id="succeedmessage"></p>
+						<p id="succeedlocation" class="alert_btnleft"></p>
+						<p class="alert_btnleft"><a id="succeedmessage_href">{lang message_forward}</a></p>
+					</div>
+				</div>
+			</div>
+			<div class="nfl" id="main_message">
+		<!--{/if}-->
 <!--{else}-->
 	<!--{template common/header_ajax}-->
 <!--{/if}-->
@@ -23,7 +36,7 @@
 						document.write('<p class="alert_btnleft"><a href="./">[ $_G['setting']['bbname'] {lang homepage} ]</a></p>');
 					}
 				</script>
-				<!--{/if}-->				
+				<!--{/if}-->
 			</div>
 			<!--{if $param[login]}-->
 				<div id="messagelogin"></div>
@@ -41,7 +54,7 @@
 			<!--{elseif $param['locationtime']}-->
 				<span class="z xg1">$param['locationtime'] {lang message_locationtime}</span>
 			<!--{/if}-->
-			<!--{if $param[login]}-->							
+			<!--{if $param[login]}-->
 				<button type="button" class="pn pnc" onclick="hideWindow('$_G['gp_handlekey']');showWindow('login', 'member.php?mod=logging&action=login');"><strong>{lang login}</strong></button>
 				<!--{if !$_G['setting']['bbclosed']}-->
 					<button type="button" class="pn pnc" onclick="hideWindow('$_G['gp_handlekey']');window.open('member.php?mod={$_G[setting][regname]}');"><em>$_G['setting']['reglinkname']</em></button>

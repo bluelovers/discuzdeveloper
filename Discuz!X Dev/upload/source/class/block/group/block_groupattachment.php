@@ -49,6 +49,11 @@ class block_groupattachment {
 				),
 				'default' => 0,
 			),
+			'threadmethod' => array(
+				'title' => 'groupattachment_threadmethod',
+				'type' => 'radio',
+				'default' => 0
+			),
 			'digest' => array(
 				'title' => 'groupattachment_digest',
 				'type' => 'mcheckbox',
@@ -190,6 +195,7 @@ class block_groupattachment {
 		$special	= isset($parameter['special']) ? $parameter['special'] : array();
 		$rewardstatus	= isset($parameter['rewardstatus']) ? intval($parameter['rewardstatus']) : 0;
 		$dateline = isset($parameter['dateline']) ? intval($parameter['dateline']) : 8640000;
+		$threadmethod = !empty($parameter['threadmethod']) ? 1 : 0;
 		$gviewperm = isset($parameter['gviewperm']) ? intval($parameter['gviewperm']) : -1;
 		$highlight = !empty($parameter['highlight']) ? 1 : 0;
 
@@ -229,6 +235,10 @@ class block_groupattachment {
 			$historytime = TIMESTAMP - $dateline;
 		$htsql = "`t`.`dateline`>='$historytime'";
 		}
+		$sqlgroupby = '';
+		if($threadmethod) {
+			$sqlgroupby = ' GROUP BY t.tid';
+		}
 		$sqlban = !empty($bannedids) ? ' AND attach.aid NOT IN ('.dimplode($bannedids).')' : '';
 
 		$sqlfield = '';
@@ -246,6 +256,7 @@ class block_groupattachment {
 			WHERE $htsql
 			$sql
 			$sqlban
+			$sqlgroupby
 			$orderbysql
 			LIMIT $startrow,$items;"
 		);
@@ -279,7 +290,7 @@ class block_groupattachment {
 			}
 		}
 		if(!empty($listtids)) {
-			$threads = $bt->getthread($threadtids, $summarylength);
+			$threads = $bt->getthread($threadtids, $summarylength, true);
 			if($threads) {
 				foreach($list as $laid => $lvalue) {
 					if(isset($threads[$lvalue['tid']])) {

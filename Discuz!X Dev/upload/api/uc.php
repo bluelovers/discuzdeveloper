@@ -9,8 +9,8 @@
 
 error_reporting(0);
 
-define('UC_CLIENT_VERSION', '1.5.1');
-define('UC_CLIENT_RELEASE', '20100501');
+define('UC_CLIENT_VERSION', '1.6.0');
+define('UC_CLIENT_RELEASE', '20110501');
 
 define('API_DELETEUSER', 1);
 define('API_RENAMEUSER', 1);
@@ -30,9 +30,10 @@ define('API_ADDFEED', 1);
 define('API_RETURN_SUCCEED', '1');
 define('API_RETURN_FAILED', '-1');
 define('API_RETURN_FORBIDDEN', '1');
-define('IN_DISCUZ', true);
 
-define('CURSCRIPT', 'api');
+@define('IN_DISCUZ', true);
+@define('IN_API', true);
+@define('CURSCRIPT', 'api');
 
 
 if(!defined('IN_UC')) {

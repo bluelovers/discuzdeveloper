@@ -199,7 +199,7 @@ function loadmember(&$uid, &$username, &$error) {
 
 	if($uid || $username != '') {
 
-		$query = DB::query("SELECT m.uid, m.username, m.groupid, m.adminid, mf.groupterms, mp.bio, mf.sightml, u.type AS grouptype, uf.allowsigbbcode, uf.allowsigimgcode FROM ".DB::table('common_member')." m
+		$query = DB::query("SELECT m.uid, m.username, m.groupid, m.adminid, mf.groupterms, mp.bio, mf.sightml, u.type AS grouptype, uf.allowsigbbcode, uf.allowsigimgcode, m.credits FROM ".DB::table('common_member')." m
 			LEFT JOIN ".DB::table('common_member_field_forum')." mf ON mf.uid=m.uid
 			LEFT JOIN ".DB::table('common_usergroup')." u ON u.groupid=m.groupid
 			LEFT JOIN ".DB::table('common_member_profile')." mp ON mp.uid=m.uid

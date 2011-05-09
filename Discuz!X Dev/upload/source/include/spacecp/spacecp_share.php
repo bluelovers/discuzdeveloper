@@ -218,6 +218,8 @@ if($_GET['op'] == 'delete') {
 
 			$arr['title_template'] = lang('spacecp', 'share_thread');
 			$arr['body_template'] = '<b>{subject}</b><br>{author}<br>{message}';
+			$attachment = !preg_match("/\[hide=?\d*\](.*?)\[\/hide\]/is", $post['message'], $a) && preg_match("/\[attach\]\d+\[\/attach\]/i", $a[1]);
+
 			$arr['body_data'] = array(
 				'subject' => "<a href=\"forum.php?mod=viewthread&tid=$id\">$thread[subject]</a>",
 				'author' => "<a href=\"home.php?mod=space&uid=$thread[authorid]\">$thread[author]</a>",
@@ -225,7 +227,7 @@ if($_GET['op'] == 'delete') {
 			);
 			$arr['itemid'] = $id;
 			$arr['fromuid'] = $thread['uid'];
-			$attachment = DB::fetch_first('SELECT attachment, isimage, thumb, remote FROM '.DB::table(getattachtablebytid($id))." WHERE tid='$id' AND isimage IN ('1', '-1') LIMIT 0,1");
+			$attachment = $attachment ? DB::fetch_first('SELECT attachment, isimage, thumb, remote FROM '.DB::table(getattachtablebytid($id))." WHERE tid='$id' AND isimage IN ('1', '-1') LIMIT 0,1") : false;
 			if($attachment) {
 				$arr['image'] = pic_get($attachment['attachment'], 'forum', $attachment['thumb'], $attachment['remote'], 1);
 				$arr['image_link'] = "forum.php?mod=viewthread&tid=$id";
@@ -339,7 +341,7 @@ if($_GET['op'] == 'delete') {
 				$article = DB::fetch_first("SELECT * FROM ".DB::table('portal_article_title')." WHERE aid='$currentid'");
 				include_once libfile('function/portal');
 				loadcache('portalcategory');
-				$cat = category_remake($article['catid']);
+				$cat = $_G['cache']['portalcategory'][$article['catid']];
 				$article['allowcomment'] = !empty($cat['allowcomment']) && !empty($article['allowcomment']) ? 1 : 0;
 				if(!$article['allowcomment']) {
 					showmessage('no_privilege_commentadd', '', array(), array('return' => true));

@@ -4,6 +4,7 @@
 	var allowpostattach = parseInt('{$_G['group']['allowpostattach']}');
 	var allowpostimg = parseInt('$allowpostimg');
 	var pid = parseInt('$pid');
+	var tid = parseInt('$_G[tid]');
 	var extensions = '{$_G['group']['attachextensions']}';
 	var imgexts = '$imgexts';
 	var postminchars = parseInt('$_G['setting']['minpostsize']');
@@ -75,7 +76,6 @@
 <!--{/block}-->
 
 <div id="pt" class="bm cl">
-	<!--{subtemplate common/simplesearchform}-->
 	<div class="z"><a href="./" class="nvhm" title="{lang homepage}">$_G[setting][bbname]</a> $navigation$actionsubject <em>&rsaquo;</em> $actiontitle</div>
 </div>
 
@@ -199,10 +199,10 @@
 
 				<!--{if $_G[gp_action] != 'edit' && checkperm('seccode') && ($secqaacheck || $seccodecheck)}-->
 					<!--{block sectpl}--><sec> <span id="sec<hash>" onclick="showMenu(this.id);"><sec></span><div id="sec<hash>_menu" class="p_pop p_opt" style="display:none"><sec></div><!--{/block}-->
-					<div class="mtm"><!--{template common/seccheck}--></div>
+					<div class="mtm"><!--{subtemplate common/seccheck}--></div>
 				<!--{/if}-->
 
-				<div class="mtm mbm">
+				<div class="mtm mbm pnpost">
 					<a href="home.php?mod=spacecp&ac=credit&op=rule&fid=$_G['fid']" class="y" target="_blank">{lang post_credits_rule}</a>
 					<button type="submit" id="postsubmit" class="pn pnc" value="true" name="{if $_G[gp_action] == 'newthread'}topicsubmit{elseif $_G[gp_action] == 'reply'}replysubmit{elseif $_G[gp_action] == 'edit'}editsubmit{/if}">
 					<!--{if $_G[gp_action] == 'newthread'}-->
@@ -230,6 +230,12 @@
 					<!--{/if}-->
 					<!--{if $special == 2}--><label><input type="checkbox" name="continueadd" value="yes" class="pc" />{lang post_message2}</label><!--{/if}-->
 					<!--{hook/post_btn_extra}-->
+					<!--{if !empty($_G['setting']['pluginhooks']['post_sync_method'])}-->
+						<span>
+							{lang post_sync_method}:
+							<!--{hook/post_sync_method}-->
+						</span>
+					<!--{/if}-->
 				</div>
 
 				<!--{hook/post_bottom}-->

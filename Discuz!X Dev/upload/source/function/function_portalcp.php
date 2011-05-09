@@ -20,7 +20,7 @@ function get_uploadcontent($attach, $type='portal', $dotype='') {
 		$return .= '<table id="attach_list_'.$attach['attachid'].'" width="100%" class="xi2">';
 		$return .= '<td width="50" class="bbs"><a href="'.$pic.'" target="_blank"><img src="'.($small_pic ? $small_pic : $pic).'" width="40" height="40"></a></td>';
 		$return .= '<td class="bbs">';
-		$return .= '<label for="setconver'.$attach['attachid'].'"><input type="radio" name="setconver" id="setconver'.$attach['attachid'].'" class="pr" value="1" onclick=setConver(\''.addslashes(serialize(array('pic'=>$type.'/'.$attach['attachment'], 'thumb'=>$attach['thumb'], 'remote'=>$attach['remote']))).'\') '.$check.'> '.lang('portalcp', 'set_to_conver').'</label><br>';
+		$return .= '<label for="setconver'.$attach['attachid'].'"><input type="radio" name="setconver" id="setconver'.$attach['attachid'].'" class="pr" value="1" onclick=setConver(\''.addslashes(serialize(array('pic'=>$type.'/'.$attach['attachment'], 'thumb'=>$attach['thumb'], 'remote'=>$attach['remote']))).'\') '.$check.'>'.lang('portalcp', 'set_to_conver').'</label><br>';
 		if($small_pic) $return .= '<a href="javascript:void(0);" onclick="insertImage(\''.$small_pic.'\', \''.$pic.'\');return false;">'.lang('portalcp', 'insert_small_image').'</a><br>';
 		$return .= '<a href="javascript:void(0);" onclick="insertImage(\''.$pic.'\');return false;">'.lang('portalcp', 'insert_large_image').'</a><br>';
 		if($type == 'portal') $return .= '<a href="javascript:void(0);" onclick="deleteAttach(\''.$attach['attachid'].'\', \'portal.php?mod=attachment&id='.$attach['attachid'].'&aid='.$aid.'&op=delete\');return false;">'.lang('portalcp', 'delete').'</a>';
@@ -115,26 +115,26 @@ function save_diy_data($primaltplname, $targettplname, $data, $database = false,
 	}
 
 	$flag = $optype == 'savecache' ? true : false;
-
-	$targettplname = $flag ? $targettplname.'_diy_preview' : $targettplname;
-
-	if(!$flag) @unlink('./data/diy/'.$targettplname.'_diy_preview.htm');
+	if($flag) {
+		$targettplname = $targettplname.'_diy_preview';
+	} else {
+		@unlink('./data/diy/'.$targettplname.'_diy_preview.htm');
+	}
 
 	$tplfile =DISCUZ_ROOT.'./data/diy/'.$targettplname.'.htm';
-
-	if (file_exists($tplfile) && !$flag) copy($tplfile, $tplfile.'.bak');
-
 	$tplpath = dirname($tplfile);
-	if (!is_dir($tplpath)) dmkdir($tplpath);
+	if (!is_dir($tplpath)) {
+		dmkdir($tplpath);
+	} else {
+		if (file_exists($tplfile) && !$flag) copy($tplfile, $tplfile.'.bak');
+	}
 	$r = file_put_contents($tplfile, $content);
-
 	if ($r && $database && !$flag) {
 		$tpldata = daddslashes(serialize($data));
 		$diytplname = getdiytplname($targettplname);
 		$diytplname = addslashes($diytplname);
 		DB::query("REPLACE INTO ".DB::table('common_diy_data')." (targettplname, primaltplname, diycontent, `name`, uid, username, dateline) VALUES ('$targettplname', '$primaltplname', '$tpldata', '$diytplname', '$_G[uid]', '$_G[username]', '".TIMESTAMP."')");
 	}
-
 	return $r;
 }
 
@@ -543,14 +543,6 @@ function import_diy($file) {
 
 function checkprimaltpl($template) {
 	global $_G;
-	$pos = strpos($template, '/');
-	if($pos !== false) {
-		$filename = substr($template, $pos+1);
-		$filename = str_replace(array('/', '\\', '.'), '', $filename);
-		$template = substr($template, 0, $pos+1).$filename;
-	} else {
-		return 'diy_template_filename_invalid';
-	}
 	if(!$template || preg_match("/(\.)(exe|jsp|asp|aspx|cgi|fcgi|pl)(\.|$)/i", $template)) {
 		return 'diy_template_filename_invalid';
 	}
@@ -715,16 +707,16 @@ function updatetopic($topic = ''){
 	}
 
 	$setarr = array(
-			'title' => $_POST['title'],
-			'name' => $_POST['name'],
-			'domain' => $_POST['domain'],
-			'summary' => getstr($_POST['summary'], '', 1, 1),
-			'keyword' => getstr($_POST['keyword'], '', 1, 1),
-			'useheader' => $_POST['useheader'] ? '1' : '0',
-			'usefooter' => $_POST['usefooter'] ? '1' : '0',
-			'allowcomment' => $_POST['allowcomment'] ? 1 : 0,
-			'closed' => $_POST['closed'] ? 0 : 1,
-		);
+		'title' => $_POST['title'],
+		'name' => $_POST['name'],
+		'domain' => $_POST['domain'],
+		'summary' => getstr($_POST['summary'], '', 1, 1),
+		'keyword' => getstr($_POST['keyword'], '', 1, 1),
+		'useheader' => $_POST['useheader'] ? '1' : '0',
+		'usefooter' => $_POST['usefooter'] ? '1' : '0',
+		'allowcomment' => $_POST['allowcomment'] ? 1 : 0,
+		'closed' => $_POST['closed'] ? 0 : 1,
+	);
 
 	if($_POST['deletecover'] && $topic['cover']) {
 		if($topic['picflag'] != '0') pic_delete(str_replace('portal/', '', $topic['cover']), 'portal', 0, $topic['picflag'] == '2' ? '1' : '0');
@@ -776,18 +768,13 @@ function updatetopic($topic = ''){
 		DB::insert('common_domain', array('domain' => $_POST['domain'], 'domainroot' => addslashes($_G['setting']['domain']['root']['topic']), 'id' => $topicid, 'idtype' => 'topic'));
 	}
 
-	$makediyfile = false;
-	if($primaltplname && !empty($topic['primaltplname']) && $topic['primaltplname'] != $primaltplname) {
+	if($topic['primaltplname'] != $primaltplname) {
 		$targettplname = 'portal/portal_topic_content_'.$topicid;
 		DB::update('common_diy_data',array('primaltplname'=>$primaltplname),array('targettplname'=>$targettplname));
-		if(DB::affected_rows()>0){
-			updatediytemplate($targettplname);
-		} else {
-			$makediyfile = true;
-		}
+		updatediytemplate($targettplname);
 	}
 
-	if($primaltplname && empty($topic['primaltplname']) || $primaltplname && $makediyfile) {
+	if($primaltplname && empty($topic['primaltplname'])) {
 		$content = file_get_contents(DISCUZ_ROOT.'./template/default/'.$primaltplname.'.htm');
 		$tplfile = DISCUZ_ROOT.'./data/diy/portal/portal_topic_content_'.$topicid.'.htm';
 		$tplpath = dirname($tplfile);
@@ -917,7 +904,7 @@ function addportalarticlecomment($id, $message, $idtype = 'aid') {
 
 	$idtype = in_array($idtype, array('aid' ,'topicid')) ? $idtype : 'aid';
 	$tablename = $idtype == 'aid' ? 'portal_article_title' : 'portal_topic';
-	$data = DB::fetch_first("SELECT allowcomment FROM ".DB::table($tablename)." WHERE $idtype='$id'");
+	$data = DB::fetch_first("SELECT uid,allowcomment FROM ".DB::table($tablename)." WHERE $idtype='$id'");
 	if(empty($data)) {
 		return 'comment_comment_noexist';
 	}
@@ -953,6 +940,10 @@ function addportalarticlecomment($id, $message, $idtype = 'aid') {
 	$tablename = $idtype == 'aid' ? 'portal_article_count' : 'portal_topic';
 	DB::query("UPDATE ".DB::table($tablename)." SET commentnum=commentnum+1 WHERE $idtype='$id'");
 	DB::update('common_member_status', array('lastpost' => $_G['timestamp']), array('uid' => $_G['uid']));
+
+	if($data['uid'] != $_G['uid']) {
+		updatecreditbyaction('portalcomment', 0, array(), $idtype.$id);
+	}
 	return 'do_success';
 }
 

@@ -2,7 +2,7 @@
 
 *{ word-wrap:break-word; outline:none; }
 body{ background:#FFF; text-align:center; }
-body, td, input, textarea, select, button{ color:#555; font:12px "Lucida Grande", Verdana, Lucida, Helvetica, Arial, sans-serif; }
+body, td, input, textarea, select, button{ color:#555; font:12px "Lucida Grande", Verdana, Lucida, Helvetica, Arial, 'Simsun', sans-serif; }
 body, ul, dl, dd, p, h1, h2, h3, h4, h5, h6, form, fieldset { margin:0; padding:0; }
 ul{ list-style:none; }
 h1, h2, h3, h4, h5, h6{ font-size:12px; }
@@ -20,6 +20,7 @@ textarea, input, select{ padding:2px; border:1px solid; border-color:#666 #ccc #
 .txt, select, .vmiddle { vertical-align:middle; }
 .txt:hover, .txt:focus, textarea:hover, textarea:focus{ border-color:#09C; background:#F5F9FD; }
 .hover:hover { background:#F5F9FD; }
+	.hover:hover .addchildboard, .hover:hover .deleterow { color: #F5F9FD; }
 .txtnobd{ border:1px solid #FFF; background:#FFF; cursor:pointer; }
 .radio, .checkbox, .pr, .pc { border:none; background:none; vertical-align:middle; }
 .checkbox{ height:14px; }
@@ -34,7 +35,8 @@ h3{ margin-bottom:10px; font-size:14px; color:#09C; }
 
 /* mainbox */
 .mainhd{ position:relative; overflow:hidden; text-align:left; height:90px; line-height:88px; background:url(bg_repx.gif) repeat-x; }
-	.logo{ text-indent:-9999px; width:135px; height:80px; background:url(logo.gif) no-repeat 15px 13px; }
+	.logo{ display: block; text-indent:-9999px; width:135px; height:80px; background:url(logo.gif) no-repeat 15px 13px; }
+		.logo:hover{ background-image:url(logo_hover.gif); }
 	.uinfo{ position:absolute; z-index:4; line-height:32px; top:10px; right:15px; }
 		.uinfo a{ color:#666; }
 		.uinfo em{ margin-right:5px; font-weight:700; }
@@ -128,9 +130,11 @@ a.faq { background: url(faq.gif) no-repeat 0 2px; padding:1px; margin-left:10px;
 .login{ padding-right:30px; width:310px; height:150px; background:url(bg_login.gif) right 50% no-repeat; }
 	.login h1{ text-indent:-9999px; margin-bottom:10px; width:262px; height:26px; background:url(login_title.gif) no-repeat; }
 	.login p{ line-height:150%; }
-.logintitle{ float:left; clear:left; width:60px; line-height:180%; font-weight:700; font-size:14px; color:#666; }
-.loginform{ float:left; line-height:180%; font-size:14px; width:160px; }
-	.loginform .txt{ margin-top:2px; width:160px; }
+.logintitle, .loginform { margin:2px 0; height:22px; line-height:22px; font-size:14px; }
+.logintitle{ float:left; clear:left; width:60px; font-weight:700; color:#666; }
+.loginform{ float:left; width:160px; }
+	.loginform .txt{ margin-top:1px; width:150px; }
+	.loginform select { margin-top:1px; padding:1px; width:156px; }
 .loginnofloat{ clear:both; }
 	.loginnofloat .btn{ margin-left:60px; }
 .logintips{ line-height:160%; margin-left:25px; }
@@ -250,11 +254,10 @@ a.faq { background: url(faq.gif) no-repeat 0 2px; padding:1px; margin-left:10px;
 		.rowform .txt, .rowform textarea{ margin-right:10px; width:250px; }
 		.rowform select{ margin-right:10px; width:256px; }
 		.rowform .radio{ margin-top:-2px !important; *margin-top:0 !important; *margin-top:-2px; }
-		.rowform li{ overflow:hidden; float:left; margin-right:10px; white-space:nowrap; }
+		.rowform li{ overflow:hidden; float:left; margin-right:10px; white-space:nowrap; cursor:pointer; }
 			.rowform .clear{ clear:both; float:none; margin-bottom:10px; }
 		.rowform .nofloat{ clear:both; }
-			.rowform li{ cursor:pointer; }
-			.rowform .nofloat li{ float:none; margin:5px 0; cursor:pointer; }
+			.rowform .nofloat li{ float:none; margin:5px 0; overflow:visible; }
 		.ckbox {width:700px; }
 		.ckbox li { float: left; margin: 5px 10px 5px 0; white-space: nowrap; width: 130px; height: 20px; }
 	.partition, .partition2{ line-height:21px; font-weight:700; color:#09C; }
@@ -356,7 +359,7 @@ a.faq { background: url(faq.gif) no-repeat 0 2px; padding:1px; margin-left:10px;
 .act{ margin:0 5px; text-decoration:underline; }
 .addchildboard, .deleterow { margin-right: 5px; padding-left:17px; line-height:25px; *line-height: 16px; background:url(bg_repno.gif) no-repeat 0 -599px; color:#FFF; zoom: 1; }
 	.deleterow { padding-left: 12px; background: url(close.gif) no-repeat 0 50%; }
-	.addchildboard:hover, .deleterow:hover { text-decoration:none; color:#F60; }
+	.addchildboard:hover, .deleterow:hover { text-decoration:none; color:#F60 !important; }
 .switch{ color:#09C; }
 	.switch:hover{ text-decoration:none; }
 	.switch img{ margin-right:5px; vertical-align:middle; }

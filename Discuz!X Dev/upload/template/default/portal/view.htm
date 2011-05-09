@@ -4,7 +4,6 @@
 <script type="text/javascript" src="{$_G['setting']['jspath']}forum_viewthread.js?{VERHASH}"></script>
 <script type="text/javascript">zoomstatus = parseInt($_G['setting']['zoomstatus']), imagemaxwidth = '{$_G['setting']['imagemaxwidth']}', aimgcount = new Array();</script>
 <div id="pt" class="bm cl">
-	<!--{subtemplate common/simplesearchform}-->
 	<div class="z">
 		<a href="./" class="nvhm" title="{lang homepage}">$_G[setting][bbname]</a> <em>&rsaquo;</em>
 		<a href="$_G[setting][navs][1][filename]">{lang nav_index}</a> <em>&rsaquo;</em>
@@ -24,9 +23,9 @@
 <div id="ct" class="ct2 wp cl">
 	<div class="mn">
 		<div class="bm vw">
-			<div class="h">
-				<h1 class="ph hm">$article[title] <!--{if $article['status'] == 1}-->({lang moderate_need})<!--{elseif $article['status'] == 2}-->({lang ignored})<!--{/if}--></h1>
-				<p class="xg1 hm">
+			<div class="h hm">
+				<h1 class="ph">$article[title] <!--{if $article['status'] == 1}-->({lang moderate_need})<!--{elseif $article['status'] == 2}-->({lang ignored})<!--{/if}--></h1>
+				<p class="xg1">
 					$article[dateline]<span class="pipe">|</span>
 					{lang view_publisher}: <a href="home.php?mod=space&uid=$article[uid]">$article[username]</a><span class="pipe">|</span>
 					{lang view_views}: <!--{if $article[viewnum] > 0}-->$article[viewnum]<!--{else}-->0<!--{/if}--><span class="pipe">|</span>
@@ -174,14 +173,13 @@
 </div>
 
 <!--{if $_G['relatedlinks']}-->
-	<div style="display: none">
-		<ul>
-			<!--{loop $_G['relatedlinks'] $key $link}-->
-			<li><a id="relatedlink_$key" href="$link[url]">$link[name]</a></li>
-			<!--{/loop}-->
-		</ul>
-	</div>
-	<script type="text/javascript">relatedlinks('article_content');</script>
+	<script type="text/javascript">
+		var relatedlink = [];
+		<!--{loop $_G['relatedlinks'] $key $link}-->
+		relatedlink[$key] = {'sname':'$link[name]', 'surl':'$link[url]'};
+		<!--{/loop}-->
+		relatedlinks('article_content');
+	</script>
 <!--{/if}-->
 
 <div class="wp mtn">

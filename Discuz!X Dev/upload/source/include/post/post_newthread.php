@@ -20,7 +20,11 @@ if(($special == 1 && !$_G['group']['allowpostpoll']) || ($special == 2 && !$_G['
 }
 
 if(!$_G['uid'] && !((!$_G['forum']['postperm'] && $_G['group']['allowpost']) || ($_G['forum']['postperm'] && forumperm($_G['forum']['postperm'])))) {
-	showmessage('postperm_login_nopermission', NULL, array(), array('login' => 1));
+	if(!defined('IN_MOBILE')) {
+		showmessage('postperm_login_nopermission', NULL, array(), array('login' => 1));
+	} else {
+		showmessage('postperm_login_nopermission_mobile', NULL, array('referer' => rawurlencode(dreferer())), array('login' => 1));
+	}
 } elseif(empty($_G['forum']['allowpost'])) {
 	if(!$_G['forum']['postperm'] && !$_G['group']['allowpost']) {
 		showmessage('postperm_none_nopermission', NULL, array(), array('login' => 1));
@@ -144,15 +148,15 @@ if(!submitcheck('topicsubmit', 0, $seccodecheck, $secqaacheck)) {
 	$_G['gp_save'] = $_G['uid'] ? $_G['gp_save'] : 0;
 
 	$typeid = isset($typeid) && isset($_G['forum']['threadtypes']['types'][$typeid]) && (empty($_G['forum']['threadtypes']['moderators'][$typeid]) || $_G['forum']['ismoderator']) ? $typeid : 0;
-	$displayorder = $modnewthreads ? -2 : (($_G['forum']['ismoderator'] && !empty($_G['gp_sticktopic'])) ? 1 : (empty($_G['gp_save']) ? 0 : -4));
+	$displayorder = $modnewthreads ? -2 : (($_G['forum']['ismoderator'] && $_G['group']['allowstickthread'] && !empty($_G['gp_sticktopic'])) ? 1 : (empty($_G['gp_save']) ? 0 : -4));
 	if($displayorder == -2) {
 		DB::update('forum_forum', array('modworks' => '1'), "fid='{$_G['fid']}'");
 	} elseif($displayorder == -4) {
 		$_G['gp_addfeed'] = 0;
 	}
-	$digest = ($_G['forum']['ismoderator'] && !empty($_G['gp_addtodigest'])) ? 1 : 0;
+	$digest = $_G['forum']['ismoderator'] && $_G['group']['allowdigestthread'] && !empty($_G['gp_addtodigest']) ? 1 : 0;
 	$readperm = $_G['group']['allowsetreadperm'] ? $readperm : 0;
-	$isanonymous = ($_G['group']['allowanonymous'] && $_G['gp_isanonymous']) ? 1 : 0;
+	$isanonymous = $_G['group']['allowanonymous'] && $_G['gp_isanonymous'] ? 1 : 0;
 	$price = intval($price);
 	$price = $_G['group']['maxprice'] && !$special ? ($price <= $_G['group']['maxprice'] ? $price : $_G['group']['maxprice']) : 0;
 
@@ -324,7 +328,7 @@ if(!submitcheck('topicsubmit', 0, $seccodecheck, $secqaacheck)) {
 		$_G['gp_rushreplyfrom'] = strtotime($_G['gp_rushreplyfrom']);
 		$_G['gp_rushreplyto'] = strtotime($_G['gp_rushreplyto']);
 		$_G['gp_rewardfloor'] = trim($_G['gp_rewardfloor']);
-		$_G['gp_stopfloor'] = dintval($_G['gp_stopfloor']);
+		$_G['gp_stopfloor'] = intval($_G['gp_stopfloor']);
 		if($_G['gp_rushreplyfrom'] > $_G['gp_rushreplyto'] && !empty($_G['gp_rushreplyto'])) {
 			showmessage('post_rushreply_timewrong');
 		}
@@ -336,7 +340,7 @@ if(!submitcheck('topicsubmit', 0, $seccodecheck, $secqaacheck)) {
 			if(!empty($floors) && is_array($floors)) {
 				foreach($floors AS $key => $floor) {
 					if(strpos($floor, '*') === false) {
-						if(dintval($floor) == 0) {
+						if(intval($floor) == 0) {
 							unset($floors[$key]);
 						} elseif($floor > $_G['gp_stopfloor']) {
 							unset($floors[$key]);
@@ -354,10 +358,10 @@ if(!submitcheck('topicsubmit', 0, $seccodecheck, $secqaacheck)) {
 	$isgroup = $_G['forum']['status'] == 3 ? 1 : 0;
 
 	if($_G['group']['allowreplycredit']) {
-		$_G['gp_replycredit_extcredits'] = dintval($_G['gp_replycredit_extcredits']);
-		$_G['gp_replycredit_times'] = dintval($_G['gp_replycredit_times']);
-		$_G['gp_replycredit_membertimes'] = dintval($_G['gp_replycredit_membertimes']);
-		$_G['gp_replycredit_random'] = dintval($_G['gp_replycredit_random']);
+		$_G['gp_replycredit_extcredits'] = intval($_G['gp_replycredit_extcredits']);
+		$_G['gp_replycredit_times'] = intval($_G['gp_replycredit_times']);
+		$_G['gp_replycredit_membertimes'] = intval($_G['gp_replycredit_membertimes']);
+		$_G['gp_replycredit_random'] = intval($_G['gp_replycredit_random']);
 
 		$_G['gp_replycredit_random'] = $_G['gp_replycredit_random'] < 0 || $_G['gp_replycredit_random'] > 99 ? 0 : $_G['gp_replycredit_random'] ;
 		$replycredit = $replycredit_real = 0;
@@ -433,7 +437,7 @@ if(!submitcheck('topicsubmit', 0, $seccodecheck, $secqaacheck)) {
 
 			if($_G['forum_optionlist'][$optionid]['type'] == 'image') {
 				$identifier = $_G['forum_optionlist'][$optionid]['identifier'];
-				$sortaid = intval($_G['gp_typeoption'][$identifier]['aid']);
+				$sortaids[] = intval($_G['gp_typeoption'][$identifier]['aid']);
 			}
 
 			DB::query("INSERT INTO ".DB::table('forum_typeoptionvar')." (sortid, tid, fid, optionid, value, expiration)
@@ -499,9 +503,10 @@ if(!submitcheck('topicsubmit', 0, $seccodecheck, $secqaacheck)) {
 		convertunusedattach($_G['gp_activityaid'], $tid, $pid);
 	}
 
-	if($_G['forum']['threadsorts']['types'][$sortid] && !empty($_G['forum_optiondata']) && is_array($_G['forum_optiondata']) && $sortaid) {
-		$threadimageaid = $sortaid;
-		convertunusedattach($sortaid, $tid, $pid);
+	if($_G['forum']['threadsorts']['types'][$sortid] && !empty($_G['forum_optiondata']) && is_array($_G['forum_optiondata']) && $sortaids) {
+		foreach($sortaids as $sortaid) {
+			convertunusedattach($sortaid, $tid, $pid);
+		}
 	}
 
 	if(($_G['group']['allowpostattach'] || $_G['group']['allowpostimage']) && ($_G['gp_attachnew'] || $sortid || !empty($_G['gp_activityaid']))) {

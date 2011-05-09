@@ -25,7 +25,7 @@
 		<span class="z">{lang input_message1} <strong id="checklen">200</strong> {lang input_message2}</span>
 		<button type="submit" value="true" class="pn pnc"><strong>{lang confirms}</strong></button>
 	</p>
-	<input type="hidden" name="referer" value="$_G[referer]" />
+	<input type="hidden" name="referer" value="{echo dreferer()}" />
 	<input type="hidden" name="reportsubmit" value="true" />
 	<input type="hidden" name="rtype" value="$_G[gp_rtype]" />
 	<input type="hidden" name="rid" value="$_G[gp_rid]" />

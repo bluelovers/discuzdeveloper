@@ -27,8 +27,8 @@
 				}
 			}
 		<!--{elseif !$threadlist && $_GET['uncheck'] == 2}-->
-			checkForumnew_handle = setTimeout(function () {checkForumnew('{$fid}', '{$_G[timestamp]}');}, checkForumtimeout);
 			showDialog('{lang none_newthread}', 'notice', null, null, 0, null, null, null, null, 3);
 		<!--{/if}-->
+		checkForumnew_handle = setTimeout(function () {checkForumnew('{$fid}', '{$_G[timestamp]}');}, checkForumtimeout);
 	</script>
 <!--{template common/footer_ajax}-->

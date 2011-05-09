@@ -8,7 +8,7 @@
 		<h1 class="mt">3.{lang eccredit}</h1>
 		<form method="post" autocomplete="off" action="home.php?mod=spacecp&ac=eccredit&op=rate" id="postform">
 			<input type="hidden" name="formhash" value="{FORMHASH}" />
-			<input type="hidden" name="referer" value="$_G['referer']" />
+			<input type="hidden" name="referer" value="{echo dreferer()}" />
 			<div class="bm">
 				<h3 class="bm_h">{lang eccredit_post}</h3>
 				<div class="bm_c">

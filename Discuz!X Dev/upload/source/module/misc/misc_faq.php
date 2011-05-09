@@ -51,7 +51,6 @@ if($_G['gp_action'] == 'faq') {
 
 	$navtitle = lang('core', 'search');
 	if(submitcheck('searchsubmit')) {
-		$keyword = isset($_G['gp_keyword']) ? trim($_G['gp_keyword']) : '';
 		if($keyword) {
 			$sqlsrch = '';
 			$searchtype = in_array($_G['gp_searchtype'], array('all', 'title', 'message')) ? $_G['gp_searchtype'] : 'all';

@@ -315,7 +315,7 @@ if(submitcheck("articlesubmit", 0, $seccodecheck, $secqaacheck)) {
 	if($_G['gp_addpage']) {
 		$article_add_page_url = $article_add_url.'&op=addpage&aid='.$aid;
 	}
-	include_once template("portal/portalcp_article");
+	include_once template("portal/portalcp_article");dexit();
 
 } elseif(submitcheck('pushplussubmit')) {
 
@@ -458,6 +458,7 @@ if ($op == 'delpage') {
 				showmessage('article_move_select_cat', dreferer());
 			}
 		}
+
 	}
 
 } elseif($op == 'verify') {

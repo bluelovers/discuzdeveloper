@@ -194,7 +194,9 @@
 							<div class="pbm">
 								<select class="ps" onchange="clearlist=1;getUser(1, this.value)">
 									<option value="-1">{lang invite_all_friend}</option>
+									<!--{loop $friendgrouplist $groupid $group}-->
 										<option value="$groupid">$group</option>
+									<!--{/loop}-->
 								</select>
 							</div>
 							<div id="selBox" class="ptn pbn">
@@ -204,7 +206,9 @@
 								<button type="button" class="y pn" onclick="fs.showPMFriend('showSelectBox_menu','selectorBox', $('showSelectBox'));doane(event)"><span>{lang close}</span></button>
 							</div>
 						</div>
+
 						<script type="text/javascript">
+
 							var page = 1;
 							var gid = -1;
 							var showNum = 0;
@@ -243,6 +247,7 @@
 							}
 							selector();
 						</script>
+
 					<!--{/if}-->
 					<ul class="buddy cl">
 						<li>

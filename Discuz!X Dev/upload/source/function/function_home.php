@@ -18,6 +18,7 @@ function getstr($string, $length, $in_slashes=0, $out_slashes=0, $bbcode=0, $htm
 	if($in_slashes) {
 		$string = dstripslashes($string);
 	}
+	$string = preg_replace("/\[hide=?\d*\](.*?)\[\/hide\]/is", '', $string);
 	if($html < 0) {
 		$string = preg_replace("/(\<[^\<]*\>|\r|\n|\s|\[.+?\])/is", ' ', $string);
 	} elseif ($html == 0) {

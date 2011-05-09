@@ -50,7 +50,7 @@ var disablepostctrl = parseInt('{$_G['group']['disablepostctrl']}');
 					<!--{if $allowpostreply}-->
 						<textarea rows="6" cols="80" name="message" id="fastpostmessage" onKeyDown="seditor_ctlent(event, {if $_G['gp_ordertype'] != 1}'fastpostvalidate($(\'fastpostform\'))'{else}'$(\'fastpostform\').submit()'{/if});" tabindex="4" class="pt"></textarea>
 					<!--{elseif !$_G['uid']}-->
-						<div class="pt hm">{lang login_to_reply} <a href="member.php?mod=logging&action=login" onclick="showWindow('login', this.href)" class="xi2">{lang login}</a> | <a href="member.php?mod={$_G[setting][regname]}" class="xi2">$_G['setting']['reglinkname']</a></div>
+						<div class="pt hm">{lang login_to_reply} <a href="member.php?mod=logging&action=login" onclick="showWindow('login', this.href)" class="xi2">{lang login}</a> | <a href="member.php?mod={$_G[setting][regname]}" class="xi2">$_G['setting']['reglinkname']</a> <!--{hook/global_login_text}--></div>
 					<!--{/if}-->
 				</div>
 			</div>
@@ -58,7 +58,7 @@ var disablepostctrl = parseInt('{$_G['group']['disablepostctrl']}');
 	</div>
 	<!--{if $allowpostreply && checkperm('seccode') && ($secqaacheck || $seccodecheck)}-->
 		<!--{block sectpl}--><sec> <span id="sec<hash>" onclick="showMenu(this.id)"><sec></span><div id="sec<hash>_menu" class="p_pop p_opt" style="display:none"><sec></div><!--{/block}-->
-		<div class="mtm sec"><!--{template common/seccheck}--></div>
+		<div class="mtm sec"><!--{subtemplate common/seccheck}--></div>
 	<!--{/if}-->
 
 	<!--{if $allowpostattach}-->
@@ -89,8 +89,8 @@ var disablepostctrl = parseInt('{$_G['group']['disablepostctrl']}');
 
 	<input type="hidden" name="formhash" value="{FORMHASH}" />
 	<input type="hidden" name="subject" value="" />
-	<p class="ptm">
-		<button {if $allowpostreply}type="submit" {elseif !$_G['uid']}type="button" onclick="showWindow('login', 'member.php?mod=logging&action=login&guestmessage=yes')" {/if}name="replysubmit" id="fastpostsubmit" class="pn vm" value="replysubmit" tabindex="5"><strong>{lang post_newreply}</strong></button>
+	<p class="ptm pnpost">
+		<button {if $allowpostreply}type="submit" {elseif !$_G['uid']}type="button" onclick="showWindow('login', 'member.php?mod=logging&action=login&guestmessage=yes')" {/if}name="replysubmit" id="fastpostsubmit" class="pn pnc vm" value="replysubmit" tabindex="5"><strong>{lang post_newreply}</strong></button>
 		<!--{if $_G['gp_ordertype'] != 1 && empty($_G[gp_from])}-->
 		<label for="fastpostrefresh"><input id="fastpostrefresh" type="checkbox" class="pc" />{lang post_fastreply_gotolast}</label>
 		<script type="text/javascript">if(getcookie('fastpostrefresh') == 1) {$('fastpostrefresh').checked=true;}</script>

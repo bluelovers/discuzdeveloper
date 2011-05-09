@@ -33,7 +33,7 @@ function userlogin($username, $password, $questionid, $answer, $loginfield = 'us
 		} elseif(isemail($username)) {
 			$return['ucresult'] = uc_user_login($username, $password, 2, 1, $questionid, $answer);
 		}
-		if($return['ucresult'][0] <= 0) {
+		if($return['ucresult'][0] <= 0 && $return['ucresult'][0] != -3) {
 			$return['ucresult'] = uc_user_login($username, $password, 0, 1, $questionid, $answer);
 		}
 	} else {

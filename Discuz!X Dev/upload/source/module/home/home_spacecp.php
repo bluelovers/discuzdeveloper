@@ -23,6 +23,12 @@ $ac = (empty($_GET['ac']) || !in_array($_GET['ac'], $acs))?'profile':$_GET['ac']
 $op = empty($_GET['op'])?'':$_GET['op'];
 $_G['mnid'] = 'mn_common';
 
+if(in_array($ac, array('privacy'))) {
+	if(!$_G['setting']['homestatus']) {
+		showmessage('home_status_off');
+	}
+}
+
 if(empty($_G['uid'])) {
 	if($_SERVER['REQUEST_METHOD'] == 'GET') {
 		dsetcookie('_refer', rawurlencode($_SERVER['REQUEST_URI']));

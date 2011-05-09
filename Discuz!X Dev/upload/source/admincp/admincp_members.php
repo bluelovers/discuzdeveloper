@@ -111,8 +111,7 @@ EOF;
 		showtips('members_export_tips');
 		showformheader("members&operation=clean");
 		showtableheader(cplang('members_search_result', array('membernum' => $membernum)).'<a href="'.ADMINSCRIPT.'?action=members&operation=search" class="act lightlink normal">'.cplang('research').'</a>');
-		showsubtitle(array('', 'username', 'credits', 'posts', 'admingroup', 'usergroup', ''));
-		echo $members;
+		//构建搜索条件url，用于导出用户数据
 		foreach($search_condition as $k => $v) {
 			if($k == 'username') {
 				$v = explode(',', $v);
@@ -131,7 +130,11 @@ EOF;
 			}
 		}
 
-		showsubmit('submit', 'submit', '<input type="checkbox" name="chkall" onclick="checkAll(\'prefix\', this.form, \'uidarray\')" class="checkbox">'.cplang('del'), '<a href='.ADMINSCRIPT.'?action=members&operation=export'.$condition_str.'>'.$lang['members_search_export'].'</a>', $multipage);
+		if($membernum) {
+			showsubtitle(array('', 'username', 'credits', 'posts', 'admingroup', 'usergroup', ''));
+			echo $members;
+			showsubmit('submit', 'submit', '<input type="checkbox" name="chkall" onclick="checkAll(\'prefix\', this.form, \'uidarray\')" class="checkbox">'.cplang('del'), '<a href='.ADMINSCRIPT.'?action=members&operation=export'.$condition_str.'>'.$lang['members_search_export'].'</a>', $multipage);
+		}
 		showtablefooter();
 		showformfooter();
 
@@ -1018,7 +1021,7 @@ EOF;
 			cpmsg('members_edit_groups_toomany', '', 'error');
 		}
 
-		if($_G['uid'] != $member['uid'] && $member['groupid'] != $_G['gp_groupidnew'] && isfounder($member)) {
+		if($member['groupid'] != $_G['gp_groupidnew'] && isfounder($member)) {
 			cpmsg('members_edit_groups_isfounder', '', 'error');
 		}
 
@@ -1458,6 +1461,7 @@ EOF;
 
 		if($_G['adminid'] == 1 && !empty($_G['gp_clear']) && is_array($_G['gp_clear'])) {
 			require_once libfile('function/delete');
+			$membercount = array();
 			if(in_array('post', $_G['gp_clear'])) {
 				if($member['uid']) {
 					require_once libfile('function/post');
@@ -1493,11 +1497,13 @@ EOF;
 						updatecache('globalstick');
 					}
 				}
+				$membercount['posts'] = 0;
 			}
 			if(in_array('blog', $_G['gp_clear'])) {
 				DB::query("DELETE FROM ".DB::table('home_blog')." WHERE uid='$member[uid]'");
 				DB::query("DELETE FROM ".DB::table('home_blogfield')." WHERE uid='$member[uid]'");
 				DB::query("DELETE FROM ".DB::table('home_feed')." WHERE uid='$member[uid]' AND idtype='blogid'");
+				$membercount['blogs'] = 0;
 			}
 			if(in_array('album', $_G['gp_clear'])) {
 				DB::query("DELETE FROM ".DB::table('home_album')." WHERE uid='$member[uid]'");
@@ -1508,10 +1514,12 @@ EOF;
 
 				DB::query("DELETE FROM ".DB::table('home_pic')." WHERE uid='$member[uid]'");
 				DB::query("DELETE FROM ".DB::table('home_feed')." WHERE uid='$member[uid]' AND idtype='albumid'");
+				$membercount['albums'] = 0;
 			}
 			if(in_array('share', $_G['gp_clear'])) {
 				DB::query("DELETE FROM ".DB::table('home_share')." WHERE uid='$member[uid]'");
 				DB::query("DELETE FROM ".DB::table('home_feed')." WHERE uid='$member[uid]' AND idtype='sid'");
+				$membercount['sharings'] = 0;
 			}
 
 			if(in_array('doing', $_G['gp_clear'])) {
@@ -1522,16 +1530,22 @@ EOF;
 				}
 
 				DB::query("DELETE FROM ".DB::table('home_doing')." WHERE uid='$member[uid]'");
+				DB::update('common_member_field_home', array('recentnote' => '', 'spacenote' => ''), "uid='$member[uid]'");
 
 				$delsql = !empty($doids) ? "doid IN (".dimplode($doids).") OR " : "";
 				DB::query("DELETE FROM ".DB::table('home_docomment')." WHERE $delsql uid='$member[uid]'");
 				DB::query("DELETE FROM ".DB::table('home_feed')." WHERE uid='$member[uid]' AND idtype='doid'");
+				$membercount['doings'] = 0;
 			}
 			if(in_array('comment', $_G['gp_clear'])) {
 				DB::query("DELETE FROM ".DB::table('home_comment')." WHERE uid='$member[uid]' OR authorid='$member[uid]' OR (id='$member[uid]' AND idtype='uid')");
 			}
 			if(in_array('postcomment', $_G['gp_clear'])) {
 				DB::query("DELETE FROM ".DB::table('forum_postcomment')." WHERE authorid='$member[uid]'");
+			}
+
+			if($membercount) {
+				DB::update('common_member_count', $membercount, "uid='$member[uid]'");
 			}
 
 		}
@@ -1665,7 +1679,10 @@ EOF;
 	}
 
 	if($do == 'bindlog') {
-		$member = DB::fetch_first("SELECT m.uid, m.username, m.conuin FROM ".DB::table('common_member')." m WHERE $condition");
+		$member = DB::fetch_first("SELECT m.uid, m.username, mqc.conuin
+			FROM ".DB::table('common_member')." m
+			LEFT JOIN ".DB::table('common_member_connect')." mqc USING(uid)
+			WHERE $condition");
 		showsubmenu("$lang[members_edit] - $member[username]", array(
 			array('connect_member_info', 'members&operation=edit&uid='.$member['uid'],  0),
 			array('connect_member_bindlog', 'members&operation=edit&do=bindlog&uid='.$member['uid'],  1),
@@ -1700,7 +1717,7 @@ EOF;
 		showtablefooter();
 		exit;
 	}
-	$member = DB::fetch_first("SELECT m.*, mf.*, mc.*, mh.*, ms.*, mp.*, m.uid AS muid, u.type, uf.allowsigbbcode, uf.allowsigimgcode
+	$member = DB::fetch_first("SELECT m.*, mf.*, mc.*, mh.*, ms.*, mp.*, mqc.*, m.uid AS muid, u.type, uf.allowsigbbcode, uf.allowsigimgcode
 		, cub.uin AS uinblack
 		FROM ".DB::table('common_member')." m
 		LEFT JOIN ".DB::table('common_member_field_forum')." mf ON mf.uid=m.uid
@@ -1711,6 +1728,7 @@ EOF;
 		LEFT JOIN ".DB::table('common_member_status')." ms ON ms.uid=m.uid
 		LEFT JOIN ".DB::table('common_member_profile')." mp ON mp.uid=m.uid
 		LEFT JOIN ".DB::table('common_uin_black')." cub ON cub.uid=m.uid
+		LEFT JOIN ".DB::table('common_member_connect')." mqc ON mqc.uid=m.uid
 		WHERE $condition");
 
 	if(!$member) {
@@ -1750,8 +1768,8 @@ EOF;
 
 		shownav('user', 'members_edit');
 		showsubmenu("$lang[members_edit] - $member[username]", array(
-			array('connect_member_info', 'members&operation=edit&uid='.$member['uid'],  1),
-			array('connect_member_bindlog', 'members&operation=edit&do=bindlog&uid='.$member['uid'],  0),
+			array('connect_member_info', 'members&operation=edit&uid='.$member['muid'],  1),
+			array('connect_member_bindlog', 'members&operation=edit&do=bindlog&uid='.$member['muid'],  0),
 		));
 		showformheader("members&operation=edit&uid=$uid", 'enctype');
 		showtableheader();
@@ -2958,7 +2976,8 @@ function connectunbind($member) {
 	connect_user_unbind($member['conuin'], 1);
 
 	DB::query("INSERT INTO ".DB::table('connect_memberbindlog')." (uid, uin, type, dateline) VALUES ('$member[uid]', '$member[conuin]', '2', '$_G[timestamp]')");
-	DB::query("UPDATE ".DB::table('common_member')." SET conisbind='0', conuin='', conisregister='0' WHERE uid='$member[uid]'");
+	DB::update('common_member', array('conisbind' => '0'), "uid='$member[uid]'");
+	DB::delete('common_member_connect', "uid='$member[uid]'");
 }
 
 function save_newsletter($cachename, $data) {

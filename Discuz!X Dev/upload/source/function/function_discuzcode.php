@@ -84,7 +84,7 @@ function discuzcode($message, $smileyoff, $bbcodeoff, $htmlon = 0, $allowsmilies
 	if($_G['setting']['plugins'][HOOKTYPE.'_discuzcode']) {
 		$_G['discuzcodemessage'] = & $message;
 		$param = func_get_args();
-		hookscript('discuzcode', 'global', 'funcs', array('param' => $param), 'discuzcode');
+		hookscript('discuzcode', 'global', 'funcs', array('param' => $param, 'caller' => 'discuzcode'), 'discuzcode');
 	}
 
 	if(!$smileyoff && $allowsmilies) {
@@ -177,14 +177,14 @@ function discuzcode($message, $smileyoff, $bbcodeoff, $htmlon = 0, $allowsmilies
 					$authorreplyexist = !$_G['forum']['ismoderator'] ? DB::result_first("SELECT pid FROM ".DB::table($posttable)." WHERE tid='$_G[tid]' AND ".($_G['uid'] ? "authorid='$_G[uid]'" : "authorid=0 AND useip='$_G[clientip]'")." LIMIT 1") : TRUE;
 				}
 				if($authorreplyexist) {
-					$message = preg_replace("/\[hide\]\s*(.+?)\s*\[\/hide\]/is", tpl_hide_reply(), $message);
+					$message = preg_replace("/\[hide\]\s*(.*?)\s*\[\/hide\]/is", tpl_hide_reply(), $message);
 				} else {
-					$message = preg_replace("/\[hide\](.+?)\[\/hide\]/is", tpl_hide_reply_hidden(), $message);
+					$message = preg_replace("/\[hide\](.*?)\[\/hide\]/is", tpl_hide_reply_hidden(), $message);
 					$message .= '<script type="text/javascript">replyreload += \',\' + '.$pid.';</script>';
 				}
 			}
 			if(strpos($msglower, '[hide=') !== FALSE) {
-				$message = preg_replace("/\[hide=(\d+)\]\s*(.+?)\s*\[\/hide\]/ies", "creditshide(\\1,'\\2', $pid)", $message);
+				$message = preg_replace("/\[hide=(\d+)\]\s*(.*?)\s*\[\/hide\]/ies", "creditshide(\\1,'\\2', $pid)", $message);
 			}
 		}
 	}

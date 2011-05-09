@@ -1,4 +1,4 @@
-<div id="post_extra" class="ptm">
+<div id="post_extra" class="ptm cl">
 	<div id="post_extra_tb" class="cl" onselectstart="return false">
 		<!--{if $_G['group']['allowreplycredit'] && !in_array($special, array(2, 3))}-->
 			<!--{if $_G[gp_action] == 'newthread'}-->
@@ -8,20 +8,20 @@
 			<!--{/if}-->
 			<!--{eval $userextcredit = getuserprofile('extcredits'.$extcreditstype);}-->
 			<!--{if ($_G[gp_action] == 'newthread' && $userextcredit > 0) || ($_G[gp_action] == 'edit' && $isorigauthor && isfirstpost)}-->
-				<label id="extra_replycredit_b" class="pn z" onclick="showExtra('extra_replycredit')"><span id="extra_replycredit_chk">{lang replycredit}</span></label>
+				<label id="extra_replycredit_b" onclick="showExtra('extra_replycredit')"><span id="extra_replycredit_chk">{lang replycredit}</span></label>
 			<!--{/if}-->
 		<!--{/if}-->
 		<!--{if $_G['group']['allowsetreadperm']}-->
-			<label id="extra_readperm_b" class="pn z" onclick="showExtra('extra_readperm')"><span id="extra_readperm_chk">{lang readperm}</span></label>
+			<label id="extra_readperm_b" onclick="showExtra('extra_readperm')"><span id="extra_readperm_chk">{lang readperm}</span></label>
 		<!--{/if}-->
 		<!--{if $_G['group']['maxprice'] && !$special}-->
-			<label id="extra_price_b" class="pn z" onclick="showExtra('extra_price')"><span id="extra_price_chk">{lang price}</span></label>
+			<label id="extra_price_b" onclick="showExtra('extra_price')"><span id="extra_price_chk">{lang price}</span></label>
 		<!--{/if}-->
 		<!--{if ($_G[gp_action] == 'newthread' && $_G['group']['allowpostrushreply'] && $special != 2) || ($_G[gp_action] == 'edit' && getstatus($thread['status'], 3))}-->
-			<label id="extra_rushreplyset_b" class="pn z" onclick="showExtra('extra_rushreplyset')"><span id="extra_rushreplyset_chk">{lang rushreply}</span></label>
+			<label id="extra_rushreplyset_b" onclick="showExtra('extra_rushreplyset')"><span id="extra_rushreplyset_chk">{lang rushreply}</span></label>
 		<!--{/if}-->
 		<!--{if $_G['group']['allowposttag']}-->
-			<label id="extra_tag_b" class="pn z" onclick="showExtra('extra_tag')"><span id="extra_tag_chk">{lang posttag}</span></label>
+			<label id="extra_tag_b" onclick="showExtra('extra_tag')"><span id="extra_tag_chk">{lang posttag}</span></label>
 		<!--{/if}-->
 	</div>
 
@@ -54,7 +54,7 @@
 								<!--{/loop}-->
 								<option value="255">{lang highest_right}</option>
 							</select>
-							{lang post_select_usergroup_readacces}
+							<span class="xg1">{lang post_select_usergroup_readacces}</span>
 						</td>
 					</tr>
 				</table>
@@ -63,14 +63,13 @@
 
 		<!--{if $_G['group']['maxprice'] && !$special}-->
 			<div id="extra_price_c" class="exfm cl" style="display:none">
-				{lang price}({$_G['setting']['extcredits'][$_G['setting']['creditstransextra'][1]][title]}):
-				<input type="text" id="price" name="price" class="px pxs" value="$thread[pricedisplay]" onblur="extraCheck(2)" /> {$_G['setting']['extcredits'][$_G['setting']['creditstransextra'][1]][unit]}
-					<span class="xg1">({lang post_price_comment})</span>
+				{lang price}:
+				<input type="text" id="price" name="price" class="px pxs" value="$thread[pricedisplay]" onblur="extraCheck(2)" /> {$_G['setting']['extcredits'][$_G['setting']['creditstransextra'][1]][unit]}{$_G['setting']['extcredits'][$_G['setting']['creditstransextra'][1]][title]}
+				<span class="xg1">({lang post_price_comment})</span>
 				<!--{if $_G['group']['maxprice'] && ($_G[gp_action] == 'newthread' || $_G[gp_action] == 'edit' && $isfirstpost)}-->
-
-				<!--{if $_G['setting']['maxincperthread']}--><p class="xg1">{lang post_price_income_comment}</p><!--{/if}-->
-				<!--{if $_G['setting']['maxchargespan']}--><p class="xg1">{lang post_price_charge_comment}<!--{if $_G[gp_action] == 'edit' && $freechargehours}-->{lang post_price_free_chargehours}<!--{/if}--></p><!--{/if}-->
-		<!--{/if}-->
+					<!--{if $_G['setting']['maxincperthread']}--><p class="xg1">{lang post_price_income_comment}</p><!--{/if}-->
+					<!--{if $_G['setting']['maxchargespan']}--><p class="xg1">{lang post_price_charge_comment}<!--{if $_G[gp_action] == 'edit' && $freechargehours}-->{lang post_price_free_chargehours}<!--{/if}--></p><!--{/if}-->
+				<!--{/if}-->
 			</div>
 		<!--{/if}-->
 
@@ -85,20 +84,20 @@
 						</td>
 					</tr>
 					<tr>
-					  <td></td>
-					  <td>
-						{lang posttag_comment}
-						<!--{eval $recent_use_tag = recent_use_tag();}-->
-						<!--{if $recent_use_tag}-->
-							<p class="mtn">{lang recent_use_tag}&nbsp;
-								<!--{eval $tagi = 0;}-->
-								<!--{loop $recent_use_tag $var}-->
-									<!--{if $tagi}-->, <!--{/if}--><a href="javascript:;" class="xi2" onclick="$('tags').value == '' ? $('tags').value += '$var' : $('tags').value += ',$var';extraCheck(4);doane();">$var</a>
-									<!--{eval $tagi++;}-->
-								<!--{/loop}-->
-							</p>
-						<!--{/if}-->
-					  </td>
+						<td></td>
+						<td>
+							<p class="xg1">{lang posttag_comment}</p>
+							<!--{eval $recent_use_tag = recent_use_tag();}-->
+							<!--{if $recent_use_tag}-->
+								<p class="mtn">{lang recent_use_tag}&nbsp;
+									<!--{eval $tagi = 0;}-->
+									<!--{loop $recent_use_tag $var}-->
+										<!--{if $tagi}-->, <!--{/if}--><a href="javascript:;" class="xi2" onclick="$('tags').value == '' ? $('tags').value += '$var' : $('tags').value += ',$var';extraCheck(4);doane();">$var</a>
+										<!--{eval $tagi++;}-->
+									<!--{/loop}-->
+								</p>
+							<!--{/if}-->
+						</td>
 					</tr>
 				</table>
 			</div>
@@ -113,12 +112,12 @@
 						<dt><label>{lang rushreply_time}</label></dt>
 						<dd>
 							<div>
-								<input type="text" name="rushreplyfrom" id="rushreplyfrom" class="px" onclick="showcalendar(event, this, true)" autocomplete="off" value="$postinfo[rush][starttimefrom]" /><span> ~ </span><input type="text" onclick="showcalendar(event, this, true)" autocomplete="off" id="rushreplyto" name="rushreplyto" class="px" value="$postinfo[rush][starttimeto]"/>
+								<input type="text" name="rushreplyfrom" id="rushreplyfrom" class="px" onclick="showcalendar(event, this, true)" autocomplete="off" value="$postinfo[rush][starttimefrom]" onkeyup="$('rushreply').checked = true;" /><span> ~ </span><input type="text" onclick="showcalendar(event, this, true)" autocomplete="off" id="rushreplyto" name="rushreplyto" class="px" value="$postinfo[rush][starttimeto]" onkeyup="$('rushreply').checked = true;" />
 							</div>
 						</dd>
 						<dt><label>{lang rushreply_rewardfloor}</label></dt>
 						<dd>
-							<input type="text" name="rewardfloor" id="rewardfloor" class="px oinf" value="$postinfo[rush][rewardfloor]" />
+							<input type="text" name="rewardfloor" id="rewardfloor" class="px oinf" value="$postinfo[rush][rewardfloor]" onkeyup="$('rushreply').checked = true;" />
 							<p class="xg1">{lang rushreply_rewardfloor_comment}</p>
 						</dd>
 					</dl>
@@ -127,7 +126,7 @@
 					<dl>
 						<dt><label>{lang rushreply_end}</label></dt>
 						<dd class="hasd cl">
-							<input type="text" name="stopfloor" id="stopfloor" class="px" autocomplete="off" value="$postinfo[rush][stopfloor]" />
+							<input type="text" name="stopfloor" id="stopfloor" class="px" autocomplete="off" value="$postinfo[rush][stopfloor]" onkeyup="$('rushreply').checked = true;" />
 						</dd>
 					</dl>
 				</div>

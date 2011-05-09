@@ -80,7 +80,7 @@ if(!submitcheck('modsubmit') && !$_G['gp_fast']) {
 
 	$modcount = DB::result_first("SELECT COUNT(*) FROM ".DB::table('common_moderate')." m
 			LEFT JOIN ".DB::table(getposttable($posttable))." p on p.pid=m.id
-			LEFT JOIN ".DB::table('forum_thread')." t ON t.tid=p.tid", "m.idtype='pid' AND m.status='$moderatestatus' AND p.first='0' $fidadd[and]$fidadd[fids]".($modfid == -1 ? " AND t.isgroup='1'" : '')." $sqlwhere");
+			LEFT JOIN ".DB::table('forum_thread')." t ON t.tid=p.tid WHERE m.idtype='pid' AND m.status='$moderatestatus' AND p.first='0' $fidadd[and]$fidadd[fids]".($modfid == -1 ? " AND t.isgroup='1'" : '')." $sqlwhere");
 	$start_limit = ($page - 1) * $ppp;
 	$query = DB::query("SELECT f.name AS forumname, f.allowsmilies, f.allowhtml, f.allowbbcode, f.allowimgcode, p.pid, p.fid, p.tid, p.author, p.authorid, p.subject, p.dateline, p.message, p.useip, p.attachment, p.htmlon, p.smileyoff, p.bbcodeoff, t.subject AS tsubject
 			FROM ".DB::table('common_moderate')." m

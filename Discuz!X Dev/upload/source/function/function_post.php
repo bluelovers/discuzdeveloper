@@ -30,7 +30,7 @@ function getattach($pid, $posttime = 0, $aids = '') {
 	}
 	$sqladd1 = $posttime > 0 ? "AND af.dateline>'$posttime'" : '';
 	if(!empty($_G['fid']) && $_G['forum']['attachextensions']) {
-		$allowext = str_replace(' ', '', $_G['forum']['attachextensions']);
+		$allowext = str_replace(' ', '', strtolower($_G['forum']['attachextensions']));
 		$allowext = explode(',', $allowext);
 	} else {
 		$allowext = '';
@@ -41,7 +41,7 @@ function getattach($pid, $posttime = 0, $aids = '') {
 		WHERE $aids (af.uid='$_G[uid]' AND a.tid='0' $sqladd1) ORDER BY a.aid DESC");
 	while($attach = DB::fetch($query)) {
 		$attach['filenametitle'] = $attach['filename'];
-		$attach['ext'] = fileext($attach['filename']);
+		$attach['ext'] = strtolower(fileext($attach['filename']));
 		if($allowext && !in_array($attach['ext'], $allowext)) {
 			continue;
 		}
@@ -184,6 +184,7 @@ function updateattach($modnewthreads, $tid, $pid, $attachnew, $attachupdate = ar
 			}
 		}
 		foreach($attachnew as $aid => $attach) {
+			$update = array();
 			$update['readperm'] = $_G['group']['allowsetattachperm'] ? $attach['readperm'] : 0;
 			$update['price'] = $_G['group']['maxprice'] ? (intval($attach['price']) <= $_G['group']['maxprice'] ? intval($attach['price']) : $_G['group']['maxprice']) : 0;
 			$update['tid'] = $tid;
@@ -500,7 +501,7 @@ function messagecutstr($str, $length = 0, $dot = ' ...') {
 	$bbcodes = 'b|i|u|p|color|size|font|align|list|indent|float';
 	$bbcodesclear = 'email|code|free|table|tr|td|img|swf|flash|attach|media|audio|payto'.($_G['cache']['bbcodes_display'][$_G['groupid']] ? '|'.implode('|', array_keys($_G['cache']['bbcodes_display'][$_G['groupid']])) : '');
 	$str = strip_tags(preg_replace(array(
-			"/\[hide=?\d*\](.+?)\[\/hide\]/is",
+			"/\[hide=?\d*\](.*?)\[\/hide\]/is",
 			"/\[quote](.*?)\[\/quote]/si",
 			$language['post_edit_regexp'],
 			"/\[url=?.*?\](.+?)\[\/url\]/si",
@@ -520,12 +521,21 @@ function messagecutstr($str, $length = 0, $dot = ' ...') {
 		$str = cutstr($str, $length, $dot);
 	}
 	$str = preg_replace($_G['cache']['smilies']['searcharray'], '', $str);
+	if($_G['setting']['plugins'][HOOKTYPE.'_discuzcode']) {
+		$_G['discuzcodemessage'] = & $str;
+		$param = func_get_args();
+		hookscript('discuzcode', 'global', 'funcs', array('param' => $param, 'caller' => 'messagecutstr'), 'discuzcode');
+	}
 	return trim($str);
 }
 
-function savepostposition($tid, $pid) {
+function savepostposition($tid, $pid, $returnposition = false) {
 	$res = DB::query("INSERT INTO ".DB::table('forum_postposition')." SET tid='$tid', pid='$pid'");
-	return $res;
+	if(!$returnposition) {
+		return $res;
+	} else {
+		return DB::insert_id();
+	}
 }
 
 function setthreadcover($pid, $tid = 0, $aid = 0) {

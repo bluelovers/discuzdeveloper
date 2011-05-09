@@ -72,11 +72,12 @@ if($id || $name) {
 				$blogidarray[$result['itemid']] = $result['itemid'];
 			}
 			$bloglist = getblogbyid($blogidarray);
+
 			$multipage = multi($count, $tpp, $page, "misc.php?mod=tag&id=$tag[tagid]&type=blog");
 		}
 	} else {
 		$shownum = 20;
-		
+
 		$tidarray = $threadlist = array();
 		$query = DB::query("SELECT itemid FROM ".DB::table('common_tagitem')." WHERE idtype='tid' AND $where LIMIT $shownum");
 		while($result = DB::fetch($query)) {
@@ -108,7 +109,7 @@ if($id || $name) {
 
 function getthreadsbytids($tidarray) {
 	global $_G;
-	
+
 	$threadlist = array();
 	if(!empty($tidarray)) {
 		loadcache('forums');
@@ -126,29 +127,29 @@ function getthreadsbytids($tidarray) {
 
 function getblogbyid($blogidarray) {
 	global $_G;
-	
+
 	$bloglist = array();
 	if(!empty($blogidarray)) {
-				$query = DB::query("SELECT bf.*, b.* FROM ".DB::table('home_blog')." b LEFT JOIN ".DB::table('home_blogfield')." bf ON bf.blogid=b.blogid WHERE b.blogid IN (".dimplode($blogidarray).") ORDER BY b.dateline DESC");
-				require_once libfile('function/spacecp');
-				require_once libfile('function/home');
-				$classarr = array();
-				while($result = DB::fetch($query)) {
-					$result['dateline'] = dgmdate($result['dateline']);
-					$classarr = getclassarr($result['uid']);
-					$result['classname'] = $classarr[$result[classid]]['classname'];
-					if($result['friend'] == 4) {
-						$result['message'] = $result['pic'] = '';
-					} else {
-						$result['message'] = getstr($result['message'], $summarylen, 0, 0, 0, -1);
-					}
-					$result['message'] = preg_replace("/&[a-z]+\;/i", '', $result['message']);
-					if($result['pic']) {
-						$result['pic'] = pic_cover_get($result['pic'], $result['picflag']);
-					}
-					$bloglist[] = $result;
-				}
+		$query = DB::query("SELECT bf.*, b.* FROM ".DB::table('home_blog')." b LEFT JOIN ".DB::table('home_blogfield')." bf ON bf.blogid=b.blogid WHERE b.blogid IN (".dimplode($blogidarray).") ORDER BY b.dateline DESC");
+		require_once libfile('function/spacecp');
+		require_once libfile('function/home');
+		$classarr = array();
+		while($result = DB::fetch($query)) {
+			$result['dateline'] = dgmdate($result['dateline']);
+			$classarr = getclassarr($result['uid']);
+			$result['classname'] = $classarr[$result[classid]]['classname'];
+			if($result['friend'] == 4) {
+				$result['message'] = $result['pic'] = '';
+			} else {
+				$result['message'] = getstr($result['message'], $summarylen, 0, 0, 0, -1);
 			}
+			$result['message'] = preg_replace("/&[a-z]+\;/i", '', $result['message']);
+			if($result['pic']) {
+				$result['pic'] = pic_cover_get($result['pic'], $result['picflag']);
+			}
+			$bloglist[] = $result;
+		}
+	}
 	return $bloglist;
 }
 ?>

@@ -568,7 +568,7 @@ if($_G['gp_action'] == 'votepoll' && submitcheck('pollsubmit', 1)) {
 	$maxratetoday = getratingleft($_G['group']['raterange']);
 
 	if(!submitcheck('ratesubmit', 1)) {
-		$_G['referer'] = $_G['siteurl'].'forum.php?mod=viewthread&tid='.$_G['tid'].'&page='.$page.($_G['gp_from'] ? '&from='.$_G['gp_from'] : '').'#pid'.$_G['gp_pid'];
+		$referer = $_G['siteurl'].'forum.php?mod=viewthread&tid='.$_G['tid'].'&page='.$page.($_G['gp_from'] ? '&from='.$_G['gp_from'] : '').'#pid'.$_G['gp_pid'];
 		$ratelist = getratelist($_G['group']['raterange']);
 		include template('forum/rate');
 
@@ -685,7 +685,7 @@ if($_G['gp_action'] == 'votepoll' && submitcheck('pollsubmit', 1)) {
 
 	if(!submitcheck('ratesubmit')) {
 
-		$_G['referer'] = $_G['siteurl'].'forum.php?mod=viewthread&tid='.$_G['tid'].'&page='.$page.($_G['gp_from'] ? '&from='.$_G['gp_from'] : '').'#pid'.$_G['gp_pid'];
+		$referer = $_G['siteurl'].'forum.php?mod=viewthread&tid='.$_G['tid'].'&page='.$page.($_G['gp_from'] ? '&from='.$_G['gp_from'] : '').'#pid'.$_G['gp_pid'];
 		$ratelogs = array();
 		$query = DB::query("SELECT * FROM ".DB::table('forum_ratelog')." WHERE pid='$_G[gp_pid]' ORDER BY dateline");
 		while($ratelog = DB::fetch($query)) {

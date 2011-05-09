@@ -83,7 +83,7 @@
 					<tr>
 						<th>&nbsp;</th>
 						<td>
-							<input type="hidden" name="referer" value="$_G[referer]" />
+							<input type="hidden" name="referer" value="{echo dreferer()}" />
 							<input type="hidden" name="editsubmit" value="true" />
 							<button name="submit" type="submit" class="pn" value="true"><strong>{lang determine}</strong></button>
 						</td>
@@ -161,7 +161,7 @@
 		<!--{if $_G[inajax]}--><span><a href="javascript:;" onclick="hideWindow('$_G[gp_handlekey]');" class="flbc" title="{lang close}">{lang close}</a></span><!--{/if}-->
 	</h3>
 	<form method="post" autocomplete="off" id="theform" name="theform" action="home.php?mod=spacecp&ac=album&op=delete&albumid=$albumid&uid=$_G[gp_uid]">
-		<input type="hidden" name="referer" value="$_G[referer]" />
+		<input type="hidden" name="referer" value="{echo dreferer()}" />
 		<input type="hidden" name="deletesubmit" value="true" />
 		<input type="hidden" name="formhash" value="{FORMHASH}" />
 		<div class="c">
@@ -187,7 +187,7 @@
 		<!--{if $_G[inajax]}--><span><a href="javascript:;" onclick="hideWindow('$_G[gp_handlekey]');" class="flbc" title="{lang close}">{lang close}</a></span><!--{/if}-->
 	</h3>
 	<form id="titleform" name="titleform" action="home.php?mod=spacecp&ac=album&op=editpic&subop=update&albumid=$pic[albumid]" method="post" autocomplete="off" {if $_G[inajax]}onsubmit="ajaxpost(this.id, 'return_$_G[gp_handlekey]');"{/if}>
-		<input type="hidden" name="referer" value="$_G[referer]" />
+		<input type="hidden" name="referer" value="{echo dreferer()}" />
 		<input type="hidden" name="formhash" value="{FORMHASH}" />
 		<input type="hidden" name="editpicsubmit" value="true" />
 		<!--{if $_G[inajax]}--><input type="hidden" name="handlekey" value="$_G[gp_handlekey]" /><!--{/if}-->
@@ -209,7 +209,7 @@
 		<!--{if $_G[inajax]}--><span><a href="javascript:;" onclick="hideWindow('$_G[gp_handlekey]');" class="flbc" title="{lang close}">{lang close}</a></span><!--{/if}-->
 	</h3>
 	<form method="post" autocomplete="off" action="home.php?mod=spacecp&ac=album&op=edithot&picid=$picid">
-		<input type="hidden" name="referer" value="$_G[referer]" />
+		<input type="hidden" name="referer" value="{echo dreferer()}" />
 		<input type="hidden" name="hotsubmit" value="true" />
 		<input type="hidden" name="formhash" value="{FORMHASH}" />
 		<div class="c">

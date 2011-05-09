@@ -34,8 +34,6 @@ $cachelife_time = 300;		// Life span for cache of searching in specified range o
 $cachelife_text = 3600;		// Life span for cache of text searching
 
 $srchtype = empty($_G['gp_srchtype']) ? '' : trim($_G['gp_srchtype']);
-$checkarray = array('posts' => '', 'trade' => '', 'threadsort' => '');
-
 $searchid = isset($_G['gp_searchid']) ? intval($_G['gp_searchid']) : 0;
 
 $srchtxt = $_G['gp_srchtxt'];
@@ -158,10 +156,12 @@ if(!submitcheck('searchsubmit', 1)) {
 			$_G['setting']['search']['group']['maxsearchresults'] = $_G['setting']['search']['group']['maxsearchresults'] ? intval($_G['setting']['search']['group']['maxsearchresults']) : 500;
 			list($srchtxt, $srchtxtsql) = searchkey($keyword, "subject LIKE '%{text}%'", true);
 
-			$query = DB::query("SELECT tid FROM ".DB::table('forum_thread')." WHERE ".($srchfid ? "fid='$srchfid' AND ": '')."isgroup='1' $srchtxtsql ORDER BY tid DESC LIMIT ".$_G['setting']['search']['group']['maxsearchresults']);
+			$query = DB::query("SELECT t.tid, f.status FROM ".DB::table('forum_thread')." t LEFT JOIN ".DB::table('forum_forum')." f ON t.fid=f.fid WHERE ".($srchfid ? "t.fid='$srchfid' AND ": '')."t.isgroup='1' $srchtxtsql ORDER BY tid DESC LIMIT ".$_G['setting']['search']['group']['maxsearchresults']);
 			while($thread = DB::fetch($query)) {
-				$tids .= ','.$thread['tid'];
-				$tnum++;
+				if($thread['status'] == 3) {
+					$tids .= ','.$thread['tid'];
+					$tnum++;
+				}
 			}
 			DB::free_result($query);
 
@@ -184,7 +184,7 @@ if(!submitcheck('searchsubmit', 1)) {
 			!($_G['group']['exempt'] & 2) && updatecreditbyaction('search');
 		}
 
-		dheader("location: search.php?mod=group&searchid=$searchid&searchsubmit=yes");
+		dheader("location: search.php?mod=group&searchid=$searchid&searchsubmit=yes&kw=".urlencode($keyword));
 
 	}
 

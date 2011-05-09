@@ -19,11 +19,11 @@
 		<!--{else}-->
 			{lang myrepeats:username} <select name="usernamenew" id="usernamenew" class="ps vm">
 			<!--{loop $permusers $user}-->
-				<option value="$user"{if $user == $username} selected{/if}>$user</option>
+				<option value="$user"{if $user == $username} selected="selected"{/if}>$user</option>
 			<!--{/loop}-->
 			</select>
 		<!--{/if}-->
-		{lang myrepeats:password} <input name="passwordnew" type="password" class="px" style="width:100px" tabindex="2" />
+		{lang myrepeats:password} <input type="password" name="passwordnew" class="px vm" style="width:100px" tabindex="2" />
 		<select name="questionidnew" tabindex="3" onchange="if(this.value > 0) {$('answernew').style.display='';} else {$('answernew').style.display='none';}" class="ps vm">
 			<option value="0">{lang myrepeats:security_question}</option>
 			<option value="1">{lang myrepeats:security_question_1}</option>

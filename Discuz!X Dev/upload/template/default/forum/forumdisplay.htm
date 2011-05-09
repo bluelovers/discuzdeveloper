@@ -3,16 +3,15 @@
 <!--{if $_G['forum']['ismoderator']}-->
 	<script type="text/javascript" src="{$_G[setting][jspath]}forum_moderate.js?{VERHASH}"></script>
 <!--{/if}-->
-
+<style id="diy_style" type="text/css"></style>
+<!--[diy=diynavtop]--><div id="diynavtop" class="area"></div><!--[/diy]-->
 <div id="pt" class="bm cl">
-	<!--{subtemplate common/simplesearchform}-->
 	<div class="z">
 		<a href="./" class="nvhm" title="{lang homepage}">$_G[setting][bbname]</a> $navigation
 	</div>
 </div>
 
 <!--{ad/text/wp a_t}-->
-<style id="diy_style" type="text/css"></style>
 <div class="wp">
 	<!--[diy=diy1]--><div id="diy1" class="area"></div><!--[/diy]-->
 </div>
@@ -153,7 +152,7 @@
 				</div>
 				<!--{/if}-->
 
-				<!--{if $threadmodcount}--><div class="bm bmn hm xi2"><strong>{lang forum_moderate_unhandled}</strong></div><!--{/if}-->
+				<!--{if $threadmodcount}--><div class="bm"><div class="ntc_l hm xi2"><strong>{lang forum_moderate_unhandled}</strong></div></div><!--{/if}-->
 
 				<div id="pgt" class="bm bw0 pgs cl">
 					$multipage
@@ -303,7 +302,7 @@
 	<script type="text/javascript">document.onkeyup = function(e){keyPageScroll(e, <!--{if $page > 1}-->1<!--{else}-->0<!--{/if}-->, <!--{if $page < $_G['setting']['threadmaxpages'] && $page < $_G['page_next']}-->1<!--{else}-->0<!--{/if}-->, 'forum.php?mod=forumdisplay&fid={$_G[fid]}&filter={$filter}&orderby={$_G[gp_orderby]}{$forumdisplayadd[page]}&{$multipage_archive}', $page);}</script>
 <!--{/if}-->
 
-<!--{if empty($_G['forum']['picstyle']) && $_G['gp_orderby'] == 'lastpost'}-->
+<!--{if empty($_G['forum']['picstyle']) && $_G['gp_orderby'] == 'lastpost' && empty($_G['gp_filter']) }-->
 	<script type="text/javascript">checkForumnew_handle = setTimeout(function () {checkForumnew($_G[fid], lasttime);}, checkForumtimeout);</script>
 <!--{/if}-->
 

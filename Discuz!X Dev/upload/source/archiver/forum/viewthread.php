@@ -38,7 +38,7 @@ include loadarchiver('common/header');
 
 function archivermessage($message) {
 	return nl2br(preg_replace(
-			array('/&amp;(#\d{3,5};)/', "/\[hide=?\d*\](.+?)\[\/hide\]/is", "/\[\/?\w+=?.*?\]/"),
+			array('/&amp;(#\d{3,5};)/', "/\[hide=?\d*\](.*?)\[\/hide\]/is", "/\[\/?\w+=?.*?\]/"),
 			array('&\\1','<b>**** Hidden Message *****</b>',''),
 		str_replace(
 			array('&', '"', '<', '>', "\t", '   ', '  '),

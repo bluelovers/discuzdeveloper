@@ -67,7 +67,7 @@ if(!submitcheck('modsubmit') && !$_G['gp_fast']) {
 		$datesql = " AND m.dateline>'".(TIMESTAMP - $dateline)."'";
 	}
 	$modcount = DB::result_first("SELECT COUNT(*) FROM ".DB::table('common_moderate')." m
-			LEFT JOIN ".DB::table('forum_thread')." t ON t.tid=m.id", "m.idtype='tid' AND m.status='$moderatestatus' $datesql $fidadd[and] $fidadd[t]$fidadd[fids] ".($modfid == '-1' ? " AND t.isgroup='1'": '')."$sqlwhere");
+			LEFT JOIN ".DB::table('forum_thread')." t ON t.tid=m.id WHERE m.idtype='tid' AND m.status='$moderatestatus' $datesql $fidadd[and] $fidadd[t]$fidadd[fids] ".($modfid == '-1' ? " AND t.isgroup='1'": '')."$sqlwhere");
 	$start_limit = ($page - 1) * $tpp;
 	$query = DB::query("SELECT f.name AS forumname, f.allowsmilies, f.allowhtml, f.allowbbcode, f.allowimgcode, t.tid, t.fid, t.posttableid, t.sortid, t.authorid, t.author, t.subject, t.dateline
 		FROM ".DB::table('common_moderate')." m

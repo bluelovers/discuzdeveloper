@@ -167,6 +167,7 @@ if(!$_G['privacy']) {
 	if(!$_G['inajax']) {
 		include_once template("home/space_profile");
 	} else {
+		$_G['gp_do'] = 'card';
 		include_once template("home/space_card");
 	}
 }

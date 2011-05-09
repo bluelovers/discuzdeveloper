@@ -12,17 +12,13 @@
 			<!--{block policymsg}--><!--{if $_G['setting']['extcredits'][$id][img]}-->$_G['setting']['extcredits'][$id][img] <!--{/if}-->$_G['setting']['extcredits'][$id][title] $policy $_G['setting']['extcredits'][$id][unit]<!--{/block}-->
 			<!--{eval $policymsgs .= $p.$policymsg;$p = ', ';}-->
 			<!--{/loop}-->
-			<!--{if $policymsgs}--><p>{lang search_credit_msg}</p><!--{/if}-->	
+			<!--{if $policymsgs}--><p>{lang search_credit_msg}</p><!--{/if}-->
 		</form>
-	
+
 		<!--{if !empty($searchid) && submitcheck('searchsubmit', 1)}-->
-			<!--{if $checkarray['posts']}-->
-				<!--{subtemplate search/thread_list}-->
-			<!--{elseif $checkarray['threadsort']}-->
-				<!--{subtemplate search/sort_list}-->
-			<!--{/if}-->
+			<!--{subtemplate search/thread_list}-->
 		<!--{/if}-->
-		
+
 	</div>
 </div>
 <!--{hook/forum_bottom}-->

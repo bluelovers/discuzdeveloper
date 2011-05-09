@@ -10,7 +10,6 @@
  */
 
 $lang = array (
-
   'all' => '全部',
   'have' => '已有',
   'homepage' => '首页',
@@ -30,7 +29,6 @@ $lang = array (
   'ranklist_today' => '今日',
   'ranklist_update' => '排行榜数据已被缓存，上次于 $lastupdate 被更新，下次将于 $nextupdate 进行更新',
   'ranklist_week' => '本周',
-
   'blog_ranklist' => '日志排行',
   'comment' => '评论',
   'comment_ranklist' => '评论排行',
@@ -39,7 +37,6 @@ $lang = array (
   'ranklist_thread_view' => '查看',
   'views' => '人气:',
   'visit_ranklist' => '查看排行',
-
   'forum' => '版块',
   'ranklist_forum' => '版块排行',
   'ranklist_forum_day_post' => '最近 24 小时发帖',
@@ -50,7 +47,6 @@ $lang = array (
   'ranklist_post_month' => '最近 30 天发帖排行',
   'ranklist_reply' => '回复排行',
   'reply' => '回复',
-
   'credit_num' => '积分数',
   'credit_ranking' => '积分排行',
   'group' => '群组',
@@ -58,7 +54,6 @@ $lang = array (
   'ranklist_group' => '群组排行',
   'ranklist_group_credit' => '群组积分数排行',
   'ranklist_member_num' => '成员数排行',
-
   'auction_ranking' => '竞价排行',
   'close_ranking_note' => '管理员已关闭竞价,暂时无法继续上榜',
   'credit_is_not_number' => '你所填写的{$extcredits[$creditid][title]}不是一个合法数值',
@@ -98,7 +93,6 @@ $lang = array (
   'unitprice_is_not_number' => '您所填写的单价不是一个合法数值',
   'unitprice_title_error' => '您所填写的单价不能小于1',
   'your_current_bid' => '自己当前的竞价单价',
-
   'add_friend' => '加为好友',
   'blogs_num' => '日志数',
   'day_post_num' => '最近24小时发帖数',
@@ -120,26 +114,21 @@ $lang = array (
   'show_credit' => '剩余竞价',
   'show_credit_note' => '竞价宣言',
   'visit_friend' => '去串个门',
-
   'hot_pic_ranklist' => '热图排行',
   'ranklist_picture' => '图片排行',
-
   'people_join' => '人参与',
   'ranklist_poll' => '投票排行',
   'to_poll' => '去投票',
-
   'bidding_rank' => '竞价排名',
   'i_want_rank' => '我要上榜',
   'more' => '更多',
   'ranklist_thread' => '帖子排行',
-
   'activity' => '活动',
   'blogs' => '日志',
   'pics' => '图片',
   'poll' => '投票',
   'posts' => '帖子',
   'user' => '用户',
-
   'author' => '作者',
   'ranklist_thread_heat' => '热度',
   'ranklist_thread_reply' => '回复',

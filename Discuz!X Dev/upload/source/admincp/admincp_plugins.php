@@ -271,6 +271,7 @@ if(!$operation) {
 			$pdir = DISCUZ_ROOT.'./source/plugin/'.$_G['gp_dir'];
 			$d = dir($pdir);
 			$xmls = '';$count = 0;
+			$referer = dreferer();
 			while($f = $d->read()) {
 				if(preg_match('/^discuz\_plugin_'.$_G['gp_dir'].'(\_\w+)?\.xml$/', $f, $a)) {
 					$extratxt = $extra = substr($a[1], 1);
@@ -283,7 +284,7 @@ if(!$operation) {
 					} elseif(preg_match('/^TC\_UTF8$/i', $extra)) {
 						$extratxt = '&#32321;&#39636;&#20013;&#25991;&#85;&#84;&#70;&#56;&#29256;';
 					}
-					$url = ADMINSCRIPT.'?action=plugins&operation=import&dir='.$_G['gp_dir'].'&installtype='.$extra.(!empty($_G['referer']) ? '&referer='.rawurlencode($_G['referer']) : '');
+					$url = ADMINSCRIPT.'?action=plugins&operation=import&dir='.$_G['gp_dir'].'&installtype='.$extra.(!empty($referer) ? '&referer='.rawurlencode($referer) : '');
 					$xmls .= '&nbsp;<input type="button" class="btn" onclick="location.href=\''.$url.'\'" value="'.($extra ? $extratxt : $lang['plugins_import_default']).'">&nbsp;';
 					$count++;
 				}
@@ -348,7 +349,7 @@ if(!$operation) {
 			}
 		}
 
-		plugininstall($pluginarray);
+		plugininstall($pluginarray, $installtype);
 
 		updatemenu('plugin');
 
@@ -357,10 +358,11 @@ if(!$operation) {
 		}
 
 		pluginstat('install', $pluginarray['plugin']);
+		$referer = dreferer();
 		if(!empty($dir)) {
-			cpmsg('plugins_install_succeed', !empty($_G['referer']) ? $_G['referer'] : 'action=plugins', 'succeed');
+			cpmsg('plugins_install_succeed', !empty($referer) ? $referer : 'action=plugins', 'succeed');
 		} else {
-			cpmsg('plugins_import_succeed', !empty($_G['referer']) ? $_G['referer'] : 'action=plugins', 'succeed');
+			cpmsg('plugins_import_succeed', !empty($referer) ? $referer : 'action=plugins', 'succeed');
 		}
 
 	}
@@ -415,10 +417,12 @@ if(!$operation) {
 		}
 	}
 
-} elseif($operation == 'upgrade' && preg_match('/^[\w\.]+$/', $_G['gp_xmlfile'])) {
+} elseif($operation == 'upgrade') {
 
 	$plugin = DB::fetch_first("SELECT identifier, directory, modules, version FROM ".DB::table('common_plugin')." WHERE pluginid='$pluginid'");
-	$importfile = DISCUZ_ROOT.'./source/plugin/'.$plugin['directory'].$_G['gp_xmlfile'];
+	$modules = unserialize($plugin['modules']);
+	$dir = substr($plugin['directory'], 0, -1);
+	$importfile = DISCUZ_ROOT.'./source/plugin/'.$dir.'/discuz_plugin_'.$dir.($modules['extra']['installtype'] ? '_'.$modules['extra']['installtype'] : '').'.xml';
 	if(!file_exists($importfile)) {
 		cpmsg('plugin_file_error', '', 'error');
 	}
@@ -448,55 +452,7 @@ if(!$operation) {
 		}
 	}
 
-	if(is_array($pluginarray['var'])) {
-		$query = DB::query("SELECT variable FROM ".DB::table('common_pluginvar')." WHERE pluginid='$pluginid'");
-		$pluginvars = $pluginvarsnew = array();
-		while($pluginvar = DB::fetch($query)) {
-			$pluginvars[] = $pluginvar['variable'];
-		}
-		foreach($pluginarray['var'] as $config) {
-			if(!in_array($config['variable'], $pluginvars)) {
-				$data = array('pluginid' => $pluginid);
-				foreach($config as $key => $val) {
-					$data[$key] = $val;
-				}
-				DB::insert('common_pluginvar', $data);
-			} else {
-				$sql = $comma = '';
-				foreach($config as $key => $val) {
-					if($key != 'value') {
-						$sql .= $comma.$key.'=\''.$val.'\'';
-						$comma = ',';
-					}
-				}
-				if($sql) {
-					DB::query("UPDATE ".DB::table('common_pluginvar')." SET $sql WHERE pluginid='$pluginid' AND variable='$config[variable]'");
-				}
-			}
-			$pluginvarsnew[] = $config['variable'];
-		}
-		$pluginvardiff = array_diff($pluginvars, $pluginvarsnew);
-		if($pluginvardiff) {
-			DB::query("DELETE FROM ".DB::table('common_pluginvar')." WHERE pluginid='$pluginid' AND variable IN (".dimplode($pluginvardiff).")");
-		}
-	}
-
-	$langexists = updatepluginlanguage($pluginarray);
-
-	if(!empty($pluginarray['intro']) || $langexists) {
-		$pluginarray['plugin']['modules'] = unserialize(dstripslashes($pluginarray['plugin']['modules']));
-		if(!empty($pluginarray['intro'])) {
-			require_once libfile('function/discuzcode');
-			$pluginarray['plugin']['modules']['extra']['intro'] = discuzcode(dstripslashes(strip_tags($pluginarray['intro'])), 1, 0);
-		}
-		$langexists && $pluginarray['plugin']['modules']['extra']['langexists'] = 1;
-		$pluginarray['plugin']['modules'] = addslashes(serialize($pluginarray['plugin']['modules']));
-	}
-	$modulenew = $pluginarray['modules'];
-
-	DB::query("UPDATE ".DB::table('common_plugin')." SET version='{$pluginarray[plugin][version]}', modules='{$pluginarray[plugin][modules]}' WHERE pluginid='$pluginid'");
-
-	updatecache(array('plugin', 'setting', 'styles'));
+	pluginupgrade($pluginarray);
 
 	if(!empty($plugin['directory']) && !empty($pluginarray['upgradefile']) && preg_match('/^[\w\.]+$/', $pluginarray['upgradefile'])) {
 		dheader('location: '.ADMINSCRIPT.'?action=plugins&operation=pluginupgrade&dir='.$plugin['directory'].'&xmlfile='.rawurlencode($_G['gp_xmlfile']).'&fromversion='.$plugin['version']);
@@ -837,7 +793,7 @@ if(!$operation) {
 		$moduleids = array();
 		if(is_array($plugin['modules'])) {
 			foreach($plugin['modules'] as $moduleid => $module) {
-				if($moduleid === 'extra') {
+				if($moduleid === 'extra' || $moduleid === 'system') {
 					continue;
 				}
 				$adminidselect = array($module['adminid'] => 'selected');
@@ -1066,7 +1022,7 @@ if(!$operation) {
 			if(is_array($plugin['modules'])) {
 				foreach($plugin['modules'] as $moduleid => $module) {
 					if(!isset($_G['gp_delete'][$moduleid])) {
-						if($moduleid === 'extra') {
+						if($moduleid === 'extra' || $moduleid === 'system') {
 							continue;
 						}
 						$modulesnew[] = array(
@@ -1132,6 +1088,10 @@ if(!$operation) {
 				$modulesnew['extra'] = $plugin['modules']['extra'];
 			}
 
+			if(!empty($plugin['modules']['system'])) {
+				$modulesnew['system'] = $plugin['modules']['system'];
+			}
+
 			DB::query("UPDATE ".DB::table('common_plugin')." SET modules='".addslashes(serialize($modulesnew))."' WHERE pluginid='$pluginid'");
 
 		} elseif($type == 'vars') {
@@ -1174,7 +1134,7 @@ if(!$operation) {
 } elseif($operation == 'delete') {
 
 	$plugin = DB::fetch_first("SELECT name, identifier, directory, modules, version, available FROM ".DB::table('common_plugin')." WHERE pluginid='$pluginid'");
-	$dir = $plugin['directory'];
+	$dir = substr($plugin['directory'], 0, -1);
 	$modules = unserialize($plugin['modules']);
 	if($modules['system']) {
 		$_G['gp_confirmed'] = false;
@@ -1182,29 +1142,12 @@ if(!$operation) {
 
 	if(!$_G['gp_confirmed']) {
 
-		$entrydir = DISCUZ_ROOT.'./source/plugin/'.$dir;
-		$newver = $upgradestr = $deletestr = '';
-		$pluginarray = array();
-		if(file_exists($entrydir)) {
-			$d = dir($entrydir);
-			while($f = $d->read()) {
-				if(preg_match('/^discuz\_plugin\_'.$plugin['identifier'].'(\_\w+)?\.xml$/', $f, $a)) {
-					$extratxt = $extra = substr($a[1], 1);
-					if(preg_match('/^SC\_GBK$/i', $extra)) {
-						$extratxt = '&#31616;&#20307;&#20013;&#25991;&#29256;';
-					} elseif(preg_match('/^SC\_UTF8$/i', $extra)) {
-						$extratxt = '&#31616;&#20307;&#20013;&#25991;&#85;&#84;&#70;&#56;&#29256;';
-					} elseif(preg_match('/^TC\_BIG5$/i', $extra)) {
-						$extratxt = '&#32321;&#39636;&#20013;&#25991;&#29256;';
-					} elseif(preg_match('/^TC\_UTF8$/i', $extra)) {
-						$extratxt = '&#32321;&#39636;&#20013;&#25991;&#85;&#84;&#70;&#56;&#29256;';
-					}
-					$importtxt = @implode('', file($entrydir.'/'.$f));
-					$pluginarray = getimportdata('Discuz! Plugin');
-					$newver = !empty($pluginarray['plugin']['version']) ? $pluginarray['plugin']['version'] : 0;
-					$upgradestr .= $newver > $plugin['version'] ? '&nbsp;<input class="btn" onclick="location.href=\''.ADMINSCRIPT.'?action=plugins&operation=upgrade&pluginid='.$pluginid.'&xmlfile='.rawurlencode($a[0]).'\'" type="button" value="'.cplang('plugins_update_to').($extra ? $extratxt : $lang['plugins_import_default']).' '.$newver.'" />&nbsp;' : '';
-				}
-			}
+		$file = DISCUZ_ROOT.'./source/plugin/'.$dir.'/discuz_plugin_'.$dir.($modules['extra']['installtype'] ? '_'.$modules['extra']['installtype'] : '').'.xml';
+		if(file_exists($file)) {
+			$importtxt = @implode('', file($file));
+			$pluginarray = getimportdata('Discuz! Plugin');
+			$newver = !empty($pluginarray['plugin']['version']) ? $pluginarray['plugin']['version'] : 0;
+			$upgradestr .= $newver > $plugin['version'] ? '&nbsp;<input class="btn" onclick="location.href=\''.ADMINSCRIPT.'?action=plugins&operation=upgrade&pluginid='.$pluginid.'\'" type="button" value="'.cplang('plugins_update_to').' '.$newver.'" />&nbsp;' : '';
 		}
 		if(!$modules['system']) {
 			$deletestr = '<input class="btn" onclick="location.href=\''.ADMINSCRIPT.'?action=plugins&operation=delete&pluginid='.$pluginid.'&confirmed=yes\'" type="button" value="'.$lang['plugins_config_uninstallplugin'].'" />';
@@ -1244,21 +1187,12 @@ if(!$operation) {
 		updatemenu('plugin');
 
 		if($dir) {
-			$dir = substr($dir, 0, -1);
-			$pdir = DISCUZ_ROOT.'./source/plugin/'.$dir;
-			if(file_exists($pdir)) {
-				$d = dir($pdir);
-				while($f = $d->read()) {
-					if(preg_match('/^discuz\_plugin_'.$dir.'(\_\w+)?\.xml$/', $f, $a)) {
-						$installtype = substr($a[1], 1);
-						$file = $pdir.'/'.$f;
-						$importtxt = @implode('', file($file));
-						$pluginarray = getimportdata('Discuz! Plugin');
-						if(!empty($pluginarray['uninstallfile']) && preg_match('/^[\w\.]+$/', $pluginarray['uninstallfile'])) {
-							dheader('location: '.ADMINSCRIPT.'?action=plugins&operation=pluginuninstall&dir='.$dir.'&installtype='.$installtype);
-						}
-						break;
-					}
+			$file = DISCUZ_ROOT.'./source/plugin/'.$dir.'/discuz_plugin_'.$dir.($modules['extra']['installtype'] ? '_'.$modules['extra']['installtype'] : '').'.xml';
+			if(file_exists($file)) {
+				$importtxt = @implode('', file($file));
+				$pluginarray = getimportdata('Discuz! Plugin');
+				if(!empty($pluginarray['uninstallfile']) && preg_match('/^[\w\.]+$/', $pluginarray['uninstallfile'])) {
+					dheader('location: '.ADMINSCRIPT.'?action=plugins&operation=pluginuninstall&dir='.$dir.'&installtype='.$modules['extra']['installtype']);
 				}
 			}
 		}

@@ -17,6 +17,7 @@ $lang = array
 	'repent_succeed' => '你操作的帖子已删除',
 	'repent_info_noperm' => '对不起，主题所在版块不允许使用本道具',
 	'repent_info_user_noperm' => '对不起，你只能删除自己的帖子',
+	'repent_do_not_rushreply' => '不能在抢楼帖中使用此道具',
 );
 
 ?>

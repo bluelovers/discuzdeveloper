@@ -3,14 +3,14 @@ Editor CSS file for Discuz! X
 (C) Comsenz Inc.
 http://www.comsenz.com
 */
-.edt { border: 1px solid; border-color: #999 #CCC #CCC #999; }	
+.edt { border: 1px solid; border-color: #999 #CCC #CCC #999; }
 	.edt .bar { padding: 4px; height: 44px; border-bottom: 1px solid #DDD; background: {COMMONBG}; }
 		.edt .bbar { height: 20px; border-top: 1px solid #DDD; text-align: right; background: {COMMONBG}; }
 			.edt .bbar img { vertical-align: bottom; *margin-right: -4px; cursor: row-resize; }
 			.edt .bbar em { width: 200px; height: 20px; overflow: hidden; white-space: nowrap; float: left; text-align: left; }
 		.edt .bbar, .edt .bbar a { color: #999; }
 		.edt .btn { float: left; border-left: 1px solid #DDD; border-right: 1px solid #FEFEFE; }
-			.edt .b1r, .edt .b2r { position: relative; float: left; padding: 0 4px; height: 44px; border-right: 1px solid #DDD; border-left: 1px solid #FEFEFE; }
+			.edt .b1r, .edt .b2r { position: relative; float: left; padding: 0 3px; height: 44px; border-right: 1px solid #DDD; border-left: 1px solid #FEFEFE; }
 			.edt .b2r p, .edt .b2r br { clear: both; }
 		.edt .bar a { float: left; border: 1px solid {COMMONBG}; background: transparent url({STATICURL}image/editor/editor.gif) no-repeat 0 0; overflow: hidden; }
 			.edt .b1r a { padding-top: 27px; width: 35px; height: 15px; text-align: center; font-size: 11px; font-family: Arial, PMingLiU, sans-serif; }
@@ -31,7 +31,7 @@ http://www.comsenz.com
 
 	.simpleedt .bar, .simpleedt .b1r, .simpleedt .b2r { height: 22px; }
 	.bar_swch { display: block; clear: both; }
-	
+
 	#e_bold			{ background-position: 0 0; }
 	#e_fontsize		{ width: 45px; }
 	#e_italic		{ background-position: -20px 0; }

@@ -289,6 +289,7 @@ $lang = array(
 	'district_level_2' => '-城市-',
 	'district_level_3' => '-州县-',
 	'district_level_4' => '-乡镇-',
+	'invite_you_to_visit' => '{user}邀请您访问{bbname}',
 
 	'spacecp_message_prompt' => '(支持 {msg} 代码,最大 1000 字)',
 	'card_update_doing' => ' <a class="xi2" href="###">[更新记录]</a>',

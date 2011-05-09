@@ -24,7 +24,7 @@ body { padding-top: 170px; }
 			#controlnav li.current { background: url({STATICURL}image/diy/cp-nav-active.png) no-repeat 0 0; }
 				#controlnav li.current a { background: url({STATICURL}image/diy/cp-nav-active.png) no-repeat 100% -50px; }
 				#controlnav li.current span { margin-right: -8px; }
-		#diy_backup_tip { top: 32px; right: 55px; line-height: 1.5; }
+		#diy_backup_tip { top: 32px; right: 55px; width: auto; line-height: 1.5; }
 	#controlcontent { margin: 0 10px; padding: 10px; height: 110px; he\ight: 90px; border: solid #CCBDCC; border-width: 0 1px; background: #FFF; overflow: hidden; }
 	#controlcontent li { float: left; margin-right: 4px; }
 		#controlcontent li a, #controlcontent li label { float: left; width: 90px; height: 90px; text-align: center; cursor: pointer; }

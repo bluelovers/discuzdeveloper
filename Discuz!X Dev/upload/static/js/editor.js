@@ -2,12 +2,9 @@
 	[Discuz!] (C)2001-2009 Comsenz Inc.
 	This is NOT a freeware, use is subject to license terms
 
-	$Id: editor.js 21505 2011-03-29 05:52:48Z monkey $
+	$Id: editor.js 22345 2011-05-03 09:50:58Z monkey $
 */
 
-var DISCUZCODE = [];
-DISCUZCODE['num'] = '-1';
-DISCUZCODE['html'] = [];
 var editorcurrentheight = 400, editorminheight = 400, savedataInterval = 30, editbox = null, editwin = null, editdoc = null, editcss = null, savedatat = null, savedatac = 0, autosave = 1, framemObj = null, cursor = -1, stack = [], initialized = false, postSubmited = false, editorcontroltop = false, editorcontrolwidth = false, editorcontrolheight = false, editorisfull = 0, fulloldheight = 0, savesimplodemode = null;
 
 function newEditor(mode, initialtext) {
@@ -96,9 +93,10 @@ function initEditor() {
 		_attachEvent(window, 'scroll', function () { editorcontrolpos(); }, document);
 	}
 	if($(editorid + '_fullswitcher') && BROWSER.ie && BROWSER.ie < 7) {
-		$(editorid + '_fullswitcher').onclick = null;
+		$(editorid + '_fullswitcher').onclick = function () {
+			showDialog('你的浏览器不支持此功能，请升级浏览器版本', 'notice', '友情提示');
+		};
 		$(editorid + '_fullswitcher').className = 'xg1';
-		$(editorid + '_fullswitcher').title = '你的浏览器不支持此功能';
 	}
 	if($(editorid + '_svdsecond') && savedatat === null) {
 		savedatac = savedataInterval;
@@ -323,14 +321,34 @@ function pasteWord(str) {
 	var mstest = /<\w[^>]* class="?[MsoNormal|xl]"?/gi;
 	if(mstest.test(str)){
 		str = str.replace(/<!--\[if[\s\S]+?<!\[endif\]-->/gi, "");
-		str = str.replace(/<\/?SPAN[^>]*>/gi, "");
 		str = str.replace(/<(\w[^>]*) class=([^ |>]*)([^>]*)/gi, "<$1$3");
-		str = str.replace(/<(\w[^>]*) style="([^"]*)"([^>]*)/gi, "<$1$3");
+		str = str.replace(/<(\w[^>]*) style="([^"]*)"([^>]*)/gi, function ($1, $2, $3, $4) {
+			var style = '';
+			re = new RegExp('(^|[;\\s])color:\\s*([^;]+);?', 'ig');
+			match = re.exec($3);
+			if(match != null) {
+				style += 'color:' + match[2] + ';';
+			}
+			re = new RegExp('(^|[;\\s])text-indent:\\s*([^;]+);?', 'ig');
+			match = re.exec($3);
+			if(match != null) {
+				style += 'text-indent:' + parseInt(parseInt(match[2]) / 10) + 'em;';
+			}
+			re = new RegExp('(^|[;\\s])font-size:\\s*([^;]+);?', 'ig');
+			match = re.exec($3);
+			if(match != null) {
+				style += 'font-size:' + match[2] + ';';
+			}
+			if(style) {
+				style = ' style="' + style + '"';
+			}
+			return '<' + $2 + style + $4;
+		});
 		htstrml = str.replace(/<(\w[^>]*) lang=([^ |>]*)([^>]*)/gi, "<$1$3");
 		str = str.replace(/<\\?\?xml[^>]*>/gi, "");
 		str = str.replace(/<\/?\w+:[^>]*>/gi, "");
 		str = str.replace(/&nbsp;/, " ");
-		var re = new RegExp("(<P)([^>]*>.*?)(<\/P>)","gi");
+		var re = new RegExp("(<P)([^>]*>.*?)(<\/P>)", 'ig');
 		str = str.replace(re, "<div$2</div>");
 		if(!wysiwyg) {
 			str = html2bbcode(str);
@@ -424,7 +442,11 @@ function writeEditorContents(text) {
 				editdoc.getElementById('editorheader').appendChild(scriptNode);
 			}
 			editdoc.body.contentEditable = true;
+			editdoc.body.spellcheck = false;
 			initialized = true;
+			if(BROWSER.safari) {
+				editdoc.onclick = safariSel;
+			}
 		}
 	} else {
 		textobj.value = text;
@@ -432,6 +454,16 @@ function writeEditorContents(text) {
 
 	setEditorStyle();
 
+}
+
+function safariSel(e) {
+	e = e.target;
+	if(e.tagName.match(/(img|embed)/i)) {
+		var sel = editwin.getSelection(),rng= editdoc.createRange(true);
+		rng.selectNode(e);
+		sel.removeAllRanges();
+		sel.addRange(rng);
+	}
 }
 
 function getEditorContents() {
@@ -692,7 +724,7 @@ function discuzcode(cmd, arg) {
 		if(wysiwyg) {
 			if(txt = getSel()) {
 				argm = arg == 'left' ? 'right' : 'left';
-				insertText('<br style="clear: both"><span style="float: ' + arg + '; margin-' + argm + ': 5px">' + txt + '</span>', true);
+				insertText('<br style="clear: both"><table class="float" style="float: ' + arg + '; margin-' + argm + ': 5px;"><tbody><tr><td>' + txt + '</td></tr></tbody></table>', true);
 			}
 		} else {
 			var opentag = '[float=' + arg + ']';
@@ -867,21 +899,24 @@ function showEditorMenu(tag, params) {
 	selection = sel ? (wysiwyg ? sel.htmlText : sel.text) : getSel();
 
 	if(menu) {
-		if($(ctrlid).getAttribute('menupos') !== '') {
+		if($(ctrlid).getAttribute('menupos') !== null) {
 			menupos = $(ctrlid).getAttribute('menupos');
 		}
-		if($(ctrlid).getAttribute('menuwidth') !== '') {
+		if($(ctrlid).getAttribute('menuwidth') !== null) {
 			menu.style.width = $(ctrlid).getAttribute('menuwidth') + 'px';
 		}
 		if(menupos == '00') {
-			if(menu.className != 'fwinmask') {
-				menu.className = 'fwinmask';
-				menu.innerHTML = '<table width="100%" cellpadding="0" cellspacing="0" class="fwin"><tr><td class="t_l"></td><td class="t_c"></td><td class="t_r"></td></tr><tr><td class="m_l">&nbsp;&nbsp;</td><td class="m_c">'
-					+ '<div class="mtm mbm">' + menu.innerHTML + '</div>'
-					+ '</td><td class="m_r"></td></tr><tr><td class="b_l"></td><td class="b_c"></td><td class="b_r"></td></tr></table>';
+			menu.className = 'fwinmask';
+			if($(editorid + '_' + tag + '_menu').style.visibility == 'hidden') {
+				$(editorid + '_' + tag + '_menu').style.visibility = 'visible';
+			} else {
+				showMenu({'ctrlid':ctrlid,'evt':'click','pos':menupos,'timeout':250,'duration':3,'drag':ctrlid + '_ctrl'});
 			}
+		} else {
+			showMenu({'ctrlid':ctrlid,'evt':'click','pos':menupos,'timeout':250,'duration':in_array(tag, ['fontname', 'fontsize', 'sml']) ? 2 : 3,'drag':1});
 		}
-		showMenu({'ctrlid':ctrlid,'evt':'click','pos':menupos,'timeout':250,'duration':in_array(tag, ['fontname', 'fontsize', 'sml']) ? 2 : 3,'drag':in_array(tag, ['attach', 'image']) ? ctrlid + '_ctrl' : 1});
+
+
 	} else {
 		switch(tag) {
 			case 'url':
@@ -1143,25 +1178,25 @@ function autoTypeset() {
 
 function getSel() {
 	if(wysiwyg) {
-		if(BROWSER.firefox || BROWSER.opera) {
+		try {
 			selection = editwin.getSelection();
 			checkFocus();
+			range = selection ? selection.getRangeAt(0) : editdoc.createRange();
+			return readNodes(range.cloneContents(), false);
+		} catch(e) {
 			try {
-				range = selection ? selection.getRangeAt(0) : editdoc.createRange();
-				return readNodes(range.cloneContents(), false);
-			} catch(e) {
-				return;
-			}
-		} else {
-			var range = editdoc.selection.createRange();
-			if(range.htmlText && range.text) {
-				return range.htmlText;
-			} else {
-				var htmltext = '';
-				for(var i = 0; i < range.length; i++) {
-					htmltext += range.item(i).outerHTML;
+				var range = editdoc.selection.createRange();
+				if(range.htmlText && range.text) {
+					return range.htmlText;
+				} else {
+					var htmltext = '';
+					for(var i = 0; i < range.length; i++) {
+						htmltext += range.item(i).outerHTML;
+					}
+					return htmltext;
 				}
-				return htmltext;
+			} catch(e) {
+				return '';
 			}
 		}
 	} else {
@@ -1180,10 +1215,9 @@ function getSel() {
 function insertText(text, movestart, moveend, select, sel) {
 	checkFocus();
 	if(wysiwyg) {
-		if(BROWSER.firefox || BROWSER.opera) {
+		try {
 			editdoc.execCommand('insertHTML', false, text);
-		} else {
-
+		} catch(e) {
 			if(!isUndefined(editdoc.selection) && editdoc.selection.type != 'Text' && editdoc.selection.type != 'None') {
 				movestart = false;
 				editdoc.selection.clear();

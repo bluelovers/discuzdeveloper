@@ -82,6 +82,7 @@ if($view == 'userapp') {
 
 	$sql = ' AND '.implode(' AND ', $wherearr);
 
+
 	$newnotify = false;
 	$count = DB::result(DB::query("SELECT COUNT(*) FROM ".DB::table('home_notification')." WHERE uid='$_G[uid]' $sql"), 0);
 	if($count) {

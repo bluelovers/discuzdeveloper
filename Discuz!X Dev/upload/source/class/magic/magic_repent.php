@@ -54,7 +54,7 @@ class magic_repent {
 		}
 		$_G['tid'] = $_G['gp_ptid'];
 
-		$post = getpostinfo($_G['gp_pid'], 'pid', array('p.first', 'p.tid', 'p.fid', 'p.authorid', 'p.replycredit'));
+		$post = getpostinfo($_G['gp_pid'], 'pid', array('p.first', 'p.tid', 'p.fid', 'p.authorid', 'p.replycredit', 't.status as thread_status'));
 		$this->_check($post);
 
 		require_once libfile('function/post');
@@ -89,8 +89,8 @@ class magic_repent {
 		global $_G;
 		$pid = !empty($_G['gp_id']) ? htmlspecialchars($_G['gp_id']) : '';
 		list($pid, $_G['tid']) = explode(':', $pid);
-		if($tid) {
-			$post = getpostinfo($_G['gp_id'], 'pid', array('p.fid', 'p.authorid'));
+		if($_G['tid']) {
+			$post = getpostinfo($_G['gp_id'], 'pid', array('p.fid', 'p.authorid', 't.status as thread_status'));
 			$this->_check($post);
 		}
 		magicshowtype('top');
@@ -115,6 +115,9 @@ class magic_repent {
 		}
 		if($post['authorid'] != $_G['uid']) {
 			showmessage(lang('magic/repent', 'repent_info_user_noperm'));
+		}
+		if(getstatus($post['thread_status'], 3)) {
+			showmessage(lang('magic/repent', 'repent_do_not_rushreply'));
 		}
 	}
 

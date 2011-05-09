@@ -499,7 +499,9 @@ if(!submitcheck('editsubmit')) {
 							convertunusedattach($newsortaid, $_G['tid'], $pid);
 						}
 					}
-
+					if($_G['forum_optionlist'][$optionid]['unchangeable']) {
+						continue;
+					}
 					if(($_G['forum_optionlist'][$optionid]['search'] || in_array($_G['forum_optionlist'][$optionid]['type'], array('radio', 'select', 'number'))) && $value) {
 						$filedname .= $separator.$_G['forum_optionlist'][$optionid]['identifier'];
 						$valuelist .= $separator."'$value'";
@@ -534,10 +536,10 @@ if(!submitcheck('editsubmit')) {
 
 			if($isorigauthor && $_G['group']['allowreplycredit']) {
 
-				$_POST['replycredit_extcredits'] = dintval($_POST['replycredit_extcredits']);
-				$_POST['replycredit_times'] = dintval($_POST['replycredit_times']);
-				$_POST['replycredit_membertimes'] = dintval($_POST['replycredit_membertimes']) > 0 ? dintval($_POST['replycredit_membertimes']) : 1;
-				$_POST['replycredit_random'] = dintval($_POST['replycredit_random']) < 0 || dintval($_POST['replycredit_random']) > 99 ? 0 : dintval($_POST['replycredit_random']) ;
+				$_POST['replycredit_extcredits'] = intval($_POST['replycredit_extcredits']);
+				$_POST['replycredit_times'] = intval($_POST['replycredit_times']);
+				$_POST['replycredit_membertimes'] = intval($_POST['replycredit_membertimes']) > 0 ? intval($_POST['replycredit_membertimes']) : 1;
+				$_POST['replycredit_random'] = intval($_POST['replycredit_random']) < 0 || intval($_POST['replycredit_random']) > 99 ? 0 : intval($_POST['replycredit_random']) ;
 				if($_POST['replycredit_extcredits'] > 0 && $_POST['replycredit_times'] > 0) {
 					$replycredit = $_POST['replycredit_extcredits'] * $_POST['replycredit_times'];
 					$replycredit_diff =  $replycredit - $thread['replycredit'];
@@ -566,7 +568,7 @@ if(!submitcheck('editsubmit')) {
 				$_G['gp_rushreplyfrom'] = strtotime($_G['gp_rushreplyfrom']);
 				$_G['gp_rushreplyto'] = strtotime($_G['gp_rushreplyto']);
 				$_G['gp_rewardfloor'] = trim($_G['gp_rewardfloor']);
-				$_G['gp_stopfloor'] = dintval($_G['gp_stopfloor']);
+				$_G['gp_stopfloor'] = intval($_G['gp_stopfloor']);
 				if($_G['gp_rushreplyfrom'] > $_G['gp_rushreplyto'] && !empty($_G['gp_rushreplyto'])) {
 					showmessage('post_rushreply_timewrong');
 				}
@@ -581,7 +583,7 @@ if(!submitcheck('editsubmit')) {
 					if(!empty($floors)) {
 						foreach($floors AS $key => $floor) {
 							if(strpos($floor, '*') === false) {
-								if(dintval($floor) == 0) {
+								if(intval($floor) == 0) {
 									unset($floors[$key]);
 								} elseif($floor > $_G['gp_stopfloor']) {
 									unset($floors[$key]);
@@ -594,7 +596,7 @@ if(!submitcheck('editsubmit')) {
 				DB::query("UPDATE ".DB::table('forum_threadrush')." SET stopfloor='$_G[gp_stopfloor]', starttimefrom='$_G[gp_rushreplyfrom]', starttimeto='$_G[gp_rushreplyto]', rewardfloor='$_G[gp_rewardfloor]' WHERE tid='$_G[tid]'", 'UNBUFFERED');
 			}
 
-			DB::query("UPDATE ".DB::table('forum_thread')." SET typeid='$typeid', sortid='$sortid', subject='$subject', readperm='$readperm', price='$price' $closedadd $authoradd $polladd $replycreditadd".($_G['forum_auditstatuson'] && $audit == 1 ? ",displayorder='$displayorder', moderated='1'" : ",displayorder='$displayorder'").", status='$thread[status]' WHERE tid='$_G[tid]'", 'UNBUFFERED');
+			DB::query("UPDATE ".DB::table('forum_thread')." SET typeid='$typeid', sortid='$sortid', subject='$subject', readperm='$readperm', price='$price' $closedadd $authoradd $polladd $replycreditadd".($_G['forum_auditstatuson'] && $audit == 1 ? ",displayorder='0', moderated='1'" : ",displayorder='$displayorder'").", status='$thread[status]' WHERE tid='$_G[tid]'", 'UNBUFFERED');
 
 			$_G['tid'] > 1 && DB::query("UPDATE ".DB::table('forum_thread')." SET subject='$subject' WHERE closed='$_G[tid]'", 'UNBUFFERED');
 
@@ -934,10 +936,11 @@ if(!submitcheck('editsubmit')) {
 	dsetcookie('clearUserdata', 'forum');
 
 	if($_G['forum_auditstatuson']) {
-		updatemoderate($isfirstpost ? 'tid' : 'pid', $isfirstpost ? $_G['tid'] : $pid);
 		if($audit == 1) {
+			updatemoderate($isfirstpost ? 'tid' : 'pid', $isfirstpost ? $_G['tid'] : $pid, '2');
 			showmessage('auditstatuson_succeed', $redirecturl, $param);
 		} else {
+			updatemoderate($isfirstpost ? 'tid' : 'pid', $isfirstpost ? $_G['tid'] : $pid);
 			showmessage('audit_edit_succeed', '', $param);
 		}
 	} else {
@@ -949,8 +952,10 @@ if(!submitcheck('editsubmit')) {
 			showmessage('post_edit_delete_succeed', "forum.php?mod=viewthread&tid=$_G[tid]&page=$_G[gp_page]&extra=$extra".($vid && $isfirstpost ? "&vid=$vid" : ''), $param);
 		} else {
 			if($isfirstpost && $modnewthreads) {
+				updatemoderate('tid', $_G['tid']);
 				showmessage('edit_newthread_mod_succeed', $redirecturl, $param);
 			} elseif(!$isfirstpost && $modnewreplies) {
+				updatemoderate('pid', $pid);
 				showmessage('edit_reply_mod_succeed', "forum.php?mod=forumdisplay&fid=$_G[fid]", $param);
 			} else {
 				if($pinvisible != -3) {

@@ -87,8 +87,9 @@ $_config['db']['common']['slave_except_table'] = '';
 //内存变量前缀, 可更改,避免同服务器中的程序引用错乱
 $_config['memory']['prefix'] = 'discuz_';
 
-$_config['memory']['eaccelerator'] = 1;				// 启动对 eaccelerator 的支持
-$_config['memory']['xcache'] = 1;				// 启动对 xcache 的支持
+$_config['memory']['eaccelerator'] = 1;					// 启动对 eaccelerator 的支持
+$_config['memory']['apc'] = 1;							// 启动对 apc 的支持
+$_config['memory']['xcache'] = 1;						// 启动对 xcache 的支持
 $_config['memory']['memcache']['server'] = '';			// memcache 服务器地址
 $_config['memory']['memcache']['port'] = 11211;			// memcache 服务器端口
 $_config['memory']['memcache']['pconnect'] = 1;			// memcache 是否长久连接
@@ -145,5 +146,22 @@ $_config['admincp']['forcesecques']		= 0;		// 管理人员必须设置安全提问才能进入系
 $_config['admincp']['checkip']			= 1;		// 后台管理操作是否验证管理员的 IP, 1=是[安全], 0=否。仅在管理员无法登陆后台时设置 0。
 $_config['admincp']['runquery']			= 1;		// 是否允许后台运行 SQL 语句 1=是 0=否[安全]
 $_config['admincp']['dbimport']			= 1;		// 是否允许后台恢复论坛数据  1=是 0=否[安全]
+
+/**
+ * 系统远程调用功能模块
+ */
+
+// 远程调用: 总开关 0=关  1=开
+$_config['remote']['on'] = 0;
+
+// 远程调用: 程序目录名. 出于安全考虑,您可以更改这个目录名, 修改完毕, 请手工修改程序的实际目录
+$_config['remote']['dir'] = 'remote';
+
+// 远程调用: 通信密钥. 用于客户端和本服务端的通信加密. 长度不少于 32 位
+//          默认值是 $_config['security']['authkey']	的 md5, 您也可以手工指定
+$_config['remote']['appkey'] = md5($_config['security']['authkey']);
+
+// 远程调用: 开启外部 cron 任务. 系统内部不再执行cron, cron任务由外部程序激活
+$_config['remote']['cron'] = 0;
 
 ?>

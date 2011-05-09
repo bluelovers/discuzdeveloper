@@ -2,7 +2,7 @@
 	[Discuz!] (C)2001-2009 Comsenz Inc.
 	This is NOT a freeware, use is subject to license terms
 
-	$Id: common_extra.js 21492 2011-03-28 09:03:55Z monkey $
+	$Id: common_extra.js 22325 2011-04-29 09:59:13Z liulanbo $
 */
 
 function _relatedlinks(rlinkmsgid) {
@@ -25,10 +25,9 @@ function _relatedlinks(rlinkmsgid) {
 	});
 	msg = msg.replace(/(^|>)([^<]+)(?=<|$)/ig, function($1, $2, $3) {
 		for(var j = 0; j > -1; j++) {
-			if($('relatedlink_'+j)) {
-				var rlink = $('relatedlink_'+j);
-				var ra = '<a href="'+rlink.href+'" target="_blank" class="relatedlink">'+rlink.innerHTML+'</a>';
-				$3 = $3.replace(rlink.innerHTML, ra);
+			if(relatedlink[j]) {
+				var ra = '<a href="'+relatedlink[j]['surl']+'" target="_blank" class="relatedlink">'+relatedlink[j]['sname']+'</a>';
+				$3 = $3.replace(relatedlink[j]['sname'], ra);
 			} else {
 				break;
 			}
@@ -185,28 +184,6 @@ function _setCopy(text, msg){
 	}
 }
 
-function _setHomepage(sURL) {
-	if(BROWSER.ie){
-		document.body.style.behavior = 'url(#default#homepage)';
-		document.body.setHomePage(sURL);
-	} else {
-		showDialog("非 IE 浏览器请手动将本站设为首页", 'notice');
-		doane();
-	}
-}
-
-function _addFavorite(url, title) {
-    try {
-		window.external.addFavorite(url, title);
-    } catch (e){
-		try {
-			window.sidebar.addPanel(title, url, '');
-        } catch (e) {
-			showDialog("请按 Ctrl+D 键添加到收藏夹", 'notice');
-		}
-	}
-}
-
 function _showselect(obj, inpid, t, rettype) {
 	var showselect_row = function (inpid, s, v, notime, rettype) {
 		if(v >= 0) {
@@ -279,6 +256,10 @@ function _showselect(obj, inpid, t, rettype) {
 
 function _zoom(obj, zimg, nocover, pn) {
 	zimg = !zimg ? obj.src : zimg;
+	if(!zoomstatus) {
+		window.open(zimg, '', '');
+		return;
+	}
 	if(!obj.id) obj.id = 'img_' + Math.random();
 	var menuid = 'imgzoom';
 	var zoomid = menuid + '_zoom';
@@ -443,8 +424,6 @@ function _switchTab(prefix, current, total, activeclass) {
 	$(prefix + '_' + current).className = $(prefix + '_' + current).className + ' '+activeclass;
 	$(prefix + '_c_' + current).style.display = '';
 }
-
-
 
 function _initTab(frameId, type) {
 	if (typeof document['diyform'] == 'object' || $(frameId).className.indexOf('tab') < 0) return false;
@@ -683,7 +662,7 @@ function slideshow(el) {
 	this.goon = function() {
 		this.stop();
 		var curobj = this;
-		this.timer = setTimeout(function(){
+		this.timer = setTimeout(function () {
 			curobj.run();
 		}, this.timestep);
 	};
@@ -712,8 +691,8 @@ function slideshow(el) {
 	for(i=0, L=imgs.length; i<L; i++) {
 		this.imgs.push(imgs[i]);
 		this.imgLoad.push(new Image());
-		this.imgLoad[i].src = this.imgs[i].src;
 		this.imgLoad[i].onerror = function (){obj.imgLoaded ++;};
+		this.imgLoad[i].src = this.imgs[i].src;
 	}
 
 	this.getSize = function () {
@@ -759,7 +738,7 @@ function slideshow(el) {
 			}
 			el.parentNode.style.position = 'relative';
 			percentEle.innerHTML = (parseInt(this.imgLoaded / this.imgs.length * 100)) + '%';
-			setTimeout(function () {obj.checkLoad();}, 100)
+			setTimeout(function () {obj.checkLoad();}, 100);
 		} else {
 			if (percentEle) percentEle.parentNode.removeChild(percentEle);
 			this.container.style.display = 'block';
@@ -842,7 +821,8 @@ function _showTip(ctrlobj) {
 		div.innerHTML = '<div class="tip_horn"></div><div class="tip_c">' + ctrlobj.getAttribute('tip') + '</div>';
 		$('append_parent').appendChild(div);
 	}
-	showMenu({'mtype':'prompt','ctrlid':ctrlobj.id,'pos':'210!','duration':2,'timeout':0,'zindex':JSMENU['zIndex']['prompt'],'fade':1});
+	$(ctrlobj.id).onmouseout = function () { hideMenu('', 'prompt'); };
+	showMenu({'mtype':'prompt','ctrlid':ctrlobj.id,'pos':'210!','duration':2,'zindex':JSMENU['zIndex']['prompt']});
 }
 
 function _showPrompt(ctrlid, evt, msg, timeout) {
@@ -867,18 +847,20 @@ function _showPrompt(ctrlid, evt, msg, timeout) {
 		if(!timeout) {
 			evt = 'click';
 		}
-		if($(ctrlid).evt !== false) {
-			var prompting = function() {
-				showMenu({'mtype':'prompt','ctrlid':ctrlid,'evt':evt,'menuid':menuid,'pos':'210'});
-			};
-			if(evt == 'click') {
-				$(ctrlid).onclick = prompting;
-			} else {
-				$(ctrlid).onmouseover = prompting;
+		if($(ctrlid)) {
+			if($(ctrlid).evt !== false) {
+				var prompting = function() {
+					showMenu({'mtype':'prompt','ctrlid':ctrlid,'evt':evt,'menuid':menuid,'pos':'210'});
+				};
+				if(evt == 'click') {
+					$(ctrlid).onclick = prompting;
+				} else {
+					$(ctrlid).onmouseover = prompting;
+				}
 			}
+			showMenu({'mtype':'prompt','ctrlid':ctrlid,'evt':evt,'menuid':menuid,'pos':'210','duration':duration,'timeout':timeout,'zindex':JSMENU['zIndex']['prompt']});
+			$(ctrlid).unselectable = false;
 		}
-		showMenu({'mtype':'prompt','ctrlid':ctrlid,'evt':evt,'menuid':menuid,'pos':'210','duration':duration,'timeout':timeout,'zindex':JSMENU['zIndex']['prompt']});
-		$(ctrlid).unselectable = false;
 	} else {
 		showMenu({'mtype':'prompt','pos':'00','menuid':menuid,'duration':duration,'timeout':timeout,'zindex':JSMENU['zIndex']['prompt']});
 		$(menuid).style.top = (parseInt($(menuid).style.top) - 100) + 'px';
@@ -1104,7 +1086,7 @@ function _imageRotate(imgid, direct) {
 	}
 }
 
-function _createPalette(colorid, id, func){
+function _createPalette(colorid, id, func) {
 	var iframe = "<iframe name=\"c"+colorid+"_frame\" src=\"\" frameborder=\"0\" width=\"210\" height=\"148\" scrolling=\"no\"></iframe>";
 	if (!$("c"+colorid+"_menu")) {
 		var dom = document.createElement('span');

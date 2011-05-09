@@ -7,6 +7,7 @@
  *      $Id$
  */
 
+define('IN_API', true);
 define('CURSCRIPT', 'api');
 
 require_once('../../source/class/class_core.php');
@@ -44,9 +45,9 @@ class My extends Manyou {
 		}
 
 		$users = $this->getUsers($uIds, $spaces, true, $isExtra, true, $friendNum, true);
-		$result = array('totalNum'	=> $totalNum,
-						'users'		=> $users
-					   );
+		$result = array('totalNum' => $totalNum,
+				'users' => $users
+				);
 		return $result;
 	}
 
@@ -63,8 +64,8 @@ class My extends Manyou {
 				$uIds[] = $row['uid'];
 				if ($row['action'] == 'delete') {
 					$deletedUsers[] = array('uId' => $row['uid'],
-											'action' => $row['action'],
-										   );
+								'action' => $row['action'],
+								);
 				} else {
 					$undeletedUserIds[] = $row['uid'];
 				}
@@ -98,19 +99,19 @@ class My extends Manyou {
 			$sql = sprintf('SELECT * FROM %s ORDER BY dateline LIMIT %d', DB::table('home_friendlog'), $num);
 			$query = DB::query($sql);
 			while ($friend = DB::fetch($query)) {
-				$friends[] = array('uId'	=> $friend['uid'],
-								   'uId2'	=> $friend['fuid'],
-								   'action'	=> $friend['action']
-								  );
+				$friends[] = array('uId' => $friend['uid'],
+							'uId2' => $friend['fuid'],
+							'action' => $friend['action']
+							);
 
 				$sql = sprintf('DELETE FROM %s WHERE uid = %d AND fuid = %d', DB::table('home_friendlog'), $friend['uid'], $friend['fuid']);
 				DB::query($sql);
 			}
 		}
 
-		$result = array('totalNum'	=> $totalNum,
-						'friends'	=> $friends
-					   );
+		$result = array('totalNum' => $totalNum,
+				'friends' => $friends
+				);
 		return $result;
 	}
 
@@ -126,26 +127,26 @@ class My extends Manyou {
 		$query = DB::query($sql);
 		$result = array();
 		$fields = array('login' => 'loginUserNum',
-						'doing' => 'doingNum',
-						'blog'	=> 'blogNum',
-						'pic'	=> 'photoNum',
-						'poll'	=> 'pollNum',
-						'event'	=> 'eventNum',
-						'share'	=> 'shareNum',
-						'thread' => 'threadNum',
-						'docomment' => 'doingCommentNum',
-						'blogcomment' => 'blogCommentNum',
-						'piccomment' => 'photoCommentNum',
-						'pollcomment' => 'pollCommentNum',
-						'eventcomment' => 'eventCommentNum',
-						'sharecomment'	=> 'shareCommentNum',
-						'pollvote'	=> 'pollUserNum',
-						'eventjoin'	=> 'eventUserNum',
-						'post'	=> 'postNum',
-						'wall'	=> 'wallNum',
-						'poke'	=> 'pokeNum',
-						'click'	=> 'clickNum',
-					   );
+				'doing' => 'doingNum',
+				'blog' => 'blogNum',
+				'pic' => 'photoNum',
+				'poll' => 'pollNum',
+				'event' => 'eventNum',
+				'share' => 'shareNum',
+				'thread' => 'threadNum',
+				'docomment' => 'doingCommentNum',
+				'blogcomment' => 'blogCommentNum',
+				'piccomment' => 'photoCommentNum',
+				'pollcomment' => 'pollCommentNum',
+				'eventcomment' => 'eventCommentNum',
+				'sharecomment' => 'shareCommentNum',
+				'pollvote' => 'pollUserNum',
+				'eventjoin' => 'eventUserNum',
+				'post' => 'postNum',
+				'wall' => 'wallNum',
+				'poke' => 'pokeNum',
+				'click' => 'clickNum',
+				);
 		while($row = DB::fetch($query)) {
 			$stat = array('date' => $row['daytime']);
 			foreach($row as $k => $v) {
@@ -187,10 +188,10 @@ class My extends Manyou {
 		$totalNum = getcount('home_friend', $where);
 		$friends = $users[0]['friends'];
 		unset($users[0]['friends']);
-		$result = array('totalNum'  => $totalNum,
-						'friends' => $friends,
-						'me'    => $users[0],
-					   );
+		$result = array('totalNum' => $totalNum,
+				'friends' => $friends,
+				'me' => $users[0],
+				);
 		return $result;
 	}
 
@@ -210,7 +211,7 @@ class My extends Manyou {
 	}
 
 	function onFriendsAreFriends($uId1, $uId2) {
-		$query = DB::query("SELECT uid FROM ".DB::table('home_friend')."  WHERE uid='$uId1' AND fuid='$uId2'");
+		$query = DB::query("SELECT uid FROM ".DB::table('home_friend')." WHERE uid='$uId1' AND fuid='$uId2'");
 		$result = false;
 		if($friend = DB::fetch($query)) {
 			$result = true;
@@ -219,7 +220,7 @@ class My extends Manyou {
 		return $result;
 	}
 
-	function onUserApplicationAdd($uId, $appId, $appName, $privacy, $allowSideNav, $allowFeed, $allowProfileLink,  $defaultBoxType, $defaultMYML, $defaultProfileLink, $version, $displayMethod, $displayOrder = null, $userPanelArea = null, $canvasTitle = null,  $isFullscreen = null , $displayUserPanel = null, $additionalStatus = null) {
+	function onUserApplicationAdd($uId, $appId, $appName, $privacy, $allowSideNav, $allowFeed, $allowProfileLink, $defaultBoxType, $defaultMYML, $defaultProfileLink, $version, $displayMethod, $displayOrder = null, $userPanelArea = null, $canvasTitle = null, $isFullscreen = null , $displayUserPanel = null, $additionalStatus = null) {
 		global $_G;
 
 		$res = $this->getUserSpace($uId);
@@ -256,15 +257,15 @@ class My extends Manyou {
 
 		$narrow = ($defaultBoxType == 'narrow') ? 1 : 0;
 
-		$setarr = array('uid'		=> $uId,
-						'appid'	=> $appId,
-						'appname'	=> $appName,
-						'privacy'	=> $privacy,
-						'allowsidenav'	=> $allowSideNav,
-						'allowfeed'		=> $allowFeed,
-						'allowprofilelink'	=> $allowProfileLink,
-						'narrow'		=> $narrow
-					   );
+		$setarr = array('uid' => $uId,
+				'appid' => $appId,
+				'appname' => $appName,
+				'privacy' => $privacy,
+				'allowsidenav' => $allowSideNav,
+				'allowfeed' => $allowFeed,
+				'allowprofilelink' => $allowProfileLink,
+				'narrow' => $narrow
+				);
 		if ($displayOrder !== null) {
 			$setarr['displayorder'] = $displayOrder;
 		}
@@ -273,11 +274,11 @@ class My extends Manyou {
 
 		DB::insert('home_userapp', $setarr);
 
-		$fields = array('uid'		=> $uId,
-						'appid'	=> $appId,
-						'profilelink'	=> $defaultProfileLink,
-						'myml'			=> $defaultMYML
-					   );
+		$fields = array('uid' => $uId,
+				'appid' => $appId,
+				'profilelink' => $defaultProfileLink,
+				'myml' => $defaultMYML
+				);
 		$result = DB::insert('home_userappfield', $fields, 1);
 
 		updatecreditbyaction('installapp', $uId, array(), $appId);
@@ -310,7 +311,7 @@ class My extends Manyou {
 		return $result;
 	}
 
-	function onUserApplicationUpdate($uId, $appIds, $appName, $privacy, $allowSideNav, $allowFeed, $allowProfileLink, $version, $displayMethod, $displayOrder = null, $userPanelArea = null, $canvasTitle = null,  $isFullscreen = null, $displayUserPanel = null) {
+	function onUserApplicationUpdate($uId, $appIds, $appName, $privacy, $allowSideNav, $allowFeed, $allowProfileLink, $version, $displayMethod, $displayOrder = null, $userPanelArea = null, $canvasTitle = null, $isFullscreen = null, $displayUserPanel = null) {
 		switch($privacy) {
 			case 'public':
 				$privacy = 0;
@@ -357,7 +358,7 @@ class My extends Manyou {
 		$sql = sprintf('SELECT appid FROM %s WHERE uid = %d', DB::table('home_userapp'), $uId);
 		$query = DB::query($sql);
 		$result = array();
-		while ($userApp  = DB::fetch($query)) {
+		while ($userApp = DB::fetch($query)) {
 			$result[] = $userApp['appid'];
 		}
 		return $result;
@@ -432,7 +433,7 @@ class My extends Manyou {
 			if($val) {
 				if ($uId) {
 					$result[$val] = notification_add($val, $appId, $notification) === null;
-				} else  {
+				} else {
 					$result[$val] = notification_add($val, $appId, $notification, array(), 1) === null;
 				}
 			} else {
@@ -449,7 +450,7 @@ class My extends Manyou {
 				'unread' => 0,
 				'mostRecent' => 0
 			),
-			'notification'   => array(
+			'notification' => array(
 				'unread' => 0 ,
 				'mostRecent' => 0
 			),
@@ -458,7 +459,7 @@ class My extends Manyou {
 			)
 		);
 
-		$query = DB::query("SELECT * FROM ".DB::table('home_notification')."  WHERE uid='$uId' AND new='1' ORDER BY id DESC");
+		$query = DB::query("SELECT * FROM ".DB::table('home_notification')." WHERE uid='$uId' AND new='1' ORDER BY id DESC");
 		$i = 0;
 		while($value = DB::fetch($query)) {
 			$i++;
@@ -473,7 +474,7 @@ class My extends Manyou {
 			$result['message']['mostRecent'] = $pmarr['data'][0]['dateline'];
 		}
 
-		$query = DB::query("SELECT * FROM ".DB::table('home_friend_request')."  WHERE uid='$uId' ORDER BY dateline DESC");
+		$query = DB::query("SELECT * FROM ".DB::table('home_friend_request')." WHERE uid='$uId' ORDER BY dateline DESC");
 		$fIds = array();
 		while($value = DB::fetch($query)) {
 			if(!$result['friendRequest']['mostRecent']) {
@@ -486,8 +487,8 @@ class My extends Manyou {
 		return $result;
 	}
 
-	function onApplicationUpdate($appId, $appName, $version, $displayMethod, $displayOrder = null, $userPanelArea = null, $canvasTitle = null,  $isFullscreen = null, $displayUserPanel = null, $additionalStatus = null) {
-		$query = DB::query(sprintf('SELECT appname FROM %s  WHERE appid=%d', DB::table('common_myapp'), $appId));
+	function onApplicationUpdate($appId, $appName, $version, $displayMethod, $displayOrder = null, $userPanelArea = null, $canvasTitle = null, $isFullscreen = null, $displayUserPanel = null, $additionalStatus = null) {
+		$query = DB::query(sprintf('SELECT appname FROM %s WHERE appid=%d', DB::table('common_myapp'), $appId));
 		$row = DB::fetch($query);
 		$result = true;
 		if ($row['appname'] != $appName) {
@@ -557,9 +558,9 @@ class My extends Manyou {
 	function onProfileSetMYML($uId, $appId, $markup, $actionMarkup) {
 		$fields = array('myml'	=> $markup,
 						'profileLink'	=> $actionMarkup);
-		$where = array('uid'	=> $uId,
-					   'appid'	=> $appId
-					  );
+		$where = array('uid' => $uId,
+				'appid' => $appId
+				);
 		DB::update('home_userappfield', $fields, $where);
 		$result = DB::affected_rows();
 		return $result;
@@ -567,9 +568,9 @@ class My extends Manyou {
 
 	function onProfileSetActionLink($uId, $appId, $actionMarkup) {
 		$fields = array('profilelink'	=> $actionMarkup);
-		$where = array('uid'	=> $uId,
-					   'appid'	=> $appId
-					  );
+		$where = array('uid' => $uId,
+				'appid' => $appId
+				);
 		DB::update('home_userappfield', $fields, $where);
 		$result = DB::affected_rows();
 		return $result;
@@ -590,7 +591,7 @@ class My extends Manyou {
 		}
 
 		$query = DB::query('SELECT '.$_G['setting']['myapp_credit'].' AS credit FROM '
-						   . DB::table('common_member_count') . ' WHERE uid =' . $uId);
+					. DB::table('common_member_count') . ' WHERE uid =' . $uId);
 		$row = DB::fetch($query);
 		return $row['credit'];
 	}
@@ -624,18 +625,17 @@ class My extends Manyou {
 			return new ErrorResponse($errCode, $errMessage);
 		}
 
-		$fields = array(
-						'uid' => $uId,
-						'appid' => $appId,
-						'type' => $type,
-						'credit' => abs($credits),
-						'note' => $note,
-						'dateline' => time()
-					   );
+		$fields = array('uid' => $uId,
+				'appid' => $appId,
+				'type' => $type,
+				'credit' => abs($credits),
+				'note' => $note,
+				'dateline' => time()
+				);
 		$result = DB::insert('home_appcreditlog', $fields, 1);
 
 		$query = DB::query('SELECT '.$_G['setting']['myapp_credit'].' AS credit FROM '
-						   . DB::table('common_member_count') . ' WHERE uid =' . $uId);
+					. DB::table('common_member_count') . ' WHERE uid =' . $uId);
 		$row = DB::fetch($query);
 		return $row['credit'];
 	}
@@ -645,12 +645,12 @@ class My extends Manyou {
 		$result = array();
 		$type = ($type == 'request') ? 1 : 0;
 
-		$fields = array('typename'	=> $requestName,
-						'appid'	=> $appId,
-						'type'	=> $type,
-						'fromuid'	=> $uId,
-						'dateline'	=> $now
-					   );
+		$fields = array('typename' => $requestName,
+				'appid' => $appId,
+				'type' => $type,
+				'fromuid' => $uId,
+				'dateline' => $now
+				);
 
 		foreach($recipientIds as $key => $val) {
 			$hash = crc32($appId . $val . $now . rand(0, 1000));
@@ -698,69 +698,76 @@ class My extends Manyou {
 		if (!$res) {
 			return new ErrorResponse('1', "User($uId) Not Exists");
 		}
-
-		$pic = base64_decode($picData);
-		if (!$pic || strlen($pic) == strlen($picData)) {
-			$errCode = '200';
-			$errMessage = 'Error argument';
-			return new ErrorResponse($errCode, $errMessage);
-		}
-
-		$secret = md5($_G['timestamp']."\t".$_G['uid']);
-		$picDir = DISCUZ_ROOT . './data/avatar/' . substr($secret, 0, 1);
-		if (!is_dir($picDir)) {
-			if (!mkdir($picDir, 0777)) {
-				$errCode = '300';
-				$errMessage = 'Cannot create directory';
+		$allowPicType = array('jpg','jpeg','gif','png');
+		if(in_array($picExt, $allowPicType)) {
+			$pic = base64_decode($picData);
+			if (!$pic || strlen($pic) == strlen($picData)) {
+				$errCode = '200';
+				$errMessage = 'Error argument';
 				return new ErrorResponse($errCode, $errMessage);
 			}
-		}
 
-		$picDir .= '/' . substr($secret, 1, 1);
-		if (!is_dir($picDir)) {
-			if (!@mkdir($picDir, 0777)) {
-				$errCode = '300';
-				$errMessage = 'Cannot create directory';
-				return new ErrorResponse($errCode, $errMessage);
+			$secret = md5($_G['timestamp']."\t".$_G['uid']);
+			$picDir = DISCUZ_ROOT . './data/avatar/' . substr($secret, 0, 1);
+			if (!is_dir($picDir)) {
+				if (!mkdir($picDir, 0777)) {
+					$errCode = '300';
+					$errMessage = 'Cannot create directory';
+					return new ErrorResponse($errCode, $errMessage);
+				}
 			}
-		}
 
-		$picPath = $picDir . '/' . $secret . '.' . $picExt;
-		$fp = @fopen($picPath, 'wb');
-		if ($fp) {
-			if (fwrite($fp, $pic) !== FALSE) {
+			$picDir .= '/' . substr($secret, 1, 1);
+			if (!is_dir($picDir)) {
+				if (!@mkdir($picDir, 0777)) {
+					$errCode = '300';
+					$errMessage = 'Cannot create directory';
+					return new ErrorResponse($errCode, $errMessage);
+				}
+			}
+
+			$picPath = $picDir . '/' . $secret . '.' . $picExt;
+			$fp = @fopen($picPath, 'wb');
+			if ($fp) {
+				if (fwrite($fp, $pic) !== FALSE) {
+					fclose($fp);
+
+					require_once libfile('class/upload');
+					$upload = new discuz_upload();
+					if(!$upload->get_image_info($picPath)) {
+						@unlink($picPath);
+					} else {
+						DB::update('common_member', array('videophotostatus'=>1), array('uid' => $uId));
+						$count = DB::result(DB::query("SELECT COUNT(*) FROM ".DB::table('common_member_verify')." WHERE uid='$uId'"), 0);
+						if(!$count) {
+							DB::insert('common_member_verify', array('uid' => $uId, 'verify7' => 1));
+						} else {
+							DB::update('common_member_verify', array('verify7' => 1), array('uid' => $uId));
+						}
+						$fields = array('videophoto' => $secret);
+						DB::update('common_member_field_home', $fields, array('uid' => $uId));
+						$result = DB::affected_rows();
+
+						if ($isReward) {
+							updatecreditbyaction('videophoto', $uId);
+						}
+						return $result;
+					}
+				}
 				fclose($fp);
-
-				DB::update('common_member', array('videophotostatus'=>1), array('uid' => $uId));
-				$count = DB::result(DB::query("SELECT COUNT(*) FROM ".DB::table('common_member_verify')." WHERE uid='$uId'"), 0);
-				if(!$count) {
-					DB::insert('common_member_verify', array('uid' => $uId, 'verify7' => 1));
-				} else {
-					DB::update('common_member_verify', array('verify7' => 1), array('uid' => $uId));
-				}
-				$fields = array('videophoto' => $secret);
-				DB::update('common_member_field_home', $fields, array('uid' => $uId));
-				$result = DB::affected_rows();
-
-				if ($isReward) {
-					updatecreditbyaction('videophoto', $uId);
-				}
-				return $result;
 			}
-			fclose($fp);
 		}
-
 		$errCode = '300';
 		$errMessage = 'Video Auth Error';
 		return new ErrorResponse($errCode, $errMessage);
 	}
 
 	function onMiniBlogPost($uId, $message, $clientIdentify, $ip = '') {
-		$fields = array('uid'		=> $uId,
-						'message'	=> $message,
-						'from'		=> $clientIdentify,
-						'dateline'	=> time()
-					   );
+		$fields = array('uid' => $uId,
+				'message' => $message,
+				'from' => $clientIdentify,
+				'dateline' => time()
+				);
 		if ($ip) {
 			$fields['ip'] = $ip;
 		}
@@ -780,10 +787,10 @@ class My extends Manyou {
 		$result = array();
 		while($doing = DB::fetch($query)) {
 			$result[] = array('created' => $doing['dateline'],
-							  'message'	=> $doing['message'],
-							  'ip'		=> $doing['ip'],
-							  'clientIdentify'	=> $doing['from']
-							 );
+					'message' => $doing['message'],
+					'ip' => $doing['ip'],
+					'clientIdentify' => $doing['from']
+					);
 		}
 		return $result;
 	}
@@ -852,7 +859,7 @@ class My extends Manyou {
 		}
 
 		DB::update('home_album', $fields, array('uid' => $uId , 'albumid' => $aId));
-		$result  = DB::affected_rows();
+		$result = DB::affected_rows();
 		return $result;
 	}
 
@@ -877,7 +884,7 @@ class My extends Manyou {
 				return new ErrorResponse($errCode, $errMessage);
 			}
 
-			$sql = 'SELECT  picnum FROM ' . DB::table('home_album') . ' WHERE albumid=' . $aId . ' AND uid=' . $uId;
+			$sql = 'SELECT picnum FROM ' . DB::table('home_album') . ' WHERE albumid=' . $aId . ' AND uid=' . $uId;
 			$query = DB::query($sql);
 			$albumInfo = DB::fetch($query);
 			if (!$albumInfo) {
@@ -987,7 +994,7 @@ class My extends Manyou {
 		if ($pIds && is_array($pIds)) {
 			$sql .= ' AND picid IN (' . implode(', ', $pIds) . ' )';
 		}
-		$query  = DB::query($sql);
+		$query = DB::query($sql);
 		$result = array();
 		$k = 0;
 		$siteUrl = $this->_getUchomeUrl();
@@ -1032,7 +1039,7 @@ class My extends Manyou {
 				$attachDir = $_SC['attachdir'];
 				$_SC['attachdir'] = DISCUZ_ROOT . './' . $_G['setting']['attachdir'];
 				$title = $fields['title'] ? $caption : $picInfo['title'];
-				$name  = $fields['filename'] ? $fileName : $picInfo['filename'];
+				$name = $fields['filename'] ? $fileName : $picInfo['filename'];
 				$stream = base64_decode($data);
 				$pic = stream_save($stream, $aId, $fileType, $name, $title, $picInfo['size']);
 				$_SC['attachdir'] = $attachDir;
@@ -1113,7 +1120,7 @@ class My extends Manyou {
 			$convAlbum['created'] = $albumInfo['dateline'];
 			$convAlbum['updated'] = $albumInfo['updatetime'];
 			$convAlbum['privacy'] = $this->_convertPrivacy($albumInfo['friend'], true);
-			$convAlbum['passwd']  = $albumInfo['passwd'];
+			$convAlbum['passwd'] = $albumInfo['passwd'];
 			$convAlbum['friendIds'] = ($albumInfo['target_ids']) ? explode(',', $albumInfo['target_ids']) : '';
 
 			if($albumInfo['pic']) {
@@ -1125,7 +1132,7 @@ class My extends Manyou {
 				$convAlbum['cover'] = '';
 			}
 
-			$convAlbum['url']     = $siteUrl . 'space.php?uid=' . $albumInfo['uid'] . '&do=album&id=' . $albumInfo['albumid'];
+			$convAlbum['url'] = $siteUrl . 'space.php?uid=' . $albumInfo['uid'] . '&do=album&id=' . $albumInfo['albumid'];
 		} else {
 			$convAlbum = false;
 		}
@@ -1212,11 +1219,11 @@ class My extends Manyou {
 				}
 			}
 			if ($isOnlyReturnId) {
-				$row  = $friend['fuid'];
+				$row = $friend['fuid'];
 			} else {
 				$row = array('uId' => $friend['fuid'],
-							   'handle' => $friend['fusername']
-							  );
+						'handle' => $friend['fusername']
+						);
 			}
 			if ($isFriendIdKey) {
 				$res[$friend['fuid']] = $row;
@@ -1239,8 +1246,8 @@ class My extends Manyou {
 		if($space['groupid'] == 1 && $space['adminid'] == 1) {
 			$adminLevel = 'manager';
 			if($founders
-			   && (in_array($space['uid'], $founders)
-				   || (!is_numeric($space['username']) && in_array($space['username'], $founders)))) {
+			 && (in_array($space['uid'], $founders)
+			 || (!is_numeric($space['username']) && in_array($space['username'], $founders)))) {
 				$adminLevel = 'founder';
 			}
 		}
@@ -1487,7 +1494,7 @@ class My extends Manyou {
 		$users = array();
 		foreach($uIds as $uId) {
 			$user = array('uId' => $uId,
-						  'extra' => $this->_spaceInfo2Extra($spaceFields[$uId]));
+					'extra' => $this->_spaceInfo2Extra($spaceFields[$uId]));
 			$users[] = $user;
 		}
 
@@ -1547,7 +1554,7 @@ class My extends Manyou {
 				LIMIT %d', DB::table('forum_postlog'), $num);
 		$query = DB::query($sql);
 		$pIds = $deletePosts = $updatePostIds = array();
-		$unDeletePosts  = array();
+		$unDeletePosts = array();
 		$posts = array();
 		while($post = DB::fetch($query)) {
 			$pIds[] = $post['pid'];
@@ -1597,7 +1604,7 @@ class My extends Manyou {
 
 	function _preGetPosts($table, $pIds) {
 		$sql = sprintf("SELECT * FROM %s WHERE pid IN (%s)",
-					   $table, implode(', ', $pIds));
+					$table, implode(', ', $pIds));
 		$query = DB::query($sql);
 		$result = array();
 		while($post = DB::fetch($query)) {
@@ -1617,7 +1624,7 @@ class My extends Manyou {
 				if (!$posts) {
 					$posts = $_posts;
 				} else {
-					$posts = $posts +  $_posts;
+					$posts = $posts + $_posts;
 				}
 				if (count($posts) == count($pIds)) {
 					break;
@@ -1735,7 +1742,7 @@ class My extends Manyou {
 				if (!$data) {
 					$data = $_posts['data'];
 				} else {
-					$data = $data +  $_posts['data'];
+					$data = $data + $_posts['data'];
 				}
 			}
 			if ($maxPid < $_posts['maxPid']) {
@@ -1819,7 +1826,7 @@ class My extends Manyou {
 				if (!$data) {
 					$data = $_posts['data'];
 				} else {
-					$data = $data +  $_posts['data'];
+					$data = $data + $_posts['data'];
 				}
 			}
 			if ($orderType == 'DESC') {
@@ -1882,7 +1889,7 @@ class My extends Manyou {
 		if ($res['data']) {
 			$_tableInfo['tables'] = $tables;
 
-			$tIds = $authors =  $forums = array();
+			$tIds = $authors = $forums = array();
 			foreach($res['data'] as $pId => $post) {
 				$authors[$post['authorId']][] = $post['pId'];
 				$tIds[$post['pId']] = $post['tId'];
@@ -1972,7 +1979,7 @@ class My extends Manyou {
 				LIMIT %d", $table, $op, $pId, $orderType, $num);
 		$query = DB::query($sql);
 		$result = array();
-		$tIds = $authors =  array();
+		$tIds = $authors = array();
 		while($post = DB::fetch($query)) {
 			$result[$key] = $post['pid'];
 			$result['data'][$post['pid']] = SearchHelper::convertPost($post);
@@ -1980,7 +1987,7 @@ class My extends Manyou {
 		return $result;
 	}
 
-	function _removeThreads($tIds) {
+	function _removeThreads($tIds, $isRecycle = false) {
 		$tables = SearchHelper::getTables('thread');
 		$tableThreads = array();
 		foreach($tables as $table) {
@@ -1997,10 +2004,16 @@ class My extends Manyou {
 			}
 
 			if ($_tids) {
+
+				if ($isRecycle) {
+					$sql = sprintf('UPDATE %s SET displayorder = -1 WHERE tid IN (%s)' , DB::table($table), implode(',', $_tids));
+					DB::query($sql);
+					continue;
+				}
+
 				$sql = sprintf('DELETE FROM %s WHERE tid IN (%s)' , DB::table($table), implode(',', $_tids));
 				DB::query($sql);
-			}
-			if ($_threadIds) {
+
 				foreach($_threadIds as $postTable => $_tIds) {
 					if ($_tIds) {
 						$sql = sprintf('DELETE FROM %s WHERE tid IN (%s)' , DB::table('forum_post' . $postTable), implode(',', $_tIds));
@@ -2041,6 +2054,35 @@ class My extends Manyou {
 		return true;
 	}
 
+	function onSearchRecyclePosts($pIds) {
+		$tables = SearchHelper::getTables('post');
+
+		$posts = array();
+		foreach($tables as $table) {
+			$_posts = $this->_preGetPosts(DB::table($table), $pIds);
+			$posts[$table] = $_posts;
+		}
+		foreach($posts as $table => $rows) {
+			$tids = $pids = array();
+			foreach($rows as $row) {
+				if ($row['isThread']) {
+					$tids[] = $row['tId'];
+				} else {
+					$pids[] = $row['pId'];
+				}
+			}
+			if ($pids) {
+				$sql = sprintf('UPDATE %s SET invisible = -1 WHERE pid IN (%s)' , DB::table($table), implode(',', $pids));
+				DB::query($sql);
+			}
+
+			if ($tids) {
+				$this->_removeThreads($tids, true);
+			}
+		}
+		return true;
+	}
+
 	function onSearchGetUpdatedThreads($num, $lastThreadIds = array(), $lastForumIds = array(), $lastUserIds = array()) {
 
 		if ($lastThreadIds) {
@@ -2062,7 +2104,7 @@ class My extends Manyou {
 		$result['totalNum'] = $totalNum;
 
 		$tIds = $deleteThreads = $updateThreadIds = $otherLogs = $ids = array();
-		$unDeleteThreads  = array();
+		$unDeleteThreads = array();
 		$threads = array();
 		$sql = sprintf('SELECT * FROM %s
 				 ORDER BY dateline
@@ -2108,10 +2150,10 @@ class My extends Manyou {
 			} else {
 				$ids['thread'][] = $thread['tid'];
 				$unDeleteThreads[$thread['tid']] = array('tId' => $thread['tid'],
-													 'action'  => $thread['action'],
-													 'otherId' => $thread['otherid'],
-													'updated' => dgmdate($thread['dateline'], 'Y-m-d H:i:s', 8),
-													);
+									'action'  => $thread['action'],
+									'otherId' => $thread['otherid'],
+									'updated' => dgmdate($thread['dateline'], 'Y-m-d H:i:s', 8),
+									);
 			}
 		}
 
@@ -2144,7 +2186,7 @@ class My extends Manyou {
 				}
 			}
 		}
-		$result['data'] = $deleteThreads +  $unDeleteThreads + $otherLogs;
+		$result['data'] = $deleteThreads + $unDeleteThreads + $otherLogs;
 		$result['ids'] = $ids;
 		return $result;
 	}
@@ -2258,7 +2300,7 @@ class My extends Manyou {
 				if (!$data) {
 					$data = $_threads['data'];
 				} else {
-					$data = $data +  $_threads['data'];
+					$data = $data + $_threads['data'];
 				}
 			}
 			if ($maxTid < $_threads['maxTid']) {
@@ -2368,7 +2410,7 @@ class My extends Manyou {
 				if (!$data) {
 					$data = $_threads['data'];
 				} else {
-					$data = $data +  $_threads['data'];
+					$data = $data + $_threads['data'];
 				}
 			}
 			if ($orderType == 'DESC') {
@@ -2488,6 +2530,75 @@ class My extends Manyou {
 		return SearchHelper::getForums($fIds);
 	}
 
+	function onSearchSetConfig($data) {
+		global $_G;
+		$searchData = unserialize($_G['setting']['my_search_data']);
+		if (!is_array($searchData)) {
+			$searchData = array();
+		}
+
+		foreach($data as $k => $v) {
+			$searchData[$k] = $v;
+		}
+
+		$searchData = addslashes(serialize(dstripslashes($searchData)));
+		DB::query("REPLACE INTO ".DB::table('common_setting')." (`skey`, `svalue`) VALUES ('my_search_data', '$searchData')");
+		require_once DISCUZ_ROOT . './source/function/function_cache.php';
+		updatecache('setting');
+		return true;
+	}
+
+	function onSearchGetConfig($keys) {
+		global $_G;
+		$maps = array(
+					'hotWords' => 'srchhotkeywords',
+					);
+		$confs = array();
+		foreach($keys as $key) {
+			if ($fieldName = $maps[$key]) {
+				$confs[$key] = $_G['setting'][$fieldName];
+			}
+		}
+		return $confs;
+	}
+
+	function onSearchSetHotWords($data, $method = 'append', $limit = 0) {
+		global $_G;
+
+		$srchhotkeywords = array();
+		if ($_G['setting']['srchhotkeywords']) {
+			$srchhotkeywords = $_G['setting']['srchhotkeywords'];
+		}
+		$newHotWords = array();
+		foreach($data as $k => $v) {
+			$newHotWords[] = addslashes(dstripslashes($v));
+		}
+
+		switch ($method) {
+			case 'overwrite':
+				$hotWords = $newHotWords;
+				break;
+			case 'prepend':
+				$hotWords = array_merge($newHotWords, $srchhotkeywords);
+				break;
+			case 'append':
+				$hotWords = array_merge($srchhotkeywords, $newHotWords);
+				break;
+		}
+
+		if ($limit) {
+			$hotWords = array_slice($hotWords, 0, $limit);
+		}
+		$hotWords = array_unique($hotWords);
+
+		$hotWords = implode("\n", $hotWords);
+
+		DB::query("REPLACE INTO ".DB::table('common_setting')." (`skey`, `svalue`) VALUES ('srchhotkeywords', '$hotWords')");
+		require_once DISCUZ_ROOT . './source/function/function_cache.php';
+		updatecache('setting');
+		return true;
+	}
+
 	function onCommonSetConfig($data) {
 		$settings = array();
 		if (is_array($data) && $data) {
@@ -2584,6 +2695,192 @@ class My extends Manyou {
 			$navs[$v['parentid']]['navs'][$v['id']] = SearchHelper::convertNav($v);
 		}
 		return $navs;
+	}
+
+	function onCloudGetApps($appName = '') {
+
+		require_once libfile('function/cloud');
+		$apps = getcloudapps(false);
+
+		if ($appName) {
+			$apps = array($appName => $apps[$appName]);
+		}
+
+		$apiVersion = '0.3';
+		$apps['apiVersion'] = $apiVersion;
+
+		return $apps;
+	}
+
+	function onCloudSetApps($apps) {
+
+		if (!is_array($apps)) {
+			return false;
+		}
+
+		$apiVersion = '0.3';
+		$res = array();
+		$res['apiVersion'] = $apiVersion;
+
+		require_once libfile('function/cloud');
+		foreach ($apps as $appName => $status) {
+
+			$res[$appName] = setcloudappstatus($appName, $status, false);
+
+			if ($appName == 'search' && $status == 'normal') {
+				SearchHelper::allowSearchForum();
+			}
+		}
+
+		return $res;
+	}
+
+	function onCloudOpenCloud() {
+		require_once libfile('function/cloud');
+		$res = openCloud();
+
+		return array('status' => $res);
+	}
+
+	function onConnectSetConfig($data) {
+		global $_G;
+
+		$settingFields = array('connectappid', 'connectappkey');
+		if (!$data) {
+			return false;
+		}
+
+		$connectData = $_G['setting']['connect'];
+		if (!is_array($connectData)) {
+			$connectData = array();
+		}
+
+		$settings = array();
+		foreach($data as $k => $v) {
+			if (in_array($k, $settingFields)) {
+				$settings[] = "('$k', '$v')";
+			} else {
+				$connectData[$k] = $v;
+			}
+		}
+		if ($connectData) {
+			$connectValue = addslashes(serialize(dstripslashes($connectData)));
+			$settings[] = "('connect', '$connectValue')";
+		}
+
+		if ($settings) {
+			DB::query("REPLACE INTO ".DB::table('common_setting')." (`skey`, `svalue`) VALUES ".implode(',', $settings));
+			require_once DISCUZ_ROOT . './source/function/function_cache.php';
+			updatecache('setting');
+			return true;
+		}
+		return false;
+	}
+
+	function onUnionAddAdvs($advs) {
+		$result = array();
+		if (is_array($advs)) {
+			foreach($advs as $advid => $adv) {
+				$data = $this->_addAdv($adv);
+				if($data === true) {
+					$result['succeed'][$advid] = $advid;
+				} else {
+					$result['failed'][$advid] = $data;
+				}
+			}
+
+			require_once libfile('function/cache');
+			updatecache('advs');
+			updatecache('setting');
+		} else {
+			$result['error'] = 'no adv';
+		}
+
+		return $result;
+	}
+
+	function _addAdv($adv) {
+		global $_G;
+
+		foreach($adv as $k => $v) {
+			$_G['gp_'.$k] = $v;
+		}
+
+		$type = $_G['gp_type'];
+		$advlibfile = libfile('adv/'.$type, 'class');
+		if (file_exists($advlibfile)) {
+			require_once $advlibfile;
+		} else {
+			return 'err_1';
+		}
+		$advclass = 'adv_'.$type;
+		$advclass = new $advclass;
+		$advnew = $_G['gp_advnew'];
+
+		$parameters = !empty($_G['gp_parameters']) ? $_G['gp_parameters'] : array();
+		if(@in_array('custom', $advnew['targets'])) {
+			$targetcustom = explode(',', $advnew['targetcustom']);
+			$advnew['targets'] = array_merge($advnew['targets'], $targetcustom);
+		}
+		$advclass->setsetting($advnew, $parameters);
+
+		$advnew['starttime'] = $advnew['starttime'] ? strtotime($advnew['starttime']) : 0;
+		$advnew['endtime'] = $advnew['endtime'] ? strtotime($advnew['endtime']) : 0;
+
+		if(!$advnew['title']) {
+			return 'err_2';
+		} elseif(strlen($advnew['title']) > 50) {
+			return 'err_3';
+		} elseif(!$advnew['style']) {
+			return 'err_4';
+		} elseif(!$advnew['targets']) {
+			return 'err_5';
+		} elseif($advnew['endtime'] && ($advnew['endtime'] <= TIMESTAMP || $advnew['endtime'] <= $advnew['starttime'])) {
+			return 'err_6';
+		} elseif(($advnew['style'] == 'code' && !$advnew['code']['html'])
+			|| ($advnew['style'] == 'text' && (!$advnew['text']['title'] || !$advnew['text']['link']))
+			|| ($advnew['style'] == 'image' && (!$_FILES['advnewimage'] && !$_G['gp_advnewimage'] || !$advnew['image']['link']))
+			|| ($advnew['style'] == 'flash' && (!$_FILES['advnewflash'] && !$_G['gp_advnewflash'] || !$advnew['flash']['width'] || !$advnew['flash']['height']))) {
+			return 'err_7';
+		}
+
+		$advid = DB::insert('common_advertisement', array('available' => 1, 'type' => $type), 1);
+
+		if($advnew['style'] == 'image' || $advnew['style'] == 'flash') {
+			$advnew[$advnew['style']]['url'] = $_G['gp_advnew'.$advnew['style']];
+		}
+
+		foreach($advnew[$advnew['style']] as $key => $val) {
+			$advnew[$advnew['style']][$key] = dstripslashes($val);
+		}
+
+		$advnew['displayorder'] = isset($advnew['displayorder']) ? implode("\t", $advnew['displayorder']) : '';
+		$advnew['code'] = $this->_encodeadvcode($advnew);
+
+		$advnew['parameters'] = addslashes(serialize(array_merge(is_array($parameters) ? $parameters : array(), array('style' => $advnew['style']), $advnew['style'] == 'code' ? array() : $advnew[$advnew['style']], array('html' => $advnew['code']), array('displayorder' => $advnew['displayorder']))));
+		$advnew['code'] = addslashes($advnew['code']);
+
+		$query = DB::query("UPDATE ".DB::table('common_advertisement')." SET title='$advnew[title]', targets='$advnew[targets]', parameters='$advnew[parameters]', code='$advnew[code]', starttime='$advnew[starttime]', endtime='$advnew[endtime]' WHERE advid='$advid'");
+
+		return true;
+	}
+
+	function _encodeadvcode($advnew) {
+		switch($advnew['style']) {
+			case 'code':
+				$advnew['code'] = $advnew['code']['html'];
+				break;
+			case 'text':
+				$advnew['code'] = '<a href="'.$advnew['text']['link'].'" target="_blank" '.($advnew['text']['size'] ? 'style="font-size: '.$advnew['text']['size'].'"' : '').'>'.$advnew['text']['title'].'</a>';
+				break;
+			case 'image':
+				$advnew['code'] = '<a href="'.$advnew['image']['link'].'" target="_blank"><img src="'.$advnew['image']['url'].'"'.($advnew['image']['height'] ? ' height="'.$advnew['image']['height'].'"' : '').($advnew['image']['width'] ? ' width="'.$advnew['image']['width'].'"' : '').($advnew['image']['alt'] ? ' alt="'.$advnew['image']['alt'].'"' : '').' border="0"></a>';
+				break;
+			case 'flash':
+				$advnew['code'] = '<embed width="'.$advnew['flash']['width'].'" height="'.$advnew['flash']['height'].'" src="'.$advnew['flash']['url'].'" type="application/x-shockwave-flash" wmode="transparent"></embed>';
+				break;
+		}
+		return $advnew['code'];
 	}
 
 }

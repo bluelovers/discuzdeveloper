@@ -168,6 +168,13 @@ if(!isset($_G['cookie']['collapse']) || strpos($_G['cookie']['collapse'], 'forum
 	$collapse['forum_rulesimg'] = 'yes';
 }
 
+$forumlastvisit = 0;
+if(empty($_G['forum']['picstyle']) && isset($_G['cookie']['forum_lastvisit']) && strexists($_G['cookie']['forum_lastvisit'], 'D_'.$_G['fid'])) {
+	preg_match('/D\_'.$_G['fid'].'\_(\d+)/', $_G['cookie']['forum_lastvisit'], $a);
+	$forumlastvisit = $a[1];
+	unset($a);
+}
+dsetcookie('forum_lastvisit', preg_replace("/D\_".$_G['fid']."\_\d+/", '', $_G['cookie']['forum_lastvisit']).'D_'.$_G['fid'].'_'.TIMESTAMP, 604800);
 
 $threadtableids = !empty($_G['cache']['threadtableids']) ? $_G['cache']['threadtableids'] : array();
 
@@ -297,7 +304,7 @@ if($_G['forum']['modrecommend'] && $_G['forum']['modrecommend']['open']) {
 	$_G['forum']['recommendlist'] = recommendupdate($_G['fid'], $_G['forum']['modrecommend'], '', 1);
 }
 $recommendgroups = array();
-if($_G['forum']['status'] != 3) {
+if($_G['forum']['status'] != 3 && $_G['setting']['groupstatus']) {
 	loadcache('forumrecommend');
 	$recommendgroups = $_G['cache']['forumrecommend'][$_G['fid']];
 }
@@ -324,9 +331,9 @@ $filteradd = $sortoptionurl = $sp = '';
 $sorturladdarray = $selectadd = array();
 $forumdisplayadd = array('orderby' => '');
 $specialtype = array('poll' => 1, 'trade' => 2, 'reward' => 3, 'activity' => 4, 'debate' => 5);
-$filterfield = array('digest', 'recommend', 'typeid', 'sortid', 'special', 'dateline', 'specialtype', 'author', 'reply', 'view', 'lastpost', 'heat', 'page', 'moderate');
+$filterfield = array('digest', 'recommend', 'typeid', 'sortid', 'dateline', 'page', 'orderby', 'specialtype', 'author', 'view', 'reply', 'lastpost');
 
-foreach ($filterfield as $v) {
+foreach($filterfield as $v) {
 	$forumdisplayadd[$v] = '';
 }
 
@@ -342,7 +349,7 @@ if($filter) {
 			$selectadd = $issort ? $geturl : array();
 			foreach($filterfield as $option) {
 				foreach($geturl as $field => $value) {
-					if(in_array($field, $filterfield) && $option != $field && $field != 'page') {
+					if(in_array($field, $filterfield) && $option != $field && $field != 'page' && ($field != 'orderby' || !in_array($option, array('author', 'reply', 'view', 'lastpost', 'heat')))) {
 						$forumdisplayadd[$option] .= '&'.$field.'='.rawurlencode($value);
 					}
 				}
@@ -375,7 +382,7 @@ if($filter) {
 							$filteradd .= "AND special='$specialtype[$value]'";
 						} elseif($field == 'dateline') {
 							$filteradd .= $value ? "AND lastpost>='".(TIMESTAMP - $value)."'" : '';
-						} else {
+						} elseif($field == 'typeid' || $field == 'sortid') {
 							$filteradd .= "AND $field='$value'";
 						}
 						$sp = ' ';
@@ -429,7 +436,6 @@ if(($_G['forum']['status'] != 3 && $_G['forum']['allowside']) || !empty($_G['for
 	}
 }
 
-$forumdisplayadd['page'] = '';
 if($_G['forum']['threadsorts']['types'] && $sortoptionarray && ($_G['gp_searchoption'] || $_G['gp_searchsort'])) {
 	$sortid = intval($_G['gp_sortid']);
 
@@ -456,7 +462,7 @@ if($_G['forum']['relatedgroup']) {
 }
 if(empty($filter) && empty($_G['gp_sortid']) && empty($_G['gp_archiveid']) && empty($_G['forum']['archive']) && empty($_G['forum']['relatedgroup'])) {
 	$_G['forum_threadcount'] = $_G['forum']['threads'];
-} elseif(!$_G['gp_moderate']) {
+} else {
 	$indexadd = '';
 	if(strexists($filteradd, "t.digest>'0'")) {
 		$indexadd = " FORCE INDEX (digest) ";
@@ -465,7 +471,8 @@ if(empty($filter) && empty($_G['gp_sortid']) && empty($_G['gp_archiveid']) && em
 }
 
 $thisgid = $_G['forum']['type'] == 'forum' ? $_G['forum']['fup'] : (!empty($_G['cache']['forums'][$_G['forum']['fup']]['fup']) ? $_G['cache']['forums'][$_G['forum']['fup']]['fup'] : 0);
-$forumstickycount = $stickycount = $stickytids = 0;
+$forumstickycount = $stickycount = 0;
+$stickytids = '';
 if($_G['setting']['globalstick'] && $_G['forum']['allowglobalstick']) {
 	$stickytids = $_G['cache']['globalstick']['global']['tids'];
 	if(!empty($_G['cache']['globalstick']['categories'][$thisgid]['count'])) {
@@ -512,7 +519,7 @@ $multipage_archive = $_G['gp_archiveid'] && in_array($_G['gp_archiveid'], $threa
 $multipage = multi($_G['forum_threadcount'], $_G['tpp'], $page, "forum.php?mod=forumdisplay&fid=$_G[fid]".($multiadd ? '&'.implode('&', $multiadd) : '')."$multipage_archive", $_G['setting']['threadmaxpages']);
 $extra = rawurlencode(!IS_ROBOT ? 'page='.$page.($forumdisplayadd['page'] ? '&filter='.$filter.$forumdisplayadd['page'] : '').($forumdisplayadd['orderby'] ? $forumdisplayadd['orderby'] : '') : 'page=1');
 
-$separatepos = $lastvisitseparator = 0;
+$separatepos = 0;
 $_G['forum_threadlist'] = $threadids = array();
 $_G['forum_colorarray'] = array('', '#EE1B2E', '#EE5023', '#996600', '#3C9D40', '#2897C5', '#2B65B7', '#8F2A90', '#EC1282');
 
@@ -550,11 +557,11 @@ if(($start_limit && $start_limit > $stickycount) || !$stickycount || $filterbool
 $_G['ppp'] = $_G['forum']['threadcaches'] && !$_G['uid'] ? $_G['setting']['postperpage'] : $_G['ppp'];
 $page = $_G['page'];
 $todaytime = strtotime(dgmdate(TIMESTAMP, 'Ymd'));
-list(,,$lastpost) = explode("\t", $_G['forum']['lastpost']);
+
 $verify = $verifyuids = $grouptids = array();
 while(($querysticky && $thread = DB::fetch($querysticky)) || ($query && $thread = DB::fetch($query))) {
 	if($_G['forum']['picstyle'] && empty($_G['cookie']['forumdefstyle'])) {
-		if($thread['fid'] != $_G['fid']) {
+		if($thread['fid'] != $_G['fid'] && empty($thread['cover'])) {
 			continue;
 		}
 		$thread['coverpath'] = getthreadcover($thread['tid'], $thread['cover']);
@@ -563,6 +570,7 @@ while(($querysticky && $thread = DB::fetch($querysticky)) || ($query && $thread 
 	$thread['forumstick'] = in_array($thread['tid'], $forumstickytids);
 	$thread['related_group'] = 0;
 	if($_G['forum']['relatedgroup'] && $thread['fid'] != $_G['fid']) {
+		if($thread['closed'] > 1) continue;
 		$thread['related_group'] = 1;
 		$grouptids[] = $thread['tid'];
 	}
@@ -637,7 +645,7 @@ while(($querysticky && $thread = DB::fetch($querysticky)) || ($query && $thread 
 		$thread['folder'] = 'lock';
 	} else {
 		$thread['folder'] = 'common';
-		$thread['weeknew'] = $thread['new'] && TIMESTAMP - 604800 <= $thread['dateline'];
+		$thread['weeknew'] = TIMESTAMP - 604800 <= $thread['dbdateline'];
 		if($thread['replies'] > $thread['views']) {
 			$thread['views'] = $thread['replies'];
 		}
@@ -651,6 +659,7 @@ while(($querysticky && $thread = DB::fetch($querysticky)) || ($query && $thread 
 		}
 	}
 	$thread['istoday'] = $thread['dateline'] > $todaytime ? 1 : 0;
+	$thread['dbdateline'] = $thread['dateline'];
 	$thread['dateline'] = dgmdate($thread['dateline'], 'd');
 	$thread['dblastpost'] = $thread['lastpost'];
 	$thread['lastpost'] = dgmdate($thread['lastpost'], 'u');
@@ -660,9 +669,10 @@ while(($querysticky && $thread = DB::fetch($querysticky)) || ($query && $thread 
 		$separatepos++;
 	} else {
 		$thread['id'] = 'normalthread_'.$thread['tid'];
-		if($thread['folder'] == 'common' && !$lastvisitseparator && $lastpost >= $forumlastvisit) {
+		if($thread['folder'] == 'common' && $thread['dblastpost'] >= $forumlastvisit || !$forumlastvisit) {
 			$thread['new'] = 1;
 			$thread['folder'] = 'new';
+			$thread['weeknew'] = TIMESTAMP - 604800 <= $thread['dbdateline'];
 		}
 	}
 	if(isset($_G['setting']['verify']['enabled']) && $_G['setting']['verify']['enabled']) {

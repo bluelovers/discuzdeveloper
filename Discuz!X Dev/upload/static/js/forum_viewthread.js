@@ -2,7 +2,7 @@
 	[Discuz!] (C)2001-2009 Comsenz Inc.
 	This is NOT a freeware, use is subject to license terms
 
-	$Id: forum_viewthread.js 21510 2011-03-29 07:34:55Z monkey $
+	$Id: forum_viewthread.js 22310 2011-04-29 06:23:50Z fengning $
 */
 
 var replyreload = '', attachimgST = new Array(), zoomgroup = new Array(), zoomgroupinit = new Array();
@@ -380,32 +380,34 @@ function copyThreadUrl(obj) {
 	return false;
 }
 
-function replyNotice(noticestatus) {
+function replyNotice() {
 	var newurl = 'forum.php?mod=misc&action=replynotice&tid=' + tid + '&op=';
-	if(noticestatus == 1) {
-		$('replynotice').href = newurl + 'receive';
-		$('replynotice').innerHTML = '接收回复通知';
-		noticestatus = 0;
+	var replynotice = $('replynotice');
+	var status = replynotice.getAttribute("status");
+	if(status == 1) {
+		replynotice.href = newurl + 'receive';
+		replynotice.innerHTML = '接收回复通知';
+		replynotice.setAttribute("status", 0);
 	} else {
-		$('replynotice').href = newurl + 'ignore';
-		$('replynotice').innerHTML = '取消回复通知';
-		noticestatus = 1;
+		replynotice.href = newurl + 'ignore';
+		replynotice.innerHTML = '取消回复通知';
+		replynotice.setAttribute("status", 1);
 	}
 }
 
 var connect_share_loaded = 0;
-function connect_share(connect_share_api, connect_uin) {
+function connect_share(connect_share_url, connect_uin) {
 	if(parseInt(discuz_uid) <= 0) {
 		return true;
 	} else {
 		if(connect_uin) {
 			setTimeout(function () {
 				if(!connect_share_loaded) {
-					showDialog('分享服务连接失败，请稍后再试', 'notice');
+					showDialog('分享服务连接失败，请稍后再试。', 'notice');
 					$('append_parent').removeChild($('connect_load_js'));
 				}
 			}, 5000);
-			connect_load(connect_share_api);
+			connect_load(connect_share_url);
 		} else {
 			showDialog($('connect_share_unbind').innerHTML, 'info', '请先绑定QQ账号');
 		}
@@ -418,7 +420,6 @@ function connect_load(src) {
 	e.type = "text/javascript";
 	e.id = 'connect_load_js';
 	e.src = src + '&_r=' + Math.random();
-	e.charset = "UTF-8";
 	e.async = true;
 	$('append_parent').appendChild(e);
 }
@@ -430,7 +431,9 @@ function connect_show_dialog(title, html, type) {
 
 function connect_get_thread() {
 	connect_thread_info.subject = $('connect_thread_title').value;
-	connect_thread_info.html_content = preg_replace(["'"], ['%27'], encodeURIComponent(preg_replace(['本帖最后由 .*? 于 .*? 编辑','&nbsp;','<em onclick="copycode\\(\\$\\(\'code0\'\\)\\);">复制代码</em>'], ['',' ', ''], $('postmessage_' + connect_thread_info.post_id).innerHTML)));
+	if ($('postmessage_' + connect_thread_info.post_id)) {
+		connect_thread_info.html_content = preg_replace(["'"], ['%27'], encodeURIComponent(preg_replace(['本帖最后由 .*? 于 .*? 编辑','&nbsp;','<em onclick="copycode\\(\\$\\(\'code0\'\\)\\);">复制代码</em>'], ['',' ', ''], $('postmessage_' + connect_thread_info.post_id).innerHTML)));
+	}
 	return connect_thread_info;
 }
 

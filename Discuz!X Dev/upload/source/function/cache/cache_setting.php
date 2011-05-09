@@ -365,18 +365,56 @@ function build_cache_setting() {
 		@unlink($cachedir.'/'.$tidmd5[0].'/'.$tidmd5[1].'/'.$tidmd5[2].'/0.htm');
 	}
 
-	if(!preg_match('/^[A-z]\w+?$/', $data['reginput']['username'])) {
-		$data['reginput']['username'] = 'username';
+	$reginputbwords = array('username', 'password', 'password2', 'email');
+	if(in_array($data['reginput']['username'], $reginputbwords) || !preg_match('/^[A-z]\w+?$/', $data['reginput']['username'])) {
+		$data['reginput']['username'] = random(6);
 	}
-	if(!preg_match('/^[A-z]\w+?$/', $data['reginput']['password'])) {
-		$data['reginput']['password'] = 'password';
+	if(in_array($data['reginput']['password'], $reginputbwords) || !preg_match('/^[A-z]\w+?$/', $data['reginput']['password'])) {
+		$data['reginput']['password'] = random(6);
 	}
-	if(!preg_match('/^[A-z]\w+?$/', $data['reginput']['password2'])) {
-		$data['reginput']['password2'] = 'password2';
+	if(in_array($data['reginput']['password2'], $reginputbwords) || !preg_match('/^[A-z]\w+?$/', $data['reginput']['password2'])) {
+		$data['reginput']['password2'] = random(6);
 	}
-	if(!preg_match('/^[A-z]\w+?$/', $data['reginput']['email'])) {
-		$data['reginput']['email'] = 'email';
+	if(in_array($data['reginput']['email'], $reginputbwords) || !preg_match('/^[A-z]\w+?$/', $data['reginput']['email'])) {
+		$data['reginput']['email'] = random(6);
 	}
+
+	if(empty($_G['setting']['domain']['app']['default'])) {
+		$_G['setting']['domain']['app']['default'] = '{CURHOST}';
+	}
+	$output = array('str'=>array(), 'preg' => array()); //str为二级域名的查找和替换，preg为rewrite和默认域名的查找和替换
+	$_G['domain'] = array();
+	if(is_array($_G['setting']['domain']['app'])) {
+		$apps = $_G['setting']['domain']['app'];
+		$repflag = $apps['portal'] || $apps['forum'] || $apps['group'] || $apps['home'];
+		foreach($apps as $app => $domain) {
+			if(in_array($app, array('default', 'mobile'))) {
+				continue;
+			}
+			$appphp = "{$app}.php";
+			if(!$domain) {
+				$domain = $apps['default'];
+			}
+			if($repflag) {
+				$output['str']['search'][$app] = "<a href=\"{$app}.php";
+				$output['str']['replace'][$app] = '<a href="http://'.$domain.$_G['siteport'].$_G['siteroot'].$appphp;
+				$_G['domain']['pregxprw'][$app] = '<a href\="http\:\/\/('.preg_quote($domain.$_G['siteport'].$_G['siteroot'], '/').')'.$appphp;
+			} else {
+				$_G['domain']['pregxprw'][$app] = '<a href\="()'.$appphp;
+			}
+		}
+	}
+	if($_G['setting']['rewritestatus'] || $_G['domain']['search']) {
+		if($_G['setting']['rewritestatus']) {
+			require_once libfile('function/admincp');
+			$output['preg'] = rewritedata(0);
+		}
+		if($repflag) {
+			$output['preg']['search'][] = "/<a href=\"(\w+\.php)/";
+			$output['preg']['replace'][] = '<a href="http://'.$_G['setting']['domain']['app']['default'].$_G['siteport'].$_G['siteroot']."$1";
+		}
+	}
+	$data['output'] = $output;
 
 	save_syscache('setting', $data);
 	$_G['setting'] = $data;
@@ -503,12 +541,15 @@ function get_cachedata_setting_plugin($method = '') {
 									if($hscript == 'global' && $funcname == 'discuzcode') {
 										$data['plugins'][$k.'_discuzcode'] = true;
 									}
+									if($hscript == 'global' && $funcname == 'deletethread') {
+										$data['plugins'][$k.'_deletethread'] = true;
+									}
 									$v = explode('_', $funcname);
 									$curscript = $v[0];
 									if(!$curscript || $classname == $funcname) {
 										continue;
 									}
-									if($hscript == 'home' && $curscript == 'spacecp') {
+									if($hscript == 'home') {
 										$curscript .= '_'.$v[1];
 									}
 									if(!@in_array($script, $data[$k][$hscript][$curscript]['module'])) {
@@ -663,7 +704,7 @@ function get_cachedata_mainnav() {
 				$onmouseover = 'navShow(\''.substr($navid, 3).'\')';
 				$data['subnavs'][$navid] = $subnavs;
 			} else {
-				$onmouseover = 'showMenu({\'ctrlid\':this.id})';
+				$onmouseover = 'showMenu({\'ctrlid\':this.id,\'ctrlclass\':\'hover\',\'duration\':2})';
 				$data['menunavs'][] = '<ul class="p_pop h_pop" id="'.$navid.'_menu" style="display: none">'.$subnavs.'</ul>';
 			}
 		}

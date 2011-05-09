@@ -190,22 +190,24 @@ if($op == 'block') {
 		showmessage('block_edit_nopermission');
 	}
 
-	// bannedids
 	if(isset($_G['gp_bannedids']) && $block['param']['bannedids'] != $_G['gp_bannedids']) {
 		$arr = explode(',', $_G['gp_bannedids']);
 		$arr = array_map('intval', $arr);
 		$arr = array_filter($arr);
 		$_G['gp_bannedids'] = implode(',', $arr);
 		$block['param']['bannedids'] = $_G['gp_bannedids'];
-			DB::update('common_block', array('param'=>addslashes(serialize($block['param']))), array('bid'=>$bid));
-			$_G['block'][$bid] = $block;
+		DB::update('common_block', array('param'=>addslashes(serialize($block['param']))), array('bid'=>$bid));
+		$_G['block'][$bid] = $block;
 		block_updatecache($bid, true);
-		}
+	}
+
 	showmessage('do_success', 'portal.php?mod=portalcp&ac=block&op=data&bid='.$bid, array('bid'=>$bid, 'eleid'=> $_GET['eleid']));
-} elseif($op == 'data') {//note 当前显示数据
-	if(!$bid || (!$allowmanage && !$allowdata)) {//编辑
+
+} elseif($op == 'data') {
+	if(!$bid || (!$allowmanage && !$allowdata)) {
 		showmessage('block_edit_nopermission');
 	}
+
 	if(submitcheck('updatesubmit')) {
 		if($_POST['displayorder']) {
 			asort($_POST['displayorder']);

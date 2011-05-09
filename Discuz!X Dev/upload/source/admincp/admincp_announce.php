@@ -17,7 +17,7 @@ if(empty($operation)) {
 
 	if(!submitcheck('announcesubmit')) {
 
-		shownav('tools', 'announce', 'admin');
+		shownav('extended', 'announce', 'admin');
 		showsubmenu('announce', array(
 			array('admin', 'announce', 1),
 			array('add', 'announce&operation=add', 0)
@@ -78,7 +78,7 @@ if(empty($operation)) {
 		$newstarttime = dgmdate(TIMESTAMP, 'Y-n-j H:i');
 		$newendtime = dgmdate(TIMESTAMP + 86400* 7, 'Y-n-j H:i');
 
-		shownav('tools', 'announce', 'add');
+		shownav('extended', 'announce', 'add');
 		showsubmenu('announce', array(
 			array('admin', 'announce', 0),
 			array('add', 'announce&operation=add', 1)
@@ -163,7 +163,7 @@ if(empty($operation)) {
 			$colorcheck = "style=\"background: $colorselect\"";
 		}
 
-		shownav('tools', 'announce');
+		shownav('extended', 'announce');
 		showsubmenu('announce', array(
 			array('admin', 'announce', 0),
 			array('add', 'announce&operation=add', 0)

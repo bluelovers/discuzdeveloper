@@ -8,8 +8,9 @@
 <script type="text/javascript" src="{$_G['setting']['jspath']}forum_viewthread.js?{VERHASH}"></script>
 <script type="text/javascript">zoomstatus = parseInt($_G['setting']['zoomstatus']);var imagemaxwidth = '{$_G['setting']['imagemaxwidth']}';var aimgcount = new Array();</script>
 
+<style id="diy_style" type="text/css"></style>
+<!--[diy=diynavtop]--><div id="diynavtop" class="area"></div><!--[/diy]-->
 <div id="pt" class="bm cl">
-	<!--{subtemplate common/simplesearchform}-->
 	<div class="z">
 		<a href="./" class="nvhm" title="{lang homepage}">$_G[setting][bbname]</a>$navigation <em>&rsaquo;</em> <a href="forum.php?mod=viewthread&tid=$_G[tid]">$_G[forum_thread][short_subject]</a>
 	</div>
@@ -140,14 +141,30 @@
 <div id="postlist" class="pl bm">
 	<table cellspacing="0" cellpadding="0">
 		<tr>
-			<td class="pls ptm pbm hm xg1">
-				{lang show}: <span class="xi1">$_G[forum_thread][views]</span>
-				<span class="pipe">|</span>{lang reply}: <span class="xi1">$_G[forum_thread][replies]</span>
+			<td class="pls ptm pbm">
+				<!--{if $_G['page'] > 1}-->
+				<div id="tath" class="cl">
+					<!--{if $_G[forum_thread][authorid] && $_G[forum_thread][author]}-->
+						<a href="home.php?mod=space&uid=$_G[forum_thread][authorid]" title="$_G[forum_thread][author]"><!--{avatar($_G[forum_thread][authorid],small)}--></a>
+						{lang thread_author}: <a href="home.php?mod=space&uid=$_G[forum_thread][authorid]" title="$_G[forum_thread][author]">$_G[forum_thread][author]</a>
+					<!--{else}-->
+						{lang thread_author}:
+						<!--{if $_G['forum']['ismoderator']}-->
+							<a href="home.php?mod=space&uid=$_G[forum_thread][authorid]">{lang anonymous}</a>
+						<!--{else}-->
+							{lang anonymous}
+						<!--{/if}-->
+					<!--{/if}-->
+				</div>
+				<!--{else}-->
+				<div class="hm">
+					<span class="xg1">{lang show}:</span> <span class="xi1">$_G[forum_thread][views]</span><span class="pipe">|</span><span class="xg1">{lang reply}:</span> <span class="xi1">$_G[forum_thread][replies]</span>
+				</div>
+				<!--{/if}-->
 			</td>
 			<td class="plc ptm pbn">
 				<!--{if !IS_ROBOT}-->
 					<div class="y">
-						<a href="{$_G[siteurl]}forum.php?mod=viewthread&tid=$_G[tid]$fromuid" onclick="return copyThreadUrl(this)" title="{lang share_url_copy}"><img src="{IMGDIR}/copy.png" alt="{lang share_url_copy}" class="vm" /></a>
 						<!--{if $post['invisible'] == 0}--><a href="forum.php?mod=viewthread&action=printable&tid=$_G[tid]" title="{lang thread_printable}" target="_blank"><img src="{IMGDIR}/print.png" alt="{lang thread_printable}" class="vm" /></a>
 						<!--{/if}-->
 						<a href="forum.php?mod=redirect&goto=nextoldset&tid=$_G[tid]" title="{lang last_thread}"><img src="{IMGDIR}/thread-prev.png" alt="{lang last_thread}" class="vm" /></a>
@@ -155,8 +172,6 @@
 					</div>
 				<!--{/if}-->
 				<h1 class="ts">
-					<a href="forum.php?mod=viewthread&tid=$_G[tid]" id="thread_subject">$_G[forum_thread][subject]</a>
-					<span class="xw0 xs1 xg1">
 					<!--{if $_G['forum_thread']['typeid'] && $_G['forum']['threadtypes']['types'][$_G['forum_thread']['typeid']]}-->
 						<!--{if !IS_ROBOT && ($_G['forum']['threadtypes']['listable'] || $_G['forum']['status'] == 3)}-->
 							<a href="forum.php?mod=forumdisplay&fid=$_G[fid]&filter=typeid&typeid=$_G[forum_thread][typeid]">[{$_G['forum']['threadtypes']['types'][$_G['forum_thread']['typeid']]}]</a>
@@ -167,6 +182,8 @@
 					<!--{if $threadsorts && $_G['forum_thread']['sortid']}-->
 						<a href="forum.php?mod=forumdisplay&fid=$_G[fid]&filter=sortid&sortid=$_G[forum_thread][sortid]">[{$_G['forum']['threadsorts']['types'][$_G['forum_thread']['sortid']]}]</a>
 					<!--{/if}-->
+					<a href="forum.php?mod=viewthread&tid=$_G[tid]" id="thread_subject">$_G[forum_thread][subject]</a>
+					<span class="xw0 xs1 xg1">
 					<!--{if $_G['forum_thread'][displayorder] == -2}-->({lang moderating})
 					<!--{elseif $_G['forum_thread'][displayorder] == -3}-->({lang have_ignored})
 					<!--{elseif $_G['forum_thread'][displayorder] == -4}-->({lang draft})
@@ -180,6 +197,7 @@
 					<!--{if $_G['forum_thread']['closed'] == 1}-->
 						&nbsp;<img src="{IMGDIR}/locked.gif" alt="{lang close}" title="{lang close}" class="vm" />
 					<!--{/if}-->
+					<a href="{$_G[siteurl]}forum.php?mod=viewthread&tid=$_G[tid]$fromuid" onclick="return copyThreadUrl(this)" title="{lang share_url_copy_comment}">[{lang share_url_copy}]</a>
 					</span>
 					<!--{hook/viewthread_title_extra}-->
 				</h1>
@@ -327,7 +345,7 @@ $_G['forum_tagscript']
 <!--{/if}-->
 <!--{if $_G['medal_list']}-->
 <!--{loop $_G['medal_list'] $medalid $medal}-->
-	<div id="md_{$medalid}_menu" class="tip tip_1" style="display: none;">
+	<div id="md_{$medalid}_menu" class="tip tip_4" style="display: none;">
 		<div class="tip_horn"></div>
 		<div class="tip_c">
 			<h4>$medal[name]</h4>
@@ -353,18 +371,21 @@ $_G['forum_tagscript']
 </div>
 
 <!--{if $_G['relatedlinks']}-->
-	<div style="display: none">
-		<ul>
-			<!--{loop $_G['relatedlinks'] $key $link}-->
-			<li><a id="relatedlink_$key" href="$link[url]">$link[name]</a></li>
-			<!--{/loop}-->
-		</ul>
-	</div>
-	<script type="text/javascript">relatedlinks('postmessage_$_G[forum_firstpid]');</script>
+	<script type="text/javascript">
+		var relatedlink = [];
+		<!--{loop $_G['relatedlinks'] $key $link}-->
+		relatedlink[$key] = {'sname':'$link[name]', 'surl':'$link[url]'};
+		<!--{/loop}-->
+		relatedlinks('postmessage_$_G[forum_firstpid]');
+	</script>
 <!--{/if}-->
 
 <!--{if !empty($_G['cookie']['clearUserdata']) && $_G['cookie']['clearUserdata'] == 'forum'}-->
 	<script type="text/javascript">saveUserdata('forum', '')</script>
+<!--{/if}-->
+
+<!--{if $my_search_se_url}-->
+<script type="text/javascript" language="utf-8" src="$my_search_se_url"></script>
 <!--{/if}-->
 
 <!--{subtemplate common/footer}-->

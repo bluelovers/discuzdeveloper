@@ -106,19 +106,14 @@ function changeselectthreadsort(selectchoiceoptionid, optionid, type) {
 		name = ' name="typeoption[' + forum_optionlist[soptionid]['sidentifier'] + ']"';
 		id = 'id="typeoption_' + forum_optionlist[soptionid]['sidentifier'] + '"';
 	}
-	if(choicesarr[sselectchoiceoptionid]['slevel'] == 1 && choicesarr[sselectchoiceoptionid]['scount'] == 1) {
+	if((choicesarr[sselectchoiceoptionid]['slevel'] == 1 || type == 'search') && choicesarr[sselectchoiceoptionid]['scount'] == 1) {
 		nameid = name + ' ' + id;
-	} else {
-		nameid = '';
 	}
 	var selectoption = '<select' + nameid + ' class="ps vm" onchange="changeselectthreadsort(this.value, \'' + optionid + '\'' + issearch + ');checkoption(\'' + forum_optionlist[soptionid]['sidentifier'] + '\', \'' + forum_optionlist[soptionid]['srequired'] + '\', \'' + forum_optionlist[soptionid]['stype'] + '\')"><option value="0">«Î—°‘Ò</option>';
 	for(var i in choicesarr) {
-		if(choicesarr[i]['scount'] >= choicesarr[sselectchoiceoptionid]['scount']) {
-			if(choicesarr[sselectchoiceoptionid]['slevel'] == 1) {
+		nameid = '';
+		if((choicesarr[sselectchoiceoptionid]['slevel'] == 1 || type == 'search') && choicesarr[i]['scount'] == choicesarr[sselectchoiceoptionid]['scount']) {
 				nameid = name + ' ' + id;
-			} else {
-				nameid = '';
-			}
 		}
 		if(choicesarr[i]['sfoptionid'] != '0') {
 			var patrn = new RegExp("^" + choicesarr[i]['sfoptionid'], 'i');
@@ -146,6 +141,9 @@ function changeselectthreadsort(selectchoiceoptionid, optionid, type) {
 		}
 	}
 	selectoption += '</select>';
+	if(type == 'search') {
+		selectoption  += "\r\n" + '<input type="hidden" name="searchoption[' + optionid + '][type]" value="select">';
+	}
 	$('select_' + forum_optionlist[soptionid]['sidentifier']).innerHTML = selectoption;
 }
 

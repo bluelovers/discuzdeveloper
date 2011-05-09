@@ -43,12 +43,11 @@
 						<a id="filter_dateline" href="javascript:;" class="showmenu xi2" onclick="showMenu(this.id)">
 							<!--{if $_G['gp_dateline'] == 86400}-->{lang last_1_days}<!--{elseif $_G['gp_dateline'] == 172800}-->{lang last_2_days}<!--{elseif $_G['gp_dateline'] == 604800}-->{lang list_one_week}<!--{elseif $_G['gp_dateline'] == 2592000}-->{lang list_one_month}<!--{elseif $_G['gp_dateline'] == 7948800}-->{lang list_three_month}<!--{else}-->{lang search_any_date}<!--{/if}-->
 						</a>
-						<span class="pipe">|</span>{lang orderby}:
+						{lang orderby}:
 						<a id="filter_orderby" href="javascript:;" class="showmenu xi2" onclick="showMenu(this.id)">
 							<!--{if $_G['gp_orderby'] == 'dateline'}-->{lang list_post_time}<!--{elseif $_G['gp_orderby'] == 'replies'}-->{lang replies}<!--{elseif $_G['gp_orderby'] == 'views'}-->{lang views}<!--{elseif $_G['gp_orderby'] == 'lastpost'}-->{lang lastpost}<!--{elseif $_G['gp_orderby'] == 'heats'}-->{lang order_heats}<!--{else}-->{lang list_default_sort}<!--{/if}-->
-						</a>
-						<span class="pipe">|</span><a href="forum.php?mod=forumdisplay&fid=$_G[fid]&filter=digest&digest=1$forumdisplayadd[digest]{if $_G['gp_archiveid']}&archiveid={$_G['gp_archiveid']}{/if}" class="xi2">{lang digest_posts}</a><!--{if !empty($_G[setting][recommendthread][status])}--><span class="pipe">|</span><a href="forum.php?mod=forumdisplay&fid=$_G[fid]&filter=recommend&orderby=recommends&recommend=1$forumdisplayadd[recommend]{if $_G['gp_archiveid']}&archiveid={$_G['gp_archiveid']}{/if}" class="xi2">{lang order_recommends}</a><!--{/if}-->
-						<!--{if empty($_G['forum']['picstyle']) && $_G['gp_orderby'] == 'lastpost'}--><!--{if $separatepos == 0}--><span class="pipe">|</span><a href="javascript:;" onclick="checkForumnew_btn('{$_G['fid']}')" title="{lang showupgrade}" class="forumrefresh"></a><!--{/if}--><!--{/if}-->
+						</a><span class="pipe">|</span><a href="forum.php?mod=forumdisplay&fid=$_G[fid]&filter=digest&digest=1$forumdisplayadd[digest]{if $_G['gp_archiveid']}&archiveid={$_G['gp_archiveid']}{/if}" class="xi2">{lang digest_posts}</a><!--{if !empty($_G[setting][recommendthread][status])}--><span class="pipe">|</span><a href="forum.php?mod=forumdisplay&fid=$_G[fid]&filter=recommend&orderby=recommends&recommend=1$forumdisplayadd[recommend]{if $_G['gp_archiveid']}&archiveid={$_G['gp_archiveid']}{/if}" class="xi2">{lang order_recommends}</a><!--{/if}-->
+						<!--{if empty($_G['forum']['picstyle']) && $_G['gp_orderby'] == 'lastpost' && (!$_G['setting']['forumseparator'] || !$separatepos) && !$_G['gp_filter']}--><span class="pipe">|</span><a href="javascript:;" onclick="checkForumnew_btn('{$_G['fid']}')" title="{lang showupgrade}" class="forumrefresh"></a><!--{/if}-->
 					</div>
 				</th>
 				<!--{if empty($_G['forum']['picstyle'])}-->
@@ -56,8 +55,8 @@
 				<td class="num">{lang replies}</td>
 				<td class="by">{lang lastpost}</td>
 				<!--{else}-->
-				<td class="by cl" colspan="3">
-					<a{if empty($_G['cookie']['forumdefstyle'])} href="forum.php?mod=forumdisplay&fid=$_G[fid]&forumdefstyle=yes" class="chked z"{else} href="forum.php?mod=forumdisplay&fid=$_G[fid]&forumdefstyle=no" class="unchk z"{/if} title="{lang view_thread_imagemode}{lang view_thread}">{lang view_thread_imagemode}</a>
+				<td class="by" colspan="3">
+					<a{if empty($_G['cookie']['forumdefstyle'])} href="forum.php?mod=forumdisplay&fid=$_G[fid]&forumdefstyle=yes" class="chked"{else} href="forum.php?mod=forumdisplay&fid=$_G[fid]&forumdefstyle=no" class="unchk"{/if} title="{lang view_thread_imagemode}{lang view_thread}">{lang view_thread_imagemode}</a>
 				</td>
 				<!--{/if}-->
 			</tr>
@@ -100,7 +99,7 @@
 							<tr class="ts">
 								<td>&nbsp;</td>
 								<!--{if $_G['forum']['ismoderator'] && !$_G['gp_archiveid']}--><td>&nbsp;</td><!--{/if}-->
-								<th><!--{if empty($_G['forum']['picstyle']) && $_G['gp_orderby'] == 'lastpost'}--><a href="javascript:;" onclick="checkForumnew_btn('{$_G['fid']}')" title="{lang showupgrade}" class="forumrefresh">{lang forum_thread}</a><!--{else}-->&nbsp;<!--{/if}--></th><td>&nbsp;</td><td>&nbsp;</td><td>&nbsp;</td>
+								<th><!--{if empty($_G['forum']['picstyle']) && $_G['gp_orderby'] == 'lastpost' && !$_G['gp_filter']}--><a href="javascript:;" onclick="checkForumnew_btn('{$_G['fid']}')" title="{lang showupgrade}" class="forumrefresh">{lang forum_thread}</a><!--{else}-->&nbsp;<!--{/if}--></th><td>&nbsp;</td><td>&nbsp;</td><td>&nbsp;</td>
 							</tr>
 						</tbody>
 					<!--{/if}-->
@@ -114,13 +113,13 @@
 									{if $thread['displayorder'] == 2}{lang thread_type2} - {/if}
 									{if $thread['displayorder'] == 3}{lang thread_type3} - {/if}
 									{if $thread['displayorder'] == 4}{lang thread_type4} - {/if}
-									{if $thread[folder] == 'lock'}关闭的主题 - {/if}
+									{if $thread[folder] == 'lock'}{lang closed_thread} - {/if}
 									{if $thread['special'] == 1}{lang thread_poll} - {/if}
 									{if $thread['special'] == 2}{lang thread_trade} - {/if}
 									{if $thread['special'] == 3}{lang thread_reward} - {/if}
 									{if $thread['special'] == 4}{lang thread_activity} - {/if}
 									{if $thread['special'] == 5}{lang thread_debate} - {/if}
-									{if $thread[folder] == "new"}有新回复 - {/if}
+									{if $thread[folder] == "new"}{lang have_newreplies} - {/if}
 									{lang target_blank}" target="_blank">
 								<!--{if $thread[folder] == 'lock'}-->
 									<img src="{IMGDIR}/folder_lock.gif" />
@@ -156,10 +155,8 @@
 							<!--{/if}-->
 							<th class="$thread[folder]">
 								<!--{hook/forumdisplay_thread $key}-->
-								<!--{if !$thread['forumstick'] && ($thread['isgroup'] == 1 || $thread['fid'] != $_G['fid'])}-->
-									<!--{if $thread['related_group'] == 0 && $thread['closed'] > 1}-->
+								<!--{if !$thread['forumstick'] && $thread['closed'] > 1 && ($thread['isgroup'] == 1 || $thread['fid'] != $_G['fid'])}-->
 										<!--{eval $thread[tid]=$thread[closed];}-->
-									<!--{/if}-->
 								<!--{/if}-->
 								$thread[typehtml] $thread[sorthtml]
 								<!--{if $thread['moved']}-->
@@ -173,9 +170,9 @@
 								<!--{if $thread['readperm']}--> - [{lang readperm} <span class="xw1">$thread[readperm]</span>]<!--{/if}-->
 								<!--{if $thread['price'] > 0}-->
 									<!--{if $thread['special'] == '3'}-->
-									- <span class="xi1">[{lang thread_reward}{$_G[setting][extcredits][$_G['setting']['creditstransextra'][2]][title]} <span class="xw1">$thread[price]</span> {$_G[setting][extcredits][$_G['setting']['creditstransextra'][2]][unit]}]</span>
+									- <span class="xi1">[{lang thread_reward} <span class="xw1">$thread[price]</span> {$_G[setting][extcredits][$_G['setting']['creditstransextra'][2]][unit]}{$_G[setting][extcredits][$_G['setting']['creditstransextra'][2]][title]}]</span>
 									<!--{else}-->
-									- [{lang price} {$_G[setting][extcredits][$_G['setting']['creditstransextra'][1]][title]} <span class="xw1">$thread[price]</span> {$_G[setting][extcredits][$_G['setting']['creditstransextra'][1]][unit]}]
+									- [{lang price} <span class="xw1">$thread[price]</span> {$_G[setting][extcredits][$_G['setting']['creditstransextra'][1]][unit]}{$_G[setting][extcredits][$_G['setting']['creditstransextra'][1]][title]}]
 									<!--{/if}-->
 								<!--{elseif $thread['special'] == '3' && $thread['price'] < 0}-->
 									- [{lang reward_solved}]
@@ -242,6 +239,11 @@
 					</table>
 					<ul class="ml mlt mtw cl">
 						<!--{loop $_G['forum_threadlist'] $key $thread}-->
+						<!--{if !$thread['forumstick'] && ($thread['isgroup'] == 1 || $thread['fid'] != $_G['fid'])}-->
+							<!--{if $thread['related_group'] == 0 && $thread['closed'] > 1}-->
+								<!--{eval $thread[tid]=$thread[closed];}-->
+							<!--{/if}-->
+						<!--{/if}-->
 						<li style="width:{$_G[setting][forumpicstyle][thumbwidth]}px;">
 							<!--{if !$_G['gp_archiveid'] && $_G['forum']['ismoderator']}-->
 								<div style="position: absolute;padding:2px;background:#FFF">
@@ -257,16 +259,16 @@
 								</div>
 							<!--{/if}-->
 							<div class="c cl">
-								<a href="forum.php?mod=viewthread&tid=$thread[tid]&{if $_G['gp_archiveid']}archiveid={$_G['gp_archiveid']}&{/if}extra=$extra"$thread[highlight]{if $thread['isgroup'] == 1 || $thread['forumstick']} target="_blank"{else} onclick="atarget(this)"{/if} title="$thread[subject]" class="z">
+								<a href="forum.php?mod=viewthread&tid=$thread[tid]&{if $_G['gp_archiveid']}archiveid={$_G['gp_archiveid']}&{/if}extra=$extra" {if $thread['isgroup'] == 1 || $thread['forumstick']} target="_blank"{else} onclick="atarget(this)"{/if} title="$thread[subject]" class="z">
 									<!--{if $thread['cover']}-->
 										<img src="$thread[coverpath]" alt="$thread[subject]" width="{$_G[setting][forumpicstyle][thumbwidth]}" height="{$_G[setting][forumpicstyle][thumbheight]}" />
 									<!--{else}-->
 										<span class="nopic" style="width:{$_G[setting][forumpicstyle][thumbwidth]}px; height:{$_G[setting][forumpicstyle][thumbheight]}px;"></span>
 									<!--{/if}-->
-									<strong style="width: {$_G[setting][forumpicstyle][thumbwidth]}px;">$thread[subject]</strong>
 								</a>
 							</div>
-							<div class="ptn cl">
+							<h3 class="ptn" style="width: {$_G[setting][forumpicstyle][thumbwidth]}px;"><a href="forum.php?mod=viewthread&tid=$thread[tid]&{if $_G['gp_archiveid']}archiveid={$_G['gp_archiveid']}&{/if}extra=$extra"$thread[highlight]{if $thread['isgroup'] == 1 || $thread['forumstick']} target="_blank"{else} onclick="atarget(this)"{/if} title="$thread[subject]">$thread[subject]</a></h3>
+							<div class="cl">
 								<!--{if $thread['cover']}--><em class="sum y xs0 xi1 xw1" title="$thread[cover] {lang pics}">$thread[cover]</em><!--{/if}-->
 								<!--{if $thread['authorid'] && $thread['author']}-->
 									<a href="home.php?mod=space&uid=$thread[authorid]">$thread[author]</a><!--{if !empty($verify[$thread['authorid']])}--> $verify[$thread[authorid]]<!--{/if}-->
@@ -276,14 +278,14 @@
 							</div>
 							<div class="cl">
 								<em class="y xs0"><a href="forum.php?mod=viewthread&tid=$thread[tid]&extra=$extra" class="xi2" title="$thread[replies] {lang reply}">$thread[replies]</a> / <em title="{if $thread['isgroup'] != 1}$thread[views]{else}{$groupnames[$thread[tid]][views]}{/if} {lang show}"><!--{if $thread['isgroup'] != 1}-->$thread[views]<!--{else}-->{$groupnames[$thread[tid]][views]}<!--{/if}--></em></em>
-								<em class="z xs0{if $thread['istoday']} xi1{/if}">$thread[dateline]</em>
+								<em class="xs0{if $thread['istoday']} xi1{/if}">$thread[dateline]</em>
 							</div>
 						</li>
 						<!--{/loop}-->
 					</ul>
 				<!--{/if}-->
 			<!--{else}-->
-				<tbody><tr><th colspan="{if !$_G['gp_archiveid'] && $_G['forum']['ismoderator']}6{else}5{/if}"><p class="emp">{lang forum_nothreads}</p></th></tr></tbody>
+				<tbody class="bw0_all"><tr><th colspan="{if !$_G['gp_archiveid'] && $_G['forum']['ismoderator']}6{else}5{/if}"><p class="emp">{lang forum_nothreads}</p></th></tr></tbody>
 			<!--{/if}-->
 			</table>
 			<!--{if $_G['forum']['ismoderator'] && $_G['forum_threadcount']}-->

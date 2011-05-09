@@ -7,6 +7,9 @@
  *      $Id$
  */
 
+define('IN_API', true);
+define('CURSCRIPT', 'api');
+
 require '../../source/class/class_core.php';
 require '../../source/function/function_forum.php';
 
@@ -60,7 +63,7 @@ window.location.href='$_G[siteurl]forum.php?mod=misc&action=paysucceed';
 </html>
 EOS;
 	} else {
-		header('location: '.$_G['siteurl'].'forum.php?mod=misc&action=paysucceed');
+		dheader('location: '.$_G['siteurl'].'forum.php?mod=misc&action=paysucceed');
 	}
 } else {
 	exit($notifydata['notify']);

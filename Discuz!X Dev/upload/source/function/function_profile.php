@@ -271,7 +271,7 @@ function profile_check($fieldid, &$value, $space=array()) {
 	} elseif($field['formtype'] == 'checkbox' || $field['formtype'] == 'list') {
 		$arr = array();
 		foreach ($value as $op) {
-			if(in_array($op, $field['choices'])) {
+			if(in_array(stripslashes($op), $field['choices'])) {
 				$arr[] = $op;
 			}
 		}
@@ -280,7 +280,7 @@ function profile_check($fieldid, &$value, $space=array()) {
 			return false;
 		}
 	} elseif($field['formtype'] == 'radio' || $field['formtype'] == 'select') {
-		if(!in_array($value, $field['choices'])){
+		if(!in_array(stripslashes($value), $field['choices'])){
 			return false;
 		}
 	}

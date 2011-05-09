@@ -44,6 +44,11 @@ class block_groupattachmentpic extends block_groupattachment {
 				),
 				'default' => 0,
 			),
+			'threadmethod' => array(
+				'title' => 'groupattachment_threadmethod',
+				'type' => 'radio',
+				'default' => 0
+			),
 			'gviewperm' => array(
 				'title' => 'groupattachment_gviewperm',
 				'type' => 'mradio',

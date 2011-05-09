@@ -7,6 +7,9 @@
  *      $Id$
  */
 
+@define('IN_API', true);
+@define('CURSCRIPT', 'api');
+
 error_reporting(0);
 
 $code = @$_GET['code'];

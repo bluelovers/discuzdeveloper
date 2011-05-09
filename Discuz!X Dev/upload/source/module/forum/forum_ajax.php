@@ -103,20 +103,20 @@ if($_G['gp_action'] == 'checkusername') {
 
 } elseif($_G['gp_action'] == 'deleteattach') {
 
+	$count = 0;
 	if($_G['gp_aids']) {
 		foreach($_G['gp_aids'] as $aid) {
-			$query = DB::query("SELECT uid, attachment, thumb, remote, aid FROM ".DB::table(getattachtablebyaid($aid))." WHERE aid='$aid' AND uid='$_G[uid]'");
-			if(DB::num_rows($query)) {
+			$attach = DB::fetch_first("SELECT * FROM ".DB::table(getattachtablebyaid($aid))." WHERE aid='$aid'");
+			if($attach && ($attach['pid'] && $attach['pid'] == $_G['gp_pid'] && $_G['uid'] == $attach['uid'] || $_G['forum']['ismoderator'] || !$attach['pid'] && $_G['uid'] == $attach['uid'])) {
 				DB::delete(getattachtablebyaid($aid), "aid='$aid'");
 				DB::delete('forum_attachment', "aid='$aid'");
-			}
-			while($attach = DB::fetch($query)) {
 				dunlink($attach);
+				$count++;
 			}
 		}
 	}
 	include template('common/header_ajax');
-	echo count($_G['gp_aids']);
+	echo $count;
 	include template('common/footer_ajax');
 	dexit();
 
@@ -284,6 +284,7 @@ if($_G['gp_action'] == 'checkusername') {
 		$todaytime = strtotime(dgmdate(TIMESTAMP, 'Ymd'));
 		$query = DB::query("SELECT * FROM ".DB::table('forum_thread')." WHERE fid = '$fid' AND displayorder = 0 AND lastpost > '$time'  AND lastpost < '".TIMESTAMP."' ORDER BY lastpost DESC LIMIT 100");
 		while($thread = DB::fetch($query)) {
+			$thread['subject'] = addslashes($thread['subject']);
 			$thread['dateline'] = $thread['dateline'] > $todaytime ? "<span class=\"xi1\">".dgmdate($thread['dateline'], 'd')."</span>" : "<span>".dgmdate($thread['dateline'], 'd')."</span>";
 			$thread['lastpost'] = dgmdate($thread['lastpost']);
 			if($forum_field['threadtypes']['prefix']) {
@@ -294,20 +295,20 @@ if($_G['gp_action'] == 'checkusername') {
 				}
 			}
 			if($forum_field['threadsorts']['prefix']) {
-				$thread['threadsort'] = $forum_field['threadsorts']['types'][$thread['sortid']] ? '<em>[<a href="forum.php?mod=forumdisplay&fid='.$fid.'&filter=sortid&typeid='.$thread['sortid'].'">'.$forum_field['threadsorts']['types'][$thread['sortid']].'</a>]</em> ' : '' ;
+				$thread['threadsort'] = $forum_field['threadsorts']['types'][$thread['sortid']] ? '<em>[<a href="forum.php?mod=forumdisplay&fid='.$fid.'&filter=sortid&typeid='.$thread['sortid'].'">'.$forum_field['threadsorts']['types'][$thread['sortid']].'</a>]</em>' : '' ;
 			}
 			if(in_array('forum_viewthread', $_G['setting']['rewritestatus'])) {
 				$thread['threadurl'] = '<a href="'.rewriteoutput('forum_viewthread', 1, '', $thread['tid'], 1, '', '').'" class="xst" onclick="atarget(this)">'.$thread['subject'].'</a>';
 			} else {
 				$thread['threadurl'] = '<a href="forum.php?mod=viewthread&amp;tid='.$thread['tid'].'" class="xst" onclick="atarget(this)">'.$thread['subject'].'</a>';
 			}
-			$thread['threadurl'] = $thread['threadsort'].$thread['threadtype'].$thread['threadurl'];
+			$thread['threadurl'] = $thread['threadtype'].$thread['threadsort'].$thread['threadurl'];
 			if(in_array('home_space', $_G['setting']['rewritestatus'])) {
 				$thread['authorurl'] = '<a href="'.rewriteoutput('home_space', 1, '', $thread['authorid'], '', '').'">'.$thread['author'].'</a>';
-				$thread['lastposterurl'] = '<a href="'.rewriteoutput('home_space', 1, '', '', $thread['lastposter'], '').'">'.$thread['lastposter'].'</a>';
+				$thread['lastposterurl'] = '<a href="'.rewriteoutput('home_space', 1, '', '', rawurlencode($thread['lastposter']), '').'">'.$thread['lastposter'].'</a>';
 			} else {
 				$thread['authorurl'] = '<a href="home.php?mod=space&uid='.$thread['authorid'].'">'.$thread['author'].'</a>';
-				$thread['lastposterurl'] = '<a href="home.php?mod=space&username='.$thread['lastposter'].'">'.$thread['lastposter'].'</a>';
+				$thread['lastposterurl'] = '<a href="home.php?mod=space&username='.rawurlencode($thread['lastposter']).'">'.$thread['lastposter'].'</a>';
 			}
 			$threadlist[] = $thread;
 		}
@@ -319,7 +320,7 @@ if($_G['gp_action'] == 'checkusername') {
 	}
 } elseif($_G['gp_action'] == 'downremoteimg') {
 	$_G['gp_message'] = dstripslashes($_G['gp_message']);
-	$_G['gp_message'] = str_replace(array("\r", "\n", "\r\n"), '', $_G['gp_message']);
+	$_G['gp_message'] = str_replace(array("\r", "\n"), array($_G['gp_wysiwyg'] ? '<br />' : '', "\\n"), $_G['gp_message']);
 	preg_match_all("/\[img\]\s*([^\[\<\r\n]+?)\s*\[\/img\]|\[img=\d{1,4}[x|\,]\d{1,4}\]\s*([^\[\<\r\n]+?)\s*\[\/img\]/is", $_G['gp_message'], $image1, PREG_SET_ORDER);
 	preg_match_all("/\<img.+src=('|\"|)?(.*)(\\1)([\s].*)?\>/ismUe", $_G['gp_message'], $image2, PREG_SET_ORDER);
 	$temp = $aids = $existentimg = array();
@@ -427,7 +428,7 @@ if($_G['gp_action'] == 'checkusername') {
 			ftpupload($aids);
 		}
 		$_G['gp_message'] = str_replace($imagereplace['oldimageurl'], $imagereplace['newimageurl'], $_G['gp_message']);
-		$_G['gp_message'] = addcslashes($_G['gp_message'], '/"\\');
+		$_G['gp_message'] = addcslashes($_G['gp_message'], '/"');
 
 	}
 	print <<<EOF

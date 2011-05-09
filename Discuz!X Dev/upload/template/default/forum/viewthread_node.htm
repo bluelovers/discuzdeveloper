@@ -21,51 +21,44 @@
 					<div class="authi"><a href="home.php?mod=space&uid=$post['authorid']" target="_blank" class="xw1">$post[author]</a>$authorverifys</div>
 				</div>
 			<!--{/if}-->
-		<div class="p_pop blk bui" id="userinfo$post[pid]" style="display: none; {if $_G['setting']['authoronleft']}margin-top: -11px;{/if}">
-			<div class="m z">
-				<div id="userinfo$post[pid]_ma"></div>
-				<ul>
-					<!--{if $post[authorid] != $_G[uid]}-->
-						<li class="callon"><a href="home.php?mod=space&uid=$post[authorid]" target="_blank" title="{lang visit_friend}" class="xi2">{lang visit_friend}</a></li>
-						<li class="pm2"><a href="home.php?mod=spacecp&ac=pm&op=showmsg&handlekey=showmsg_$post[authorid]&touid=$post[authorid]&pmid=0&daterange=2&pid=$post[pid]&tid=$post[tid]" onclick="hideMenu('userinfo$post[pid]');showWindow('sendpm', this.href)" title="{lang send_pm}" class="xi2">{lang send_pm}</a></li>
-						<li class="buddy"><a href="home.php?mod=spacecp&ac=friend&op=add&uid=$post[authorid]&handlekey=addfriendhk_{$post[authorid]}" id="a_friend_li_{$post[pid]}" onclick="hideMenu('userinfo$post[pid]');showWindow(this.id, this.href, 'get', 1, {'ctrlid':this.id,'pos':'00'});" title="{lang add_to_buddylist}" class="xi2">{lang add_to_buddylist}</a></li>
-					<!--{/if}-->
-				</ul>
-				<!--{hook/viewthread_profileside $postcount}-->
-			</div>
-			<div class="i y">
-				<div>
-					<strong><a href="home.php?mod=space&uid=$post[authorid]" target="_blank" class="xi2">$post[author]</a></strong>
-					<!--{if $_G['setting']['vtonlinestatus'] && $post['authorid']}-->
-						<!--{if ($_G['setting']['vtonlinestatus'] == 2 && $_G[forum_onlineauthors][$post[authorid]]) || ($_G['setting']['vtonlinestatus'] == 1 && (TIMESTAMP - $post['lastactivity'] <= 10800) && !$post['authorinvisible'])}-->
-							<em>{lang online}</em>
-						<!--{else}-->
-							<em>{lang offline}</em>
-						<!--{/if}-->
-					<!--{/if}-->
+			<div class="p_pop blk bui" id="userinfo$post[pid]" style="display: none; {if $_G['setting']['authoronleft']}margin-top: -11px;{/if}">
+				<div class="m z">
+					<div id="userinfo$post[pid]_ma"></div>
+					<!--{hook/viewthread_profileside $postcount}-->
 				</div>
-				<dl class="cl">{$post[custominfo][menu]}</dl>
-				<div class="imicn">
-					<!--{if $post['qq']}--><a href="http://wpa.qq.com/msgrd?V=1&Uin=$post[qq]&Site=$_G['setting']['bbname']&Menu=yes" target="_blank" title="QQ"><img src="{IMGDIR}/qq.gif" alt="QQ" /></a><!--{/if}-->
-					<!--{if $post['icq']}--><a href="http://wwp.icq.com/scripts/search.dll?to=$post[icq]" target="_blank" title="ICQ"><img src="{IMGDIR}/icq.gif" alt="ICQ" /></a><!--{/if}-->
-					<!--{if $post['yahoo']}--><a href="http://edit.yahoo.com/config/send_webmesg?.target=$post[yahoo]&.src=pg" target="_blank" title="Yahoo"><img src="{IMGDIR}/yahoo.gif" alt="Yahoo!"  /></a><!--{/if}-->
-					<!--{if $post['taobao']}--><a href="javascript:;" onclick="window.open('http://amos.im.alisoft.com/msg.aw?v=2&uid='+encodeURIComponent('$post[taobaoas]')+'&site=cntaobao&s=2&charset=utf-8')" title="{lang taobao}"><img src="{IMGDIR}/taobao.gif" alt="{lang taobao}" /></a><!--{/if}-->
-					<!--{if $post['site']}--><a href="$post[site]" target="_blank" title="{lang member_homepage}"><img src="{IMGDIR}/forumlink.gif" alt="{lang member_homepage}" /></a><!--{/if}-->
-					<a href="home.php?mod=space&uid=$post[authorid]&do=profile" target="_blank" title="{lang member_viewpro}"><img src="{IMGDIR}/userinfo.gif" alt="{lang member_viewpro}" /></a>
-					<!--{hook/viewthread_imicons $postcount}-->
-					<!--{if $_G['setting']['magicstatus']}-->
-						<!--{if !empty($_G['setting']['magics']['showip'])}-->
-							<a href="home.php?mod=magic&mid=showip&idtype=user&id={echo rawurlencode($post[author])}" id="a_showip_li_{$post[pid]}" class="xi2" onclick="showWindow(this.id, this.href)"><img src="{STATICURL}/image/magic/showip.small.gif" alt="" /> $_G['setting']['magics']['showip']</a>
+				<div class="i y">
+					<div>
+						<strong><a href="home.php?mod=space&uid=$post[authorid]" target="_blank" class="xi2">$post[author]</a></strong>
+						<!--{if $_G['setting']['vtonlinestatus'] && $post['authorid']}-->
+							<!--{if ($_G['setting']['vtonlinestatus'] == 2 && $_G[forum_onlineauthors][$post[authorid]]) || ($_G['setting']['vtonlinestatus'] == 1 && (TIMESTAMP - $post['lastactivity'] <= 10800) && !$post['authorinvisible'])}-->
+								<em>{lang online}</em>
+							<!--{else}-->
+								<em>{lang offline}</em>
+							<!--{/if}-->
 						<!--{/if}-->
-						<!--{if !empty($_G['setting']['magics']['checkonline']) && $post['authorid'] != $_G['uid']}-->
-							<a href="home.php?mod=magic&mid=checkonline&idtype=user&id={echo rawurlencode($post[author])}" id="a_repent_$post[pid]" class="xi2" onclick="showWindow(this.id, this.href)"><img src="{STATICURL}/image/magic/checkonline.small.gif" alt="" /> $_G['setting']['magics']['checkonline']</a>
+					</div>
+					<dl class="cl">{$post[custominfo][menu]}</dl>
+					<div class="imicn">
+						<!--{if $post['qq'] && !$post['privacy']['profile']['qq']}--><a href="http://wpa.qq.com/msgrd?V=1&Uin=$post[qq]&Site=$_G['setting']['bbname']&Menu=yes" target="_blank" title="QQ"><img src="{IMGDIR}/qq.gif" alt="QQ" /></a><!--{/if}-->
+						<!--{if $post['icq'] && !$post['privacy']['profile']['icq']}--><a href="http://wwp.icq.com/scripts/search.dll?to=$post[icq]" target="_blank" title="ICQ"><img src="{IMGDIR}/icq.gif" alt="ICQ" /></a><!--{/if}-->
+						<!--{if $post['yahoo'] && !$post['privacy']['profile']['yahoo']}--><a href="http://edit.yahoo.com/config/send_webmesg?.target=$post[yahoo]&.src=pg" target="_blank" title="Yahoo"><img src="{IMGDIR}/yahoo.gif" alt="Yahoo!"  /></a><!--{/if}-->
+						<!--{if $post['taobao'] && !$post['privacy']['profile']['taobao']}--><a href="javascript:;" onclick="window.open('http://amos.im.alisoft.com/msg.aw?v=2&uid='+encodeURIComponent('$post[taobaoas]')+'&site=cntaobao&s=2&charset=utf-8')" title="{lang taobao}"><img src="{IMGDIR}/taobao.gif" alt="{lang taobao}" /></a><!--{/if}-->
+						<!--{if $post['site'] && !$post['privacy']['profile']['site']}--><a href="$post[site]" target="_blank" title="{lang member_homepage}"><img src="{IMGDIR}/forumlink.gif" alt="{lang member_homepage}" /></a><!--{/if}-->
+						<a href="home.php?mod=space&uid=$post[authorid]&do=profile" target="_blank" title="{lang member_viewpro}"><img src="{IMGDIR}/userinfo.gif" alt="{lang member_viewpro}" /></a>
+						<!--{hook/viewthread_imicons $postcount}-->
+						<!--{if $_G['setting']['magicstatus']}-->
+							<!--{if !empty($_G['setting']['magics']['showip'])}-->
+								<a href="home.php?mod=magic&mid=showip&idtype=user&id={echo rawurlencode($post[author])}" id="a_showip_li_{$post[pid]}" class="xi2" onclick="showWindow(this.id, this.href)"><img src="{STATICURL}/image/magic/showip.small.gif" alt="" /> $_G['setting']['magics']['showip']</a>
+							<!--{/if}-->
+							<!--{if !empty($_G['setting']['magics']['checkonline']) && $post['authorid'] != $_G['uid']}-->
+								<a href="home.php?mod=magic&mid=checkonline&idtype=user&id={echo rawurlencode($post[author])}" id="a_repent_$post[pid]" class="xi2" onclick="showWindow(this.id, this.href)"><img src="{STATICURL}/image/magic/checkonline.small.gif" alt="" /> $_G['setting']['magics']['checkonline']</a>
+							<!--{/if}-->
+							<!--{hook/viewthread_magic_user $postcount}-->
 						<!--{/if}-->
-						<!--{hook/viewthread_magic_user $postcount}-->
-					<!--{/if}-->
+					</div>
+					<div id="avatarfeed"><span id="threadsortswait"></span></div>
 				</div>
-				<div id="avatarfeed"><span id="threadsortswait"></span></div>
 			</div>
-		</div>
 		<!--{/if}-->
 		<!--{if $post['authorid'] && $post['username'] && !$post['anonymous']}-->
 			<div>
@@ -79,17 +72,31 @@
 			<p><em><a href="home.php?mod=spacecp&ac=usergroup&gid=$post[groupid]" target="_blank">{$post[authortitle]}</a></em></p>
 			<!--{if $post['customstatus'] && $_G['group']['allowcstatus']}--><p class="xg1">$post[customstatus]</p><!--{/if}-->
 			</div>
-			<p{if $post['upgradecredit'] !== false} onmouseover="showTip(this)" tip="$post['authortitle'], {lang credits} $post['credits'], {lang thread_groupupgrade} $post['upgradecredit'] {lang credits}"{/if}><!--{eval showstars($post['stars']);}--></p>
+			<p{if $post['upgradecredit'] !== false} id="g_up$post[pid]" onmouseover="showMenu({'ctrlid':this.id, 'pos':'12!'});"{/if}><!--{eval showstars($post['stars']);}--></p>
+			<!--{if $post['upgradecredit'] !== false}-->
+				<div id="g_up$post[pid]_menu" class="tip tip_4" style="display: none;">
+					<div class="tip_horn"></div>
+					<div class="tip_c">$post['authortitle'], {lang credits} $post['credits'], {lang thread_groupupgrade} $post['upgradecredit'] {lang credits}</div>
+				</div>
+			<!--{/if}-->
 			<!--{hook/viewthread_sidetop $postcount}-->
 			<!--{if $post[custominfo][left]}--><dl class="pil cl">{$post[custominfo][left]}</dl><!--{/if}-->
 			<!--{if $post['medals']}-->
 				<p class="md_ctrl">
 					<a href="home.php?mod=medal">
 						<!--{loop $post['medals'] $medal}-->
-						<img id="md_{$post[pid]}_{$medal[medalid]}" src="{STATICURL}image/common/$medal[image]" alt="$medal[name]" title="" onmouseover="showMenu({'ctrlid':this.id, 'menuid':'md_$medal[medalid]_menu', 'pos':'43!'});" />
+						<img id="md_{$post[pid]}_{$medal[medalid]}" src="{STATICURL}image/common/$medal[image]" alt="$medal[name]" title="" onmouseover="showMenu({'ctrlid':this.id, 'menuid':'md_$medal[medalid]_menu', 'pos':'12!'});" />
 						<!--{/loop}-->
 					</a>
 				</p>
+			<!--{/if}-->
+			<!--{if $post[authorid] != $_G[uid]}-->
+				<ul class="xl xl2 o cl">
+					<li class="callon"><a href="home.php?mod=space&uid=$post[authorid]" target="_blank" title="{lang viewthread_left_tospace}" class="xi2">{lang viewthread_left_tospace}</a></li>
+					<li class="buddy"><a href="home.php?mod=spacecp&ac=friend&op=add&uid=$post[authorid]&handlekey=addfriendhk_{$post[authorid]}" id="a_friend_li_{$post[pid]}" onclick="showWindow(this.id, this.href, 'get', 1, {'ctrlid':this.id,'pos':'00'});" title="{lang viewthread_left_addfriend}" class="xi2">{lang viewthread_left_addfriend}</a></li>
+					<li class="poke2"><a href="home.php?mod=spacecp&ac=poke&op=send&uid=$post[authorid]" id="a_poke_li_{$post[pid]}" onclick="showWindow(this.id, this.href, 'get', 0);" title="{lang viewthread_left_poke}" class="xi2">{lang viewthread_left_poke}</a></li>
+					<li class="pm2"><a href="home.php?mod=spacecp&ac=pm&op=showmsg&handlekey=showmsg_$post[authorid]&touid=$post[authorid]&pmid=0&daterange=2&pid=$post[pid]&tid=$post[tid]" onclick="showWindow('sendpm', this.href);" title="{lang viewthread_left_sendpm}" class="xi2">{lang viewthread_left_sendpm}</a></li>
+				</ul>
 			<!--{/if}-->
 			<!--{hook/viewthread_sidebottom $postcount}-->
 		<!--{else}-->
@@ -126,14 +133,17 @@
 		<div class="pi">
 			<!--{if !IS_ROBOT}-->
 				<!--{if !$postcount && !$_G['forum_thread']['archiveid'] && $post['first'] }-->
-					<div id="fj" class="y pns">
+					<div id="fj" class="y">
 						<label class="z">{lang thread_redirect_postno}</label>
-						<input type="text" class="px p_free z" size="2" onkeyup="$('fj_btn').href='forum.php?mod=redirect&ptid=$_G[tid]&authorid=$_G[gp_authorid]&postno='+this.value" onkeydown="if(event.keyCode==13) {window.location=$('fj_btn').href;return false;}" title="{lang thread_redirect_postno_tips}" />
+						<input type="text" class="px p_fre z" size="2" onkeyup="$('fj_btn').href='forum.php?mod=redirect&ptid=$_G[tid]&authorid=$_G[gp_authorid]&postno='+this.value" onkeydown="if(event.keyCode==13) {window.location=$('fj_btn').href;return false;}" title="{lang thread_redirect_postno_tips}" />
 						<a id="fj_btn" class="z" href="javascript:;" title="{lang thread_redirect_postno_tips}">go</a>
 					</div>
 				<!--{/if}-->
+				<!--{if $post['warned']}-->
+					<a href="forum.php?mod=misc&action=viewwarning&tid=$_G[tid]&uid=$post[authorid]" title="{lang warn_get}" class="y" onclick="showWindow('viewwarning', this.href)"><img src="{IMGDIR}/warning.gif" alt="{lang warn_get}" /></a>
+				<!--{/if}-->
 				<strong>
-					<a href="{$_G[siteurl]}{if $post[first]}forum.php?mod=viewthread&tid=$_G[tid]$fromuid{else}forum.php?mod=redirect&goto=findpost&ptid=$_G[tid]&pid=$post[pid]$fromuid{/if}" title="{lang share_url_copy}" id="postnum$post[pid]" onclick="setCopy(this.href, '{lang post_copied}');return false;"><!--{if !empty($postno[$post[number]])}-->$postno[$post[number]]<!--{else}--><em>{$post[number]}</em>{$postno[0]}<!--{/if}--></a>
+					<a href="{$_G[siteurl]}{if $post[first]}forum.php?mod=viewthread&tid=$_G[tid]$fromuid{else}forum.php?mod=redirect&goto=findpost&ptid=$_G[tid]&pid=$post[pid]$fromuid{/if}" title="{lang share_url_copy_comment}" id="postnum$post[pid]" onclick="setCopy(this.href, '{lang post_copied}');return false;"><!--{if !empty($postno[$post[number]])}-->$postno[$post[number]]<!--{else}--><em>{$post[number]}</em>{$postno[0]}<!--{/if}--></a>
 				</strong>
 			<!--{/if}-->
 			<div class="pti">
@@ -164,9 +174,9 @@
 				<!--{if $post['authorid'] && !$post['anonymous']}-->
 					<!--{if !$_G['setting']['authoronleft']}--><a href="home.php?mod=space&uid=$post[authorid]" target="_blank" class="xi2">$post[author]</a>$authorverifys<!--{/if}-->
 					<em id="authorposton$post[pid]">{lang poston} $post[dateline]</em>
-                    <!--{if $post['status'] & 8}-->
-                		<span class="xg1"><!--{if $_G['setting']['mobile']['mobilecomefrom']}-->{$_G['setting']['mobile']['mobilecomefrom']}<!--{else}-->{lang from_mobile}<!--{/if}--></span>
-                	<!--{/if}-->
+					<!--{if $post['status'] & 8}-->
+						<span class="xg1"><!--{if $_G['setting']['mobile']['mobilecomefrom']}-->{$_G['setting']['mobile']['mobilecomefrom']}<!--{else}-->{lang from_mobile}<!--{/if}--></span>
+					<!--{/if}-->
 					<!--{if $post['invisible'] == 0}-->
 						<!--{if !IS_ROBOT && !$_G['gp_authorid'] && !$_G['forum_thread']['archiveid']}-->
 							<span class="pipe">|</span><a href="forum.php?mod=viewthread&tid=$post[tid]&page=$page&authorid=$post[authorid]" rel="nofollow">{lang thread_show_author}</a>
@@ -195,9 +205,9 @@
 					<!--{if $thread['authorid'] == $_G['uid']}-->
 						<span class="pipe">|</span>
 						<!--{if $replynotice == 1}-->
-							<a id="replynotice" href="forum.php?mod=misc&action=replynotice&op=ignore&tid=$_G[tid]" onclick="ajaxmenu(this, 3000, 0, 0, '43', function () {replyNotice(1);});return false;">{lang ignore_replynotice}</a>
+							<a id="replynotice" href="forum.php?mod=misc&action=replynotice&op=ignore&tid=$_G[tid]" status="1" onclick="ajaxmenu(this, 3000, 0, 0, '43', function () {replyNotice();});return false;">{lang ignore_replynotice}</a>
 						<!--{else}-->
-							<a id="replynotice" href="forum.php?mod=misc&action=replynotice&op=receive&tid=$_G[tid]" onclick="ajaxmenu(this, 3000, 0, 0, '43', function () {replyNotice(0);});return false;">{lang receive_replynotice}</a>
+							<a id="replynotice" href="forum.php?mod=misc&action=replynotice&op=receive&tid=$_G[tid]" status="0" onclick="ajaxmenu(this, 3000, 0, 0, '43', function () {replyNotice();});return false;">{lang receive_replynotice}</a>
 						<!--{/if}-->
 					<!--{/if}-->
 				<!--{/if}-->
@@ -206,30 +216,7 @@
 			</div>
 		</div>
 
-		<!--{if $post['first']}-->
-			<!--{if $post[tags] || $relatedkeywords}-->
-				<div class="ptg bbda mbm">
-					<!--{if $post[tags]}-->
-						<!--{eval $tagi = 0;}-->
-						<!--{loop $post[tags] $var}-->
-							<!--{if $tagi}-->, <!--{/if}--><a title="$var[1]" href="misc.php?mod=tag&id=$var[0]" target="_blank">$var[1]</a>
-							<!--{eval $tagi++;}-->
-						<!--{/loop}-->
-					<!--{/if}-->
-					<!--{if $relatedkeywords}--><span>$relatedkeywords</span><!--{/if}-->
-				</div>
-			<!--{/if}-->
-		<!--{/if}-->
-
 		<!--{ad ad_a_pr/thread/a_pr/3/$postcount}-->
-
-		<!--{if !$post['first'] && $post['replycredit'] > 0}-->
-        	<div class="cm">
-            	<h3 class="psth xs1">
-                	{lang replycredit} <span class="xw1 xs2 xi1">+{$post['replycredit']}</span> {$_G['setting']['extcredits'][$_G['forum_thread']['replycredit_rule']['extcreditstype']][unit]}{$_G['setting']['extcredits'][$_G['forum_thread']['replycredit_rule']['extcreditstype']][title]}
-                </h3>
-            </div>
-        <!--{/if}-->
 
 		<div class="pct">
 			<!--{ad/thread/a_pt/2/$postcount}-->
@@ -240,8 +227,29 @@
 				<!--{/if}-->
 			<!--{/if}-->
 
+			<!--{if !$post['first'] && $post['replycredit'] > 0}-->
+				<div class="cm">
+					<h3 class="psth xs1">
+						{lang replycredit} <span class="xw1 xs2 xi1">+{$post['replycredit']}</span> {$_G['setting']['extcredits'][$_G['forum_thread']['replycredit_rule']['extcreditstype']][unit]}{$_G['setting']['extcredits'][$_G['forum_thread']['replycredit_rule']['extcreditstype']][title]}
+					</h3>
+				</div>
+			<!--{/if}-->
+
 			<!--{subtemplate forum/viewthread_node_body}-->
 		</div>
+
+		<!--{if $post['first'] && ($post[tags] || $relatedkeywords)}-->
+			<div class="ptg mbm">
+				<!--{if $post[tags]}-->
+					<!--{eval $tagi = 0;}-->
+					<!--{loop $post[tags] $var}-->
+						<!--{if $tagi}-->, <!--{/if}--><a title="$var[1]" href="misc.php?mod=tag&id=$var[0]" target="_blank">$var[1]</a>
+						<!--{eval $tagi++;}-->
+					<!--{/loop}-->
+				<!--{/if}-->
+				<!--{if $relatedkeywords}--><span>$relatedkeywords</span><!--{/if}-->
+			</div>
+		<!--{/if}-->
 	</td></tr>
 	<tr><td class="plc plm">
 		<!--{if !IS_ROBOT && $post['first'] && !$_G['forum_thread']['archiveid']}-->
@@ -249,7 +257,12 @@
 
 		<!--{if $post['invisible'] == 0}-->
 		<div id="p_btn" class="mtw mbm cl">
-			<!--{hook/viewthread_useraction_prefix}-->
+			<!--{if !empty($_G['setting']['pluginhooks']['viewthread_share_method'])}-->
+				<div class="tshare cl">
+					<strong>{lang viewthread_share_to}:</strong>
+					<!--{hook/viewthread_share_method}-->
+				</div>
+			<!--{/if}-->
 			<!--{if $_G['setting']['homestatus']}-->
 				<a href="home.php?mod=spacecp&ac=share&type=thread&id=$_G[tid]" id="k_share" onclick="showWindow(this.id, this.href, 'get', 0);" onmouseover="this.title = $('sharenumber').innerHTML + ' {lang activity_member_unit}{lang thread_share}'"><i><img src="{IMGDIR}/oshr.png" alt="{lang thread_share}" />{lang thread_share}<span id="sharenumber">{$_G['forum_thread']['sharetimes']}</span></i></a>
 			<!--{/if}-->
@@ -274,7 +287,7 @@
 				<h3 class="pbm mbm bbda">{lang related_thread}</h3>
 				<ul class="xl xl2 cl">
 					<!--{loop $post['relateitem'] $var}-->
-					<li>&#8226; <a title="$var[subject]" href="forum.php?mod=viewthread&tid=$var[tid]" target="_blank">$var[subject]</a></li>
+					<li>&#8226; <a href="forum.php?mod=viewthread&tid=$var[tid]" title="$var[subject]" target="_blank">$var[subject]</a></li>
 					<!--{/loop}-->
 				</ul>
 			</div>
@@ -378,7 +391,7 @@
 						<!--{/if}-->
 						<!--{hook/viewthread_magic_thread}-->
 					<!--{/if}-->
-					<!--{if !empty($_G['setting']['magics']['repent']) && $post['authorid'] == $_G['uid']}-->
+					<!--{if !empty($_G['setting']['magics']['repent']) && $post['authorid'] == $_G['uid'] && !$rushreply}-->
 						<li><a href="home.php?mod=magic&mid=repent&idtype=pid&id=$post[pid]:$_G[tid]" id="a_repent_$post[pid]" onclick="showWindow(this.id, this.href)"><img src="{STATICURL}image/magic/bump.small.gif" />$_G['setting']['magics']['repent']</a></li>
 					<!--{/if}-->
 					<!--{if !empty($_G['setting']['magics']['anonymouspost']) && $post['authorid'] == $_G['uid']}-->

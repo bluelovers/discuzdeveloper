@@ -11,6 +11,7 @@ define('IN_ADMINCP', TRUE);
 define('NOROBOT', TRUE);
 define('ADMINSCRIPT', basename(__FILE__));
 define('CURSCRIPT', 'admin');
+define('HOOKTYPE', 'hookscript');
 define('APPTYPEID', 0);
 
 

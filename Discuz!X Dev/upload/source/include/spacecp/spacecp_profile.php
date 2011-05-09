@@ -50,6 +50,8 @@ if($_G['setting']['regverify'] == 2 && $_G['groupid'] == 8) {
 	$validate = DB::fetch_first("SELECT * FROM ".DB::table('common_member_validate')." WHERE uid='$_G[uid]' AND status='1'");
 }
 
+$conisregister = $operation == 'password' && $_G['setting']['connect']['allow'] && DB::result_first("SELECT conisregister FROM ".DB::table('common_member_connect')." WHERE uid='$_G[uid]'");
+
 if(submitcheck('profilesubmit')) {
 
 	require_once libfile('function/discuzcode');
@@ -157,9 +159,9 @@ if(submitcheck('profilesubmit')) {
 	if($_G['gp_deletefile'] && is_array($_G['gp_deletefile'])) {
 		foreach($_G['gp_deletefile'] as $key => $value) {
 			if(isset($_G['cache']['profilesetting'][$key])) {
-			@unlink(getglobal('setting/attachdir').'./profile/'.$space[$key]);
-			@unlink(getglobal('setting/attachdir').'./profile/'.$verifyinfo['field'][$key]);
-			$verifyarr[$key] = $setarr[$key] = '';
+				@unlink(getglobal('setting/attachdir').'./profile/'.$space[$key]);
+				@unlink(getglobal('setting/attachdir').'./profile/'.$verifyinfo['field'][$key]);
+				$verifyarr[$key] = $setarr[$key] = '';
 			}
 		}
 	}
@@ -272,7 +274,7 @@ if(submitcheck('profilesubmit')) {
 	$setarr = array();
 	$emailnew = dhtmlspecialchars($_G['gp_emailnew']);
 	$ignorepassword = 0;
-	if($_G['setting']['connect']['allow'] && $_G['member']['conisregister']) {
+	if($_G['setting']['connect']['allow'] && DB::result_first("SELECT conisregister FROM ".DB::table('common_member_connect')." WHERE uid='$_G[uid]'")) {
 		$_G['gp_oldpassword'] = '';
 		$ignorepassword = 1;
 	}
@@ -282,6 +284,7 @@ if(submitcheck('profilesubmit')) {
 	} else {
 		$secquesnew = $_G['gp_questionidnew'] > 0 ? random(8) : '';
 	}
+
 	if(!empty($_G['gp_newpassword']) && $_G['gp_newpassword'] != $_G['gp_newpassword2']) {
 		showmessage('profile_passwd_notmatch', '', array(), array('return' => true));
 	}
@@ -301,7 +304,9 @@ if(submitcheck('profilesubmit')) {
 	if(!empty($_G['gp_newpassword']) || $secquesnew) {
 		$setarr['password'] = md5(random(10));
 	}
-	$setarr['conisregister'] = 0;
+	if($_G['setting']['connect']['allow']) {
+		DB::update('common_member_connect', array('conisregister' => 0), array('uid' => $_G['uid']));
+	}
 
 	$authstr = false;
 	if($emailnew != $_G['member']['email']) {

@@ -289,6 +289,9 @@ EOT;
 		list($y, $m, $d) = explode("-", $_GET['cleardateline']);
 		$_GET['step'] = $_GET['step'] ? $_GET['step'] : 1;
 		$cleardateline = $_GET['cleardateline'] && $y && $m ? mktime(23, 59, 59, $m, $d, $y) : 0 ;
+		if($cleardateline < TIMESTAMP) {
+			cpmsg('card_make_cleardateline_early', '', 'error');
+		}
 		if(!$_GET['rule']) {
 			cpmsg('card_make_rule_empty', '', 'error');
 		}

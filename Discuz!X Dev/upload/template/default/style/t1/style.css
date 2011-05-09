@@ -7,14 +7,17 @@ Powered by Discuz! X
 html { background: #FAF6ED url(background.png); }
 body { background: transparent url(bgimg.jpg) no-repeat 50% 0; }
 #nv { background-color: #BA350F; background-image: url(nv.png); }
-	#nv li { background-image: url(nv_a.png) !important; }
-	#nv li.a { background: #840000 url(nv_a.png) no-repeat 50% 100%; }
+	#nv li, #nv li a:hover, #nv li.hover a, #nv li.hover a:hover { background-image: url(nv_a.png) !important; }
+	#nv li.a { background-color: #840000; }
 	#qmenu { background-image: url(qmenu.png); }
+#scbar, #scbar_form, .scbar_icon_td, .scbar_txt_td, .scbar_type_td, .scbar_btn_td { background-image: url(search.png); }
+#scbar { border-color: #FCC; }
 
+.bm_h, .tl th, .tl td { border-bottom-color: #CDCDCD; }
 .fl .bm_h { border-color: #FCC; background: #FFECEC url(titlebg.png) repeat-x 0 0; }
 
 /* 重定义 {SPECIALBG} */
-.bmn, .bm_h, .pn, td.pls, .ad td.plc, div.exfm, .tb a, .tb_h, .ttp li.a a, div.uo a, input#addsubmit_btn, #gh .bm .bm_h, .appnew, .apphot { background-color: #FFECEC; }
+.bmn, .bm_h, td.pls, .ad td.plc, div.exfm, .tb a, .tb_h, .ttp li.a a, div.uo a, input#addsubmit_btn, #gh .bm .bm_h, .appnew, .apphot { background-color: #FFECEC; }
 
 .ct2_a, .ct3_a { background-image: url(vlineb.png); }
 .tbn li.a { background: #FAF6ED url(background.png); }
@@ -55,4 +58,9 @@ body { background: transparent url(bgimg.jpg) no-repeat 50% 0; }
 .bdl dd.bdl_a a { color: #BA350F; }
 
 /* 重定义下拉菜单 */
-.p_pop a:hover, .p_pop a.a, #sctype_menu .sca { background-color: #D22121; background-image: url(pope_bg.png); text-shadow: -1px -1px 0 #BA350F; }
+.p_pop a { border-bottom-color: #FFECEC; }
+	.p_pop a:hover, .p_pop a.a, #sctype_menu .sca { background-color: #FFECEC; color: #BA350F; }
+	.blk a:hover { background-color: transparent; }
+
+/* 重定义好友列表 */
+#nv_home .buddy li { background-color: transparent; border: none; }

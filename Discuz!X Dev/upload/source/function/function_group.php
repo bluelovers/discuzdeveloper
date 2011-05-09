@@ -430,6 +430,7 @@ function update_groupmoderators($fid) {
 }
 
 function update_usergroups($uids) {
+	global $_G;
 	if(empty($uids)) return '';
 	if(!is_array($uids)) $uids = array($uids);
 	foreach($uids as $uid) {
@@ -449,9 +450,24 @@ function update_usergroups($uids) {
 			$usergroups = array('groups' => $groups, 'grouptype' => $grouptype);
 			if(!empty($usergroups)) {
 				DB::query("UPDATE ".DB::table('common_member_field_forum')." SET groups='".addslashes(serialize($usergroups))."' WHERE uid='$uid'");
+				$attentiongroups = DB::result_first("SELECT attentiongroup FROM ".DB::table('common_member_field_forum')." WHERE uid='$uid'");
+				if($attentiongroups) {
+					$attentiongroups = explode(',', $attentiongroups);
+					$updateattention = 0;
+					foreach($attentiongroups as $key => $val) {
+						if(empty($usergroups['groups'][$val])) {
+							unset($attentiongroups[$key]);
+							$updateattention = 1;
+						}
+					}
+					if($updateattention) {
+						DB::query("UPDATE ".DB::table('common_member_field_forum')." SET attentiongroup='".implode(',', $attentiongroups)."' WHERE uid='$uid'");
+						$_G['member']['attentiongroup'] = implode(',', $attentiongroups);
+					}
+				}
 			}
 		} else {
-			DB::query("UPDATE ".DB::table('common_member_field_forum')." SET groups='' WHERE uid='$uid'");
+			DB::query("UPDATE ".DB::table('common_member_field_forum')." SET groups='', attentiongroup='' WHERE uid='$uid'");
 		}
 	}
 	return $usergroups;

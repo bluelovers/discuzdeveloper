@@ -10,7 +10,6 @@
  */
 
 $lang = array (
-
   'accept_invitation' => '接受邀请',
   'and_play_together' => '，并一起玩',
   'become_friend' => '<p>成为好友后，你们就可以一起讨论话题，及时关注对方的更新，还可以玩有趣的游戏 $userapp[appname] ……</p>
@@ -28,21 +27,15 @@ $lang = array (
   'somebody_friends' => '的好友',
   'want_to_register' => '我要注册',
   'welcome' => '欢迎您，',
-
   'add' => '添加',
   'add_friend_max_10' => '添加好友(最多 10 个)',
   'sent_following_friends' => '已给下列好友发送通知',
-
   'no_redbag_space' => '没有探测到任何有红包的空间',
-
   'done_doodle_notice' => '涂鸦完成记得点"保存"',
-
   'modified_time' => '修改时间',
-
   'credits_per_part' => '每份积分',
   'credits_type' => '积分类型',
   'hide_credits' => '埋设积分',
-
   'friends_space_message_following' => '已在下列好友空间留言',
   'poke_1' => '踩一下',
   'poke_10' => '电一下',
@@ -71,16 +64,13 @@ $lang = array (
   'visitmsg_4' => '我又来了',
   'visitmsg_5' => '好漂亮的空间啊',
   'visitmsg_6' => '最近在忙什么呢',
-
   'credits' => '积分',
   'experience' => '经验',
   'you_chance_pre_week' => '本周期内，您还有 $rule[cyclenum] 次机会',
-
   'close' => '关闭',
   'enter_password' => '您需要正确输入密码后才能继续查看：',
   'password_authentication' => '密码验证',
   'submit' => '提交',
-
   'basic_data' => '基础数据',
   'comprehensive_overview' => '综合概况',
   'comprehensive_overview_message' => '这里看到的是站点的综合概况发展统计(需要至少统计 2 天后才有效)',
@@ -97,7 +87,6 @@ $lang = array (
   'stat_merge_statistic' => '合并统计',
   'stat_message' => '站点趋势统计系统，会记录站点每日的发展概况。通过每日的趋势变化，为站长运营站点提供科学的数据基础 ',
   'trends_and_statistics' => '趋势统计',
-
   'a_file' => '个文件',
   'aim_album' => '上传到:',
   'album_name' => '相册名',
@@ -153,10 +142,8 @@ $lang = array (
   'uploading_message' => '个文件等待上传,正在上传第',
   'ver_message_1' => '程序需 FlashPlayer 9.0.45 以上版本您的播放器版本为',
   'ver_message_2' => '请升级',
-
   'my_dear_friend' => '亲爱的朋友',
   'system_email_not_replay' => '此邮件为系统自动发出的邮件，请勿直接回复 ',
-
   'activity' => '活动',
   'all_friends' => '全部好友',
   'create_new_activity' => '发起新活动',
@@ -183,7 +170,6 @@ $lang = array (
   'two' => '二',
   'view_all' => '随便看看',
   'week' => '星期',
-
   'album' => '相册',
   'default_album' => '默认相册',
   'doing_record_list' => '结果列表',
@@ -206,7 +192,6 @@ $lang = array (
   'they_album' => 'TA 的所有相册',
   'update' => '更新',
   'upload_pic' => '上传图片',
-
   'add_frame' => '加相框',
   'cancel_frame' => '取消相框',
   'comment' => '评论',
@@ -231,7 +216,6 @@ $lang = array (
   'start_playing' => '幻灯播放',
   'stop_playing' => '停止播放',
   'upload_at' => '上传于',
-
   'album_pics' => '张图片',
   'favorite' => '收藏',
   'next_album' => '下一组',
@@ -240,7 +224,6 @@ $lang = array (
   'switch_pics' => '其它相册',
   'system_cat' => '系统分类',
   'total' => '共',
-
   'all_blogs' => '全部日志',
   'blog' => '日志',
   'blog_read' => '次阅读',
@@ -259,7 +242,6 @@ $lang = array (
   'somebody_blog' => '的日志',
   'stick' => '置顶',
   'they_blog' => 'TA 的所有日志',
-
   'all' => '全部',
   'article_push' => '生成文章',
   'author_newest_blog' => '作者的其他最新日志',
@@ -270,7 +252,6 @@ $lang = array (
   'popular_blog_review' => '热门日志导读',
   'use_magic_tools' => '使用道具',
   'view_blog' => '查看日志',
-
   'add_friend' => '加为好友',
   'connect_me' => '给我留言',
   'diy_space' => '装扮空间',
@@ -286,14 +267,11 @@ $lang = array (
   'user_ban' => '禁止用户',
   'user_edit' => '编辑用户',
   'view_message' => '查看留言',
-
   'anonymity' => '匿名',
   'person' => '人',
   'position_friend' => '刚表态过的朋友',
-
   'moderate_not_validate' => '审核未通过',
   'reply' => '回复',
-
   'accessory' => '附件',
   'affirm' => '正方',
   'affirm_votes' => '正方观点',
@@ -321,7 +299,6 @@ $lang = array (
   'top_debate' => '热门辩论',
   'view_by_friend' => '按好友查看',
   'win' => '获胜',
-
   'diy_add_block' => '添加模块',
   'diy_block' => '模块',
   'diy_dress' => '自定义装扮',
@@ -332,7 +309,6 @@ $lang = array (
   'diy_start' => '开始',
   'diy_style' => '风格',
   'do_it_yourself' => '自定义',
-
   'doing' => '记录',
   'doing_enter_keywords' => '请输入搜索关键字',
   'doing_no_replay' => '现在还没有记录',
@@ -346,11 +322,9 @@ $lang = array (
   'me_friend_doing' => '我和好友的记录',
   'search' => '搜索',
   'somebody_doing' => '的记录',
-
   'doing_maxlimit_char' => '还可输入 <strong id="maxlimit">200</strong> 个字符',
   'doing_update_personal_signature' => '同步到个人签名',
   'publish' => '发布',
-
   'closed' => '已关闭',
   'credit_rating' => '信用评价',
   'draft' => '草稿箱',
@@ -371,7 +345,6 @@ $lang = array (
   'recyclebin' => '回收站',
   'regdate' => '注册时间',
   'taobao' => '阿里旺旺',
-
   'del_favorite' => '删除选中收藏',
   'del_select_favorite_confirm' => '确定要删除选中的收藏吗？',
   'favorite_album' => '相册',
@@ -383,7 +356,6 @@ $lang = array (
   'favorite_thread' => '帖子',
   'no_favorite_yet' => '您还没有添加任何收藏',
   'select_all' => '全选',
-
   'click_play' => '点击播放',
   'click_view' => '点击查看',
   'delete_feed' => '删除动态',
@@ -392,7 +364,6 @@ $lang = array (
   'menu' => '菜单',
   'other_participants' => '其他参与者',
   'shield_feed' => '屏蔽动态',
-
   'add_blacklist' => '添加黑名单用户',
   'all_friend_list' => '全部好友列表',
   'blacklist_message' => '加入到黑名单的用户，将会从您的好友列表中删除。同时，对方将不能进行与您相关的打招呼、踩日志、加好友、评论、留言、短消息等互动行为 ',
@@ -431,12 +402,12 @@ $lang = array (
   'trace_list' => '您曾经拜访过的用户列表',
   'username' => '用户名',
   'view_online_friend' => '显示当前全部在线的用户',
+  'view_profile' => '查看资料',
+  'visit_friend' => '去串个门',
   'visitor_list' => '他们拜访过您，回访一下吧',
   'volume_group' => '批量分组',
-
   'friend_request' => '好友请求',
   'people_might_know' => '可能认识的人',
-
   'copy' => '复制',
   'copy_space_address' => '空间地址复制成功',
   'dress_space' => '装扮空间',
@@ -445,13 +416,11 @@ $lang = array (
   'return_homepage' => '返回首页',
   'somebody_space' => '的个人空间',
   'visit_my_space' => '访问我的空间',
-
   'feed' => '动态',
   'main_page' => '空间首页',
   'memcp_profile' => '个人资料',
   'message_board' => '留言板',
   'topic' => '主题',
-
   'depending_your' => '根据您的',
   'filter_settings' => '筛选设置',
   'fix_profile' => '点此完善',
@@ -499,19 +468,14 @@ $lang = array (
   'what_everybody_playing' => '大家在玩什么',
   'what_friend_playing' => '好友在玩什么',
   'yesterday' => '昨天',
-
   'credit_num' => '积分数',
   'no_members_of' => '没有相关成员',
   'profile_certified' => '已认证',
   'video_certification' => '视频认证',
-  'view_profile' => '查看资料',
-  'visit_friend' => '去串个门',
-
   'magics_log' => '道具记录',
   'magics_shop' => '道具商店',
   'magics_tips' => '道具系统已关闭，仅管理员可以正常使用',
   'magics_user' => '我的道具',
-
   'data_nonexistence' => '暂无数据',
   'magics_amount_buy' => '购买数量',
   'magics_amount_present' => '赠送数量',
@@ -532,12 +496,10 @@ $lang = array (
   'magics_target_present' => '赠送给',
   'magics_target_receive' => '赠送人',
   'magics_target_use' => '使用对象',
-
   'magics_capacity' => '我的道具包容量',
   'magics_num' => '数量',
   'magics_operation_use' => '使用',
   'magics_user_totalnum' => '总重量',
-
   'magics_confirm' => '确认该操作',
   'magics_outofperoid_1' => '今天',
   'magics_outofperoid_2' => '本周',
@@ -550,7 +512,6 @@ $lang = array (
   'magics_select' => '选择道具',
   'magics_weight' => '重量',
   'recycling_prices' => '回收价',
-
   'buy_credits' => '充值',
   'credit_exchange' => '积分兑换',
   'default' => '默认',
@@ -558,14 +519,12 @@ $lang = array (
   'sold' => '已售出',
   'top' => '热门',
   'you_have_now' => '目前有',
-
   'magics_discountprice' => '折扣价',
   'magics_permission_no' => '您无权使用此道具',
   'magics_yourcredit' => '我目前有{$_G[setting][extcredits][$magic[credit]][title]}',
   'memcp_usergroups_buy' => '购买',
   'my_magic_volume' => '我的道具包可用容量',
   'stock' => '库存',
-
   'days' => '天',
   'expire' => '有效期',
   'medals_apply' => '申请',
@@ -588,7 +547,6 @@ $lang = array (
   'medals_type_1' => '自主申请',
   'medals_type_2' => '人工审核',
   'my_medals' => '我的勋章',
-
   'all_applications_news' => '全部应用消息',
   'applications_news' => '应用消息',
   'ignore_invitations_application' => '忽略该应用的所有邀请',
@@ -607,7 +565,6 @@ $lang = array (
   'request' => '请求',
   'successfully_ignored_information' => '成功忽略了该条应用消息',
   'view_old_notice' => '点此查看已读提醒',
-
   'announce_pm' => '公共消息',
   'appendchatpmmember' => '加入新的成员',
   'appendchatpmmember_comment' => '加入新的成员',
@@ -646,16 +603,17 @@ $lang = array (
   'quit_chatpm_comment' => '退出该群聊话题',
   'refresh' => '刷新',
   'say' => '说',
+  'select_friend' => '选择好友',
+  'selectfromfriendlist' => '从好友列表中选择',
   'send' => '发送',
   'sendmultipmsystem' => '这是由系统发送的多人消息',
   'sendmultipmwho' => '这是由 <a href="home.php?mod=space&uid=$grouppm[authorid]" class="xi2" target="_blank">$grouppm[author]</a> 发送的多人消息',
+  'sendpm_tip' => '多个用户使用逗号、分号或回车提示系统分开',
   'view_newpm' => '点击这里查看未读的私人消息',
   'view_privatepm' => '查看全部私人消息',
   'yes' => '是',
   'you_to' => '对',
-
   'pmreport' => '举报',
-
   'create_new_poll' => '发起新投票',
   'friend_poll' => '好友发起的投票',
   'hide_poll' => '本页有 $hiddennum 个投票因隐私问题而隐藏',
@@ -669,7 +627,6 @@ $lang = array (
   'they_poll' => 'TA 的所有投票',
   'to_poll' => '去投票',
   'top_poll' => '热门投票',
-
   'active_profile' => '活跃概况',
   'albums_num' => '相册数',
   'become_friend_message' => '请加入到我的好友中，您就可以了解我的近况，与我一起交流，随时与我保持联系 ',
@@ -733,7 +690,6 @@ $lang = array (
 		\'12\' => \'(GMT +12:00) 奥克兰, 惠灵顿, 斐济, 马绍尔群岛\'',
   'used_space' => '已用空间',
   'view_friend_list' => '查看好友列表',
-
   'email_status' => '邮箱状态',
   'group_useful_life' => '有效期至',
   'hours' => '小时',
@@ -749,7 +705,6 @@ $lang = array (
   'spacenote' => '最新记录',
   'stat_info' => '统计信息',
   'view_certification_photos' => '查看认证照片',
-
   'friend_reward' => '好友发布的悬赏',
   'has_been_resolved' => '已解决',
   'hide_reward' => '本页有 $hiddennum 个悬赏因隐私问题而隐藏',
@@ -764,15 +719,12 @@ $lang = array (
   'they_reward' => 'TA 的所有悬赏',
   'top_reward' => '热门悬赏',
   'unresolved' => '未解决',
-
   'description' => '描述',
   'help' => '帮助',
   'how_to_share_tips' => '<strong>如何分享视频？</strong><br/>填写视频所在网页的网址。(不需要填写视频的真实地址)<br/>我们支持的视频网站有：<br/>Youtube、优酷、酷6、Mofile、偶偶视频、56、新浪视频、搜狐视频。<br/><br/><strong>如何分享音乐？</strong><br/>填写音乐文件的地址。(后缀需要是 mp3 或者 wma)<br/><br/><strong>如何分享 Flash？</strong><br/>填写 Flash 文件的地址。(后缀需要是 swf)',
   'share_description' => '分享说明',
   'share_web_music_flash' => '分享网址、视频、音乐、Flash',
-
   'sharemetoo' => '我也分享',
-
   'friend_share' => '好友的分享',
   'hide_share' => '本页有 $pricount 条分享因未通过审核而隐藏',
   'my_share' => '我的分享',
@@ -792,14 +744,12 @@ $lang = array (
   'share_video' => '视频',
   'somebody_share' => '的分享',
   'they_share' => 'TA 的所有分享',
-
+  'doing_sync' => '同步',
   'no_update_record' => '您还没有更新过心情记录',
   'view_all_my_doings' => '查看我的所有记录',
-
   'task_done' => '已完成的任务',
   'task_failed' => '失败的任务',
   'task_new' => '新任务',
-
   'nothing' => '无',
   'task_admins' => '管理人员',
   'task_applicants' => '已有 $task[applicants] 位会员参与此任务',
@@ -827,13 +777,10 @@ $lang = array (
   'task_relatedtask' => '必须完成指定任务',
   'task_reward' => '奖励',
   'unlimited' => '不限',
-
   'task_applies' => '人气',
   'task_nodoing' => '暂无进行中的任务，请到新任务中申请 ',
   'task_nonew' => '暂无新任务，周期性任务完成后可以再次申请，敬请关注 ',
-
   'member_viewpro' => '查看详细资料',
-
   'author' => '作者',
   'del_select_thread' => '删除选中主题',
   'del_select_thread_confirm' => '确定要删除选中的主题吗？',
@@ -841,6 +788,7 @@ $lang = array (
   'friend_post' => '好友的帖子',
   'group' => '群组',
   'hide_thread' => '本页有 $hiddennum 篇帖子因隐私问题而隐藏',
+  'ignored' => '已忽略',
   'last_post' => '最后发帖',
   'my_post' => '我的帖子',
   'newest_thread' => '最新帖子',
@@ -851,7 +799,6 @@ $lang = array (
   'they_thread' => 'TA 的所有帖子',
   'top_thread' => '热门帖子',
   'trade' => '商品',
-
   'additional' => '附加',
   'buy_trade' => '买家交易',
   'create_new_trade' => '发起新交易',
@@ -886,7 +833,6 @@ $lang = array (
   'trade_trading' => '进行中的',
   'trade_units' => '元',
   'trade_unstart' => '未生效的',
-
   'content_manage' => '内容管理',
   'manage_album' => '管理相册',
   'manage_blog' => '管理日志',
@@ -897,17 +843,14 @@ $lang = array (
   'manage_group_threads' => '群组主题',
   'manage_share' => '管理分享',
   'member_manage' => '用户管理',
-
   'this_is_certification_photo' => '这是已经通过审核的认证照片',
   'video_certification_photo' => '视频认证照片',
   'videophoto' => '视频认证',
-
   'click_view_message' => '点击此处查看全部留言',
   'leave_comments' => '留言',
   'login_to_wall' => '您需要登录后才可以留言',
   'message' => '留言板',
   'view_one_operation_message' => '当前只显示与您操作相关的单个留言',
-
   'adjust_hot' => '调整热度',
   'album_cover_notice' => '提示：您可以指定一张图片作为当前相册的封面图片，但是，在下次上传新的图片后，系统会自动选择一张新图片来更新本相册的封面图片 ',
   'album_depict' => '相册描述',
@@ -937,12 +880,10 @@ $lang = array (
   'the_album_pic' => '该相册中的图片',
   'update_explain' => '更新说明',
   'view_album' => '查看相册',
-
   'current_my_space' => '当前我的头像',
   'setting_avatar_message' => '如果您还没有设置自己的头像，系统会显示为默认头像，您需要自己上传一张新照片来作为自己的个人头像 ',
   'setting_my_new_avatar' => '设置我的新头像',
   'setting_my_new_avatar_message' => '请选择一个新照片进行上传编辑。<br />头像保存后，您可能需要刷新一下本页面(按F5键)，才能查看最新的头像效果 ',
-
   'auto_keyword' => '自动获取',
   'cancel_stick_blog' => '取消置顶日志',
   'change_default_settings' => '更改默认配置',
@@ -972,17 +913,14 @@ $lang = array (
   'sure_cancel_stick_blog' => '确定要取消置顶指定的日志吗？',
   'sure_delete_blog' => '确定删除指定的日志吗？',
   'sure_stick_blog' => '确定置顶指定的日志吗？',
-
   'delete_category' => '删除分类',
   'delete_category_message' => '确定删除指定的分类吗？',
   'modify_category' => '修改分类',
   'new_category_name' => '新分类名',
-
   'content' => '内容',
   'delete_reply' => '删除回复',
   'delete_reply_message' => '确定删除指定的回复吗？',
   'edit_content' => '编辑内容',
-
   'bid_single_price' => '竞价单价',
   'modify_unitprice' => '修改竞价单价',
   'modify_unitprice_note' => '竞价单价决定您在竞价排行中的排名，单价越高，您的排名越靠前。站上会员访问一次您的个人主页将从您的竞价总额中扣除相应的竞价值 ',
@@ -990,7 +928,6 @@ $lang = array (
   'shield_all_friend' => '屏蔽所有好友的',
   'shield_notice' => '屏蔽通知',
   'shield_this_friend' => '仅屏蔽该好友的',
-
   'credits_give' => '给',
   'memcp_credits_addfunds' => '充值',
   'memcp_credits_addfunds_msg' => '您将要充值$extcredits[$creditstrans][title] $_G[gp_addfundamount] $extcredits[$fromcredits][unit]，所需人民币 $price 元<br />请选择支付方式：',
@@ -1001,7 +938,6 @@ $lang = array (
   'memcp_credits_password' => '请输入登录密码',
   'memcp_credits_transfer' => '转账',
   'memcp_credits_transfer_user' => '您要转账',
-
   'action_name' => '动作名称',
   'activity_award_message' => '进行以下事件动作，会得到积分奖励。不过，在一个周期内，您最多得到的奖励次数有限制 ',
   'card' => '充值卡',
@@ -1035,13 +971,11 @@ $lang = array (
   'transfer_login_password' => '登录密码',
   'unlimited_time' => '不限次数',
   'viewmore' => '查看更多',
-
   'credit_rule' => '积分规则',
   'credit_rule_global' => '全局规则',
   'exchange_credits' => '兑换',
   'my_credits' => '我的积分',
   'transfer_credits' => '转帐',
-
   'credit_change' => '积分变更',
   'credit_income' => '收支',
   'credit_income_0' => '不限',
@@ -1057,18 +991,14 @@ $lang = array (
   'srch' => '查询',
   'starttime_endtime' => '时间范围',
   'total_time' => '总次数',
-
   'delete_log' => '删除记录',
   'determine_delete_doing' => '确定删除该记录吗？',
   'spacecp_doing_message1' => '还可输入',
   'spacecp_doing_message2' => '个字符',
-
   'edit_domain' => '修改域名',
   'edit_domain_message' => '修改域名将需要支付积分 $consume，您现在有拥有 $credits',
   'space_domain_message' => '域名可使用最少 $domainlength 个 ，最多 30 个的字母或数字组合，且必须字母开头 ',
-
   'eccredit_needexplanation' => '我要解释',
-
   'eccredit_content' => '评价内容',
   'eccredit_explanation' => '解释',
   'eccredit_explanationexpiration' => '您可以在 $comment[expiration] 之前作出解释',
@@ -1081,7 +1011,6 @@ $lang = array (
   'eccredit_s' => '的',
   'eccredit_tradeprice' => '成交价',
   'from' => '来自',
-
   'eccredit' => '信用评价',
   'eccredit_bad_comment' => '(扣1分)',
   'eccredit_good_comment' => '(加1分)',
@@ -1089,15 +1018,12 @@ $lang = array (
   'eccredit_retee' => '被评价人',
   'eccredit_soso_comment' => '(不加分)',
   'eccredit_tradegoods' => '相关商品',
-
   'delete_favorite' => '取消收藏',
   'delete_favorite_message' => '您确定要删除此收藏吗？',
   'favorite_count' => '已有 <b>$fav_count</b> 人收藏',
   'favorite_description' => '收藏说明',
-
   'determine_delete_feed' => '确定删除该动态吗？',
   'next_visit_not_view_feed' => '在下次浏览时不再显示此类动态',
-
   'memcp_credit' => '积分',
   'memcp_privacy' => '隐私筛选',
   'memcp_promotion' => '访问推广',
@@ -1105,7 +1031,6 @@ $lang = array (
   'memcp_usergroup' => '用户组',
   'memcp_verify' => '认证',
   'password_security' => '密码安全',
-
   'add_friend_note' => '为好友，附言',
   'adjust_friend_hot' => '调整好友的热度',
   'approval' => '批准',
@@ -1117,6 +1042,7 @@ $lang = array (
   'confirm_applications' => '批准申请',
   'determine_ignore_all_friends_application' => '确定要忽略所有的好友申请吗？',
   'determine_lgnore_friend' => '确定忽略好友关系吗？',
+  'find_know_nofound' => '暂时没有可能认识的人',
   'friend_friend_might_know' => '他们是您的好友的好友，您也可能认识',
   'friend_group' => '分组',
   'friend_group_hot_message' => '对选定的好友进行分组，热度表示的是您跟好友互动的次数 ',
@@ -1145,7 +1071,6 @@ $lang = array (
   'you_have_common_friends' => '你们目前有 {eval echo count($list)} 位共同的好友',
   'you_have_no_common_friends' => '你们目前还没有共同的好友',
   'your_common_friends' => '查看你们的共同好友',
-
   'add_music' => '添加音乐',
   'album_cover_documents_address' => '唱片集封面和文件地址',
   'auto_run' => '自动',
@@ -1223,7 +1148,6 @@ $lang = array (
   'upload_new_pic' => '上传新图片',
   'upload_start' => '开始上传',
   'vertical_repeat' => '纵向平铺',
-
   'add_from_address_book' => '从地址簿添加',
   'click_link_become_friend' => '请您点击以下链接，接受好友邀请',
   'click_link_copy' => '点击下面的链接可直接复制 (邀请链接和邀请码作用相同，可随意选择其一。)',
@@ -1263,13 +1187,11 @@ $lang = array (
   'sure_resend' => '确定重新发送邀请邮件吗？',
   'you_get' => '您自己可获得',
   'you_have' => '您现在拥有',
-
   'cancel_effects_message' => '您确定要取消道具 $_G[setting][magics][flicker] 的效果吗？',
   'cancel_magics_effects' => '取消道具效果',
   'return_redbag' => '回收红包',
   'spacecp_magic_message1' => '您确定要回收红包吗？',
   'spacecp_magic_message2' => '剩余',
-
   'confirm_new_password' => '确认新密码',
   'login_username' => '登录用户名',
   'modify_password' => '修改密码',
@@ -1277,7 +1199,6 @@ $lang = array (
   'my_login_password' => '我的登录密码',
   'new_password' => '新密码',
   'old_password' => '旧密码',
-
   'addressee' => '收件人',
   'back_mailbox' => '返回消息列表',
   'chat_type' => '群聊',
@@ -1298,15 +1219,11 @@ $lang = array (
   'pm_kickmember' => '踢出',
   'pm_report' => '短消息举报',
   'quit' => '退出',
-  'selectfromfriendlist' => '从好友列表中选择',
-  'sendpm_tip' => '多个用户使用空格、逗号或回车提示系统分开',
   'shield_the_user' => '确定屏蔽该用户吗？',
   'taking_with_user' => '正在与{$msguser}聊天中……',
   'title' => '标题',
   'view_with_sb_chat' => '查看与{$msguser}的聊天记录',
   'visit_sb_space' => '访问{$msguser}的空间',
-  'select_friend' => '选择好友',
-
   'back_to_say_hello' => '回打招呼',
   'determine_lgnore_poke' => '确定忽略招呼吗？',
   'ignore_all' => '全部忽略',
@@ -1320,9 +1237,7 @@ $lang = array (
   'see_all_poke' => '查看所有招呼',
   'to' => '向',
   'you_can_reply_ignore' => '您可以回复招呼或者进行忽略',
-
   'poke_0' => '不用动作',
-
   'add_share' => '添加分享',
   'allow' => '允许 ',
   'ban' => '禁止',
@@ -1372,7 +1287,6 @@ $lang = array (
   'view_right_setting_effective' => '相关浏览权限需要在每篇日志中单独设置方可完全生效',
   'write_blog' => '撰写日志',
   'you_control_see_content' => '您可以完全控制哪些人可以看到您的主页上面的内容',
-
   'check_date_item' => '请检查该资料项',
   'current_time' => '当前时间',
   'email' => 'Email',
@@ -1397,8 +1311,8 @@ $lang = array (
   'security_question_5' => '您个人计算机的型号',
   'security_question_6' => '您最喜欢的餐馆名称',
   'security_question_7' => '驾驶执照最后四位数字',
-  'spacecp_profile_message1' => '以下信息通过审核后将不能再次修改,提交后请耐心等待核查 ',
-  'spacecp_profile_message2' => '恭喜您，您的认证审核已经通过,下面的资料项已经不允许被修改 ',
+  'spacecp_profile_message1' => '以下信息通过审核后将不能再次修改，提交后请耐心等待核查 ',
+  'spacecp_profile_message2' => '恭喜您，您的认证审核已经通过，下面的资料项已经不允许被修改 ',
   'time_zone' => '时区',
   'time_zone_message' => '如果发现当前显示的时间与您本地时间相差几个小时，那么您需要更改自己的时区设置 ',
   'update_date_success' => '资料更新成功',
@@ -1406,16 +1320,16 @@ $lang = array (
   'validator_message' => '注册原因',
   'validator_remark' => '否决原因',
   'validator_submit' => '重新提交申请',
-
   'space_domain' => '我的空间域名',
-
-  'post_promotion' => '如果您的朋友通过下面任意一个链接访问站点并注册新会员，您将获得相应积分奖励',
-  'post_promotion_reg' => '如果您的朋友不但访问并且注册成为会员，您将再获得相应积分奖励',
-  'post_promotion_url' => '如果您的朋友通过下面任意一个链接访问站点，您将获相应积分奖励',
+  'mode_one' => '方式一：',
+  'mode_two' => '方式二：',
+  'mode_two_desc' => '通过点击帖子标题旁的“复制链接”，推广成功后也可以获得积分奖励 &nbsp; <a href="forum.php" class="xi2">去推广帖子&raquo;</a>',
+  'post_promotion' => '如果您的朋友通过下面任意一个链接访问站点并注册新会员，您将获得积分奖励 <span class="xi1">$regstr</span>',
+  'post_promotion_reg' => '如果您的朋友不但访问并且注册成为会员，您将再获得积分奖励 <span class="xi1">$regstr</span>',
+  'post_promotion_url' => '如果您的朋友通过下面任意一个链接访问站点，您将获得积分奖励 <span class="xi1">$visitstr</span>',
   'post_promotion_url1' => '推广链接1',
   'post_promotion_url2' => '推广链接2',
   'promotion_url_copied' => '推广链接复制成功',
-
   'advance_seek' => '高级方式查找',
   'age_segment' => '年龄段',
   'birth_city' => '出生地',
@@ -1440,7 +1354,6 @@ $lang = array (
   'uploaded_avatar' => '已经上传头像',
   'user_id' => '用戶 UID',
   'year' => '年',
-
   'activate_mailbox_first' => '您首先需要激活您的邮箱',
   'activate_mailbox_message' => '填写您常用的邮箱，系统会给您的邮箱发送一封含有激活链接的邮件，把激活链接复制到浏览器进行访问就可以激活您的邮箱,然后您就能可以设置邮件提醒 ',
   'click_activate_mailbox' => '点这里发送验证激活邮件',
@@ -1479,7 +1392,6 @@ $lang = array (
   'send_once_per_day' => '每天发送一次',
   'send_once_per_week' => '每周发送一次',
   'send_real_time' => '实时发送',
-
   'comment_add_inonetime' => '同时作为评论发表',
   'delete_share' => '删除分享',
   'delete_share_message' => '确定删除指定的分享吗？',
@@ -1487,10 +1399,8 @@ $lang = array (
   'share_copylink' => '地址复制成功<br />您可以用快捷键 Ctrl + V 粘贴到 QQ、MSN 里',
   'share_count' => '已有 <b>$share_count</b> 人分享',
   'share_im' => '通过 QQ、MSN 分享给朋友',
-
   'hide_app' => '隐藏应用',
   'hide_app_message' => '确定要隐藏该应用吗？',
-
   'add_to_existing_album' => '添加到现有相册',
   'back_to_my_album' => '返回我的相册',
   'bulk_upload' => '批量上传',
@@ -1502,7 +1412,6 @@ $lang = array (
   'select_upload_pic' => '请选择要上传的图片',
   'upload_pic_tips' => '<p>从电脑中选择您要上传的图片。<br />提示：选择一张图片后，您可以继续选择下一张图片，这样就可以一次上传多张图片了 </p>',
   'you_can_buy_magictools' => '您可以购买道具“{$_G[setting][magics][attachsize]}”来增加附件容量，上传更多的附件',
-
   'about_space' => '家园相关',
   'bytes' => '字节',
   'forum_name' => '版块名称',
@@ -1548,12 +1457,10 @@ $lang = array (
   'usergroup_right_message3' => '表示必须拥有指定的认证',
   'youhave' => '您目前有',
   'yourusergroup' => '当前用户组',
-
   'my' => '我的',
   'my_usergroups' => '我的用户组',
   'rights' => '权限',
   'usergroups_joinbuy' => '购买用户组',
-
   'for_video_authentication' => '申请视频认证',
   'my_video_photo' => '我的视频认证照片',
   'video_auth_message_1' => '以下是您认证的视频照片。如果站长允许重复认证，您可以<a href="userapp.php?mod=app&id=1036584">重新进入视频认证程序 ',

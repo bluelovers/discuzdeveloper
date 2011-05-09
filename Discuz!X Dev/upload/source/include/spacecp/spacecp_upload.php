@@ -70,7 +70,7 @@ if(submitcheck('albumsubmit')) {
 		$setarr['friend'] = $_POST['friend'];
 		$setarr['password'] = $_POST['password'];
 		$setarr['target_ids'] = $_POST['target_ids'];
-		$setarr['depict'] = $_POST['depict'];
+		$setarr['depict'] = dhtmlspecialchars($_POST['depict']);
 
 		$albumid = DB::insert('home_album', $setarr, 1);
 
@@ -183,7 +183,7 @@ if(submitcheck('albumsubmit')) {
 		space_merge($space, 'count');
 		space_merge($space, 'field_home');
 		$maxspacesize = $maxspacesize + $space['addsize'] * 1024 * 1024;
-		$haveattachsize = formatsize($maxspacesize - $space['attachsize']);
+		$haveattachsize = ($maxspacesize < $space['attachsize'] ? '-':'').formatsize($maxspacesize - $space['attachsize']);
 	} else {
 		$haveattachsize = 0;
 	}

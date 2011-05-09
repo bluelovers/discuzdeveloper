@@ -2,7 +2,7 @@
 	[Discuz!] (C)2001-2009 Comsenz Inc.
 	This is NOT a freeware, use is subject to license terms
 
-	$Id: logging.js 21062 2011-03-14 01:26:10Z monkey $
+	$Id: logging.js 21541 2011-03-31 02:44:01Z monkey $
 */
 
 function lsSubmit(op) {

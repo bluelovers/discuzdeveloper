@@ -280,7 +280,7 @@ EOT;
 		$deletetids = array();
 		$timestamp = TIMESTAMP;
 		$query = DB::query("SELECT tm.tid FROM ".DB::table('forum_threadmod')." tm, ".DB::table('forum_thread')." t
-			WHERE tm.action='DEL' AND tm.dateline<'$timestamp-$_G[gp_days]*86400' AND t.tid=tm.tid AND t.displayorder='-1'");
+			WHERE tm.action='DEL' AND tm.dateline<$timestamp-".(intval($_G['gp_days']) * 86400)." AND t.tid=tm.tid AND t.displayorder='-1'");
 		while($thread = DB::fetch($query)) {
 			$deletetids[] = $thread['tid'];
 		}

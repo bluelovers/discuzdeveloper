@@ -10,7 +10,40 @@
  */
 
 $lang = array (
-
+  'cancel' => '取消',
+  'code' => '纯文本',
+  'e_audio' => '音乐',
+  'e_audio_title' => '添加音乐',
+  'e_autotypeset' => '自动排版',
+  'e_center' => '居中',
+  'e_code_title' => '添加代码文字',
+  'e_flash' => 'Flash',
+  'e_flash_title' => '添加 Flash',
+  'e_font' => '字体',
+  'e_fontname' => '设置字体',
+  'e_fontsize' => '设置文字大小',
+  'e_hr_title' => '分隔线',
+  'e_image_title' => '添加图片',
+  'e_img_height' => '高(可选)',
+  'e_img_inserturl' => '请输入图片地址',
+  'e_img_width' => '宽(可选)',
+  'e_italic' => '文字斜体',
+  'e_left' => '居左',
+  'e_orderedlist' => '排序的列表',
+  'e_paste' => '粘贴',
+  'e_quote_title' => '添加引用文字',
+  'e_removeformat' => '清除文本格式',
+  'e_right' => '居右',
+  'e_size' => '大小',
+  'e_smilies' => '表情',
+  'e_smilies_title' => '添加表情',
+  'e_table' => '添加表格',
+  'e_underline' => '文字加下划线',
+  'e_unlink' => '移除链接',
+  'e_unorderedlist' => '未排序列表',
+  'e_video' => '视频',
+  'e_video_title' => '添加视频',
+  'submit' => '提交',
   'activity_jointime' => '申请时间',
   'activity_member_unit' => '人',
   'activity_new_join' => '已通过',
@@ -18,7 +51,6 @@ $lang = array (
   'activity_self' => '自付',
   'leaveword' => '留言',
   'payment_unit' => '元',
-
   'activity_allow_join' => '允许参加',
   'activity_applylist' => '活动报名者',
   'activity_applylist_manage' => '活动报名者管理',
@@ -38,7 +70,6 @@ $lang = array (
   'status' => '状态',
   'to_improve' => '需完善',
   'views' => '查看',
-
   'activity_already' => '已报名人数',
   'activity_content' => '活动内容',
   'activity_space' => '活动地点',
@@ -49,7 +80,6 @@ $lang = array (
   'gender' => '性别',
   'male' => '男',
   'unlimited' => '不限',
-
   'e_attach_del' => '删除',
   'e_attach_mediacode' => '添加附件媒体播放代码',
   'e_attach_url' => '添加附件地址',
@@ -57,17 +87,14 @@ $lang = array (
   'readperm' => '阅读权限',
   'update' => '更新',
   'upload_msg' => '$attach[filenametitle] {LF}上传日期: $attach[dateline] {LF}文件大小: $attach[attachsize]',
-
   'description' => '描述',
   'save_to_album' => '保存到相册',
-
   'all' => '全部',
   'announcement' => '公告',
   'author' => '作者',
   'month' => '月',
   'open' => '展开',
   'year' => '年',
-
   'attachment' => '附件',
   'buy_all_attch' => '购买所有附件',
   'download' => '下载附件',
@@ -78,12 +105,10 @@ $lang = array (
   'price' => '售价',
   'status_download' => '您所在的用户组可以免费下载',
   'status_insufficient' => '抱歉，您的 {$_G[setting][extcredits][$_G[setting][creditstransextra][1]][title]} 不足，无法下载',
-
   'attachment_buy_not' => '目前没有用户购买此附件',
   'pay_view' => '记录',
   'time' => '时间',
   'username' => '用户名',
-
   'comment_1' => '差',
   'comment_2' => '一般',
   'comment_3' => '还行',
@@ -96,13 +121,11 @@ $lang = array (
   'comments' => '点评',
   'more' => '更多',
   'publish' => '发布',
-
   'delete' => '删除',
   'detail' => '详情',
   'guest' => '游客',
   'poston' => '发表于',
   'reply' => '回复',
-
   'debate_bestdebater' => '最佳辩手',
   'debate_draw' => '平局',
   'debate_list_nonexistence' => '如果不在列表中，请自行填写',
@@ -113,8 +136,6 @@ $lang = array (
   'debate_umpirecomment' => '裁判点评',
   'debate_umpirepoint' => '裁判观点',
   'debate_winner' => '获胜',
-  'submit' => '提交',
-
   'announcements' => '公告',
   'forum_category_modedby' => '分区版主',
   'forum_lastpost' => '最后发表',
@@ -143,7 +164,6 @@ $lang = array (
   'total' => '总计',
   'url_link' => '链接到外部地址',
   'welcome_new_members' => '欢迎新会员',
-
   'attachcredits' => '下载积分',
   'attachment_buy' => '购买',
   'discuzcode_copyclipboard' => '复制代码',
@@ -154,37 +174,8 @@ $lang = array (
   'post_hide_reply_hidden' => '，如果您要查看本帖隐藏内容请<a href="forum.php?mod=post&action=reply&fid=$_G[fid]&tid=$_G[tid]" onclick="showWindow(\'reply\', this.href)">回复</a>',
   'set_cover' => '设为封面',
   'upload' => '上传',
-
-  'cancel' => '取消',
-  'code' => '纯文本',
-  'e_autotypeset' => '自动排版',
-  'e_center' => '居中',
-  'e_code_title' => '添加代码文字',
   'e_editor_loading' => '请稍后 ...',
-  'e_font' => '字体',
   'e_fontbgcolor' => '设置文字背景色',
-  'e_fontname' => '设置字体',
-  'e_fontsize' => '设置文字大小',
-  'e_hr_title' => '分隔线',
-  'e_image_title' => '添加图片',
-  'e_img_height' => '高(可选)',
-  'e_img_inserturl' => '请输入图片地址',
-  'e_img_width' => '宽(可选)',
-  'e_italic' => '文字斜体',
-  'e_left' => '居左',
-  'e_orderedlist' => '排序的列表',
-  'e_paste' => '粘贴',
-  'e_quote_title' => '添加引用文字',
-  'e_removeformat' => '清除文本格式',
-  'e_right' => '居右',
-  'e_size' => '大小',
-  'e_smilies' => '表情',
-  'e_smilies_title' => '添加表情',
-  'e_table' => '添加表格',
-  'e_underline' => '文字加下划线',
-  'e_unlink' => '移除链接',
-  'e_unorderedlist' => '未排序列表',
-
   'attachment_allow_exts' => '可用扩展名',
   'attachment_filenums_tip' => '建议一次上传数量不超过 <strong>20</strong>',
   'attachment_insert_all_attach' => '插入全部附件',
@@ -214,8 +205,8 @@ $lang = array (
   'select_album' => '选择相册',
   'size_no_limit' => '大小不限制',
   'uch_selectfromalbum' => '从我的相册中选择图片',
+  'upload_after_selected' => '选择完文件后请点击“上传”按钮',
   'uploading' => '上传中，请稍候，您可以<a href="javascript:;" onclick="hideMenu()">暂时关闭这个小窗口</a>，上传完成后您会收到通知',
-
   'forum_activeusers' => '正在浏览此版块的会员',
   'forum_archive' => '存档',
   'forum_domain' => '本版域名',
@@ -241,22 +232,22 @@ $lang = array (
   'threads_all' => '全部主题',
   'viewd_threads' => '浏览过的帖子',
   'viewed_forums' => '浏览过的版块',
-
   'e_attach_title' => '添加附件',
   'login_to_post' => '您需要登录后才可以发帖',
   'post_advancemode' => '高级模式',
+  'post_sync_method' => '将此主题同步到',
   'quick_post' => '快速发帖',
   'select_thread_catgory' => '选择主题分类',
-
   'favorite_forums' => '收藏的版块',
   'forum_nav' => '版块导航',
-
   'attach_img' => '图片附件',
+  'closed_thread' => '关闭的主题',
   'digest_posts' => '精华',
   'forum_nothreads' => '本版块或指定的范围内尚无主题',
   'forum_thread' => '版块主题',
   'forum_viewall' => '全部',
   'from' => '来自',
+  'have_newreplies' => '有新回复',
   'heats' => '级热门',
   'last_1_days' => '一天',
   'last_2_days' => '两天',
@@ -296,9 +287,7 @@ $lang = array (
   'thread_type4' => '多版置顶主题',
   'view_thread' => '浏览帖子',
   'view_thread_imagemode' => '图片模式',
-
   'forum_password_require' => '本版块需要密码，您必须在下面输入正确的密码才能浏览这个版块',
-
   'forum_moderate' => '审核',
   'logout' => '退出',
   'mod_error_invalid' => '抱歉，您无此权限',
@@ -315,7 +304,6 @@ $lang = array (
   'mod_option_subject' => '主题管理',
   'modcp_logs' => '管理日志',
   'modcp_report' => '管理举报',
-
   'action' => '操作',
   'delete_check' => '删?',
   'displayorder' => '顺序',
@@ -335,7 +323,6 @@ $lang = array (
   'starttime' => '起始时间',
   'text' => '文字',
   'title' => '标题',
-
   'disabled' => '禁用',
   'discuzcode' => '编辑器代码',
   'enabled' => '可用',
@@ -353,7 +340,6 @@ $lang = array (
   'recommend_moderator' => '推荐人',
   'search_nomatch' => '抱歉，没有找到匹配结果',
   'subject' => '标题',
-
   'forum' => '版块',
   'member' => '会员',
   'mod_access_ban_download' => '禁止下载附件',
@@ -383,7 +369,6 @@ $lang = array (
   'mod_notice_access' => '通常情况下，用户在版块的权限是根据他的用户组决定的，此处您可以限制某个用户在某版块的权限。<br />注意: 看帖是基本权限，一旦禁止, 其他权限会同时进行禁止。<br />图例说明: <img src="static/image/common/access_normal.gif" class="vm" /> 默认权限&nbsp;&nbsp;&nbsp;&nbsp;<img src="static/image/common/access_disallow.gif" class="vm" /> 强制禁止&nbsp;&nbsp;&nbsp;&nbsp;<img src="static/image/common/access_allow.gif" class="vm" />强制允许 ',
   'moderator' => '版主',
   'search' => '搜索',
-
   'admin' => '论坛管理员',
   'days' => '天',
   'expire' => '有效期',
@@ -392,14 +377,12 @@ $lang = array (
   'modcp_home_adminnote_to' => '留言给',
   'modcp_home_message_list' => '留言列表',
   'supermod' => '超级版主',
-
   'keyword' => '关键字',
   'modcp_logs_action' => '操作',
   'modcp_logs_list_1' => '日志列表',
   'modcp_logs_other' => '其他',
   'modcp_logs_perpage' => '每页显示条数',
   'modcp_logs_search' => '查找',
-
   'add_new' => '新增:',
   'avatar_del' => '删除头像',
   'bio' => '自我介绍',
@@ -430,7 +413,6 @@ $lang = array (
   'reason' => '理由',
   'signature' => '个人签名',
   'valid_before' => '有效期至',
-
   'ignore' => '忽略',
   'invalidate' => '否决',
   'mod_message_moderate_nopermission' => '抱歉，您没有管理任何版块的权限，无法执行此操作',
@@ -461,14 +443,12 @@ $lang = array (
   'pass' => '通过',
   'table_branch' => '分表：',
   'validate' => '通过',
-
   'mod_moderate_member' => '审核用户',
   'mod_moderate_member_sendemail' => '发 Email 通知被审核用户',
   'mod_moderate_nonexistence' => '抱歉，您没有选择任何内容，请返回',
   'mod_moderate_reason' => '操作理由[可选]',
   'mod_moderate_reply' => '审核回复',
   'mod_moderate_thread' => '审核主题',
-
   'anonymous' => '匿名',
   'mod_option_selectforum' => '版块选择',
   'mod_option_subject_delete' => '帖子管理',
@@ -495,7 +475,6 @@ $lang = array (
   'modcp_posts_week_2' => '您只能操作最近 2 周的帖子',
   'modcp_select_forum' => '请选择版块',
   'posttable_branch' => '帖子分表:',
-
   'modcp_dateline_range' => '发表时间范围',
   'modcp_forum_select_msg' => '请选择版块进行管理',
   'modcp_no_reply_range' => '多少天内无回复',
@@ -508,11 +487,10 @@ $lang = array (
   'modcp_threadstick_3' => '置顶III',
   'modcp_views_range' => '点击次数范围',
   'thread_stick' => '置顶',
-
   'dateline' => '发布时间',
+  'ishtmlon' => 'HTML帖',
   'no' => '否',
   'yes' => '是',
-
   'modcp_report_content' => '内容',
   'modcp_report_note' => '留言',
   'modcp_report_nothing' => '没有新的举报或没有选择版块',
@@ -524,13 +502,10 @@ $lang = array (
   'modcp_report_reward' => '奖惩',
   'modcp_report_time' => '举报时间',
   'modcp_report_waiting' => '等待处理的举报',
-
   'modcp_thread_search_msg' => '共搜索出结果 <strong>$total</strong> 条',
-
   'pay' => '购买主题',
-
   'pay_nobuyers' => '目前没有用户购买此主题',
-
+  'draftbox' => '草稿箱',
   'edit_save' => '保存',
   'edit_thread' => '编辑帖子',
   'edit_trade' => '编辑商品',
@@ -538,10 +513,11 @@ $lang = array (
   'join_thread' => '参与/回复主题',
   'post_credits_rule' => '本版积分规则',
   'post_message2' => '保存后继续添加下一个商品',
+  'post_message3' => '查看所有草稿',
+  'reply_quote' => '引用',
   'replycredit_revenue' => '税后支付',
   'save_draft' => '保存草稿',
   'trade_add_post' => '添加商品',
-
   'activity_city' => '所在城市',
   'activity_need_member' => '需要人数',
   'activity_starttime_endtime' => '时间范围',
@@ -561,23 +537,18 @@ $lang = array (
   'post_option' => '项',
   'post_topic_image' => '活动图片',
   'user_consumption_money' => '活动参与者需消耗的金钱',
-
   'attachment_limit' => '您今日还能上传',
   'attachment_or' => '或者',
   'attachment_outoflimit' => '今日您已无法上传更多的附件',
   'attachment_sizelimit' => '总大小 <strong>$allowuploadsize</strong> 以内的文件',
   'attachment_unit' => '<strong>$allowuploadnum</strong> 个文件',
-
   'debate_opponent_point' => '反方观点',
   'debate_square_point' => '正方观点',
   'debate_umpire' => '裁判',
   'post_debate_message_1' => '抱歉，请输入正方观点',
   'post_debate_message_2' => '抱歉，请输入反方观点',
-
   'auto_keyword' => '自动获取',
   'choosetag' => '选择标签',
-  'draftbox' => '草稿箱',
-  'post_message3' => '查看所有草稿',
   'post_price_charge_comment' => '主题最多能销售 {$_G[setting][maxchargespan]} 个小时',
   'post_price_comment' => '最高 {$_G[group][maxprice]} {$_G[setting][extcredits][$_G[setting][creditstransextra][1]][unit]}',
   'post_price_free_chargehours' => '，本主题还能销售 $freechargehours 个小时',
@@ -586,7 +557,6 @@ $lang = array (
   'posttag' => '设置主题标签',
   'posttag_comment' => '用逗号或空格隔开多个标签，最多可填写 5 个',
   'recent_use_tag' => '最近使用标签:',
-  'reply_quote' => '引用',
   'replycredit_empty' => '(留空或填 0 为不奖励)',
   'replycredit_however' => '本帖尚有',
   'replycredit_member' => '每人最多可获得',
@@ -602,20 +572,12 @@ $lang = array (
   'rushreply_rewardfloor_comment' => '多楼层用逗号隔开,*号可匹配任意数或空值,如:8,88,*88',
   'rushreply_time' => '抢楼时间:',
   'you_have' => '您有',
-
   'e_attach' => '附件',
-  'e_audio' => '音乐',
-  'e_audio_title' => '添加音乐',
-  'e_flash' => 'Flash',
-  'e_flash_title' => '添加 Flash',
   'e_floatleft' => '左浮动',
   'e_floatright' => '右浮动',
   'e_free' => '添加免费信息',
   'e_hide' => '添加隐藏内容',
-  'e_video' => '视频',
-  'e_video_title' => '添加视频',
   'missed_data' => '您有上次未提交成功的数据',
-
   'approve' => '需审核',
   'attach_delete' => '删除附件',
   'attach_unused' => '个未使用的附件',
@@ -627,10 +589,8 @@ $lang = array (
   'img_use' => '使用图片',
   'modify' => '修改',
   'post_message1' => '添加商品信息，完成后可在本帖中继续添加多个商品',
-
   'addfeed' => '发送动态',
   'auditstatuson' => '通过审核',
-  'del_thread_sure' => '确定要删除该帖子吗？',
   'del_thread_warning' => '删除后无法撤销',
   'disable' => '禁用',
   'hiddenreplies' => '回帖仅作者可见',
@@ -646,13 +606,10 @@ $lang = array (
   'post_stick_thread' => '主题置顶',
   'reward_price_back' => '，返还悬赏费用，不退还手续费',
   'smilies' => '表情',
-
   'nav_forum' => '进入版块',
   'nav_forum_frequently' => '常用版块',
   'post_forum_navigation' => '论坛导航',
-
   'threadtype_option' => '分类信息',
-
   'poll_after_result' => '投票后结果可见',
   'poll_close' => '关闭投票',
   'poll_finish' => '已结束',
@@ -664,7 +621,6 @@ $lang = array (
   'post_poll_options' => '选项',
   'post_poll_overt' => '公开投票参与人',
   'post_single_frame_mode' => '单框模式',
-
   'post_reward_error_message' => '抱歉，请输入悬赏价格',
   'post_reward_message' => '天后如果您仍未设置最佳答案，版主有权代为您选择',
   'post_reward_resolved' => '已解决的悬赏',
@@ -675,7 +631,6 @@ $lang = array (
   'reward_price_overflow' => '售价不能高于 32767',
   'reward_tax_add' => '税后追加',
   'reward_tax_after' => '税后支付',
-
   'five_days' => '5天',
   'half_year' => '半年',
   'maxlength' => '最大长度',
@@ -687,17 +642,9 @@ $lang = array (
   'seven_days' => '7天',
   'threadtype_description' => '发帖说明',
   'threadtype_expiration' => '信息有效期',
-  'threadtype_format_email_invalid' => '邮件地址不正确',
-  'threadtype_format_num_invalid' => '数字填写不正确',
-  'threadtype_maxnum_invalid' => '大于设置最大值',
-  'threadtype_minnum_invalid' => '小于设置最小值',
-  'threadtype_required_invalid' => '必填项目没有填写',
-  'threadtype_required_select_invalid' => '请选择下一级',
-  'threadtype_toolong_invalid' => '填写项目长度过长',
   'three_days' => '3天',
   'three_months' => '3个月',
   'unchangeable' => '不可修改',
-
   'post_current_credit' => '现价积分',
   'post_current_price' => '现价(人民币)',
   'post_goods_error_message_1' => '抱歉，请输入商品名称',
@@ -724,9 +671,7 @@ $lang = array (
   'trade_new' => '全新',
   'trade_old' => '二手',
   'trade_type_transport_physical' => '支付给物流公司',
-
   'postappend' => '补充',
-
   'admin_operation_explain' => '操作说明',
   'admin_pm' => '通知作者',
   'admin_rate' => '评分扣除自身相应积分',
@@ -739,12 +684,7 @@ $lang = array (
   'rate_todayleft' => '今日剩余',
   'thread_removerate' => '撤销评分',
   'user_operation_explain' => '可选评分理由',
-
   'rate_view' => '查看全部评分',
-
-  'share_faild' => '分享失败',
-  'share_succeed' => '分享成功',
-
   'none' => '无',
   'stats' => '站点统计',
   'stats_main' => '基本概况',
@@ -769,13 +709,11 @@ $lang = array (
   'stats_main_topposter' => '今日论坛之星',
   'stats_main_total_posted' => '发帖数',
   'stats_update' => '统计数据已被缓存，上次于 $lastupdate 被更新，下次将于 $nextupdate 进行更新',
-
   'lastvisit' => '上次访问',
   'member_list' => '会员列表',
   'posts' => '帖子',
   'regdate' => '注册日期',
   'uid' => 'UID',
-
   'stats_agent' => '客户软件',
   'stats_browser' => '浏览器',
   'stats_credits_rank' => '积分排行',
@@ -807,11 +745,9 @@ $lang = array (
   'stats_threads_rank' => '主题排行',
   'stats_views' => '流量统计',
   'stats_week' => '星期流量',
-
   'stats_onlinetime' => '在线时间',
   'stats_onlinetime_thismonth' => '本月在线时间排行(小时)',
   'stats_onlinetime_total' => '总在线时间排行(小时)',
-
   'admin_status' => '管理级别',
   'admin_usergroup_title' => '组头衔',
   'hours' => '小时',
@@ -820,17 +756,14 @@ $lang = array (
   'stats_team' => '管理团队',
   'stats_team_admins' => '管理员和超级版主',
   'stats_team_offdays' => '离开天数',
-
   'stats_trade_rank' => '交易排行',
   'trace_number_sort' => '交易数排行',
   'trace_sell_number' => '售出数量',
   'trade_price_sort' => '交易额排行',
   'trade_seller' => '卖家',
   'trade_totalprice' => '总金额',
-
   'none_tag' => '没有相关标签',
   'tag_search' => '搜索结果最多显示 50 个，点击结果链接可直接插入标签',
-
   'admin_bump' => '提升主题',
   'admin_close' => '关闭主题',
   'admin_delthread_confirm' => '您确认要 <strong>删除</strong> 选择的主题么?',
@@ -854,7 +787,6 @@ $lang = array (
   'recommend' => '推荐',
   'thread_highlight' => '高亮',
   'types' => '分类',
-
   'admin_banpost' => '屏蔽',
   'admin_delposts' => '删除选定帖子',
   'admin_merge' => '合并',
@@ -878,10 +810,8 @@ $lang = array (
   'topicadmin_warn_delete' => '解除',
   'topicadmin_warn_nums' => '用户 $warningauthor 已被警告 $authorwarnings 次',
   'topicadmin_warn_prompt' => '{$_G[setting][warningexpiration]} 天内累计被警告 {$_G[setting][warninglimit]} 次，将被自动禁止发帖 {$_G[setting][warningexpiration]} 天',
-
   'admin_ban_this_ip' => '禁止此 IP',
   'admin_user_this_ip' => '此 IP 下用户',
-
   'admin_bump_down' => '提升下沉',
   'admin_openclose' => '关闭打开',
   'admin_select' => '选中',
@@ -889,7 +819,6 @@ $lang = array (
   'minimize' => '最小化',
   'piece' => '篇',
   'topicadmin_recommend_forum' => '推荐到版块',
-
   'post_trade_sticklist' => '推荐商品',
   'post_trade_transport_physical' => '买家收到货物后直接支付给物流公司',
   'trade_additional' => '附加',
@@ -913,7 +842,6 @@ $lang = array (
   'trade_seller_remark' => '备注信息',
   'trade_seller_remark_comment' => '200 字以内',
   'trade_units' => '元',
-
   'save' => '保存',
   'trade_displayorder' => '柜台商品管理',
   'trade_hour' => '小时',
@@ -922,7 +850,6 @@ $lang = array (
   'trade_timeout' => '成交结束',
   'trade_update_stick' => '推荐',
   'trade_update_stickmax' => '您最多可推荐的商品数:',
-
   'attach_nopermission' => '您所在的用户组无法下载或查看附件',
   'eccredit_buyerinfo' => '买家信用',
   'eccredit_sellerinfo' => '卖家信用',
@@ -946,7 +873,6 @@ $lang = array (
   'trade_type_viewthread' => '商品类型',
   'trade_viewtrade' => '查看商品',
   'user_threads' => '查看主题',
-
   'eccredit1' => '评价',
   'eccredit_post_already' => '对方已评',
   'eccredit_post_between' => '双方已评',
@@ -965,7 +891,7 @@ $lang = array (
   'trade_payment_comment' => '(点击下方的“更新交易单”按钮重新计算交易金额)',
   'trade_submit_order' => '更新交易单',
   'trade_transportfee' => '运费',
-
+  'upload_selectfile' => '浏览',
   'have_ignored' => '已忽略',
   'i_want' => '我要',
   'last_thread' => '上一主题',
@@ -999,16 +925,19 @@ $lang = array (
   'modmenu_warn' => '警告',
   'next_thread' => '下一主题',
   'return_forumdisplay' => '返回列表',
+  'share_url_copy' => '复制链接',
+  'share_url_copy_comment' => '您的朋友访问此链接后，您将获得相应的积分奖励',
+  'thread_author' => '楼主',
+  'thread_printable' => '打印',
   'thread_replycredit_tips1' => '回复本帖可获得 {$_G[forum_thread][replycredit_rule][extcredits]} {$_G[setting][extcredits][$_G[forum_thread][replycredit_rule][extcreditstype]][unit]}{$_G[setting][extcredits][$_G[forum_thread][replycredit_rule][extcreditstype]][title]}奖励!',
   'thread_replycredit_tips2' => '每人限 {$_G[forum_thread][replycredit_rule][membertimes]} 次',
-  'thread_replycredit_tips3' => '(奖励概率 {$_G[forum_thread][replycredit_rule][random]}%)',
+  'thread_replycredit_tips3' => '(中奖概率 {$_G[forum_thread][replycredit_rule][random]}%)',
   'thread_rushreply' => '本帖为抢楼帖，欢迎抢楼!',
+  'thread_rushreply_check_back' => '返回抢楼帖',
   'thread_rushreply_end' => '截止楼层：',
   'thread_rushreply_floor' => '奖励楼层',
   'thread_rushreply_over' => '抢楼结束：',
   'thread_rushreply_start' => ' 抢楼开始：',
-  'thread_rushreply_check_back' => '返回抢楼帖',
-
   'activity_about_member' => '剩余名额',
   'activity_join' => '我要参加',
   'activity_join_audit' => '您已经参加了此活动',
@@ -1028,7 +957,6 @@ $lang = array (
   'manage' => '管理',
   'next_page' => '下一页',
   'pm_archive' => '导出',
-
   'debate_all_point' => '全部观点',
   'debate_comment_dateline' => '评判时间',
   'debate_join' => '加入',
@@ -1036,25 +964,20 @@ $lang = array (
   'debate_umpire_end' => '结束此次辩论',
   'debate_umpirepoint_edit' => '编辑裁判观点',
   'debater' => '辩手',
-
   'login_to_reply' => '您需要登录后才可以回帖',
   'post_fastreply_gotolast' => '回帖后跳转到最后一页',
   'post_newreply' => '发表回复',
-
   'debate_view_neutral' => '只看中立',
   'debate_view_opponent' => '只看反方',
   'debate_view_square' => '只看正方',
   'post_add_aboutcounter' => '添加柜台介绍',
   'reward_set_bestanswer' => '最佳答案',
-
   'expiration_unlimit' => '永 久',
   'thread_moderations' => '主题操作记录',
   'thread_moderations_action' => '操作',
   'thread_moderations_cron' => '任务系统',
   'thread_moderations_username' => '操作者',
   'to' => '到',
-
-  'add_to_buddylist' => '加为好友',
   'ban_member' => '禁止',
   'debate_filter' => '按立场筛选',
   'from_mobile' => '来自手机',
@@ -1079,20 +1002,22 @@ $lang = array (
   'rushreply_hit' => '抢中本楼',
   'rushreply_hit_title' => '查看抢中楼层',
   'rushreply_view' => '查看抢中楼层',
-  'share_url_copy' => '复制本帖链接',
   'thread_favorite' => '收藏',
   'thread_magic' => '使用道具',
   'thread_mod' => '帖子模式',
   'thread_mod_by' => '本主题由 $lastmod[modusername] 于 $lastmod[moddateline] $lastmod[modaction]',
   'thread_mod_recommend_by' => '本主题由 $lastmod[modusername] 于 $lastmod[moddateline] $lastmod[modaction]到 $lastmod[reason]',
-  'thread_printable' => '打印',
   'thread_redirect_postno' => '电梯直达',
   'thread_redirect_postno_tips' => '跳转到指定楼层',
   'thread_share' => '分享',
-  'thread_show_all' => '显示全部帖子',
+  'thread_show_all' => '显示全部楼层',
   'thread_show_author' => '只看该作者',
-  'visit_friend' => '去串个门',
-
+  'viewthread_left_addfriend' => '加好友',
+  'viewthread_left_poke' => '打招呼',
+  'viewthread_left_sendpm' => '发消息',
+  'viewthread_left_tospace' => '串个门',
+  'viewthread_share_to' => '分享到',
+  'warn_get' => '受到警告',
   'admin_message_banned' => '提示: <em>作者被禁止或删除 内容自动屏蔽，只有管理员可见</em>',
   'admin_message_single_banned' => '提示: <em>该帖被管理员或版主屏蔽，只有管理员可见</em>',
   'attach_nopermission_login' => '你需要<a href="member.php?mod=logging&action=login" onclick="showWindow(\'login\', this.href);return false;">登录</a>才可以下载或查看附件。没有帐号？<a href="member.php?mod={$_G[setting][regname]}" title="注册帐号">{$_G[setting][reglinkname]}</a>',
@@ -1111,12 +1036,9 @@ $lang = array (
   'rate_total' => '总评分',
   'replies_recommended' => '回帖推荐',
   'view_full_content' => '查看完整内容',
-  'warn_get' => '受到警告',
-
-  'pay_comment' => '本主题需向作者支付 <strong>{$_G[setting][extcredits][$_G[setting][creditstransextra][1]][title]} {$thread[price]} {$_G[setting][extcredits][$_G[setting][creditstransextra][1]][unit]}</strong> 才能浏览',
+  'pay_comment' => '本主题需向作者支付 <strong>{$thread[price]} {$_G[setting][extcredits][$_G[setting][creditstransextra][1]][unit]}{$_G[setting][extcredits][$_G[setting][creditstransextra][1]][title]}</strong> 才能浏览',
   'pay_free_time' => '本主题购买截止日期为 $thread[endtime]，到期后将免费',
   'people_bug' => '人购买',
-
   'poll_count_down' => '距结束还有',
   'poll_end' => '投票已经结束',
   'poll_hour' => '小时',
@@ -1130,22 +1052,17 @@ $lang = array (
   'poll_single' => '单选',
   'poll_view_voters' => '查看投票参与人',
   'poll_voterscount' => '共有 $voterscount 人参与投票',
-
   'poll_voters' => '参与投票的会员',
-
   'comment_num' => '评论数',
   'home_view_num' => '查看数',
   'latest_comments' => '最新评论',
   'portal' => '门户',
   'posted_by' => '发布者',
-
   'attach_download_count' => '下载次数',
   'thread_print' => '打印本页',
   'welcometo' => '欢迎光临',
-
   'reward_answer' => '我来回答',
   'reward_bestanswer' => '最佳答案',
-
   'my_trade_stat' => '交易记录',
   'post_trade_totalnumber' => '商品数',
   'trade_nogoods' => '本柜台无商品',
@@ -1153,7 +1070,6 @@ $lang = array (
   'viewthread_trade_message2' => '添加多个商品',
   'viewthread_trade_message3' => '并可以针对帖内所有商品添加统一的',
   'viewthread_trade_message4' => '柜台介绍',
-
   'warn_view_log' => '$warnuser 警告记录',
   'warn_view_prompt' => '$warnuser 已被累计警告 $warnnum 次，{$_G[setting][warningexpiration]} 天内累计被警告 {$_G[setting][warninglimit]} 次，将被自动禁止发帖 {$_G[setting][warningexpiration]} 天',
 );

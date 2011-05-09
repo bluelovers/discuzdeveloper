@@ -1,4 +1,4 @@
-	<div>{lang thread_reward}<strong> <span class="xi1 xs3">$rewardprice</span> </strong>{$_G['setting']['extcredits'][$_G['setting']['creditstransextra'][2]][title]} {if $_G['forum_thread']['price'] > 0}<span class="xi1">{lang unresolved}</span>{elseif $_G['forum_thread']['price'] < 0}<span class="xg1">{lang resolved}</span>{/if}</div>
+	<div>{lang thread_reward}<strong> <span class="xi1 xs3">$rewardprice</span> </strong>{$_G['setting']['extcredits'][$_G['setting']['creditstransextra'][2]][unit]}{$_G['setting']['extcredits'][$_G['setting']['creditstransextra'][2]][title]} {if $_G['forum_thread']['price'] > 0}<span class="xi1">{lang unresolved}</span>{elseif $_G['forum_thread']['price'] < 0}<span class="xg1">{lang resolved}</span>{/if}</div>
 	<div id="postmessage_$post[pid]" class="postmessage">$post[message]</div>
 
 

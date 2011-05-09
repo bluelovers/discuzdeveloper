@@ -95,6 +95,9 @@ if($_G['gp_op'] == 'base') {
 				if($card['status'] == 2) {
 					showmessage('memcp_credits_card_msg_used', '', array(), array('showdialog' => 1, 'showmsg' => true, 'closetime' => true));
 				}
+				if($card['cleardateline'] < TIMESTAMP) {
+					showmessage('memcp_credits_card_msg_cleardateline_early', '', array(), array('showdialog' => 1, 'showmsg' => true, 'closetime' => true));
+				}
 				DB::query("UPDATE ".DB::table('common_card')." SET status = 2, uid = '{$_G['uid']}', useddateline = '{$_G['timestamp']}' WHERE id = '{$card['id']}'");
 				updatemembercount($_G[uid], array($card['extcreditskey'] => $card['extcreditsval']), true, 'CDC', 1);
 				showmessage('memcp_credits_card_msg_succeed', 'home.php?mod=spacecp&ac=credit&op=base', array('extcreditstitle' => $_G['setting']['extcredits'][$card['extcreditskey']]['title'], 'extcreditsval' => $card['extcreditsval']), array('showdialog' => 1, 'alert' => 'right', 'showmsg' => true, 'locationtime' => true));
@@ -109,7 +112,7 @@ if($_G['gp_op'] == 'base') {
 				showmessage('credits_addfunds_amount_invalid', '', array('ec_maxcredits' => $_G['setting']['ec_maxcredits'], 'ec_mincredits' => $_G['setting']['ec_mincredits']), array('showdialog' => 1, 'showmsg' => true, 'closetime' => true));
 			}
 
-			if(DB::result_first("SELECT COUNT(*) FROM ".DB::table('forum_order')." WHERE uid='$_G[uid]' AND submitdate>='$_G[timestamp]'-180 LIMIT 1")) {
+			if($apitype == 'card' && DB::result_first("SELECT COUNT(*) FROM ".DB::table('forum_order')." WHERE uid='$_G[uid]' AND submitdate>='$_G[timestamp]'-180 LIMIT 1")) {
 				showmessage('credits_addfunds_ctrl', '', array(), array('showdialog' => 1, 'showmsg' => true, 'closetime' => true));
 			}
 
@@ -134,7 +137,15 @@ if($_G['gp_op'] == 'base') {
 			DB::query("INSERT INTO ".DB::table('forum_order')." (orderid, status, uid, amount, price, submitdate)
 				VALUES ('$orderid', '1', '$_G[uid]', '$amount', '$price', '$_G[timestamp]')");
 
-			showmessage('credits_addfunds_succeed', $requesturl, array(), array('showdialog' => 1, 'locationtime' => true));
+			include template('common/header_ajax');
+			echo '<form id="payform" action="'.$requesturl.'" method="post"></form><script type="text/javascript" reload="1">$(\'payform\').submit();</script>';
+			include template('common/footer_ajax');
+			dexit();
+		}
+	} else {
+		if($_G['setting']['card']['open'] && $_G['setting']['seccodestatus'] & 16) {
+			$seccodecheck = 1;
+			$secqaacheck = 0;
 		}
 	}
 
@@ -260,12 +271,17 @@ if($_G['gp_op'] == 'base') {
 	$list = array();
 	if($_G['gp_rid']) {
 		$rid = intval($_G['gp_rid']);
-		$wheresql = " WHERE rid='$rid'";
+		$wheresql = " AND rid='$rid'";
 	}
 	require_once libfile('function/forumlist');
 	$select = forumselect(false, 0, $_G['gp_fid']);
 	$keys = array_keys($_G['setting']['extcredits']);
-	$query = DB::query("SELECT * FROM ".DB::table('common_credit_rule')." $wheresql ORDER BY rid DESC");
+	if(!$_G['setting']['homestatus']) {
+		foreach (array('doing', 'publishblog', 'guestbook', 'getguestbook', 'poke', 'visit') AS $val) {
+			$wheresql .= " AND action <> '{$val}'";
+		}
+	}
+	$query = DB::query("SELECT * FROM ".DB::table('common_credit_rule')." WHERE 1 $wheresql ORDER BY rid DESC");
 	while($value = DB::fetch($query)) {
 		if(empty($_G['gp_fid']) || in_array($value['action'], array('digest', 'post', 'reply', 'getattach', 'postattach'))) {
 			if(checkvalue($value, $keys)) {

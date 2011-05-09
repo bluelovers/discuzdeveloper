@@ -7,6 +7,9 @@
  *      $Id$
  */
 
+define('IN_API', true);
+define('CURSCRIPT', 'api');
+
 require '../../source/class/class_core.php';
 require '../../source/function/function_forum.php';
 
@@ -68,7 +71,7 @@ window.location.href='$_G[siteurl]misc.php?mod=buyinvitecode&action=paysucceed&o
 </html>
 EOS;
 	} else {
-		header('location: '.$_G['siteurl'].'misc.php?mod=buyinvitecode&action=paysucceed&orderid='.$orderid);
+		dheader('location: '.$_G['siteurl'].'misc.php?mod=buyinvitecode&action=paysucceed&orderid='.$orderid);
 	}
 } else {
 	exit($notifydata['notify']);

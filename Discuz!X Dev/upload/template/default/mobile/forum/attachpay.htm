@@ -4,7 +4,7 @@
 	<div class="bm_h">{lang pay_attachment}</div>
     <form id="attachpayform" method="post" autocomplete="off" action="forum.php?mod=misc&action=attachpay&tid={$_G[tid]}&mobile=yes">
             <input type="hidden" name="formhash" value="{FORMHASH}" />
-            <input type="hidden" name="referer" value="$_G['referer']" />
+            <input type="hidden" name="referer" value="{echo dreferer()}" />
             <input type="hidden" name="aid" value="$aid" />
             <div class="bm_c">
                 <table cellspacing="5" cellpadding="5">

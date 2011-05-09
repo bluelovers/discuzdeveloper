@@ -256,7 +256,7 @@ if(!submitcheck('replysubmit', 0, $seccodecheck, $secqaacheck)) {
 			} elseif($post['status'] & 1) {
 				$post['message'] = $language['post_single_banned'];
 			} else {
-				$post['message'] = preg_replace("/\[hide=?\d*\](.+?)\[\/hide\]/is", "[b]$language[post_hidden][/b]", $post['message']);
+				$post['message'] = preg_replace("/\[hide=?\d*\](.*?)\[\/hide\]/is", "[b]$language[post_hidden][/b]", $post['message']);
 				$post['message'] = discuzcode($post['message'], $post['smileyoff'], $post['bbcodeoff'], $post['htmlon'] & 1, $_G['forum']['allowsmilies'], $_G['forum']['allowbbcode'], $_G['forum']['allowimgcode'], $_G['forum']['allowhtml'], $_G['forum']['jammer']);
 			}
 
@@ -364,7 +364,13 @@ if(!submitcheck('replysubmit', 0, $seccodecheck, $secqaacheck)) {
 	));
 
 	if($pid && getstatus($thread['status'], 1)) {
-		savepostposition($_G['tid'], $pid);
+		$postionid = savepostposition($_G['tid'], $pid, true);
+	}
+	if(getstatus($thread['status'], 3) && $postionid) {
+		$rushstopfloor = DB::result_first("SELECT stopfloor FROM ".DB::table('forum_threadrush')." WHERE tid = '$_G[tid]'");
+		if($rushstopfloor > 0 && $thread['closed'] == 0 && $postionid >= $rushstopfloor) {
+			DB::query("UPDATE ".DB::table('forum_thread')." SET closed='1' WHERE tid='$_G[tid]'");
+		}
 	}
 	useractionlog($_G['uid'], 'pid');
 

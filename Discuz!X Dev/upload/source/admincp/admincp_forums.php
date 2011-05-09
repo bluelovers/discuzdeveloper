@@ -163,7 +163,7 @@ var rowtypedata = [
 
 					} else {
 						$forumfields['allowsmilies'] = $forumfields['allowbbcode'] = $forumfields['allowimgcode'] = 1;
-						$forumfields['allowpostspecial'] = 127;
+						$forumfields['allowpostspecial'] = 1;
 						$forumfields['allowside'] = 0;
 						$forumfields['allowfeed'] = 0;
 						$forumfields['recyclebin'] = 1;

@@ -48,6 +48,7 @@ if($operation == 'filecheck') {
 		checkfiles('api/', '');
 		checkfiles('source/', '', 1, 'discuzfiles.md5');
 		checkfiles('static/', '');
+		checkfiles('archiver/', '');
 		checkfiles('uc_client/', '\.php|\.htm', 0);
 		checkfiles('uc_client/data/', '\.htm');
 		checkfiles('uc_client/control/', '\.php|\.htm');
@@ -309,6 +310,7 @@ if($operation == 'filecheck') {
 
 	$rule = array();
 	$rewritedata = rewritedata();
+	$rule['{apache1}'] = $rule['{apache2}'] = $rule['{iis}'] = $rule['{iis7}'] = $rule['{zeus}'] = $rule['{nginx}'] = '';
 	foreach($rewritedata['rulesearch'] as $k => $v) {
 		if(!in_array($k, $_G['setting']['rewritestatus'])) {
 			continue;
@@ -351,7 +353,7 @@ if($operation == 'filecheck') {
 		define('FOOTERDISABLED' , 1);
 		exit();
 	}
-	cpmsg('robots_output', 'action=checktools&operation=robots&do=output&frame=no', 'download');
+	cpmsg('robots_output', 'action=checktools&operation=robots&do=output&frame=no', 'download', array('siteurl' => $_G['siteurl']));
 
 }
 

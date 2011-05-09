@@ -159,12 +159,15 @@ $modforumnum = count($modforums['list']);
 $modnum = '';
 if($modforumnum) {
 	if($_G['group']['allowmodpost']) {
-		$posttable = getposttable();
-		$modnum = DB::result_first("SELECT COUNT(*) FROM ".DB::table($posttable)." WHERE invisible='-2' AND first='0' and fid IN($modforums[fids])") +
-		DB::result_first("SELECT COUNT(*) FROM ".DB::table('forum_thread')." WHERE fid IN($modforums[fids]) AND displayorder='-2'");
+		$modnum = DB::result_first("SELECT COUNT(*) FROM ".DB::table('common_moderate')." m
+			INNER JOIN ".DB::table('forum_thread')." t ON t.tid=m.id AND t.fid IN($modforums[fids])
+			WHERE m.idtype='tid' AND m.status='0'");
+		$modnum += DB::result_first("SELECT COUNT(*) FROM ".DB::table('common_moderate')." m
+			INNER JOIN ".DB::table('forum_post')." p ON p.pid=m.id AND p.fid IN($modforums[fids])
+			WHERE m.idtype='pid' AND m.status='0'");
 	}
 	if($_G['group']['allowmoduser']) {
-		$modnum +=	DB::result_first("SELECT COUNT(*) FROM ".DB::table('common_member_validate')." WHERE status='0'");
+		$modnum += DB::result_first("SELECT COUNT(*) FROM ".DB::table('common_member_validate')." WHERE status='0'");
 	}
 }
 

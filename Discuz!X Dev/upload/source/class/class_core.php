@@ -77,7 +77,7 @@ class discuz_core {
 	function _init_env() {
 
 		error_reporting(E_ERROR);
-		if(phpversion() < '5.3.0') {
+		if(PHP_VERSION < '5.3.0') {
 			set_magic_quotes_runtime(0);
 		}
 
@@ -167,8 +167,16 @@ class discuz_core {
 		$_G['PHP_SELF'] = htmlspecialchars($_SERVER['SCRIPT_NAME'] ? $_SERVER['SCRIPT_NAME'] : $_SERVER['PHP_SELF']);
 		$_G['basescript'] = CURSCRIPT;
 		$_G['basefilename'] = basename($_G['PHP_SELF']);
-		$_G['siteurl'] = htmlspecialchars('http://'.$_SERVER['HTTP_HOST'].preg_replace("/\/+(api)?\/*$/i", '', substr($_G['PHP_SELF'], 0, strrpos($_G['PHP_SELF'], '/'))).'/');
-		$_G['siteroot'] = substr($_G['PHP_SELF'], 0, -strlen($_G['basefilename']));
+		$sitepath = substr($_G['PHP_SELF'], 0, strrpos($_G['PHP_SELF'], '/'));
+		if(defined('IN_API')) {
+			$sitepath = preg_replace("/\/api\/?.*?$/i", '', $sitepath);
+		} elseif(defined('IN_ARCHIVER')) {
+			$sitepath = preg_replace("/\/archiver/i", '', $sitepath);
+		}
+		$_G['siteurl'] = htmlspecialchars('http://'.$_SERVER['HTTP_HOST'].$sitepath.'/');
+
+		$url = parse_url($_G['siteurl']);
+		$_G['siteroot'] = isset($url['path']) ? $url['path'] : '';
 		$_G['siteport'] = empty($_SERVER['SERVER_PORT']) || $_SERVER['SERVER_PORT'] == '80' ? '' : ':'.$_SERVER['SERVER_PORT'];
 
 		if(defined('SUB_DIR')) {
@@ -200,10 +208,12 @@ class discuz_core {
 		}
 
 
-		$_GET['diy'] = empty($_GET['diy']) ? '' : $_GET['diy'];
-
 		if($_SERVER['REQUEST_METHOD'] == 'POST' && !empty($_POST)) {
 			$_GET = array_merge($_GET, $_POST);
+		}
+
+		if(isset($_GET['diy'])) {
+			$_GET['diy'] = empty($_GET['diy']) ? '' : $_GET['diy'];
 		}
 
 		foreach($_GET as $k => $v) {
@@ -293,7 +303,7 @@ class discuz_core {
 
 	function _xss_check() {
 		$temp = strtoupper(urldecode(urldecode($_SERVER['REQUEST_URI'])));
-		if(strpos($temp, '<') !== false || strpos($temp, '"') !== false || strpos($tmp,'CONTENT-TRANSFER-ENCODING')!==false) {
+		if(strpos($temp, '<') !== false || strpos($temp, '"') !== false || strpos($temp, 'CONTENT-TRANSFER-ENCODING') !== false) {
 			system_error('request_tainting');
 		}
 		return true;
@@ -406,7 +416,8 @@ class discuz_core {
 	}
 
 	function _init_cron() {
-		if($this->init_cron && $this->init_setting) {
+		$ext = empty($this->config['remote']['on']) || empty($this->config['remote']['cron']) || APPTYPEID == 200;
+		if($this->init_cron && $this->init_setting && $ext) {
 			if($this->var['cache']['cronnextrun'] <= TIMESTAMP) {
 				require_once libfile('class/cron');
 				discuz_cron::run();
@@ -596,7 +607,7 @@ class discuz_core {
 			}
 		}
 
-		if((!$this->var['setting']['mobile']['mobileforward'] && $_GET['mobile'] !== 'yes') || $nomobile) {
+		if($nomobile || (!$this->var['setting']['mobile']['mobileforward'] && $_GET['mobile'] !== 'yes')) {
 			if($_SERVER['HTTP_HOST'] == $this->var['setting']['domain']['app']['mobile'] && $this->var['setting']['domain']['app']['default']) {
 				dheader("Location:http://".$this->var['setting']['domain']['app']['default'].$_SERVER['REQUEST_URI']);
 			} else {
@@ -619,7 +630,8 @@ class discuz_core {
 		define('IN_MOBILE', true);
 		setglobal('gzipcompress', 0);
 
-		$query_sting_tmp = preg_replace(array('/&simpletype=\w+/', '/simpletype=\w+/', '/&mobile=yes/', '/mobile=yes/'), array(), $_SERVER['QUERY_STRING']);
+		$arr = array(strstr($_SERVER['QUERY_STRING'], '&simpletype'), strstr($_SERVER['QUERY_STRING'], 'simpletype'), '&mobile=yes', 'mobile=yes');
+		$query_sting_tmp = str_replace($arr, '', $_SERVER['QUERY_STRING']);
 		$this->var['setting']['mobile']['nomobileurl'] = ($this->var['setting']['domain']['app']['forum'] ? 'http://'.$this->var['setting']['domain']['app']['forum'].'/' : $this->var['siteurl']).$this->var['basefilename'].($query_sting_tmp ? '?'.$query_sting_tmp.'&' : '?').'mobile=no';
 
 		$this->var['setting']['lazyload'] = 0;
@@ -660,8 +672,8 @@ class discuz_core {
 
 
 		$this->var['setting']['mobile']['simpletypeurl'] = array();
-		$this->var['setting']['mobile']['simpletypeurl'][0] = $this->var['siteurl'].$this->var['basefilename'].($query_sting_tmp ? '?'.$query_sting_tmp.'&' : '?').'simpletype=no&mobile=yes' ;
-		$this->var['setting']['mobile']['simpletypeurl'][1] =  $this->var['siteurl'].$this->var['basefilename'].($query_sting_tmp ? '?'.$query_sting_tmp.'&' : '?').'simpletype=yes&mobile=yes';
+		$this->var['setting']['mobile']['simpletypeurl'][0] = $this->var['siteurl'].$this->var['basefilename'].($query_sting_tmp ? '?'.$query_sting_tmp.'&' : '?').'mobile=yes&simpletype=no';
+		$this->var['setting']['mobile']['simpletypeurl'][1] =  $this->var['siteurl'].$this->var['basefilename'].($query_sting_tmp ? '?'.$query_sting_tmp.'&' : '?').'mobile=yes&simpletype=yes';
 		unset($query_sting_tmp);
 		ob_start();
 	}
@@ -678,7 +690,7 @@ class discuz_core {
 				$value[$key] = $this->mobile_iconv_recurrence($val);
 			}
 		} else {
-			$value = daddslashes(diconv(stripslashes($value), 'utf-8', CHARSET));
+			$value = addslashes(diconv(stripslashes($value), 'utf-8', CHARSET));
 		}
 		return $value;
 	}
@@ -1282,6 +1294,7 @@ class discuz_memory
 
 	function discuz_memory() {
 		$this->extension['eaccelerator'] = function_exists('eaccelerator_get');
+		$this->extension['apc'] = function_exists('apc_fetch');
 		$this->extension['xcache'] = function_exists('xcache_get');
 		$this->extension['memcache'] = extension_loaded('memcache');
 	}
@@ -1310,6 +1323,12 @@ class discuz_memory
 		if(!is_object($this->memory) && $this->extension['xcache'] && $this->config['xcache']) {
 			require_once libfile('class/xcache');
 			$this->memory = new discuz_xcache();
+			$this->memory->init(null);
+		}
+
+		if(!is_object($this->memory) && $this->extension['apc'] && $this->config['apc']) {
+			require_once libfile('class/apc');
+			$this->memory = new discuz_apc();
 			$this->memory->init(null);
 		}
 
@@ -1364,9 +1383,13 @@ class discuz_memory
 
 	function clear() {
 		if($this->enable && is_array($this->keys)) {
-			$this->keys['memory_system_keys'] = true;
-			foreach ($this->keys as $k => $v) {
-				$this->memory->rm($this->_key($k));
+			if(method_exists($this->memory, 'clear')) {
+				$this->memory->clear();
+			} else {
+				$this->keys['memory_system_keys'] = true;
+				foreach ($this->keys as $k => $v) {
+					$this->memory->rm($this->_key($k));
+				}
 			}
 		}
 		$this->keys = array();

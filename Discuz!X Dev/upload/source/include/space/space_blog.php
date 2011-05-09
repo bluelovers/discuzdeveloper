@@ -118,7 +118,7 @@ if($id) {
 	$clicks = empty($_G['cache']['click']['blogid'])?array():$_G['cache']['click']['blogid'];
 
 	foreach ($clicks as $key => $value) {
-		$value['clicknum'] = $blog["click{$value['clickid']}"];
+		$value['clicknum'] = $blog["click{$key}"];
 		$value['classid'] = mt_rand(1, 4);
 		if($value['clicknum'] > $maxclicknum) $maxclicknum = $value['clicknum'];
 		$clicks[$key] = $value;

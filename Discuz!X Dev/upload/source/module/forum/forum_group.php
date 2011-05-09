@@ -617,10 +617,11 @@ if($action == 'index') {
 						}
 					}
 				}
+				$threadtypesnew = !empty($threadtypesnew) ? daddslashes(serialize($threadtypesnew)) : '';
 			} else {
 				$threadtypesnew = '';
 			}
-			DB::update('forum_forumfield', array('threadtypes' => daddslashes(serialize($threadtypesnew))), "fid='{$_G['fid']}'");
+			DB::update('forum_forumfield', array('threadtypes' => $threadtypesnew), "fid='{$_G['fid']}'");
 			showmessage('group_threadtype_edit_succeed', $url);
 		}
 	} elseif($_G['gp_op'] == 'demise') {

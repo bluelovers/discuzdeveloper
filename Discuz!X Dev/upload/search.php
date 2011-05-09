@@ -46,9 +46,7 @@ $navtitle = lang('core', 'title_search');
 if($mod == 'curforum') {
 	$mod = 'forum';
 	$_G['gp_srchfid'] = array($_G['gp_srhfid']);
-	$_G['gp_srhfid'] = $_G['gp_srhfid'];
 } elseif($mod == 'forum') {
-	$_G['gp_srchfid'] = array();
 	$_G['gp_srhfid'] = 0;
 }
 

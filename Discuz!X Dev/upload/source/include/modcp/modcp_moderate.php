@@ -476,9 +476,9 @@ if($op == 'replies') {
 	}
 
 	$modcount = DB::result_first('SELECT COUNT(*)
-				FROM '.DB::table('common_moderate')." m
-				LEFT JOIN ".DB::table('forum_thread')." t ON t.tid=m.id
-				WHERE m.idtype='tid' AND m.status='$moderatestatus'".($modfidsadd ? " AND t.$modfidsadd" : ''));
+		FROM '.DB::table('common_moderate')." m
+		LEFT JOIN ".DB::table('forum_thread')." t ON t.tid=m.id
+		WHERE m.idtype='tid' AND m.status='$moderatestatus'".($modfidsadd ? " AND t.$modfidsadd" : ''));
 	$multipage = multi($modcount, $_G['tpp'], $page, "{$cpscript}?mod=modcp&action=$_G[gp_action]&op=$op&filter=$filter&fid=$_G[fid]");
 
 	if($modcount) {

@@ -13,7 +13,7 @@
       <!--{/if}-->
       <div class="inbox"><textarea name="message" id="fastpostmessage" cols="25" rows="3" class="txt"></textarea></div>
       <!--{if checkperm('seccode') && ($secqaacheck || $seccodecheck)}-->
-      <div class="inbox"><!--{template common/seccheck}--></div>
+      <div class="inbox"><!--{subtemplate common/seccheck}--></div>
       <!--{/if}-->
       <div class="inbox"><input type="submit" name="replysubmit" id="fastpostsubmit" value="{lang reply}" /></div>
     </form>

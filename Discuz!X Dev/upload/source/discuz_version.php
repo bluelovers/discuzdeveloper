@@ -11,7 +11,9 @@ if(!defined('IN_DISCUZ')) {
 	exit('Access Denied');
 }
 
-@define('DISCUZ_VERSION', 'X2 Beta');
-@define('DISCUZ_RELEASE', '20110321');
+if(!defined('DISCUZ_VERSION')) {
+	define('DISCUZ_VERSION', 'X2 RC');
+	define('DISCUZ_RELEASE', '20110505');
+}
 
 ?>

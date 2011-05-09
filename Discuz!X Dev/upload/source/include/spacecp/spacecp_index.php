@@ -297,7 +297,7 @@ if (submitcheck('diysubmit')) {
 	$setarr['blockposition'] = daddslashes(serialize($blockdata));
 	$setarr['theme'] = $style;
 	DB::update('common_member_field_home', $setarr, "uid = {$_G['uid']}");
-	showmessage('do_success','home.php?mod=space');
+	showmessage('do_success','home.php?mod=space'.($_G['adminid'] == 1 && $_G['setting']['allowquickviewprofile'] ? '&view=admin' : ''));
 }
 
 if (submitcheck('uploadsubmit')) {

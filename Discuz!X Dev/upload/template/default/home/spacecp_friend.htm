@@ -41,7 +41,7 @@
 				<!--{if $_G[inajax]}--><span><a href="javascript:;" onclick="hideWindow('$_G[gp_handlekey]');" class="flbc" title="{lang close}">{lang close}</a></span><!--{/if}-->
 			</h3>
 			<form method="post" autocomplete="off" id="friendform_{$uid}" name="friendform_{$uid}" action="home.php?mod=spacecp&ac=friend&op=ignore&uid=$uid&confirm=1" {if $_G[inajax]}onsubmit="ajaxpost(this.id, 'return_$_G[gp_handlekey]');"{/if}>
-				<input type="hidden" name="referer" value="$_G[referer]">
+				<input type="hidden" name="referer" value="{echo dreferer()}">
 				<input type="hidden" name="friendsubmit" value="true" />
 				<input type="hidden" name="formhash" value="{FORMHASH}" />
 				<input type="hidden" name="from" value="$_G[gp_from]" />
@@ -63,7 +63,7 @@
 		<!--{elseif $op == 'find'}-->
 
 			<!--{if !empty($recommenduser) || $nearlist || $friendlist || $onlinelist}-->
-	
+
 				<!--{if !empty($recommenduser)}-->
 				<h2 class="mtw">{lang recommend_user}</h2>
 				<ul class="buddy cl">
@@ -77,7 +77,7 @@
 					<!--{/loop}-->
 				</ul>
 				<!--{/if}-->
-	
+
 				<!--{if $nearlist}-->
 				<h2 class="mtw">{lang surprise_they_near}</h2>
 				<ul class="buddy cl">
@@ -90,7 +90,7 @@
 					<!--{/loop}-->
 				</ul>
 				<!--{/if}-->
-	
+
 				<!--{if $friendlist}-->
 				<h2 class="mtw">{lang friend_friend_might_know}</h2>
 				<ul class="buddy cl">
@@ -103,7 +103,7 @@
 					<!--{/loop}-->
 				</ul>
 				<!--{/if}-->
-	
+
 				<!--{if $onlinelist}-->
 				<h2 class="mtw">{lang they_online_add_friend}</h2>
 				<ul class="buddy cl">
@@ -118,7 +118,7 @@
 				<!--{/if}-->
 			<!--{else}-->
 				<div class="emp mtw ptw hm xs2">
-				暂时没有可能认识的人
+				{lang find_know_nofound}
 				</div>
 			<!--{/if}-->
 
@@ -133,7 +133,7 @@
 				<!--{if $_G[inajax]}--><span><a href="javascript:;" onclick="hideWindow('$_G[gp_handlekey]');" class="flbc" title="{lang close}">{lang close}</a></span><!--{/if}-->
 			</h3>
 			<form method="post" autocomplete="off" id="changenumform_{$uid}" name="changenumform_{$uid}" action="home.php?mod=spacecp&ac=friend&op=changenum&uid=$uid">
-				<input type="hidden" name="referer" value="$_G[referer]">
+				<input type="hidden" name="referer" value="{echo dreferer()}">
 				<!--{if $_G[inajax]}--><input type="hidden" name="handlekey" value="$_G[gp_handlekey]" /><!--{/if}-->
 				<input type="hidden" name="formhash" value="{FORMHASH}" />
 				<div class="c">
@@ -157,7 +157,7 @@
 				<!--{if $_G[inajax]}--><span><a href="javascript:;" onclick="hideWindow('$_G[gp_handlekey]');" class="flbc" title="{lang close}">{lang close}</a></span><!--{/if}-->
 			</h3>
 			<form method="post" autocomplete="off" id="changegroupform_{$uid}" name="changegroupform_{$uid}" action="home.php?mod=spacecp&ac=friend&op=changegroup&uid=$uid" {if $_G[inajax]}onsubmit="ajaxpost(this.id, 'return_$_G[gp_handlekey]');"{/if}>
-				<input type="hidden" name="referer" value="$_G[referer]">
+				<input type="hidden" name="referer" value="{echo dreferer()}">
 				<input type="hidden" name="changegroupsubmit" value="true" />
 				<!--{if $_G[inajax]}--><input type="hidden" name="handlekey" value="$_G[gp_handlekey]" /><!--{/if}-->
 				<input type="hidden" name="formhash" value="{FORMHASH}" />
@@ -189,7 +189,7 @@
 				<!--{if $_G[inajax]}--><span><a href="javascript:;" onclick="hideWindow('$_G[gp_handlekey]');" class="flbc" title="{lang close}">{lang close}</a></span><!--{/if}-->
 			</h3>
 			<form method="post" autocomplete="off" id="editnoteform_{$uid}" name="editnoteform_{$uid}" action="home.php?mod=spacecp&ac=friend&op=editnote&uid=$uid" {if $_G[inajax]}onsubmit="ajaxpost(this.id, 'return_$_G[gp_handlekey]');"{/if}>
-				<input type="hidden" name="referer" value="$_G[referer]">
+				<input type="hidden" name="referer" value="{echo dreferer()}">
 				<input type="hidden" name="editnotesubmit" value="true" />
 				<!--{if $_G[inajax]}--><input type="hidden" name="handlekey" value="$_G[gp_handlekey]" /><!--{/if}-->
 				<input type="hidden" name="formhash" value="{FORMHASH}" />
@@ -236,7 +236,7 @@
 					</ul>
 				</div>
 				<div class="mtn">
-					<label for="chkall" onclick="checkAll(this.form, 'fuids')"><input type="checkbox" name="chkall" id="chkall" class="pc" />{lang select_all}</label> 
+					<label for="chkall" onclick="checkAll(this.form, 'fuids')"><input type="checkbox" name="chkall" id="chkall" class="pc" />{lang select_all}</label>
 					{lang set_member_group}:
 					<select name="group" class="ps vm">
 					<!--{loop $groups $key $value}-->
@@ -260,7 +260,7 @@
 			</h3>
 			<div id="__groupnameform_{$group}">
 				<form method="post" autocomplete="off" id="groupnameform_{$group}" name="groupnameform_{$group}" action="home.php?mod=spacecp&ac=friend&op=groupname&group=$group" {if $_G[inajax]}onsubmit="ajaxpost(this.id, 'return_$_G[gp_handlekey]');"{/if}>
-					<input type="hidden" name="referer" value="$_G[referer]">
+					<input type="hidden" name="referer" value="{echo dreferer()}">
 					<input type="hidden" name="groupnamesubmit" value="true" />
 					<!--{if $_G[inajax]}--><input type="hidden" name="handlekey" value="$_G[gp_handlekey]" /><!--{/if}-->
 					<input type="hidden" name="formhash" value="{FORMHASH}" />
@@ -286,7 +286,7 @@
 			</h3>
 			<div id="$group">
 				<form method="post" autocomplete="off" id="groupignoreform" name="groupignoreform" action="home.php?mod=spacecp&ac=friend&op=groupignore&group=$group" {if $_G[inajax]}onsubmit="ajaxpost(this.id, 'return_$_G[gp_handlekey]');"{/if}>
-					<input type="hidden" name="referer" value="$_G[referer]">
+					<input type="hidden" name="referer" value="{echo dreferer()}">
 					<input type="hidden" name="groupignoresubmit" value="true" />
 					<!--{if $_G[inajax]}--><input type="hidden" name="handlekey" value="$_G[gp_handlekey]" /><!--{/if}-->
 					<input type="hidden" name="formhash" value="{FORMHASH}" />
@@ -392,7 +392,7 @@
 				<!--{if $_G[inajax]}--><span><a href="javascript:;" onclick="hideWindow('$_G[gp_handlekey]');" class="flbc" title="{lang close}">{lang close}</a></span><!--{/if}-->
 			</h3>
 			<form method="post" autocomplete="off" id="addform_{$tospace[uid]}" name="addform_{$tospace[uid]}" action="home.php?mod=spacecp&ac=friend&op=add&uid=$tospace[uid]" {if $_G[inajax]}onsubmit="ajaxpost(this.id, 'return_$_G[gp_handlekey]');"{/if}>
-				<input type="hidden" name="referer" value="$_G[referer]" />
+				<input type="hidden" name="referer" value="{echo dreferer()}" />
 				<input type="hidden" name="addsubmit" value="true" />
 				<!--{if $_G[inajax]}--><input type="hidden" name="handlekey" value="$_G[gp_handlekey]" /><!--{/if}-->
 				<input type="hidden" name="formhash" value="{FORMHASH}" />
@@ -425,7 +425,7 @@
 				<!--{if $_G[inajax]}--><span><a href="javascript:;" onclick="hideWindow('$_G[gp_handlekey]');" class="flbc" title="{lang close}">{lang close}</a></span><!--{/if}-->
 			</h3>
 			<form method="post" autocomplete="off" id="addratifyform_{$tospace[uid]}" name="addratifyform_{$tospace[uid]}" action="home.php?mod=spacecp&ac=friend&op=add&uid=$tospace[uid]" {if $_G[inajax]}onsubmit="ajaxpost(this.id, 'return_$_G[gp_handlekey]');"{/if}>
-				<input type="hidden" name="referer" value="$_G[referer]" />
+				<input type="hidden" name="referer" value="{echo dreferer()}" />
 				<input type="hidden" name="add2submit" value="true" />
 				<input type="hidden" name="from" value="$_G[gp_from]" />
 				<!--{if $_G[inajax]}--><input type="hidden" name="handlekey" value="$_G[gp_handlekey]" /><!--{/if}-->

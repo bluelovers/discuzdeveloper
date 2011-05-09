@@ -2,7 +2,7 @@
 	[Discuz!] (C)2001-2009 Comsenz Inc.
 	This is NOT a freeware, use is subject to license terms
 
-	$Id: space_diy.js 18221 2010-11-17 03:01:47Z zhangguosheng $
+	$Id: space_diy.js 21831 2011-04-13 08:53:11Z maruitao $
 */
 
 var drag = new Drag();
@@ -195,8 +195,6 @@ spaceDiy.extend({
 				$('spacename').appendChild(dom);
 			}
 			$('spaceinfoshow').onmousedown = function () {spaceDiy.showEditSpaceInfo();};
-			$('spaceinfoshow').onmouseover = function () {$('infoedit').style.display='inline';};
-			$('spaceinfoshow').onmouseout = function () {$('infoedit').style.display='none';};
 		}
 		if ($('nv')) {
 			if(!$('nv').getElementsByTagName('li').length) {

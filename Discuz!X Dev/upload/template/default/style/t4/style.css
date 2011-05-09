@@ -6,13 +6,14 @@ Powered by Discuz! X
 
 body { background: #FFF url(bgimg.jpg) no-repeat 50% 0; }
 #nv { background-color: #9934B7; background-image: url(nv.png); }
-	#nv li { background-image: url(nv_a.png) !important; }
-	#nv li.a { background: #6C1992 url(nv_a.png) no-repeat 50% 100%; }
+	#nv li, #nv li a:hover, #nv li.hover a, #nv li.hover a:hover { background-image: url(nv_a.png) !important; }
+	#nv li.a { background-color: #6C1992; }
 
+.bm_h, .tl th, .tl td { border-bottom-color: #CDCDCD; }
 .fl .bm_h { border-color: #DFCDDE; background: #F8EFF8 url(titlebg.png) repeat-x 0 0; }
 
 /* 重定义 {SPECIALBG} */
-.bmn, .bm_h, .pn, td.pls, .ad td.plc, div.exfm, .tb a, .tb_h, .ttp li.a a, div.uo a, input#addsubmit_btn, #gh .bm .bm_h, .appnew, .apphot { background-color: #F8EFF8; }
+.bmn, .bm_h, td.pls, .ad td.plc, div.exfm, .tb a, .tb_h, .ttp li.a a, div.uo a, input#addsubmit_btn, #gh .bm .bm_h, .appnew, .apphot { background-color: #F8EFF8; }
 
 .ct2_a, .ct3_a { background-image: url(vlineb.png); }
 .tbn li.a { background: #FFF; }
@@ -47,4 +48,6 @@ body { background: #FFF url(bgimg.jpg) no-repeat 50% 0; }
 .bdl dd.bdl_a a { color: #6F099E; }
 
 /* 重定义下拉菜单 */
-.p_pop a:hover, .p_pop a.a, #sctype_menu .sca { background-color: #A630CA; background-image: url(pope_bg.png); text-shadow: -1px -1px 0 #6F099E; }
+.p_pop a { border-bottom-color: #F8EFF8; }
+	.p_pop a:hover, .p_pop a.a, #sctype_menu .sca { background-color: #F8EFF8; color: #6F099E; }
+	.blk a:hover { background-color: transparent; }

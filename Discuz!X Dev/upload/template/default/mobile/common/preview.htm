@@ -1,32 +1,35 @@
 <!--{subtemplate common/header}-->
-<div class="cl">
-	<div class="z" style="width: 300px;">
-		<div style="width: 300px; height: 540px; background: url(./static/image/mobile/browser.jpg) no-repeat;">
-			<iframe id="ifm0" frameborder="0" width="270" height="380" style="margin-top: 74px; margin-left: 14px;" src="misc.php?mod=mobile&view=true"></iframe>
-		</div>
+<div id="ct" class="wp cl ptw pbw">
+	<div class="z" style="width: 370px; height: 550px; background: url({STATICURL}image/mobile/preview.jpg) no-repeat 0 0;">
+		<iframe id="ifm0" frameborder="0" width="240" height="360" style="margin: 69px 0 0 70px;" src="misc.php?mod=mobile&view=true"></iframe>
 	</div>
-	<div class="y" style="padding-top: 10px; width: 630px;">
-		<div class="bn">
-			<h1 class="ph xw1 mbm">现在就登录 - {$_G['setting']['bbname']} 手机版</h1>
-			<!--{if $_G['setting']['domain']['app']['mobile']}-->
-				<p class="ph mbm">立即使用手机访问：<span class="xi1">http://{$_G['setting']['domain']['app']['mobile']}</span> 获得急速移动体验</p>
-			<!--{else}-->
-				<p class="ph mbm">立即使用手机访问：<span class="xi1">{$_G['siteurl']}forum.php</span> 获得急速移动体验</p>
-			<!--{/if}-->
-			<div class="bm">
-				<div class="bm_h">快速收藏</div>
-				<p class="bm_c">您可以通过手机快速访问论坛版块及管理收藏夹，随时随地访问自己最爱的内容</p>
+	<div class="z" style="margin-top: 60px; width: 530px;">
+		<div class="mtw bm bw0" style="background-color: #dfeaf4;">
+			<div class="bm_c">
+				<h1 class="xw1 xs2 mbn">{lang login_mobile}</h1>
+				<p class="mbw xg2">{lang login_mobile_join}</p>
+				<p class="hm mbw" style="font-size: 18px; color: #F60;">
+					<!--{if $_G['setting']['domain']['app']['mobile']}-->
+						http://{$_G['setting']['domain']['app']['mobile']}
+					<!--{else}-->
+						{$_G['siteurl']}forum.php
+					<!--{/if}-->
+				</p>
 			</div>
-			
-			<div class="bm">
-				<div class="bm_h">看帖及回帖更快速</div>
-				<p class="bm_c">通过手机版，可以快速的访问您需要阅读的主题，并可以快速的发布新帖及回复</p>
-			</div>
-			
-			<div class="bm">
-				<p class="bm_c">站内短信实时收发，与短信另一端的朋友进行单人或多人聊天</p>
-				<p class="bm_c">节省流量与获得优质手机体验并存</p>
-			</div>
+		</div>
+		<div class="bm bw0">
+			<dl class="xld bbda">
+				<dt class="xs2">{lang mobile_favorite}</dt>
+				<dd>{lang mobile_favorite_comment}</dd>
+			</dl>
+			<dl class="xld bbda">
+				<dt class="xs2">{lang mobile_viewthread}</dt>
+				<dd>{lang mobile_viewthread_comment}</dd>
+			</dl>
+			<dl class="xld">
+				<dt class="xs2">{lang mobile_pm}</dt>
+				<dd>{lang mobile_other_1}</dd>
+			</dl>
 		</div>
 	</div>
 </div>

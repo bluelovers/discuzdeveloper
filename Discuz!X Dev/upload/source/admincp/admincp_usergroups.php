@@ -75,7 +75,7 @@ if(!$operation) {
 				"<input type=\"text\" class=\"txt\" size=\"6\"name=\"group_color[$group[groupid]]\" value=\"$group[color]\">",
 				"<input class=\"checkbox\" type=\"checkbox\" chkvalue=\"gspecial\" value=\"$group[groupid]\" onclick=\"multiupdate(this)\" /><a href=\"".ADMINSCRIPT."?action=usergroups&operation=edit&id=$group[groupid]\" class=\"act\">$lang[edit]</a>".
 					"<a href=\"".ADMINSCRIPT."?action=usergroups&operation=copy&source=$group[groupid]\" title=\"$lang[usergroups_copy_comment]\" class=\"act\">$lang[usergroups_copy]</a>".
-					"<a href=\"".ADMINSCRIPT."?action=usergroups&operation=viewsgroup&sgroupid=$group[groupid]\" onclick=\"ajaxget(this.href, 'sgroup_$group[groupid]', 'sgroup_$group[groupid]', 'auto');doane(event);\" class=\"act\">$lang[view]</a> &nbsp;"
+					"<a href=\"".ADMINSCRIPT."?action=usergroups&operation=viewsgroup&sgroupid=$group[groupid]\" onclick=\"ajaxget(this.href, 'sgroup_$group[groupid]', 'sgroup_$group[groupid]');doane(event);\" class=\"act\">$lang[view]</a> &nbsp;"
 			), TRUE);
 			$sg .= showtablerow('', array('colspan="5" id="sgroup_'.$group['groupid'].'" style="display: none"'), array(''), TRUE);
 
@@ -239,7 +239,13 @@ EOT;
 					}
 
 					$newgid = DB::insert('common_usergroup', $data, 1);
-					DB::insert('common_usergroup_field', array('groupid' => $newgid));
+
+					$datafield = array(
+						'groupid' => $newgid,
+						'allowsearch' => 2,
+					);
+
+					DB::insert('common_usergroup_field', $datafield);
 					DB::insert('forum_onlinelist', array(
 						'groupid' => $newgid,
 						'title' => $data['grouptitle'],
@@ -303,9 +309,15 @@ EOT;
 							$data = array_merge($data, $extadd[$_G['gp_groupnewaddproject'][$k]]);
 						}
 						$newgid = DB::insert('common_usergroup', $data, true);
-						DB::insert('common_usergroup_field', array('groupid' => $newgid));
+
+						$datafield = array(
+							'groupid' => $newgid,
+							'allowsearch' => 2,
+						);
+
+						DB::insert('common_usergroup_field', $datafield);
 						DB::insert('forum_onlinelist', array(
-							'groupid' => $newgroupid,
+							'groupid' => $newgid,
 							'title' => $data['grouptitle'],
 							'url' => '',
 						), false, true);
@@ -315,7 +327,7 @@ EOT;
 							$projectid = substr($_G['gp_groupnewaddproject'][$k], 1);
 							$group_fields = DB::fetch_first("SELECT * FROM ".DB::table('common_usergroup_field')." WHERE groupid='$projectid'");
 							unset($group_fields['groupid']);
-							DB::update('common_usergroup_field', $group_fields, "groupid='$newgroupid'");
+							DB::update('common_usergroup_field', $group_fields, "groupid='$newgid'");
 							$query = DB::query("SELECT fid, viewperm, postperm, replyperm, getattachperm, postattachperm, postimageperm FROM ".DB::table('forum_forumfield')."");
 							while($row = DB::fetch($query)) {
 								$upforumperm = array();

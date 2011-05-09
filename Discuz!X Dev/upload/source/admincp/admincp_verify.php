@@ -576,6 +576,20 @@ EOF;
 		);
 
 		DB::insert('common_setting', $setting, 0, true);
+		if(isset($verifynew['viewrealname']) && !$verifynew['viewrealname']) {
+			DB::update('common_member_profile_setting', array('showinthread' => 0), array('fieldid' => 'realname'));
+			$result = DB::fetch_first("SELECT svalue FROM ".DB::table('common_setting')." WHERE skey='customauthorinfo'");
+			$custominfo = unserialize($result['svalue']);
+			if(isset($custominfo[0]['field_realname'])) {
+				unset($custominfo[0]['field_realname']);
+				$setting = array(
+					'skey' => 'customauthorinfo',
+					'svalue' => addslashes(serialize($custominfo))
+				);
+				DB::insert('common_setting', $setting, 0, true);
+				updatecache(array('custominfo'));
+			}
+		}
 		updatecache(array('setting'));
 		cpmsg('members_verify_update_succeed', 'action=verify', 'succeed');
 	}

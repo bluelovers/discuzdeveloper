@@ -43,6 +43,11 @@ class block_attachmentnew extends block_attachment {
 				),
 				'default' => 0,
 			),
+			'threadmethod' => array(
+				'title' => 'attachmentlist_threadmethod',
+				'type' => 'radio',
+				'default' => 0
+			),
 			'titlelength' => array(
 				'title' => 'attachmentlist_titlelength',
 				'type' => 'text',

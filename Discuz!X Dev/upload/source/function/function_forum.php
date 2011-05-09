@@ -21,7 +21,6 @@ function dunlink($attach) {
 	$filename = $attach['attachment'];
 	$havethumb = $attach['thumb'];
 	$remote = $attach['remote'];
-	$aid = $attach['aid'];
 	if($remote) {
 		ftpcmd('delete', $_G['setting']['ftp']['attachdir'].'/forum/'.$filename);
 		$havethumb && ftpcmd('delete', $_G['setting']['ftp']['attachdir'].'/forum/'.getimgthumbname($filename));
@@ -29,7 +28,9 @@ function dunlink($attach) {
 		@unlink($_G['setting']['attachdir'].'/forum/'.$filename);
 		$havethumb && @unlink($_G['setting']['attachdir'].'/forum/'.getimgthumbname($filename));
 	}
-	@unlink($_G['setting']['attachdir'].'image/'.$aid.'_140_140.jpg');
+	if($attach['aid']) {
+		@unlink($_G['setting']['attachdir'].'image/'.$attach['aid'].'_140_140.jpg');
+	}
 }
 
 function formulaperm($formula) {
@@ -441,15 +442,12 @@ function loadforum() {
 	if(!empty($tid) || !empty($fid)) {
 
 		if(!empty ($tid)) {
-
-			if(!$_G['forum_auditstatuson']) {
-				$addcondiction = $_G['uid'] ? 'AND (displayorder>=0 OR (displayorder IN (-4,-3,-2) AND authorid=\''.$_G[uid].'\'))' : 'AND displayorder>=0';
-			} else {
-				$addcondiction = '';
-			}
-
 			$archiveid = !empty($_G['gp_archiveid']) ? intval($_G['gp_archiveid']) : null;
-			$_G['thread'] = get_thread_by_tid($tid, '*', $addcondiction, $archiveid);
+			$_G['thread'] = get_thread_by_tid($tid, '*', '', $archiveid);
+			if(!$_G['forum_auditstatuson'] && !empty($_G['thread'])
+					&& !($_G['thread']['displayorder'] >= 0 || (in_array($_G['thread']['displayorder'], array(-4,-3,-2)) && $_G['thread']['authorid'] == $_G['uid']))) {
+				$_G['thread'] = null;
+			}
 
 			$_G['forum_thread'] = & $_G['thread'];
 
@@ -503,12 +501,14 @@ function loadforum() {
 			}
 			foreach(array('threadtypes', 'threadsorts', 'creditspolicy', 'modrecommend') as $key) {
 				$forum[$key] = !empty($forum[$key]) ? unserialize($forum[$key]) : array();
+				if(!is_array($forum[$key])) {
+					$forum[$key] = array();
+				}
 			}
 
 			if($forum['status'] == 3) {
 				$_G['isgroupuser'] = 0;
 				$_G['basescript'] = 'group';
-				$_G['group']['allowstickthread'] = 1;
 				if(empty($forum['level'])) {
 					$levelid = DB::result_first("SELECT levelid FROM ".DB::table('forum_grouplevel')." WHERE creditshigher<='$forum[commoncredits]' AND '$forum[commoncredits]'<creditslower LIMIT 1");
 					$forum['level'] = $levelid;
@@ -884,6 +884,46 @@ function updateattachtid($where, $oldtid, $newtid) {
 		DB::delete($oldattachtable, $where);
 	}
 	DB::query("UPDATE ".DB::table('forum_attachment')." SET tid='$newtid' WHERE $where");
+}
+
+function updatepost($data, $condition, $unbuffered = false, $posttableid = false) {
+	global $_G;
+	loadcache('posttableids');
+	$affected_rows = 0;
+	if(!empty($_G['cache']['posttableids'])) {
+		$posttableids = $posttableid !== false && in_array($posttableid, $_G['cache']['posttableids']) ? array($posttableid) : $_G['cache']['posttableids'];
+	} else {
+		$posttableids = array('0');
+	}
+	foreach($posttableids as $id) {
+		DB::update(getposttable($id), $data, $condition, $unbuffered);
+		$affected_rows += DB::affected_rows();
+	}
+	return $affected_rows;
+}
+
+function insertpost($data) {
+	if(isset($data['tid'])) {
+		$tableid = DB::result_first("SELECT posttableid FROM ".DB::table('forum_thread')." WHERE tid='{$data['tid']}'");
+	} else {
+		$tableid = $data['tid'] = 0;
+	}
+	$pid = DB::insert('forum_post_tableid', array('pid' => null), true);
+
+	if(!$tableid) {
+		$tablename = 'forum_post';
+	} else {
+		$tablename = "forum_post_$tableid";
+	}
+
+	$data = array_merge($data, array('pid' => $pid));
+
+	DB::insert($tablename, $data);
+	if($pid % 1024 == 0) {
+		DB::delete('forum_post_tableid', "pid<$pid");
+	}
+	save_syscache('max_post_id', $pid);
+	return $pid;
 }
 
 ?>

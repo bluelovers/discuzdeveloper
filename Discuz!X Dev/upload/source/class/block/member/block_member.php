@@ -146,6 +146,7 @@ class block_member {
 				'avatar_big' => array('name' => lang('blockclass', 'blockclass_member_field_avatar_big'), 'formtype' => 'text', 'datatype' => 'string'),
 				'regdate' => array('name' => lang('blockclass', 'blockclass_member_field_regdate'), 'formtype' => 'date', 'datatype' => 'date'),
 				'posts' => array('name' => lang('blockclass', 'blockclass_member_field_posts'), 'formtype' => 'text', 'datatype' => 'int'),
+				'threads' => array('name' => lang('blockclass', 'blockclass_member_field_threads'), 'formtype' => 'text', 'datatype' => 'int'),
 				'digestposts' => array('name' => lang('blockclass', 'blockclass_member_field_digestposts'), 'formtype' => 'text', 'datatype' => 'int'),
 				'credits' => array('name' => lang('blockclass', 'blockclass_member_field_credits'), 'formtype' => 'text', 'datatype' => 'int'),
 				'reason' => array('name' => lang('blockclass', 'blockclass_member_field_reason'), 'formtype' => 'text', 'datatype' => 'string'),
@@ -311,6 +312,7 @@ class block_member {
 		if($uids) {
 			$wheres[] = 'm.uid IN ('.dimplode($uids).')';
 		}
+		$wheres[] = '(m.groupid < 4 OR m.groupid > 8)';
 
 		$tables = array_unique($tables);
 		$wheres = array_unique($wheres);

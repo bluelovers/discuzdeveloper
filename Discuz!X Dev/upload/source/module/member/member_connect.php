@@ -29,11 +29,36 @@ if($_G['gp_action'] == 'login') {
 
 } else {
 
+	require_once libfile('function/connect');
+	$params = $_GET;
+	connect_params($params, $connect_params);
+	$_G['qc']['connect_auth_hash'] = $connect_params['auth_hash'];
+	$auth_code = authcode($_G['qc']['connect_auth_hash']);
+	$auth_code = explode('|', $auth_code);
+	$conuin = authcode($auth_code[0]);
+
 	$ctl_obj = new register_ctl();
 	$ctl_obj->setting = $_G['setting'];
 
-	$ctl_obj->setting = $_G['setting'];
-	$ctl_obj->setting['regclosed'] = $_G['setting']['regconnect'] && !$_G['setting']['regstatus'];
+	if($_G['setting']['regconnect']) {
+		$ctl_obj->setting['regstatus'] = 1;
+	}
+
+	$_G['setting']['regclosed'] = $_G['setting']['regconnect'] && !$_G['setting']['regstatus'];
+	$_G['qc']['uinlimit'] = $_G['setting']['connect']['register_uinlimit'] && DB::result_first("SELECT COUNT(DISTINCT uid) FROM ".DB::table('connect_memberbindlog')." WHERE uin='$conuin' AND type='1'") >= $_G['setting']['connect']['register_uinlimit'];
+	if($_G['qc']['uinlimit']) {
+		$_G['setting']['regconnect'] = false;
+	}
+	if(!$_G['setting']['regconnect']) {
+		$ctl_obj->showregisterform = 0;
+		$ctl_obj->setting['sitemessage']['register'] = array();
+	}
+
+	if($_G['qc']['uinlimit']) {
+		$ctl_obj->showregisterform = 0;
+		$ctl_obj->setting['sitemessage']['register'] = array();
+		$ctl_obj->setting['regconnect'] = false;
+	}
 	if($_G['setting']['connect']['register_regverify']) {
 		$ctl_obj->setting['regverify'] = 0;
 	}
@@ -48,9 +73,8 @@ if($_G['gp_action'] == 'login') {
 	$_G['cache']['profilesetting']['birthyear']['unchangeable'] = 0;
 	$_G['cache']['profilesetting']['birthmonth']['unchangeable'] = 0;
 	$_G['cache']['profilesetting']['birthday']['unchangeable'] = 0;
-	$uin = $_G['gp_con_uin'] ? $_G['gp_con_uin'] : $_G['gp_uin'];
 	$_G['cache']['fields_register'] = array_merge($_G['cache']['fields_connect_register'], $_G['cache']['fields_register']);
-	$_G['qc']['uinlimit'] = $_G['setting']['connect']['register_uinlimit'] && DB::result_first("SELECT COUNT(DISTINCT uid) FROM ".DB::table('connect_memberbindlog')." WHERE uin='$uin' AND type='1'") >= $_G['setting']['connect']['register_uinlimit'];
+
 	if($_G['setting']['connect']['register_invite']) {
 		$ctl_obj->setting['regstatus'] = 1;
 	}

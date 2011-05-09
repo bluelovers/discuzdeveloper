@@ -70,7 +70,7 @@ if(!submitcheck('deletesubmit')) {
 		if($_G['gp_keywords']) {
 			$sqlkeywords = $or = '';
 			foreach(explode(',', str_replace(' ', '', $_G['gp_keywords'])) as $_G['gp_keywords']) {
-				$sqlkeywords .= " $or af.description LIKE '%$_G[gp_keywords]%'";
+				$sqlkeywords .= " $or a.description LIKE '%$_G[gp_keywords]%'";
 				$or = 'OR';
 			}
 			$sql .= " AND ($sqlkeywords)";

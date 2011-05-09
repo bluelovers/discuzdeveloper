@@ -24,7 +24,7 @@ ckstart($start, $perpage);
 
 $idtypes = array('thread'=>'tid', 'forum'=>'fid', 'blog'=>'blogid', 'group'=>'gid', 'album'=>'albumid', 'space'=>'uid', 'article'=>'aid');
 $_GET['type'] = isset($idtypes[$_GET['type']]) ? $_GET['type'] : 'all';
-$actives = array($_GET['type'] => ' class="a"');
+$actives[$_GET['type']] = ' class="a"';
 
 $gets = array(
 	'mod' => 'space',
@@ -75,13 +75,13 @@ $multi = multi($count, $perpage, $page, $theurl);
 
 dsetcookie('home_diymode', $diymode);
 
-if(!$_G['gp_type']) {
-	$_G['gp_type'] = 'all';
+if(!$_GET['type']) {
+	$_GET['type'] = 'all';
 }
-if($_G['gp_type'] == 'group') {
+if($_GET['type'] == 'group') {
 	$navtitle = lang('core', 'title_group_favorite', array('gorup' => $_G['setting']['navs'][3]['navname']));
 } else {
-	$navtitle = lang('core', 'title_'.$_G['gp_type'].'_favorite');
+	$navtitle = lang('core', 'title_'.$_GET['type'].'_favorite');
 }
 
 include_once template("diy:home/space_favorite");

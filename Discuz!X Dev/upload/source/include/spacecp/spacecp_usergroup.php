@@ -71,7 +71,7 @@ if(in_array($do, array('buy', 'exit'))) {
 				$groupexpirynew = groupexpiry($groupterms);
 
 				DB::query("UPDATE ".DB::table('common_member')." SET groupexpiry='$groupexpirynew', extgroupids='$extgroupidsnew' WHERE uid='$_G[uid]'");
-				updatemembercount($_G['uid'], array('extcredits'.$creditstrans => "-$amount"));
+				updatemembercount($_G['uid'], array($creditstrans => "-$amount"), true, 'UGP', $extgroupidsnew);
 
 				DB::query("UPDATE ".DB::table('common_member_field_forum')." SET groupterms='".addslashes(serialize($groupterms))."' WHERE uid='$_G[uid]'");
 

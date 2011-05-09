@@ -20,7 +20,12 @@ $gets = array(
 	'mod' => 'spacecp',
 	'op' => $_G['gp_op'],
 	'ac' => 'credit',
-	'suboperation' => $_G['gp_suboperation']
+	'suboperation' => $_G['gp_suboperation'],
+	'exttype' => $_G['gp_exttype'],
+	'income' => $_G['gp_income'],
+	'starttime' => $_G['gp_starttime'],
+	'endtime' => $_G['gp_endtime'],
+	'optype' => $_G['gp_optype']
 );
 $theurl = 'home.php?'.url_implode($gets);
 $multi = '';
@@ -131,7 +136,7 @@ if($count) {
 }
 
 $optypehtml = '<select id="optype" name="optype" class="ps" width="168">';
-$optypehtml .= '<option>'.lang('spacecp', 'logs_select_operation').'</option>';
+$optypehtml .= '<option value="">'.lang('spacecp', 'logs_select_operation').'</option>';
 foreach($optypes as $type) {
 	$optypehtml .= '<option value="'.$type.'"'.($type == $_G['gp_optype'] ? ' selected="selected"' : '').'>'.lang('spacecp', 'logs_credit_update_'.$type).'</option>';
 }

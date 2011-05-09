@@ -2,7 +2,7 @@
 	[Discuz!] (C)2001-2009 Comsenz Inc.
 	This is NOT a freeware, use is subject to license terms
 
-	$Id: portal_diy.js 21153 2011-03-16 10:09:24Z zhangguosheng $
+	$Id: portal_diy.js 22076 2011-04-21 06:22:09Z zhangguosheng $
 */
 
 var drag = new Drag();
@@ -655,6 +655,7 @@ drag.extend({
 			bcontent.parentNode.removeChild(bcontent);
 			$(id).innerHTML = obj.childNodes[0].innerHTML;
 			evalscript(s);
+			if(s.indexOf('runslideshow()') != -1) {runslideshow();}
 			drag.initPosition();
 			if (all) {drag.getBlocks();}
 		});
@@ -692,6 +693,7 @@ drag.extend({
 		if($('allupdate')) {
 			$('allupdate').innerHTML = '已操作完成。';
 			$('fwin_dialog_submit').style.display = '';
+			$('fwin_dialog_cancel').style.display = 'none';
 		}
 		this.initPosition();
 	},
@@ -843,6 +845,16 @@ drag.extend({
 		this.isChange = false;
 		this.isClearClose = true;
 		window.onbeforeunload = function () {};
+	},
+	goonDIY : function () {
+		if ($('prefile').value == '1') {
+			showDialog('<div style="line-height:28px;">按继续按钮将打开暂存数据并DIY，<br />按删除按钮将删除暂存数据。</div>','confirm','是否继续暂存数据的DIY？', function(){location.replace(location.href+'&preview=yes');}, true, 'spaceDiy.cancelDIY()', '', '继续', '删除');
+		} else if (location.search.indexOf('preview=yes') > -1) {
+			spaceDiy.enablePreviewButton();
+		} else {
+			spaceDiy.disablePreviewButton();
+		}
+		setInterval(function(){spaceDiy.save('savecache', 1);},180000);
 	}
 });
 
@@ -940,16 +952,6 @@ spaceDiy.extend({
 			document.diyform.submit();
 		}
 		doane();
-	},
-	goonDIY : function () {
-		if ($('prefile').value == '1') {
-			showDialog('<div style="line-height:28px;">按继续按钮将打开暂存数据并DIY，<br />按删除按钮将删除暂存数据。</div>','confirm','是否继续暂存数据的DIY？', function(){location.replace(location.href+'&preview=yes');}, true, 'spaceDiy.cancelDIY()', '', '继续', '删除');
-		} else if (location.search.indexOf('preview=yes') > -1) {
-			this.enablePreviewButton();
-		} else {
-			this.disablePreviewButton();
-		}
-		setInterval(function(){spaceDiy.save('savecache', 1);},180000);
 	},
 	enablePreviewButton : function () {
 		if ($('preview')){

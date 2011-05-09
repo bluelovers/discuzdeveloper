@@ -2,7 +2,7 @@
 	[Discuz!] (C)2001-2009 Comsenz Inc.
 	This is NOT a freeware, use is subject to license terms
 
-	$Id: calendar.js 21305 2011-03-22 10:33:29Z monkey $
+	$Id: calendar.js 21580 2011-04-01 02:22:19Z svn_project_zhangjie $
 */
 
 var controlid = null;
@@ -101,7 +101,7 @@ function settime(d) {
 
 function confirmcalendar() {
 	if(addtime && controlid.value === '') {
-		controlid.value = today.getFullYear() + '-' + today.getMonth() + '-' + today.getDate() + ' ' + zerofill($('hour').value) + ':' + zerofill($('minute').value);
+		controlid.value = today.getFullYear() + '-' + (today.getMonth() + 1) + '-' + today.getDate() + ' ' + zerofill($('hour').value) + ':' + zerofill($('minute').value);
 	}
 	closecalendar();
 }

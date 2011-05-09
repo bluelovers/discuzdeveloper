@@ -189,6 +189,10 @@ function deletethread($tids, $membercount = false, $credit = false, $ponly = fal
 	if(!$tids) {
 		return;
 	}
+	if($_G['setting']['plugins'][HOOKTYPE.'_deletethread']) {
+		$hookparam = func_get_args();
+		hookscript('deletethread', 'global', 'funcs', array('param' => $hookparam, 'step' => 'check'), 'deletethread');
+	}
 	require_once libfile('function/forum');
 	foreach($tids as $tid) {
 		my_post_log('delete', array('tid' => $tid));
@@ -204,7 +208,6 @@ function deletethread($tids, $membercount = false, $credit = false, $ponly = fal
 	}
 
 	DB::delete('common_moderate', "id IN ($tids) AND idtype='tid'");
-
 
 	$atids = $fids = $postids = $threadtables = array();
 	foreach($threadtableids as $tableid) {
@@ -340,6 +343,9 @@ function deletethread($tids, $membercount = false, $credit = false, $ponly = fal
 	DB::query("DELETE FROM ".DB::table('home_feed')." WHERE id IN ($tids) AND idtype='tid'", 'UNBUFFERED');
 	DB::query("DELETE FROM ".DB::table('common_tagitem')." WHERE idtype='tid' AND itemid IN ($tids)", 'UNBUFFERED');
 	DB::query("DELETE FROM ".DB::table('forum_threadrush')." WHERE tid IN ($tids)", 'UNBUFFERED');
+	if($_G['setting']['plugins'][HOOKTYPE.'_deletethread']) {
+		hookscript('deletethread', 'global', 'funcs', array('param' => $hookparam, 'step' => 'delete'), 'deletethread');
+	}
 	return $count;
 }
 

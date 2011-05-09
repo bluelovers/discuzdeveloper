@@ -2,7 +2,7 @@
 	[Discuz!] (C)2001-2009 Comsenz Inc.
 	This is NOT a freeware, use is subject to license terms
 
-	$Id: portal.js 20763 2011-03-03 02:55:15Z monkey $
+	$Id: portal.js 21566 2011-03-31 09:00:16Z zhangguosheng $
 */
 
 function block_get_setting(classname, script, bid) {

@@ -1,5 +1,5 @@
 {eval
-	$filter = array( 'common' => '{lang have_posted}', 'save' => '{lang draft}', 'close' => '{lang closed}', 'aduit' => '{lang pending}', 'recyclebin' => '{lang recyclebin}');
+	$filter = array( 'common' => '{lang have_posted}', 'save' => '{lang draft}', 'close' => '{lang closed}', 'aduit' => '{lang pending}', 'ignored' => '{lang ignored}', 'recyclebin' => '{lang recyclebin}');
 	$_G[home_tpl_spacemenus][] = "<a href=\"home.php?mod=space&uid=$space[uid]&do=thread&view=me\">{lang they_thread}</a>";
 }
 
@@ -84,13 +84,13 @@
 		<div class="mn">
 			<div class="bm">
 				<div class="bm_h cl">
+					<!--{if $space[self]}--><span class="xi2 y"><a href="forum.php?mod=misc&action=nav" onclick="showWindow('nav', this.href, 'get', 0)" class="addnew">{lang posted}</a></span><!--{/if}-->
 					<h1{if $_G['setting']['homestatus']} class="mt"{/if}>
 						<!--{if $_G[gp_type] == 'reply'}-->
 						<span class="xs1 xw0"><a href="home.php?mod=space&do=thread&view=me&type=thread&uid=$space[uid]&from=space">{lang topic}</a><span class="pipe">|</span></span>{lang reply}
 						<!--{else}-->
 						{lang topic}<span class="xs1 xw0"><span class="pipe">|</span><a href="home.php?mod=space&do=thread&view=me&type=reply&uid=$space[uid]&from=space">{lang reply}</a></span>
 						<!--{/if}-->
-						<!--{if $space[self]}--><span class="xs1 xw0">( <a href="forum.php?mod=misc&action=nav" onclick="showWindow('nav', this.href, 'get', 0)">{lang posted}</a> )</span><!--{/if}-->
 					</h1>
 				</div>
 				<div class="bm_c">
@@ -173,10 +173,10 @@
 								<!--{/if}-->
 								<!--{if $thread[multipage]}--><span class="tps">$thread[multipage]</span><!--{/if}-->
 								<!--{if !$_G['gp_filter']}-->
-									<!--{if $thread['displayorder'] == -1 || $thread['invisible'] == -1}--><span class="xg1">$filter[recyclebin]</span>
-									<!--{elseif $thread['displayorder'] == -2}--><span class="xg1">$filter[aduit]</span>
-									<!--{elseif $thread['displayorder'] == -3}--><span class="xg1">$filter[ignored]</span>
-									<!--{elseif $thread['displayorder'] == -4}--><span class="xg1">$filter[save]</span>
+									<!--{if $thread[$statusfield] == -1}--><span class="xg1">$filter[recyclebin]</span>
+									<!--{elseif $thread[$statusfield] == -2}--><span class="xg1">$filter[aduit]</span>
+									<!--{elseif $thread[$statusfield] == -3 && $thread[displayorder] != -4}--><span class="xg1">$filter[ignored]</span>
+									<!--{elseif $thread[displayorder] == -4}--><span class="xg1">$filter[save]</span>
 									<!--{elseif $thread['closed'] == 1}--><span class="xg1">$filter[close]</span>
 									<!--{/if}-->
 								<!--{/if}-->
@@ -226,7 +226,7 @@
 
 					<!--{if $_G['gp_view'] == 'all' && $pruneperm && !$_G['gp_archiveid'] && $list}-->
 						<p class="mtm pns">
-							<label for="chkall" onclick="checkall(this.form, 'moderate')"><input type="checkbox" name="chkall" id="chkall" class="pc vm" />{lang select_all}</label> 
+							<label for="chkall" onclick="checkall(this.form, 'moderate')"><input type="checkbox" name="chkall" id="chkall" class="pc vm" />{lang select_all}</label>
 							<button type="submit" name="delsubmit" value="true" class="pn vm"><em>{lang del_select_thread}</em></button>
 						</p>
 					<!--{/if}-->

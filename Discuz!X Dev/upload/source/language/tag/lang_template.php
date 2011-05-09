@@ -10,10 +10,8 @@
  */
 
 $lang = array (
-
   'no_tag' => '还没有任何标签',
   'tag' => '标签',
-
   'blog_read' => '次阅读',
   'blog_replay' => '个评论',
   'empty_tags' => '没有此标签，您可以继续搜索或者<a href="misc.php?mod=tag" title="返回标签首页">返回标签首页</a>',

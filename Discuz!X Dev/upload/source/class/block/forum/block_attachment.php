@@ -48,6 +48,11 @@ class block_attachment {
 				),
 				'default' => 0,
 			),
+			'threadmethod' => array(
+				'title' => 'attachmentlist_threadmethod',
+				'type' => 'radio',
+				'default' => 0
+			),
 			'digest' => array(
 				'title' => 'attachmentlist_digest',
 				'type' => 'mcheckbox',
@@ -166,6 +171,7 @@ class block_attachment {
 		$titlelength	= !empty($parameter['titlelength']) ? intval($parameter['titlelength']) : 40;
 		$summarylength	= !empty($parameter['summarylength']) ? intval($parameter['summarylength']) : 80;
 		$dateline = isset($parameter['dateline']) ? intval($parameter['dateline']) : 8640000;
+		$threadmethod = !empty($parameter['threadmethod']) ? 1 : 0;
 		$highlight = !empty($parameter['highlight']) ? 1 : 0;
 
 		$fids = array();
@@ -193,6 +199,10 @@ class block_attachment {
 			$historytime = TIMESTAMP - $dateline;
 			$htsql = "`t`.`dateline`>='$historytime'";
 		}
+		$sqlgroupby = '';
+		if($threadmethod) {
+			$sqlgroupby = ' GROUP BY t.tid';
+		}
 		$sqlban = !empty($bannedids) ? ' AND attach.aid NOT IN ('.dimplode($bannedids).')' : '';
 		$sqlfield = $highlight ? ', t.highlight' : '';
 		$query = DB::query("SELECT attach.*,t.tid,t.author,t.authorid,t.subject$sqlfield
@@ -202,6 +212,7 @@ class block_attachment {
 			WHERE $htsql
 			$sql
 			$sqlban
+			$sqlgroupby
 			$orderbysql
 			LIMIT $startrow,$items;"
 		);
@@ -236,7 +247,7 @@ class block_attachment {
 			}
 		}
 		if(!empty($listtids)) {
-			$threads = $bt->getthread($threadtids, $summarylength);
+			$threads = $bt->getthread($threadtids, $summarylength, true);
 			if($threads) {
 				foreach($list as $laid => $lvalue) {
 					if(isset($threads[$lvalue['tid']])) {

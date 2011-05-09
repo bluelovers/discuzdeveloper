@@ -39,7 +39,7 @@ echo <<<EOT
 <tr>
 <td colspan="2" height="90">
 <div class="mainhd">
-<div class="logo">Discuz! Administrator's Control Panel</div>
+<a href="admin.php?action=index" class="logo">Discuz! Administrator's Control Panel</a>
 <div class="uinfo" id="frameuinfo">
 <p>$header_welcome, $cpadmingroup <em>{$_G['member']['username']}</em> [<a href="$basescript?action=logout" target="_top">$header_logout</a>]</p>
 <p class="btnlink"><a href="index.php" target="_blank">$header_bbs</a></p>

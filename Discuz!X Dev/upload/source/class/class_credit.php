@@ -316,6 +316,7 @@ class credit {
 			$updatearray['credits'] = $credits;
 			$member['credits'] = $credits;
 		}
+		$member['credits'] = $member['credits'] == '' ? 0 : $member['credits'] ;
 		$sendnotify = false;
 		if(empty($group) || $group['type'] == 'member' && !($member['credits'] >= $group['creditshigher'] && $member['credits'] < $group['creditslower'])) {
 			$newgroup = DB::fetch_first("SELECT grouptitle, groupid FROM ".DB::table('common_usergroup')." WHERE type='member' AND $member[credits]>=creditshigher AND $member[credits]<creditslower LIMIT 1");

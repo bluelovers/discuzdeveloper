@@ -20,7 +20,7 @@ if($_G['config']['app']['domain']['home'] || $_G['config']['app']['domain']['def
 	if(!$_G['config']['app']['domain']['home']) {
 		$appphp = 'home.php';
 	}
-	$url = 'http://'.$domain.$port.$_G['siteroot'].$appphp;
+	$url = 'http://'.$_G['siteroot'].$port.$appphp;
 } else {
 	$url = 'home.php';
 }
@@ -29,6 +29,6 @@ if($_G['gp_srchtxt']) {
 	$url .= '&username='.$_G['gp_srchtxt'].'&searchsubmit=yes';
 }
 
-header('Location: '.$url);
+dheader('Location: '.$url);
 
 ?>

@@ -22,7 +22,7 @@
 			</h3>
 		<!--{/if}-->
 			<form method="post" autocomplete="off" id="pokeform_{$tospace[uid]}" name="pokeform_{$tospace[uid]}" action="home.php?mod=spacecp&ac=poke&op=$op&uid=$tospace[uid]" {if $_G[inajax]}onsubmit="ajaxpost(this.id, 'return_$_G[gp_handlekey]');"{/if}>
-				<input type="hidden" name="referer" value="$_G[referer]">
+				<input type="hidden" name="referer" value="{echo dreferer()}">
 				<input type="hidden" name="pokesubmit" value="true" />
 				<input type="hidden" name="formhash" value="{FORMHASH}" />
 				<input type="hidden" name="from" value="$_G[gp_from]" />
@@ -79,7 +79,7 @@
 				<!--{if $_G[inajax]}--><span><a href="javascript:;" onclick="hideWindow('$_G[gp_handlekey]');" class="flbc" title="{lang close}">{lang close}</a></span><!--{/if}-->
 			</h3>
 			<form method="post" autocomplete="off" id="friendform_{$uid}" name="friendform_{$uid}" action="home.php?mod=spacecp&ac=poke&op=ignore&uid=$uid" {if $_G[inajax]}onsubmit="ajaxpost(this.id, 'return_$_G[gp_handlekey]');"{/if}>
-				<input type="hidden" name="referer" value="$_G[referer]">
+				<input type="hidden" name="referer" value="{echo dreferer()}">
 				<input type="hidden" name="ignoresubmit" value="true" />
 				<input type="hidden" name="formhash" value="{FORMHASH}" />
 				<input type="hidden" name="from" value="$_G[gp_from]" />

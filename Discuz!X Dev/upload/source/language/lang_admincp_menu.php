@@ -55,7 +55,7 @@ $lang = array
 	'menu_setting_search' => '搜索设置',
 	'menu_setting_district' => '地区设置',
 	'menu_setting_ranklist' => '排行榜设置',
-	'menu_setting_mobile' => '手机访问设置',
+	'menu_setting_mobile' => '手机版访问设置',
 	'menu_setting_tag' => '标签管理',
 
 	'menu_forums' => '版块管理',

@@ -17,6 +17,7 @@ Disallow: {path}search.php
 Disallow: {path}member.php
 Disallow: {path}api.php
 Disallow: {path}misc.php
+Disallow: {path}connect.php
 Disallow: {path}forum.php?mod=redirect*
 Disallow: {path}forum.php?mod=post*
 Disallow: {path}home.php?mod=spacecp*

@@ -1,7 +1,6 @@
 <!--{template common/header}-->
 <!--{if !$_G[inajax]}-->
 <div id="pt" class="bm cl">
-	<!--{subtemplate common/simplesearchform}-->
 	<div class="z">
 		<a href="./" class="nvhm" title="{lang homepage}">$_G[setting][bbname]</a> <em>&rsaquo;</em> 
 		<a href="$_G[setting][navs][1][filename]">{lang portal}</a> <em>&rsaquo;</em>
@@ -57,7 +56,7 @@
 				<input type="hidden" name="formhash" value="{FORMHASH}" />
 				<input type="hidden" name="recommendsubmit" value="1" />
 				<input type="hidden" name="handlekey" value="$_G['gp_handlekey']" />
-				<input type="hidden" name="referer" value="$_G[referer]">
+				<input type="hidden" name="referer" value="{echo dreferer()}">
 				<!--{if ($_G['gp_idtype'] == 'tid' || $_G['gp_idtype'] == 'gtid')}-->
 				<input type="hidden" class="px vm" name="recommendto" id="recommendto" value="" />&nbsp;
 				<label for="showrecommendtip"><input type="checkbox" name="showrecommendtip" id="showrecommendtip" class="pc" fwin="mods" value="1">{lang show_push}</label>&nbsp;

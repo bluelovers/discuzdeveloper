@@ -931,14 +931,13 @@ EOT;
 			}
 		}
 
+		DB::update('common_smiley', array('typeid' => 0), "type='stamplist'");
 		if(is_array($_G['gp_stampicon'])) {
 			foreach($_G['gp_stampicon'] as $k => $v) {
 				if($_G['gp_typeidnew'][$k]) {
 					$k = 0;
 				}
-				DB::update('common_smiley', array(
-				    'typeid' => $k
-				), "id='$v' AND type='stamplist'");
+				DB::update('common_smiley', array('typeid' => $k), "id='$v' AND type='stamplist'");
 			}
 		}
 

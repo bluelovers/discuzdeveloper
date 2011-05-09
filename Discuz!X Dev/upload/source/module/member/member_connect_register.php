@@ -1,10 +1,10 @@
 <?php
 
 /**
- *      [Discuz!] (C)2001-2099 Comsenz Inc.
- *      This is NOT a freeware, use is subject to license terms
+ *	  [Discuz!] (C)2001-2099 Comsenz Inc.
+ *	  This is NOT a freeware, use is subject to license terms
  *
- *      $Id$
+ *	  $Id$
  */
 
 if(!defined('IN_DISCUZ')) {
@@ -14,16 +14,39 @@ if(!defined('IN_DISCUZ')) {
 $from_connect = $_G['setting']['connect']['allow'] ? 1 : 0;
 $regname = 'connect';
 
+require_once libfile('function/connect');
+
 if(empty($_POST)) {
 
-	if(!connect_valid($_GET, $connect_params)) {
-		showmessage('connect_register_bind_miss_uin');
-	}
+	$params = $_GET;
+	connect_params($params, $connect_params);
+
 	$connect_usernames = base64_decode($connect_params['x_usernames']);
 	$connect_nick = connect_filter_username(base64_decode($connect_params['x_nick']));
-	$_G['qc']['connect_uin'] = $connect_params['uin'];
+	$_G['qc']['connect_auth_hash'] = $connect_params['auth_hash'];
 	$_G['qc']['connect_email'] = $connect_params['x_email'];
-	$_G['qc']['dreferer'] = !$dreferer ? str_replace('&amp;', '&', $_G['referer']) : $dreferer;
+	$_G['qc']['dreferer'] = dreferer();
+
+	$auth_code = authcode($_G['qc']['connect_auth_hash']);
+	if (empty($auth_code)) {
+		showmessage('connect_get_request_token_failed', $referer);
+	}
+	$auth_code = explode('|', $auth_code);
+	$conopenid = authcode($auth_code[2]);
+
+	$_G['qc']['connect_show_user_info'] = $connect_params['is_user_info'];
+
+	$_G['qc']['connect_app_id'] = $_G['setting']['connectappid'];
+	$_G['qc']['connect_openid'] = $conopenid;
+	unset($auth_code, $conopenid);
+
+	$_G['qc']['connect_is_notify'] = $connect_params['is_notify'] == 1 ? $connect_params['is_notify'] : 0;
+
+	$_G['qc']['connect_is_feed'] = $connect_params['is_feed'] == 1 ? $connect_params['is_feed'] : 0;
+
+	if ($connect_nick) {
+		$_G['qc']['qq_nick'] = "<strong> $connect_nick </strong>";
+	}
 
 	$_G['qc']['usernames'] = $available_usernames = $unavailable_usernames = array();
 	$connect_usernames = array_unique(array_map('connect_filter_username', array_filter(explode(',', $connect_usernames))));
@@ -66,6 +89,7 @@ if(empty($_POST)) {
 		default:
 			$connectdefault['gender'] = 0;
 	}
+
 	list($connectdefault['birthyear'], $connectdefault['birthmonth'], $connectdefault['birthday']) = explode('-', $connect_params['x_birthday']);
 	foreach($_G['cache']['fields_register'] as $field) {
 		$fieldid = $field['fieldid'];
@@ -78,30 +102,53 @@ if(empty($_POST)) {
 
 } else {
 
-	$userdata['conuin'] = $_G['gp_uin'];
-	$userdata['conisbind'] = $userdata['conispublishfeed'] = $userdata['conispublisht'] = $userdata['conisregister'] = 1;
-	$userdata['conisqzoneavatar'] = !empty($_G['gp_use_qzone_avatar']) ? 1 : 0;
+	if (empty($_G['gp_auth_hash'])) {
+		$_G['gp_auth_hash'] = $_G['cookie']['con_auth_hash'];
+	}
+	$auth_code = authcode($_G['gp_auth_hash']);
+	$auth_code = explode('|', authcode($_G['gp_auth_hash']));
+	$conuin = authcode($auth_code[0]);
+	$conuinsecret = authcode($auth_code[1]);
+	$conopenid = authcode($auth_code[2]);
+
+	$cookie_expires = 2592000;
+	dsetcookie('client_created', TIMESTAMP, $cookie_expires);
+	dsetcookie('client_token', 1, $cookie_expires);
+
+	if (!$conuin || !$conuinsecret || !$conopenid) {
+		showmessage('connect_get_request_token_failed');
+	}
+
+	$is_feed = !empty($_G['gp_is_feed']) ? 1 : 0;
+	$is_qzone_avatar = !empty($_G['gp_use_qzone_avatar']) ? 1 : 0;
 	$userdata['avatarstatus'] = !empty($_G['gp_use_qzone_avatar']) ? 1 : 0;
+	$userdata['conisbind'] = 1;
+
+	DB::query("INSERT INTO ".DB::table('common_member_connect')." (uid, conuin, conuinsecret, conopenid, conisfeed, conispublishfeed, conispublisht, conisregister, conisqzoneavatar) VALUES ('$uid', '$conuin', '$conuinsecret', '$conopenid', '$is_feed', '1', '1', '1', '$is_qzone_avatar')");
+
+	if ($_G['gp_is_notify']) {
+		dsetcookie('connect_js_name', 'user_bind', 86400);
+		dsetcookie('connect_js_params', base64_encode(serialize(array('type' => 'register'))), 86400);
+	}
+	dsetcookie('connect_login', 1, 31536000);
+	dsetcookie('connect_is_bind', '1', 31536000);
+	dsetcookie('connect_uin', $conopenid, 31536000);
+
+	DB::query("INSERT INTO ".DB::table('connect_memberbindlog')." (uid, uin, type, dateline) VALUES ('$uid', '$conuin', '1', '$_G[timestamp]')");
+
+	dsetcookie('con_auth_hash');
+
 	if($_G['setting']['connect']['register_groupid']) {
 		$userdata['groupid'] = $groupinfo['groupid'] = $_G['setting']['connect']['register_groupid'];
 	}
 
-	dsetcookie('connect_js_name', 'user_bind', 86400);
-	dsetcookie('connect_js_params', base64_encode(serialize(array('type' => 'register'))), 86400);
-	dsetcookie('connect_login', 1, 31536000);
-
-	manyoulog('user', $uid, 'add');
-
-	DB::query("INSERT INTO ".DB::table('connect_memberbindlog')." (uid, uin, type, dateline) VALUES ('$uid', '$_G[gp_uin]', '1', '$_G[timestamp]')");
 	if($_G['setting']['connect']['register_addcredit']) {
 		updatemembercount($uid, array($_G['setting']['connect']['register_rewardcredit'] => $_G['setting']['connect']['register_addcredit']));
 	}
-
 }
 
 function connect_filter_username($username) {
 	$username = str_replace(' ', '_', trim($username));
 	return cutstr($username, 15, '');
 }
-
 ?>

@@ -30,11 +30,11 @@
 	</div>
 	<!--{else}-->
 		<!--{if $operation == 'password'}-->
-			<p class="bbda pbm mbm"><!--{if !$_G['setting']['connect']['allow'] || !$_G['member']['conisregister']}-->{lang old_password_comment}<!--{else}-->{lang connect_config_newpassword_comment}<!--{/if}--></p>
-			<form action="home.php?mod=spacecp&ac=profile" method="post" autocomplete="off" onsubmit="return profilecheck()">
+			<p class="bbda pbm mbm"><!--{if !$_G['setting']['connect']['allow'] || !$conisregister}-->{lang old_password_comment}<!--{else}-->{lang connect_config_newpassword_comment}<!--{/if}--></p>
+			<form action="home.php?mod=spacecp&ac=profile" method="post" autocomplete="off">
 				<input type="hidden" value="{FORMHASH}" name="formhash" />
 				<table summary="{lang memcp_profile}" cellspacing="0" cellpadding="0" class="tfm">
-					<!--{if !$_G['setting']['connect']['allow'] || !$_G['member']['conisregister']}-->
+					<!--{if !$_G['setting']['connect']['allow'] || !$conisregister}-->
 						<tr>
 							<th><span class="rq" title="{lang required}">*</span>{lang old_password}</th>
 							<td><input type="password" name="oldpassword" id="oldpassword" class="px" /></td>
@@ -96,7 +96,7 @@
 					</tr>
 					<!--{if checkperm('seccode') && ($secqaacheck || $seccodecheck)}-->
 					<!--{eval $sectpl = '<tr><th><sec></th><td><sec><p class="d"><sec></p></td>';}-->
-					<!--{template common/seccheck}-->
+					<!--{subtemplate common/seccheck}-->
 					<!--{/if}-->
 					<tr>
 						<th>&nbsp;</th>
@@ -237,7 +237,7 @@
 				}
 				function show_success(message) {
 					message = message == '' ? '{lang update_date_success}' : message;
-					showDialog(message, 'notice', '{lang reminder}', function(){
+					showDialog(message, 'right', '{lang reminder}', function(){
 						top.window.location.href = top.window.location.href;
 					}, 0, null, '', '', '', '', 3);
 				}

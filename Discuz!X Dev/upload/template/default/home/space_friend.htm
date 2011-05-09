@@ -193,35 +193,44 @@
 										<p class="maxh">$value[recentnote]</p>
 									<!--{/if}-->
 
-									<!--{if $_GET['view']=='blacklist'}-->
-										<div class="xg1"><a href="home.php?mod=spacecp&ac=friend&op=blacklist&subop=delete&uid=$value[uid]&start=$_GET[start]">{lang delete_blacklist}</a></div>
-									<!--{elseif $_GET['view']=='visitor' || $_GET['view'] == 'trace'}-->
-										<div class="xg1"><!--{date($value[dateline], 'n{lang month}j{lang day}')}--></div>
-									<!--{elseif $_GET['view']=='online'}-->
-										<div class="xg1"><!--{date($ols[$value[uid]], 'H:i')}--></div>
-									<!--{else}-->
 										<div class="xg1">
-											<a href="home.php?mod=spacecp&ac=friend&op=changenum&uid=$value[uid]&handlekey=hotuserhk_{$value[uid]}" id="friendnum_$value[uid]" onclick="showWindow(this.id, this.href, 'get', 0);" title="{lang hot}">{lang hot}(<span id="spannum_$value[uid]">$value[num]</span>)</a><span class="pipe">|</span>
-											<a href="javascript:;" id="interaction_$value[uid]" onmouseover="showMenu(this.id);" class="showmenu">{lang interactive}</a><span class="pipe">|</span>
-											<!--{if !$value[isfriend]}-->
-											<a href="home.php?mod=spacecp&ac=friend&op=add&uid=$value[uid]&handlekey=adduserhk_{$value[uid]}" id="a_friend_$key" onclick="showWindow(this.id, this.href, 'get', 0);" title="{lang add_friend}">{lang add_friend}</a>
+											<!--{if $_GET['view'] == 'blacklist'}-->
+												<a href="home.php?mod=spacecp&ac=friend&op=blacklist&subop=delete&uid=$value[uid]&start=$_GET[start]">{lang delete_blacklist}</a>
+											<!--{elseif $_GET['view'] == 'visitor' || $_GET['view'] == 'trace'}-->
+												<!--{date($value[dateline], 'n{lang month}j{lang day}')}-->
+											<!--{elseif $_GET['view'] == 'online'}-->
+												<!--{date($ols[$value[uid]], 'H:i')}-->
 											<!--{else}-->
+												<a href="home.php?mod=spacecp&ac=friend&op=changenum&uid=$value[uid]&handlekey=hotuserhk_{$value[uid]}" id="friendnum_$value[uid]" onclick="showWindow(this.id, this.href, 'get', 0);" title="{lang hot}">{lang hot}(<span id="spannum_$value[uid]">$value[num]</span>)</a>
+											<!--{/if}-->
+											<!--{if $value[uid] != $_G['uid'] && $value[username] != ''}-->
+											<span class="pipe">|</span>
+											<a href="javascript:;" id="interaction_$value[uid]" onmouseover="showMenu(this.id);" class="showmenu">{lang interactive}</a>
+											<!--{/if}-->
+											<!--{if !$value[isfriend] && $value[username] != ''}-->
+											<span class="pipe">|</span>
+											<a href="home.php?mod=spacecp&ac=friend&op=add&uid=$value[uid]&handlekey=adduserhk_{$value[uid]}" id="a_friend_$key" onclick="showWindow(this.id, this.href, 'get', 0);" title="{lang add_friend}">{lang add_friend}</a>
+											<!--{elseif !in_array($_GET['view'], array('blacklist', 'visitor', 'trace', 'online'))}-->
+											<span class="pipe">|</span>
 											<a href="javascript:;" id="opfrd_$value[uid]" onmouseover="showMenu(this.id);" class="showmenu">{lang manage}</a>
 											<!--{/if}-->
 										</div>
-										<!--{if $value[isfriend]}-->
+										<!--{if $value[isfriend] && !in_array($_GET['view'], array('blacklist', 'visitor', 'trace', 'online'))}-->
 											<div id="opfrd_$value[uid]_menu" class="p_pop" style="display: none; width: 80px;">
 												<p><a href="home.php?mod=spacecp&ac=friend&op=changegroup&uid=$value[uid]&handlekey=editgrouphk_{$value[uid]}" id="friend_group_$value[uid]" onclick="showWindow(this.id, this.href, 'get', 0);" title="{lang set_friend_group}">{lang set_friend_group}</a></p>
 												<p><a href="home.php?mod=spacecp&ac=friend&op=editnote&uid=$value[uid]&handlekey=editnote_{$value[uid]}" id="friend_editnote_$value[uid]" onclick="showWindow(this.id, this.href, 'get', 0);" title="{lang friend_editnote}">{lang friend_editnote}</a></p>
 												<p><a href="home.php?mod=spacecp&ac=friend&op=ignore&uid=$value[uid]&handlekey=delfriendhk_{$value[uid]}" id="a_ignore_$key" onclick="showWindow(this.id, this.href, 'get', 0);" title="{lang delete}">{lang delete}</a></p>
 											</div>
 										<!--{/if}-->
+										<!--{if $value[uid] != $_G['uid'] && $value[username] != ''}-->
 										<div id="interaction_$value[uid]_menu" class="p_pop" style="display: none; width: 80px;">
+											<p><a href="home.php?mod=space&uid=$value[uid]&do=profile" target="_blank" title="{lang view_profile}">{lang view_profile}</a></p>
+											<!--{if $_G['setting']['homestatus']}--><p><a href="home.php?mod=space&uid=$value[uid]" target="_blank" title="{lang visit_friend}">{lang visit_friend}</a></p><!--{/if}-->
 											<p><a href="home.php?mod=spacecp&ac=poke&op=send&uid=$value[uid]" id="a_poke_$key" onclick="showWindow(this.id, this.href, 'get', 0);" title="{lang say_hi}">{lang say_hi}</a></p>
 											<p><a href="home.php?mod=spacecp&ac=pm&op=showmsg&handlekey=showmsg_$value[uid]&touid=$value[uid]&pmid=0&daterange=2" id="a_sendpm_$key" onclick="showWindow('showMsgBox', this.href, 'get', 0)" title="{lang send_pm}">{lang send_pm}</a></p>
 											<!--{hook/space_interaction_extra}-->
 										</div>
-									<!--{/if}-->
+										<!--{/if}-->
 									</li>
 								<!--{/loop}-->
 								</ul>

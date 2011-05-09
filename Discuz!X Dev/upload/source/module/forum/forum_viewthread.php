@@ -25,7 +25,7 @@ if(!$_G['forum_thread'] || !$_G['forum']) {
 
 $page = max(1, $_G['page']);
 
-if($_G['setting']['cachethreadlife'] && $_G['forum']['threadcaches'] && !$_G['uid'] && $page == 1 && !$_G['forum']['special'] && empty($_G['gp_do']) && !defined('IN_ARCHIVER')) {
+if($_G['setting']['cachethreadlife'] && $_G['forum']['threadcaches'] && !$_G['uid'] && $page == 1 && !$_G['forum']['special'] && empty($_G['gp_do']) && !defined('IN_ARCHIVER') && !defined('IN_MOBILE')) {
 	viewthread_loadcache();
 }
 
@@ -568,15 +568,18 @@ if($postusers) {
 	$query = DB::query("SELECT m.uid, m.username, m.groupid, m.adminid, m.regdate, m.credits, m.email, m.status AS memberstatus,
 			ms.lastactivity, ms.lastactivity, ms.invisible AS authorinvisible,
 			mc.*, mp.gender, mp.site, mp.icq, mp.qq, mp.yahoo, mp.msn, mp.taobao, mp.alipay,
-			mf.medals, mf.sightml AS signature, mf.customstatus $fieldsadd
+			mf.medals, mf.sightml AS signature, mf.customstatus, mh.privacy $fieldsadd
 			FROM ".DB::table('common_member')." m
 			LEFT JOIN ".DB::table('common_member_field_forum')." mf USING(uid)
 			LEFT JOIN ".DB::table('common_member_status')." ms USING(uid)
 			LEFT JOIN ".DB::table('common_member_count')." mc USING(uid)
 			LEFT JOIN ".DB::table('common_member_profile')." mp USING(uid)
+			LEFT JOIN ".DB::table('common_member_field_home')." mh USING(uid)
 			$verifyadd
 			WHERE m.uid IN (".dimplode(array_keys($postusers)).")");
 	while($postuser = DB::fetch($query)) {
+		$postuser['privacy'] = unserialize($postuser['privacy']);
+		unset($postuser['privacy']['feed'], $postuser['privacy']['view']);
 		$postusers[$postuser['uid']] = $postuser;
 	}
 	$_G['medal_list'] = array();
@@ -588,9 +591,13 @@ if($postusers) {
 }
 
 if($savepostposition && $positionlist) {
-	foreach ($positionlist as $pid => $position)
-	if($postlist[$pid]){
-		$postlist[$pid]['number'] = $position;
+	foreach ($positionlist as $pid => $position) {
+		if($postlist[$pid]){
+			$postlist[$pid]['number'] = $position;
+			if($rushreply) {
+				$postlist[$pid] = checkrushreply($postlist[$pid]);
+			}
+		}
 	}
 }
 if($_G['gp_checkrush'] && $rushreply) {
@@ -771,6 +778,19 @@ if($_G['forum_thread']['replies'] > $_G['forum_thread']['views']) {
 	$_G['forum_thread']['views'] = $_G['forum_thread']['replies'];
 }
 
+$my_search_data = unserialize($_G['setting']['my_search_data']);
+if (viewthread_is_search_referer() && $my_search_data['status']) {
+	require_once libfile('function/cloud');
+	if(getcloudappstatus('search')) {
+		$_params = array('s_site_gid' => $_G['groupid'],
+						'response_type' => 'js',
+						'referer' => $_SERVER['HTTP_REFERER'],
+					);
+		$signUrl = generateSiteSignUrl($_params);
+		$my_search_se_url = 'http://search.discuz.qq.com/api/site/se?' . $signUrl . "";
+	}
+}
+
 if(empty($_G['gp_viewpid'])) {
 	$sufix = '';
 	if($_G['gp_from'] == 'portal') {
@@ -782,7 +802,7 @@ if(empty($_G['gp_viewpid'])) {
 } else {
 	$_G['setting']['admode'] = 0;
 	$post = $postlist[$_G['gp_viewpid']];
-	if($rushreply && !empty($_G['gp_viewpid'])) {
+	if($rushreply) {
 		$post['number'] = DB::result_first("SELECT position FROM ".DB::table('forum_postposition')." WHERE pid='$_G[gp_viewpid]'");
 	} else {
 		$post['number'] = DB::result_first("SELECT COUNT(*) FROM ".DB::table($posttable)." WHERE tid='$post[tid]' AND dateline<='$post[dbdateline]'");
@@ -793,7 +813,6 @@ if(empty($_G['gp_viewpid'])) {
 		if($post['number'] == str_replace(",", '', $arr['0']['0'])) {
 			$post['rewardfloor'] = 1;
 		}
-
 	}
 	include template('common/header_ajax');
 	hookscriptoutput('viewthread');
@@ -946,9 +965,6 @@ function viewthread_procpost($post, $lastvisit, $ordertype, $special = 0) {
 		}
 	}
 	$_G['forum_firstpid'] = intval($_G['forum_firstpid']);
-	if($rushreply) {
-		$post = checkrushreply($post);
-	}
 	$post['custominfo'] = viewthread_custominfo($post);
 	return $post;
 }
@@ -1026,12 +1042,12 @@ function viewthread_custominfo($post) {
 			if(substr($key, 0, 10) == 'extcredits') {
 				$i = substr($key, 10);
 				$extcredit = $_G['setting']['extcredits'][$i];
-				$v = '<dt>'.($extcredit['img'] ? $extcredit['img'].' ' : '').$extcredit['title'].'</dt><dd>'.$post['extcredits'.$i].' '.$extcredit['unit'].'&nbsp;</dd>';
+				$v = '<dt>'.($extcredit['img'] ? $extcredit['img'].' ' : '').$extcredit['title'].'</dt><dd>'.$post['extcredits'.$i].' '.$extcredit['unit'].'</dd>';
 			} elseif(substr($key, 0, 6) == 'field_') {
 				require_once libfile('function/profile');
 				$v = profile_show(substr($key, 6), $post);
 				if($v) {
-					$v = '<dt>'.$_G['cache']['custominfo']['profile'][$key][0].'</dt><dd title="'.htmlspecialchars(strip_tags($v)).'">'.$v.'&nbsp;</dd>';
+					$v = '<dt>'.$_G['cache']['custominfo']['profile'][$key][0].'</dt><dd title="'.htmlspecialchars(strip_tags($v)).'">'.$v.'</dd>';
 				}
 			} else {
 				switch($key) {
@@ -1051,7 +1067,7 @@ function viewthread_custominfo($post) {
 					case 'oltime': $v = $post['oltime'].' '.lang('space', 'viewthread_userinfo_hour');break;
 				}
 				if($v !== '') {
-					$v = '<dt>'.lang('space', 'viewthread_userinfo_'.$key).'</dt><dd>'.$v.'&nbsp;</dd>';
+					$v = '<dt>'.lang('space', 'viewthread_userinfo_'.$key).'</dt><dd>'.$v.'</dd>';
 				}
 			}
 			$data .= $v;
@@ -1171,5 +1187,14 @@ function checkrushreply($post) {
 		$post['rewardfloor'] = 1;
 	}
 	return $post;
+}
+
+function viewthread_is_search_referer() {
+    $regex = "((http|https)\:\/\/)?";
+    $regex .= "([a-z]*.)?(ask.com|yahoo.com|cn.yahoo.com|bing.com|baidu.com|soso.com|google.com|google.cn)(.[a-z]{2,3})?\/";
+    if(preg_match("/^$regex/", $_SERVER['HTTP_REFERER'])) {
+        return true;
+    }
+    return false;
 }
 ?>

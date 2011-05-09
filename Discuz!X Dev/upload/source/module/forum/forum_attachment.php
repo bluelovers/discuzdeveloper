@@ -26,7 +26,7 @@ if($_G['gp_uid'] != $_G['uid'] && $_G['gp_uid']) {
 
 $requestmode = !empty($_G['gp_request']) && empty($_G['gp_uid']);
 
-$aid = $_G['gp_aid'];
+$aid = intval($_G['gp_aid']);
 
 $tableid = !empty($_G['gp_tableid']) ? getattachtableid($_G['gp_tableid']) : DB::result_first("SELECT tableid FROM ".DB::table('forum_attachment')." WHERE aid='$aid'");
 if(!is_numeric($tableid)) {

@@ -75,7 +75,13 @@
 						<a href="home.php?mod=space&uid=$thread[authorid]" class="avt" c="1" target="_blank"><!--{avatar($thread[authorid],small)}--></a>
 						<p class="mtn"><a href="home.php?mod=space&uid=$thread[authorid]" target="_blank">$thread[author]</a></p>
 					</div>
-					<div class="c z">
+					<div class="s y">
+						<a href="forum.php?mod=viewthread&tid=$thread[tid]" class="joins" target="_blank">
+							<span>$thread[poll][voters]</span>{lang people_join}
+						</a>
+						<a href="forum.php?mod=viewthread&tid=$thread[tid]" class="go" target="_blank">{lang to_poll}</a>
+					</div>
+					<div class="c">
 						<h4 class="h"><a href="forum.php?mod=viewthread&tid=$thread[tid]" target="_blank">$thread[subject]</a></h4>
 						<ol>
 							<!--{loop $thread[poll][pollpreview] $key $value}-->
@@ -94,12 +100,6 @@
 							<span class="pipe">|</span>
 							{lang hot} $thread['heats']
 						</div>
-					</div>
-					<div class="s z">
-						<a href="forum.php?mod=viewthread&tid=$thread[tid]" class="joins" target="_blank">
-							<span>$thread[poll][voters]</span>{lang people_join}
-						</a>
-						<a href="forum.php?mod=viewthread&tid=$thread[tid]" class="go" target="_blank">{lang to_poll}</a>
 					</div>
 				</li>
 			<!--{/loop}-->

@@ -54,11 +54,8 @@ class plugin_myrepeats {
 			dsetcookie('mrd', $cookievalue ? $cookievalue : "\t", 3600);
 		}
 
-		if(CURSCRIPT != 'search') {
-			$this->value['global_usernav_extra1'] = '<span class="pipe">|</span><span id="myrepeats" class="showmenu cur1" onmouseover="delayShow(this)">'.lang('plugin/myrepeats', 'switch').'</span>&nbsp;';
-		} else {
-			$this->value['global_usernav_extra1'] = '<a href="javascript:;" id="myrepeats" class="showmenu" onmouseover="delayShow(this)">'.lang('plugin/myrepeats', 'switch').'</a>&nbsp;';
-		}
+		$this->value['global_usernav_extra1'] = '<span class="pipe">|</span><a id="myrepeats" class="showmenu cur1" onmouseover="delayShow(this)">'.lang('plugin/myrepeats', 'switch').'</a>'."\n";
+
 		$list = '<ul id="myrepeats_menu" class="p_pop" style="display:none;">';
 		foreach($userlist as $user) {
 			if(!$user) {

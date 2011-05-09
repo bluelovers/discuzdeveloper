@@ -72,7 +72,7 @@ switch($frommodcp) {
 		$_G['referer'] = "forum.php?mod=modcp&action=forum&op=recommend".(getgpc('show') ? "&show=getgpc('show')" : '')."&fid=$_G[fid]";
 		break;
 	default:
-		if(($operation == 'delete' || in_array('move', $operations)) && !strpos($_SERVER['HTTP_REFERER'], 'search.php?mod=forum')) {
+		if((in_array('delete', $operations) || in_array('move', $operations)) && !strpos($_SERVER['HTTP_REFERER'], 'search.php?mod=forum')) {
 			$_G['referer'] = 'forum.php?mod=forumdisplay&fid='.$_G['fid'].(!empty($_G['gp_listextra']) ? '&'.rawurldecode($_G['gp_listextra']) : '');
 		} else {
 			$_G['referer'] = $_G['gp_redirect'];
@@ -267,9 +267,6 @@ if(!submitcheck('modsubmit')) {
 					$oldrecommendlist = array();
 					$query = DB::query("SELECT * FROM ".DB::table('forum_forumrecommend')." WHERE tid IN ($moderatetids)");
 					while($row = DB::fetch($query)) {
-						if($row['aid']) {
-							@unlink(DISCUZ_ROOT.'./data/imagecache/'.intval($row['aid']).'_'.$imgw.'_'.$imgh.'.jpg');
-						}
 						$oldrecommendlist[$row['tid']] = $row;
 					}
 					foreach($threadlist as $thread) {

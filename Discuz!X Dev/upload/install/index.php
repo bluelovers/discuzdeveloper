@@ -430,7 +430,7 @@ if($method == 'show_license') {
 		VIEW_OFF && show_msg('initdbresult_succ');
 
 		if(!VIEW_OFF) {
-			echo '<script type="text/javascript">function setlaststep() {document.getElementById("laststep").disabled=false;document.getElementById("laststep").value = \''.lang('install_founder_contact').'\';}</script><script type="text/javascript">setTimeout(function(){window.location=\'index.php?method=ext_info\'}, 30000);</script><iframe src="../misc.php?mod=initsys" style="display:none;" onload="setlaststep()"></iframe>'."\r\n";
+			echo '<script type="text/javascript">function setlaststep() {document.getElementById("laststep").disabled=false;window.location=\'index.php?method=ext_info\';}</script><script type="text/javascript">setTimeout(function(){window.location=\'index.php?method=ext_info\'}, 30000);</script><iframe src="../misc.php?mod=initsys" style="display:none;" onload="setlaststep()"></iframe>'."\r\n";
 			show_footer();
 		}
 
@@ -445,14 +445,6 @@ if($method == 'show_license') {
 	}
 
 } elseif($method == 'ext_info') {
-	include ROOT_PATH.CONFIG;
-	$db = new dbstuff;
-	$db->connect($_config['db']['1']['dbhost'], $_config['db']['1']['dbuser'], $_config['db']['1']['dbpw'], $_config['db']['1']['dbname'], $_config['db']['1']['dbcharset']);
-	$skip = getgpc('skip');
-	$tablepre = $_config['db']['1']['tablepre'];
-	if(empty($skip)) {
-		upg_comsenz_stats();
-	}
 	@touch($lockfile);
 	if(VIEW_OFF) {
 		show_msg('ext_info_succ');

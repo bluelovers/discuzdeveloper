@@ -65,6 +65,7 @@ if($_G['gp_goto'] == 'findpost') {
 
 	if(empty($post)) {
 		if($ptid) {
+			header("HTTP/1.1 301 Moved Permanently");
 			dheader("Location: forum.php?mod=viewthread&tid=$ptid");
 		} else {
 			showmessage('post_check', NULL, array('tid' => $ptid));
@@ -85,12 +86,13 @@ if($_G['gp_goto'] == 'findpost') {
 	}
 
 	if($thread['special'] == 2 && DB::result_first("SELECT count(*) FROM ".DB::table('forum_trade')." WHERE pid='$pid'")) {
+		header("HTTP/1.1 301 Moved Permanently");
 		dheader("Location: forum.php?mod=viewthread&do=tradeinfo&tid=$tid&pid=$pid");
 	}
 
 	$authoridurl = $authorid ? '&authorid='.$authorid : '';
 	$ordertypeurl = $ordertype ? '&ordertype='.$ordertype : '';
-
+	header("HTTP/1.1 301 Moved Permanently");
 	dheader("Location: forum.php?mod=viewthread&tid=$tid&page=$page$authoridurl$ordertypeurl".(isset($_G['gp_modthreadkey']) && ($modthreadkey = modauthkey($tid)) ? "&modthreadkey=$modthreadkey": '')."#pid$pid");
 }
 
@@ -113,7 +115,7 @@ if($_G['gp_goto'] == 'lastpost') {
 
 	$lastpost = $_G['thread']['lastpost'];
 
-	$query = "SELECT tid FROM ".DB::table($_G['thread']['threadtable'])." WHERE fid='$_G[fid]' AND displayorder>='0' AND lastpost";
+	$query = "SELECT tid FROM ".DB::table($_G['thread']['threadtable'])." WHERE fid='$_G[fid]' AND displayorder>='0' AND closed='0' AND lastpost";
 	if($_G['gp_goto'] == 'nextnewset') {
 		$query .= ">'$lastpost' ORDER BY lastpost ASC LIMIT 1";
 	} else {

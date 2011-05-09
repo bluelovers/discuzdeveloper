@@ -86,8 +86,7 @@ if($operation == 'updatecache') {
 			'data/log',
 			'data/template',
 			'data/threadcache',
-			'data/diy',
-			'data/imagecache',
+			'data/diy'
 		);
 
 		foreach(array('data/cache', 'data/log', 'data/template', 'data/attachment', 'data/diy') as $directory) {

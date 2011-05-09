@@ -7,6 +7,9 @@
  *      $Id$
  */
 
+define('IN_API', true);
+define('CURSCRIPT', 'api');
+
 require_once('../../source/class/class_core.php');
 require_once('../../source/function/function_home.php');
 
@@ -242,9 +245,8 @@ class Search {
 			$rightHtmlCode .= "\t<span class=\"pipe\">|</span><a href=\"member.php?mod=logging&action=login\">".lang('template', 'login')."</a>\n";
 		}
 		$rightHtmlCode .= "\t</p>\n";
-		$siteurl = dirname(dirname($_G['siteurl']));
-		$leftHtmlCode = urlcovert($leftHtmlCode, $siteurl);
-		$rightHtmlCode = urlcovert($rightHtmlCode, $siteurl);
+		$leftHtmlCode = urlcovert($leftHtmlCode, $_G['siteurl']);
+		$rightHtmlCode = urlcovert($rightHtmlCode, $_G['siteurl']);
 		if(strtolower($_G['config']['output']['charset']) != 'utf-8') {
 			require_once libfile('class/chinese');
 			$chinese = new Chinese($_G['config']['output']['charset'], 'utf-8', true);
@@ -261,7 +263,7 @@ function urlcovert($html, $siteurl) {
 	if(preg_match_all("/\s+href=\"(.+?)\"/is", $html, $match)) {
 		foreach($match[1] as $key => $val) {
 			if(preg_match('/^http:\/\//is', $val) || $val == 'javascript:;' || $val{0} == '#') continue;
-			$html = str_replace($match[0][$key], ' href="'.$siteurl.'/'.$val.'"', $html);
+			$html = str_replace($match[0][$key], ' href="'.$siteurl.$val.'"', $html);
 		}
 	}
 	return $html;

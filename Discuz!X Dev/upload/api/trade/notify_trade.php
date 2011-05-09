@@ -7,6 +7,9 @@
  *      $Id$
  */
 
+define('IN_API', true);
+define('CURSCRIPT', 'api');
+
 require '../../source/class/class_core.php';
 require '../../source/function/function_forum.php';
 
@@ -102,7 +105,7 @@ if($notifydata['validator']) {
 }
 
 if($notifydata['location']) {
-	header('location: '.$_G['siteurl'].'forum.php?mod=misc&action=paysucceed&orderid='.$orderid);
+	dheader('location: '.$_G['siteurl'].'forum.php?mod=misc&action=paysucceed&orderid='.$orderid);
 } else {
 	exit($notifydata['notify']);
 }

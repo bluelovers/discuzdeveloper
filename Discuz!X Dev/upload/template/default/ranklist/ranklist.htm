@@ -1,6 +1,5 @@
 <!--{template common/header}-->
 <div id="pt" class="bm cl">
-	<!--{subtemplate common/simplesearchform}-->
 	<div class="z">
 		<a href="./" class="nvhm" title="{lang homepage}">$_G[setting][bbname]</a> <em>&rsaquo;</em>
 		<a href="$_G[setting][navs][8][filename]">$_G[setting][navs][8][navname]</a> <em>&rsaquo;</em>
@@ -22,7 +21,7 @@
 				<span class="y">
 					<a href="misc.php?mod=ranklist&type=member" class="xi1 xw1">{lang i_want_rank}</a>
 					<span class="pipe">|</span>
-					<a href="misc.php?mod=ranklist&type=member">{lang more}&rsaquo;</a>
+					<a href="misc.php?mod=ranklist&type=member" class="xi2">{lang more}&rsaquo;</a>
 				</span>
 				<h2>{lang bidding_rank}</h2>
 			</div>
@@ -49,7 +48,7 @@
 		<div class="rnk1">
 			<div class="bm">
 				<div class="bm_h cl">
-					<span class="y">
+					<span class="y xi2">
 						<a href="misc.php?mod=ranklist&type=picture&view=hot&orderby=all">{lang more}&rsaquo;</a>
 					</span>
 					<h2>{lang ranklist_picture}</h2>
@@ -89,8 +88,9 @@
 			</div>
 			<div class="bm_c">
 				<ul class="xl xl2 cl">
+					<!--{eval $key = 0;}-->
 					<!--{loop $threads_hot $thread}-->
-						<li class="{echo swapclass('xl2_r');}">
+						<li{if $key++%2} class="xl2_r"{/if}>
 							<em><a href="home.php?mod=space&uid=$thread[authorid]" target="_blank">$thread[author]</a></em>
 							&middot; <a href="forum.php?mod=viewthread&tid=$thread[tid]" target="_blank">$thread[subject]</a>
 						</li>
@@ -108,8 +108,9 @@
 			</div>
 			<div class="bm_c">
 				<ul class="xl xl2 cl">
+					<!--{eval $key = 0;}-->
 					<!--{loop $blogs_hot $blog}-->
-						<li class="{echo swapclass('xl2_r');}">
+						<li{if $key++%2} class="xl2_r"{/if}>
 							<em><a href="home.php?mod=space&uid=$blog[uid]" target="_blank">$blog[username]</a></em>
 							&middot; <a href="home.php?mod=space&uid=$blog[uid]&do=blog&id=$blog[blogid]" target="_blank">$blog[subject]</a>
 						</li>
@@ -127,8 +128,9 @@
 			</div>
 			<div class="bm_c">
 				<ul class="xl xl2 cl">
+					<!--{eval $key = 0;}-->
 					<!--{loop $polls_hot $poll}-->
-						<li class="{echo swapclass('xl2_r');}">
+						<li{if $key++%2} class="xl2_r"{/if}>
 							<em><a href="home.php?mod=space&uid=$poll[authorid]" target="_blank">$poll[author]</a></em>
 							&middot; <a href="forum.php?mod=viewthread&tid=$poll[tid]" target="_blank">$poll[subject]</a>
 						</li>
@@ -146,8 +148,9 @@
 			</div>
 			<div class="bm_c">
 				<ul class="xl xl2 cl">
+					<!--{eval $key = 0;}-->
 					<!--{loop $activities_hot $activity}-->
-						<li class="{echo swapclass('xl2_r');}">
+						<li{if $key++%2} class="xl2_r"{/if}>
 							<em><a href="home.php?mod=space&uid=$activity[authorid]" target="_blank">$activity[author]</a></em>
 							&middot; <a href="forum.php?mod=viewthread&tid=$activity[tid]" target="_blank">$activity[subject]</a>
 						</li>

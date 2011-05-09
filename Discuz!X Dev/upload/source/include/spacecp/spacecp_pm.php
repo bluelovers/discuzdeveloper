@@ -293,7 +293,7 @@ if($_GET['op'] == 'checknewpm') {
 				if(!defined('IN_MOBILE')) {
 					showmessage('do_success', 'home.php?mod=space&do=pm&subop=view&touid='.$touid, array('pmid' => $return), $_G['inajax'] ? array('msgtype' => 3, 'showmsg' => false) : array());
 				} else {
-					showmessage('do_success', 'home.php?mod=space&do=pm&subop=view'.(dintval($_POST['touid']) ? '&touid='.dintval($_POST['touid']) : ( dintval($_POST['plid']) ? '&plid='.dintval($_POST['plid']).'&daterange=1&type=1' : '' )));
+					showmessage('do_success', 'home.php?mod=space&do=pm&subop=view'.(intval($_POST['touid']) ? '&touid='.intval($_POST['touid']) : ( intval($_POST['plid']) ? '&plid='.intval($_POST['plid']).'&daterange=1&type=1' : '' )));
 				}
 
 			}
@@ -412,9 +412,9 @@ if($_GET['op'] == 'checknewpm') {
 		include_once libfile('function/friend');
 		$returns = array();
 		foreach($members as $member) {
-		$member['onlyacceptfriendpm'] = $member['onlyacceptfriendpm'] ? $member['onlyacceptfriendpm'] : ($_G['setting']['onlyacceptfriendpm'] ? 1 : 2);
-		if($_G['group']['allowsendallpm'] || $member['onlyacceptfriendpm'] == 2 || ($member['onlyacceptfriendpm'] == 1 && friend_check($member['uid']))) {
-			$return = uc_pm_appendchatpm($plid, $_G['uid'], $member['uid']);
+			$member['onlyacceptfriendpm'] = $member['onlyacceptfriendpm'] ? $member['onlyacceptfriendpm'] : ($_G['setting']['onlyacceptfriendpm'] ? 1 : 2);
+			if($_G['group']['allowsendallpm'] || $member['onlyacceptfriendpm'] == 2 || ($member['onlyacceptfriendpm'] == 1 && friend_check($member['uid']))) {
+				$return = uc_pm_appendchatpm($plid, $_G['uid'], $member['uid']);
 				$returns[] = array('uid' => $member['uid'], 'username' => $member['username'], 'return' => $return);
 			} else {
 				$returns[] = array('uid' => $member['uid'], 'username' => $member['username'], 'return' => 0);

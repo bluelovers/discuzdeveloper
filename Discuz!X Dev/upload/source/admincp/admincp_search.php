@@ -47,11 +47,17 @@ if($_G['gp_searchsubmit'] && $keywords) {
 					$tmp[] = '<a href="'.ADMINSCRIPT.'?'.$url.'&highlight='.rawurlencode($keywords).'"  target="_blank">'.$title.'</a>';
 				}
 			}
-			$texts = '';
+			$texts = array();
 			$tkeys = array_unique($tkeys);
 			foreach($tkeys as $tkey) {
-				$texts .= '<li>'.$searchindex[$skey]['text'][$tkey].'</li>';
+				if(isset($lang[$searchindex[$skey]['text'][$tkey]])) {
+					$texts[] = '<li><span s="1">'.strip_tags($lang[$searchindex[$skey]['text'][$tkey]]).'</span><span class="lightfont">('.$searchindex[$skey]['text'][$tkey].')</span></li>';
+				} else {
+					$texts[] = '<li><span s="1">'.$searchindex[$skey]['text'][$tkey].'</span></li>';
+				}
 			}
+			$texts = array_unique($texts);
+			$texts = implode('', $texts);
 			$totalcount += $count = count($tkeys);
 			$html[] = '<div class="news"><span class="right">'.cplang('search_result_item', array('number' => $count)).'</span><b>'.implode(' &raquo; ', $tmp).'</b></div><ul class="tipsblock">'.$texts.'</ul>';
 		}

@@ -7,6 +7,7 @@
  *      $Id$
  */
 
+@define('IN_API', true);
 @define('CURSCRIPT', 'api');
 
 require_once('../../source/class/class_core.php');

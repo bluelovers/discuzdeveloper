@@ -26,7 +26,7 @@ $discuz = & discuz_core::instance();
 $mod = $discuz->var['mod'];
 $discuz->init();
 
-if(!in_array($mod, array('config', 'dispatch'))) {
+if(!in_array($mod, array('config', 'dispatch', 'login', 'feed', 'share'))) {
 	showmessage('undefined_action');
 }
 

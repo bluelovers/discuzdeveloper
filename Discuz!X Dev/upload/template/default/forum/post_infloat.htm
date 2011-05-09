@@ -48,7 +48,9 @@
 						<select name="typeid" id="typeid_float" width="80">
 						<option value="0">{lang select_thread_catgory}</option>
 						<!--{loop $_G['forum'][threadtypes][types] $typeid $name}-->
+							<!--{if empty($_G['forum']['threadtypes']['moderators'][$typeid]) || $_G['forum']['ismoderator']}-->
 							<option value="$typeid"{if $thread['typeid'] == $typeid} selected="selected"{/if}><!--{echo strip_tags($name);}--></option>
+							<!--{/if}-->
 						<!--{/loop}-->
 						</select>
 					</div>
@@ -102,7 +104,7 @@
 			<a href="javascript:;" id="custominfo" class="y"><img src="{IMGDIR}/info_small.gif" alt="{lang faq}" /></a>
 		<!--{/if}-->
 		<button type="submit" id="postsubmit" class="pn pnc z" value="true" name="{if $_G[gp_action] == 'newthread'}topicsubmit{elseif $_G[gp_action] == 'reply'}replysubmit{/if}" tabindex="23"><span><!--{if $_G[gp_action] == 'newthread'}-->{lang post_newthread}<!--{elseif $_G[gp_action] == 'reply'}-->{lang join_thread}<!--{/if}--></span></button>
-		<!--{hook/post_infloat_btn_extra}-->		
+		<!--{hook/post_infloat_btn_extra}-->
 	</div>
 </form>
 

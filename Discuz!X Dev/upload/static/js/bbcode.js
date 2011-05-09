@@ -2,11 +2,12 @@
 	[Discuz!] (C)2001-2009 Comsenz Inc.
 	This is NOT a freeware, use is subject to license terms
 
-	$Id: bbcode.js 21353 2011-03-24 00:04:54Z monkey $
+	$Id: bbcode.js 22345 2011-05-03 09:50:58Z monkey $
 */
 
-var re;
-
+var re, DISCUZCODE = [];
+DISCUZCODE['num'] = '-1';
+DISCUZCODE['html'] = [];
 EXTRAFUNC['bbcode2html'] = [];
 EXTRAFUNC['html2bbcode'] = [];
 
@@ -131,7 +132,9 @@ function bbcode2html(str) {
 	}
 
 	if(!allowhtml || !fetchCheckbox('htmlon')) {
-		str = preg_replace(['\t', '   ', '  ', '(\r\n|\n|\r)'], ['&nbsp; &nbsp; &nbsp; &nbsp; ', '&nbsp; &nbsp;', '&nbsp;&nbsp;', '<br />'], str);
+		str = str.replace(/(^|>)([^<]+)(?=<|$)/ig, function($1, $2, $3) {
+			return $2 + preg_replace(['\t', '   ', '  ', '(\r\n|\n|\r)'], ['&nbsp; &nbsp; &nbsp; &nbsp; ', '&nbsp; &nbsp;', '&nbsp;&nbsp;', '<br />'], $3);
+		});
 	}
 
 	return str;
@@ -323,6 +326,7 @@ function html2bbcode(str) {
 
 	if(!fetchCheckbox('bbcodeoff') && allowbbcode) {
 		str = preg_replace([
+			'<table[^>]*float:\\\s*(left|right)[^>]*><tbody><tr><td>\\\s*([\\\s\\\S]+?)\\\s*<\/td><\/tr></tbody><\/table>',
 			'<table([^>]*(width|background|background-color|backcolor)[^>]*)>',
 			'<table[^>]*>',
 			'<tr[^>]*(?:background|background-color|backcolor)[:=]\\\s*(["\']?)([\(\)\\\s%,#\\\w]+)(\\1)[^>]*>',
@@ -332,8 +336,11 @@ function html2bbcode(str) {
 			'<t[dh][^>]*>',
 			'<\/t[dh]>',
 			'<\/tr>',
-			'<\/table>'
+			'<\/table>',
+			'<h\\\d[^>]*>',
+			'<\/h\\\d>'
 		], [
+			function($1, $2, $3) {return '[float=' + $2 + ']' + $3 + '[/float]';},
 			function($1, $2) {return tabletag($2);},
 			'[table]\n',
 			function($1, $2, $3) {return '[tr=' + $3 + ']';},
@@ -343,7 +350,9 @@ function html2bbcode(str) {
 			'[td]',
 			'[/td]',
 			'[/tr]\n',
-			'[/table]'
+			'[/table]',
+			'[b]',
+			'[/b]'
 		], str);
 
 		str = str.replace(/<h([0-9]+)[^>]*>(.*)<\/h\\1>/ig, "[size=$1]$2[/size]\n\n");
@@ -367,7 +376,7 @@ function html2bbcode(str) {
 		str = recursion('ul', str, 'listtag');
 		str = recursion('div', str, 'dstag');
 		str = recursion('p', str, 'ptag');
-		str = recursion('span', str, 'dstag');
+		str = recursion('span', str, 'fonttag');
 	}
 
 	str = str.replace(/<[\/\!]*?[^<>]*?>/ig, '');

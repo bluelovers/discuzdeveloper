@@ -204,7 +204,7 @@ $polloptions = isset($polloptions) ? censor(trim($polloptions)) : '';
 $readperm = isset($_G['gp_readperm']) ? intval($_G['gp_readperm']) : 0;
 $price = isset($_G['gp_price']) ? intval($_G['gp_price']) : 0;
 
-if(empty($bbcodeoff) && !$_G['group']['allowhidecode'] && !empty($message) && preg_match("/\[hide=?\d*\].+?\[\/hide\]/is", preg_replace("/(\[code\](.+?)\[\/code\])/is", ' ', $message))) {
+if(empty($bbcodeoff) && !$_G['group']['allowhidecode'] && !empty($message) && preg_match("/\[hide=?\d*\].*?\[\/hide\]/is", preg_replace("/(\[code\](.+?)\[\/code\])/is", ' ', $message))) {
 	showmessage('post_hide_nopermission');
 }
 
@@ -291,7 +291,7 @@ if(!$sortid && !$specialextra) {
 }
 
 $editorid = 'e';
-$_G['setting']['editoroptions'] = str_pad(decbin($_G['setting']['editoroptions']), 2, 0, STR_PAD_LEFT);
+$_G['setting']['editoroptions'] = str_pad(decbin($_G['setting']['editoroptions']), 3, 0, STR_PAD_LEFT);
 $editormode = $_G['setting']['editoroptions']{0};
 $allowswitcheditor = $_G['setting']['editoroptions']{1};
 $editor = array(
@@ -302,6 +302,8 @@ $editor = array(
 	'allowbbcode' => $_G['forum']['allowbbcode'],
 	'allowimgcode' => $_G['forum']['allowimgcode'],
 	'allowresize' => 1,
+	'allowchecklength' => 1,
+	'allowtopicreset' => 1,
 	'textarea' => 'message',
 	'simplemode' => !isset($_G['cookie']['editormode_'.$editorid]) ? !$_G['setting']['editoroptions']{2} : $_G['cookie']['editormode_'.$editorid],
 );

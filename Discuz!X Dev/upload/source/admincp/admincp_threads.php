@@ -21,6 +21,7 @@ $fromumanage = $_G['gp_fromumanage'] ? 1 : 0;
 if((!$operation && !$optype) || ($operation == 'group' && empty($optype))) {
 	if(!submitcheck('searchsubmit', 1) && empty($_G['gp_search'])) {
 		$newlist = 1;
+		$_G['gp_intype'] = '';
 		$_G['gp_detail'] = 1;
 		$_G['gp_inforum'] = 'all';
 		$_G['gp_starttime'] = dgmdate(TIMESTAMP - 86400 * 30, 'Y-n-j');
