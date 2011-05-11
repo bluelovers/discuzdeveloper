@@ -1115,8 +1115,6 @@ i.pstatus { display: block; margin-bottom: -30px; font-size: 12px; text-align: c
 /** portal::portalcp **/
 .pgm { clear: both; padding: 5px 0; }
 	.pgm .pg { float: left; }
-#attach_image_body td { padding: 5px 0; }
-	#attach_image_body img { margin: 0 !important; }
 
 /* 管理相关文章 */
 .bart { position: relative; padding: 10px; width: 640px; }
@@ -1135,6 +1133,19 @@ i.pstatus { display: block; margin-bottom: -30px; font-size: 12px; text-align: c
 /* 文章标题颜色、加粗、斜体、下划线等样式 by Pony */
 .colorwd { margin-right: 3px; }
 .dopt input { float: left; }
+
+/*
+	Name:			mod_post_article_attach
+	Level:			Function
+	Explain:		发文章时上传附件区域
+	Last Modify:	Pony 11051011
+*/
+.posta { float: right; margin-top: 70px; padding: 0; width: 135px; }
+	.posta_c { height: 540px; overflow-x: hidden; overflow-y: auto; }
+	.ie6 .posta_c, .ie7 .posta_c { height: 548px; }
+#attach_image_body table, #attach_file_body table { table-layout: fixed; }
+#attach_image_body td, #attach_file_body td { padding: 5px 0; }
+	#attach_image_body img { margin: 0 !important; }
 /** end **/
 
 

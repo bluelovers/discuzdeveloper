@@ -239,7 +239,7 @@ EOF;
 							continue;
 						}
 						if($_G['cache']['profilesetting'][$key]['formtype'] == 'file') {
-							$field = '<a href="'.(getglobal('setting/attachurl').'./profile/'.$field).'" target="_blank">'.$field.'</a>';
+							$field = '<a href="'.(getglobal('setting/attachurl').'./profile/'.$field).'" target="_blank"><img src="'.(getglobal('setting/attachurl').'./profile/'.$field).'" class="verifyimg" /></a>';
 						} elseif(in_array($key, array('gender', 'birthday', 'birthcity', 'residecity'))) {
 							$field = profile_show($key, $fields);
 						}
@@ -270,7 +270,7 @@ EOF;
 								$value[$field] = profile_show($key, $value);
 							}
 							if($_G['cache']['profilesetting'][$key]['formtype'] == 'file') {
-								$value[$field] = '<a href="'.(getglobal('setting/attachurl').'./profile/'.$value[$field]).'" target="_blank">'.$value[$field].'</a>';
+								$value[$field] = '<a href="'.(getglobal('setting/attachurl').'./profile/'.$value[$field]).'" target="_blank"><img src="'.(getglobal('setting/attachurl').'./profile/'.$value[$field]).'" class="verifyimg" /></a>';
 							}
 							$fieldstr .= '<tr><td width="100">'.$_G['cache']['profilesetting'][$key]['title'].':</td><td>'.$value[$field].'</td></tr>';
 						}

@@ -43,7 +43,7 @@ class RequestHandler {
 	}
 
 	function RequestHandler() {
-		$this->url = "";
+		$this->gateUrl = "http://service.tenpay.com/cgi-bin/v3.0/payservice.cgi";
 		$this->key = "";
 		$this->parameters = array();
 		$this->debugInfo = "";
@@ -207,7 +207,7 @@ class MediPayRequestHandler extends RequestHandler {
 	}
 
 	function MediPayRequestHandler() {
-		$this->setGateURL("https://www.tenpay.com/cgi-bin/med/show_opentrans.cgi");
+		$this->setGateURL("http://service.tenpay.com/cgi-bin/v3.0/payservice.cgi");	
 	}
 
 	function init() {

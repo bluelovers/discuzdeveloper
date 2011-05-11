@@ -1336,7 +1336,6 @@ function showDialog(msg, mode, t, func, cover, funccancel, leftmsg, confirmtxt, 
 	if(closetime) {
 		leftmsg = closetime + ' 秒后窗口关闭';
 		setTimeout(closefunc, closetime * 1000);
-		confirmtxtdefault = '关闭';
 	}
 	locationtime = isUndefined(locationtime) ? '' : locationtime;
 	if(locationtime) {
@@ -1474,7 +1473,7 @@ function showError(msg) {
 	var p = /<script[^\>]*?>([^\x00]*?)<\/script>/ig;
 	msg = msg.replace(p, '');
 	if(msg !== '') {
-		showDialog(msg, 'alert', '错误信息', null, true, null, '', '关闭', '', 3);
+		showDialog(msg, 'alert', '错误信息', null, true, null, '', '', '', 3);
 	}
 }
 
@@ -1685,7 +1684,7 @@ function thumbImg(obj, method) {
 			zw = zh * zr;
 		}
 	} else {
-		fixw = isUndefined(imagemaxwidth) ? '600' : imagemaxwidth;
+		fixw = typeof imagemaxwidth == 'undefined' ? '600' : imagemaxwidth;
 		if(zw > fixw) {
 			zw = fixw;
 			zh = zw / zr;

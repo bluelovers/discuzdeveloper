@@ -26,8 +26,10 @@
 					<h3 class="xs2">{lang invitecode_buycode}</h3>
 				</div>
 				<div class="bm_c">
-					<form id="confirmform" class="postbox" method="post" autocomplete="off" action="misc.php?mod=buyinvitecode">
+					<form id="confirmform" class="postbox" method="post" autocomplete="off" action="misc.php?mod=buyinvitecode" onsubmit="ajaxpost(this.id, 'return_addfundsform');">
 						<input type="hidden" name="formhash" value="{FORMHASH}" />
+						<input type="hidden" name="buysubmit" value="true" />
+						<input type="hidden" name="handlekey" value="buyinvite" />
 						<!--{if $_G['setting']['inviteconfig']['invitecodeprompt']}-->
 								<div class="rfm ptw pbm">$_G['setting'][inviteconfig][invitecodeprompt]</div>
 							<!--{/if}-->
@@ -88,6 +90,7 @@
 						</script>
 						<!--{/if}-->
 					</form>
+					<span style="display: none" id="return_addfundsform"></span>
 				</div>
 			<!--{/if}-->
 			</div>

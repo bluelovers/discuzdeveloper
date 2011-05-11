@@ -227,6 +227,7 @@ function fastpostvalidate(theform, noajaxpost) {
 	}
 	if(s) {
 		showError(s);
+		doane();
 		$('fastpostsubmit').disabled = false;
 		return false;
 	}

@@ -57,7 +57,7 @@ styleCss.prototype.addRule = function(selector, styles, n, porperty) {
 	}
 	s = s.indexOf('!important') > -1 || s.indexOf('! important') > -1 ? s : s.replace(/;/g,' !important;');
 	s = s + styles;
-	if(typeof n == "undefined") {
+	if (typeof n == 'undefined' || !isNaN(n)) {
 		n = this.rules.length;
 	}
 	if (this.sheet.insertRule) {
@@ -1501,7 +1501,7 @@ var Util = {
 		},
 		getSpacecssStr : function() {
 			var css = '';
-			var selectors = ['body', '#hd','#ct'];
+			var selectors = ['body', '#hd','#ct', 'BODY'];
 			for (var i in this.spacecss) {
 				var name = i.split(' ')[0];
 				if(selectors.indexOf(name) == -1 && !drag.getObjByName(name.substr(1))) {
@@ -1746,7 +1746,6 @@ var Util = {
 			var propertyJs = property.property2js();
 			if (typeof value == 'undefined') value = '';
 			var selector = this.getSelector(currentDiv);
-			if (!isNaN(num) || typeof num == 'undefined') num = 0;
 
 			if (!this.backFlag) {
 				var rule = this.styleSheet.getRule(selector,propertyJs);

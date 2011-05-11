@@ -28,7 +28,7 @@
 				<!--{if $space[profileprogress] != 100}-->
 					<div class="bm">
 						<div class="bm_c">
-							<div class="pbg mbn"><div class="pbr" style="width: $space[profileprogress]%;"></div></div>
+							<div class="pbg mbn"><div class="pbr" style="width: {if $space[profileprogress] < 2}2{else}$space[profileprogress]{/if}%;"></div></div>
 							<p>{lang profile_completed} $space[profileprogress]%, <a href="home.php?mod=spacecp&ac=profile" class="xi2">{lang fix_profile}</a></p>
 						</div>
 					</div>

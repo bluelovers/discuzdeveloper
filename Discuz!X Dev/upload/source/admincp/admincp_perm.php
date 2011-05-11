@@ -11,10 +11,9 @@ if(!defined('IN_DISCUZ') || !defined('IN_ADMINCP')) {
 	exit('Access Denied');
 }
 
-array_splice($menu['global'], 2, 1, array(
-	array('setting_cachethread', 'setting_cachethread'),
-	array('setting_serveropti', 'setting_serveropti'),
+array_splice($menu['global'], 4, 0, array(
 	array('setting_memory', 'setting_memory'),
+	array('setting_serveropti', 'setting_serveropti'),
 ));
 
 array_splice($menu['global'], 9, 0, array(

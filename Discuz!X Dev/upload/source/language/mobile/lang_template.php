@@ -92,6 +92,7 @@ $lang = array (
   'user_mobile_pm_comment' => '短消息发出后将跳回上一页',
   'reset' => '重填',
   'reg_username' => '用户名必须为大于3位小于15位',
+  'misc_mobile_title' => '手机版演示',
 );
 
 ?>

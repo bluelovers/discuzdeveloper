@@ -139,7 +139,7 @@ function getuserprofile($field) {
 	}
 	static $tablefields = array(
 		'count'		=> array('extcredits1','extcredits2','extcredits3','extcredits4','extcredits5','extcredits6','extcredits7','extcredits8','friends','posts','threads','digestposts','doings','blogs','albums','sharings','attachsize','views','oltime','todayattachs','todayattachsize'),
-		'status'	=> array('regip','lastip','lastvisit','lastactivity','lastpost','lastsendmail','invisible','buyercredit','sellercredit','favtimes','sharetimes'),
+		'status'	=> array('regip','lastip','lastvisit','lastactivity','lastpost','lastsendmail','invisible','buyercredit','sellercredit','favtimes','sharetimes','profileprogress'),
 		'field_forum'	=> array('publishfeed','customshow','customstatus','medals','sightml','groupterms','authstr','groups','attentiongroup'),
 		'field_home'	=> array('videophoto','spacename','spacedescription','domain','addsize','addfriend','menunum','theme','spacecss','blockposition','recentnote','spacenote','privacy','feedfriend','acceptemail','magicgift','stickblogs'),
 		'profile'	=> array('realname','gender','birthyear','birthmonth','birthday','constellation','zodiac','telephone','mobile','idcardtype','idcard','address','zipcode','nationality','birthprovince','birthcity','resideprovince','residecity','residedist','residecommunity','residesuite','graduateschool','company','education','occupation','position','revenue','affectivestatus','lookingfor','bloodtype','height','weight','alipay','icq','qq','yahoo','msn','taobao','site','bio','interest','field1','field2','field3','field4','field5','field6','field7','field8'),
@@ -338,9 +338,13 @@ function checkrobot($useragent = '') {
 function checkmobile() {
 	global $_G;
 	$mobile = array();
-	static $mobilebrowser_list =array('iphone', 'android', 'phone', 'mobile', 'wap', 'netfront', 'java', 'opera\smini',
-				'ucweb', 'windows\sce', 'symbian', 'series', 'webos', 'sony', 'blackberry', 'dopod', 'nokia', 'samsung',
-				'palmsource', 'xda', 'pieplus', 'meizu', 'midp', 'cldc');
+	static $mobilebrowser_list =array('iphone', 'android', 'phone', 'mobile', 'wap', 'netfront', 'java', 'opera mobi', 'opera mini',
+				'ucweb', 'windows ce', 'symbian', 'series', 'webos', 'sony', 'blackberry', 'dopod', 'nokia', 'samsung',
+				'palmsource', 'xda', 'pieplus', 'meizu', 'midp', 'cldc', 'motorola', 'foma', 'docomo', 'up.browser',
+				'up.link', 'blazer', 'helio', 'hosin', 'huawei', 'novarra', 'coolpad', 'webos', 'techfaith', 'palmsource',
+				'alcatel', 'amoi', 'ktouch', 'nexian', 'ericsson', 'philips', 'sagem', 'wellcom', 'bunjalloo', 'maui', 'smartphone',
+				'iemobile', 'spice', 'bird', 'zte-', 'longcos', 'pantech', 'gionee', 'portalmmm', 'jig browser', 'hiptop',
+				'benq', 'haier', '^lct', '320x320', '240x320', '176x220');
 	$useragent = strtolower($_SERVER['HTTP_USER_AGENT']);
 	if(($v = dstrpos($useragent, $mobilebrowser_list, true))) {
 		$_G['mobile'] = $v;
@@ -552,17 +556,17 @@ function template($file, $templateid = 0, $tpldir = '', $gettplfile = 0, $primal
 		}
 	}
 
+	$file .= !empty($_G['inajax']) && ($file == 'common/header' || $file == 'common/footer') ? '_ajax' : '';
+	$tpldir = $tpldir ? $tpldir : (defined('TPLDIR') ? TPLDIR : '');
+	$templateid = $templateid ? $templateid : (defined('TEMPLATEID') ? TEMPLATEID : '');
+	$filebak = $file;
 	if(defined('IN_MOBILE') && !defined('TPL_DEFAULT') && strpos($file, 'mobile/') === false || $_G['forcemobilemessage']) {
 		$file = 'mobile/'.$oldfile;
 	}
 
-	$file .= !empty($_G['inajax']) && ($file == 'common/header' || $file == 'common/footer') ? '_ajax' : '';
-	$tpldir = $tpldir ? $tpldir : (defined('TPLDIR') ? TPLDIR : '');
-	$templateid = $templateid ? $templateid : (defined('TEMPLATEID') ? TEMPLATEID : '');
 
 	$tplfile = ($tpldir ? $tpldir.'/' : './template/').$file.'.htm';
 
-	$filebak = $file;
 	$file == 'common/header' && defined('CURMODULE') && CURMODULE && $file = 'common/header_'.$_G['basescript'].'_'.CURMODULE;
 
 	if(defined('IN_MOBILE') && !defined('TPL_DEFAULT')) {
@@ -980,7 +984,6 @@ function getforumimg($aid, $nocache = 0, $w = 140, $h = 140, $type = '') {
 
 function rewriteoutput($type, $returntype, $host) {
 	global $_G;
-	$host = $host ? 'http://'.$host : '';
 	$fextra = '';
 	if($type == 'forum_forumdisplay') {
 		list(,,, $fid, $page, $extra) = func_get_args();
@@ -1121,7 +1124,7 @@ function output() {
 	}
 	$_G['setting']['ftp'] = array();
 
-	if(defined('CACHE_FILE') && CACHE_FILE && !defined('CACHE_FORBIDDEN')) {
+	if(defined('CACHE_FILE') && CACHE_FILE && !defined('CACHE_FORBIDDEN') && !defined('IN_MOBILE')) {
 		if(diskfreespace(DISCUZ_ROOT.'./'.$_G['setting']['cachethreaddir']) > 1000000) {
 			if($fp = @fopen(CACHE_FILE, 'w')) {
 				flock($fp, LOCK_EX);
@@ -1140,17 +1143,16 @@ function output() {
 function output_replace($content) {
 	global $_G;
 	if(defined('IN_MODCP') || defined('IN_ADMINCP')) return $content;
-	$temp = parse_url($_G['siteurl']);
 	if(!empty($_G['setting']['output']['str']['search'])) {
 		if(empty($_G['setting']['domain']['app']['default'])) {
-			$_G['setting']['output']['str']['replace'] = str_replace('{CURHOST}', $temp['host'], $_G['setting']['output']['str']['replace']);
+			$_G['setting']['output']['str']['replace'] = str_replace('{CURHOST}', $_G['siteurl'], $_G['setting']['output']['str']['replace']);
 		}
 		$content = str_replace($_G['setting']['output']['str']['search'], $_G['setting']['output']['str']['replace'], $content);
 	}
 	if(!empty($_G['setting']['output']['preg']['search'])) {
 		if(empty($_G['setting']['domain']['app']['default'])) {
-			$_G['setting']['output']['preg']['search'] = str_replace('\{CURHOST\}', preg_quote($temp['host']), $_G['setting']['output']['preg']['search']);
-			$_G['setting']['output']['preg']['replace'] = str_replace('{CURHOST}', $temp['host'], $_G['setting']['output']['preg']['replace']);
+			$_G['setting']['output']['preg']['search'] = str_replace('\{CURHOST\}', preg_quote($_G['siteurl']), $_G['setting']['output']['preg']['search']);
+			$_G['setting']['output']['preg']['replace'] = str_replace('{CURHOST}', $_G['siteurl'], $_G['setting']['output']['preg']['replace']);
 		}
 		$content = preg_replace($_G['setting']['output']['preg']['search'], $_G['setting']['output']['preg']['replace'], $content);
 	}
@@ -2483,10 +2485,10 @@ function get_seosetting($page, $data = array(), $defset = array()) {
 		if($titletext) {
 			$seotitle = strreplace_strip_split($searchs, $replaces, $titletext);
 		}
-		if($descriptiontext && (IS_ROBOT || $_G['adminid'] == 1)) {
+		if($descriptiontext && (CURSCRIPT == 'forum' || IS_ROBOT || $_G['adminid'] == 1)) {
 			$seodescription = strreplace_strip_split($searchs, $replaces, $descriptiontext);
 		}
-		if($keywordstext && (IS_ROBOT || $_G['adminid'] == 1)) {
+		if($keywordstext && (CURSCRIPT == 'forum' || IS_ROBOT || $_G['adminid'] == 1)) {
 			$seokeywords = strreplace_strip_split($searchs, $replaces, $keywordstext);
 		}
 	}

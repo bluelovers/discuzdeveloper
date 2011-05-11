@@ -219,7 +219,7 @@
 					<div class="bm_h cl">
 						<h2>{lang article_description}</h2>
 					</div>
-					<div class="bm_c"><textarea name="summary" cols="80" class="pt" style="width: 846px; w\idth: 744px;">$article[summary]</textarea></div>
+					<div class="bm_c"><textarea name="summary" cols="80" class="pt" style="width: 98.7%; height: 51px;">$article[summary]</textarea></div>
 				</div>
 
 				<div class="bm bml">
@@ -268,11 +268,11 @@
 			</form>
 		</div>
 	</div>
-	<div class="appl" style="float: right; margin-top: 45px; border: none; background-color: transparent;">
+	<div class="appl posta">
 		<h3 class="mbm pbm bbs">{lang attachment_upload}</h3>
 		<div class="pbm xg1">{lang attachment_upload_comment}</div>
 		<div id="attachbodyhidden" style="display:none;">
-			<form method="post" autocomplete="off" id="upload" action="portal.php?mod=portalcp&ac=upload&aid=$aid&catid=$catid" enctype="multipart/form-data" target="uploadframe" style="background: transparent;">
+			<form method="post" autocomplete="off" id="upload" action="portal.php?mod=portalcp&ac=upload&aid=$aid&catid=$catid" enctype="multipart/form-data" target="uploadframe">
 				<input type="file" name="attach" class="pf" size="6" />
 				<span id="localfile"></span>
 				<input type="hidden" name="uploadsubmit" id="uploadsubmit" value="true" />
@@ -283,10 +283,10 @@
 
 		<script src="{$_G[setting][jspath]}portal_upload.js?{VERHASH}" type="text/javascript"></script>
 		<iframe id="uploadframe" name="uploadframe" width="0" height="0" marginwidth="0" frameborder="0" src="about:blank"></iframe>
-
-		<div id="attach_image_body" class="bn">$article[attach_image]</div>
-		<div id="attach_file_body" class="bn">$article[attach_file]</div>
-
+		<div class="posta_c">
+			<div id="attach_image_body" class="bn">$article[attach_image]</div>
+			<div id="attach_file_body" class="bn">$article[attach_file]</div>
+		</div>
 	</div>
 </div>
 

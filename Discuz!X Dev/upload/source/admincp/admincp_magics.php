@@ -241,6 +241,7 @@ if($operation == 'admin') {
 		$supplynumnew = $_G['gp_supplytypenew'] ? intval($_G['gp_supplynumnew']) : 0;
 		$usenumnew = intval($_G['gp_usenumnew']);
 		$useperoidnew = $_G['gp_useperoidnew'] ? intval($_G['gp_useperoidnew']) : 0;
+		$creditnew = intval($_G['gp_creditnew']);
 
 		if(!$namenew) {
 			cpmsg('magics_parameter_invalid', '', 'error');
@@ -251,7 +252,7 @@ if($operation == 'admin') {
 			cpmsg('magics_identifier_invalid', '', 'error');
 		}
 
-		DB::query("UPDATE ".DB::table('common_magic')." SET name='$namenew', description='$descriptionnew', price='$_G[gp_pricenew]', num='$_G[gp_numnew]', supplytype='$supplytypenew', supplynum='$supplynumnew', useperoid='$useperoidnew', usenum='$usenumnew', weight='$_G[gp_weightnew]', magicperm='$magicpermnew' WHERE magicid='$magicid'");
+		DB::query("UPDATE ".DB::table('common_magic')." SET name='$namenew', description='$descriptionnew', price='$_G[gp_pricenew]', num='$_G[gp_numnew]', supplytype='$supplytypenew', supplynum='$supplynumnew', useperoid='$useperoidnew', usenum='$usenumnew', weight='$_G[gp_weightnew]', magicperm='$magicpermnew', credit='$creditnew' WHERE magicid='$magicid'");
 
 		updatecache(array('setting', 'magics'));
 		cpmsg('magics_data_succeed', 'action=magics&operation=admin', 'succeed');

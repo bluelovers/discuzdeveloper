@@ -38,8 +38,10 @@ if(submitcheck('buysubmit')) {
 		}
 		DB::query("INSERT INTO ".DB::table('forum_order')." (orderid, status, uid, amount, price, submitdate, email, ip)
 			VALUES ('$orderid', '1', '0', '$amount', '$price', '$_G[timestamp]', '$email', '$_G[clientip]')");
-
-		showmessage('buyinvitecode_addorder_succeed', $requesturl);
+		include template('common/header_ajax');
+		echo '<form id="payform" action="'.$requesturl.'" method="post"></form><script type="text/javascript" reload="1">$(\'payform\').submit();</script>';
+		include template('common/footer_ajax');
+		dexit();
 	} else {
 		showmessage('action_closed', NULL);
 	}

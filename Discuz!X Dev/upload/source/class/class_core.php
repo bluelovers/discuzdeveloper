@@ -1161,6 +1161,7 @@ class discuz_session {
 		$this->set('sid', random(6));
 		$this->set('uid', $uid);
 		$this->set('ip', $ip);
+		$uid && $this->set('invisible', getuserprofile('invisible'));
 		$this->set('lastactivity', time());
 		$this->sid = $this->var['sid'];
 
@@ -1184,6 +1185,7 @@ class discuz_session {
 	}
 
 	function update() {
+		global $_G;
 		if($this->sid !== null) {
 
 			$data = daddslashes($this->var);
@@ -1193,6 +1195,7 @@ class discuz_session {
 			} else {
 				DB::update('common_session', $data, "sid='$data[sid]'");
 			}
+			$_G['session'] = $data;
 			dsetcookie('sid', $this->sid, 86400);
 		}
 	}

@@ -54,13 +54,13 @@ if(!submitcheck('modsubmit')) {
 	}
 
 	if($pids) {
-		$pidimplode = dimplode($pids);
+		require_once libfile('function/delete');
 		if($_G['forum']['recyclebin']) {
-			DB::query("UPDATE ".DB::table($posttable)." SET invisible='-5' WHERE pid IN ($pidimplode)");
-			DB::delete('forum_postcomment', "rpid IN ($pidimplode)");
+			deletepost($pids, 'pid', true, false, true);
 			manage_addnotify('verifyrecyclepost', $modpostsnum);
 		} else {
 			$logs = array();
+			$pidimplode = dimplode($pids);
 			$query = DB::query("SELECT r.extcredits, r.score, p.authorid, p.author FROM ".DB::table('forum_ratelog')." r LEFT JOIN ".DB::table($posttable)." p ON r.pid=p.pid WHERE r.pid IN ($pidimplode)");
 			while($author = DB::fetch($query)) {
 				if($author['score'] > 0) {
@@ -74,23 +74,7 @@ if(!submitcheck('modsubmit')) {
 				unset($logs);
 			}
 
-			if($have_replycredit = DB::fetch_first("SELECT * FROM ".DB::table('forum_replycredit')." WHERE tid = '$thread[tid]' LIMIT 1")) {
-				$replycredit_del = array();
-				$query = DB::query("SELECT authorid, replycredit FROM ".DB::table($posttable)." WHERE pid IN ($pidimplode)");
-				while($result = DB::fetch($query)) {
-					if($result['replycredit'] > 0 && $result['authorid'] > 0) {
-						$replycredit_del[$result['authorid']] += $result['replycredit'];
-					}
-				}
-				if(!empty($replycredit_del)) {
-					foreach($replycredit_del AS $uid => $credit) {
-						updatemembercount($uid, array($_G['setting']['creditstransextra'][10] => '-'.$credit), true);
-					}
-				}
-			}
-
-			require_once libfile('function/delete');
-			deletepost($pids);
+			deletepost($pids, 'pid', true);
 		}
 	}
 

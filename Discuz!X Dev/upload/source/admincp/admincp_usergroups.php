@@ -1154,11 +1154,7 @@ EOT;
 
 		updatecache(array('usergroups', 'onlinelist', 'groupreadaccess'));
 
-		if($_G['gp_return'] == 'admin') {
-			cpmsg('usergroups_edit_succeed', 'action=admingroup', 'succeed');
-		} else {
-			cpmsg('usergroups_edit_succeed', 'action=usergroups&operation=edit&'.($multiset ? 'multi='.implode(',', $_G['gp_multi']) : 'id='.$_G['gp_id']).'&anchor='.$_G['gp_anchor'], 'succeed');
-		}
+		cpmsg('usergroups_edit_succeed', 'action=usergroups&operation=edit&'.($multiset ? 'multi='.implode(',', $_G['gp_multi']) : 'id='.$_G['gp_id']).'&anchor='.$_G['gp_anchor'], 'succeed');
 	}
 
 } elseif($operation == 'copy') {

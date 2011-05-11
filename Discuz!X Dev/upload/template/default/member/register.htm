@@ -249,7 +249,7 @@
 		<!--{/if}-->
 	<!--{/if}-->
 	function showBBRule() {
-		showDialog($('layer_bbrule').innerHTML, 'info', '$this->setting['bbname'] {lang rulemessage}');
+		showDialog($('layer_bbrule').innerHTML, 'info', '{echo addslashes($this->setting['bbname']);} {lang rulemessage}');
 		$('fwin_dialog_close').style.display = 'none';
 	}
 <!--{/if}-->

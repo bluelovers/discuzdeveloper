@@ -204,9 +204,7 @@ if($rushreply) {
 	$rewardfloor = '';
 	$rushresult = $rewardfloorarr = $rewardfloorarray = array();
 	$rushresult = DB::fetch_first("SELECT * FROM ".DB::table('forum_threadrush')." WHERE tid='$_G[tid]'");
-	if(TIMESTAMP > $rushresult['starttimefrom'] && TIMESTAMP < $rushresult['starttimeto'] && $_G['forum_thread']['closed']) {
-		DB::query("UPDATE ".DB::table('forum_thread')." SET closed='0' WHERE tid='$_G[tid]'");
-	} elseif((TIMESTAMP < $rushresult['starttimefrom'] || ($rushresult['starttimeto'] && TIMESTAMP > $rushresult['starttimeto']) || ($rushresult['stopfloor'] && $_G['forum_thread']['replies'] + 1 >= $rushresult['stopfloor'])) && $_G['forum_thread']['closed'] == 0) {
+	if((TIMESTAMP < $rushresult['starttimefrom'] || ($rushresult['starttimeto'] && TIMESTAMP > $rushresult['starttimeto']) || ($rushresult['stopfloor'] && $_G['forum_thread']['replies'] + 1 >= $rushresult['stopfloor'])) && $_G['forum_thread']['closed'] == 0) {
 		DB::query("UPDATE ".DB::table('forum_thread')." SET closed='1' WHERE tid='$_G[tid]'");
 	}
 	$rushresult['starttimefrom'] = $rushresult['starttimefrom'] ? dgmdate($rushresult['starttimefrom']) : '';

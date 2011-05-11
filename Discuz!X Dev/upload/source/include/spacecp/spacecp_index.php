@@ -166,7 +166,7 @@ if (submitcheck('blocksubmit')) {
 		if($blockname == 'blog') {
 			$blockdata['parameters'][$blockname]['showmessage'] = min(100000, abs(intval($_G['gp_showmessage'])));
 		} elseif($blockname == 'myapp') {
-			$blockdata['parameters'][$blockname]['logotype'] = in_array($_G['gp_logotype'], array('logo', 'icon')) ? $_G['gp_logotype'] : 'icon';
+			$blockdata['parameters'][$blockname]['logotype'] = in_array($_G['gp_logotype'], array('logo', 'icon')) ? $_G['gp_logotype'] : 'logo';
 		}
 
 		$setarr['blockposition'] = daddslashes(serialize($blockdata));

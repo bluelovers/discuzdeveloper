@@ -19,7 +19,7 @@ function get_uploadcontent($attach, $type='portal', $dotype='') {
 
 		$return .= '<table id="attach_list_'.$attach['attachid'].'" width="100%" class="xi2">';
 		$return .= '<td width="50" class="bbs"><a href="'.$pic.'" target="_blank"><img src="'.($small_pic ? $small_pic : $pic).'" width="40" height="40"></a></td>';
-		$return .= '<td class="bbs">';
+		$return .= '<td align="right" class="bbs">';
 		$return .= '<label for="setconver'.$attach['attachid'].'"><input type="radio" name="setconver" id="setconver'.$attach['attachid'].'" class="pr" value="1" onclick=setConver(\''.addslashes(serialize(array('pic'=>$type.'/'.$attach['attachment'], 'thumb'=>$attach['thumb'], 'remote'=>$attach['remote']))).'\') '.$check.'>'.lang('portalcp', 'set_to_conver').'</label><br>';
 		if($small_pic) $return .= '<a href="javascript:void(0);" onclick="insertImage(\''.$small_pic.'\', \''.$pic.'\');return false;">'.lang('portalcp', 'insert_small_image').'</a><br>';
 		$return .= '<a href="javascript:void(0);" onclick="insertImage(\''.$pic.'\');return false;">'.lang('portalcp', 'insert_large_image').'</a><br>';
@@ -28,9 +28,9 @@ function get_uploadcontent($attach, $type='portal', $dotype='') {
 		$return .= '</table>';
 
 	} else {
-		$return .= '<table id="attach_list_'.$attach['attachid'].'" width="100%">';
-		$return .= '<td><a href="portal.php?mod=attachment&id='.$attach['attachid'].'" target="_blank">'.$attach['filename'].'</a></td>';
-		$return .= '<td>';
+		$return .= '<table id="attach_list_'.$attach['attachid'].'" width="100%" class="xi2">';
+		$return .= '<td width="50" class="bbs"><a href="portal.php?mod=attachment&id='.$attach['attachid'].'" target="_blank">'.$attach['filename'].'</a></td>';
+		$return .= '<td align="right" class="bbs">';
 		$return .= '<a href="javascript:void(0);" onclick="insertFile(\''.$attach['filename'].'\', \'portal.php?mod=attachment&id='.$attach['attachid'].'\');return false;">'.lang('portalcp', 'insert_file').'</a><br>';
 		$return .= '<a href="javascript:void(0);" onclick="deleteAttach(\''.$attach['attachid'].'\', \'portal.php?mod=attachment&id='.$attach['attachid'].'&op=delete\');return false;">'.lang('portalcp', 'delete').'</a>';
 		$return .= '</td>';

@@ -321,6 +321,7 @@ if($need_count) {
 		foreach($list as $key => $val) {
 			if(!$forums[$val['fid']] || $val['closed'] > 0) {
 				unset($list[$key]);
+				$hiddennum++;
 			}
 		}
 		if($_G['gp_view'] == 'all') {

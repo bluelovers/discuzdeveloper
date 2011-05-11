@@ -545,6 +545,15 @@ if(!submitcheck('editsubmit')) {
 					$replycredit_diff =  $replycredit - $thread['replycredit'];
 					if($replycredit_diff > 0) {
 						$replycredit_diff = ceil($replycredit_diff + ($replycredit_diff * $_G['setting']['creditstax']));
+						if(!$replycredit_rule) {
+							$replycredit_rule = array();
+							if($_G['setting']['creditstransextra']['10']) {
+								$replycredit_rule['extcreditstype'] = $_G['setting']['creditstransextra']['10'];
+							}
+						}
+						if($replycredit_diff > getuserprofile('extcredits'.$replycredit_rule['extcreditstype'])) {
+							showmessage('post_edit_thread_replaycredit_nocredit');
+						}
 					}
 					if($replycredit_diff) {
 						updatemembercount($_G['uid'], array($replycredit_rule['extcreditstype'] => ($replycredit_diff > 0 ? -$replycredit_diff : abs($replycredit_diff))), 1, ($replycredit_diff > 0 ? 'RCT' : 'RCB'), $_G['tid']);

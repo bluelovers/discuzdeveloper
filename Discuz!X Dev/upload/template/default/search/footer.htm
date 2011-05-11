@@ -3,22 +3,22 @@
 <!--{if $focusid !== null}-->
 	<!--{eval $focus = $_G['cache']['focus']['data'][$focusid];}-->
 	<div class="focus" id="focus">
-		<h3 class="flb">
-			<em><!--{if $_G['cache']['focus']['title']}-->{$_G['cache']['focus']['title']}<!--{else}-->{lang focus_hottopics}<!--{/if}--></em>
-			<span><a href="javascript:;" onclick="setcookie('nofocus_$focusid', 1, 86400);$('focus').style.display='none'" class="flbc" title="{lang close}">{lang close}</a></span>
-		</h3>
-		<hr class="l" />
-		<div class="detail">
-			<h4><a href="{$focus['url']}" target="_blank">$focus['subject']</a></h4>
-			<p>
-				<!--{if $focus[image]}-->
-				<a href="{$focus['url']}" target="_blank"><img src="{$focus['image']}" onload="thumbImg(this, 1)" _width="58" _height="58" /></a>
-				<!--{/if}-->
-				$focus['summary']
-			</p>
+		<div class="bm">
+			<div class="bm_h cl">
+				<a href="javascript:;" onclick="setcookie('nofocus_$focusid', 1, $_G['cache']['focus']['cookie']*3600);$('focus').style.display='none'" class="y" title="{lang close}">{lang close}</a>
+				<h2><!--{if $_G['cache']['focus']['title']}-->{$_G['cache']['focus']['title']}<!--{else}-->{lang focus_hottopics}<!--{/if}--></h2>
+			</div>
+			<div class="bm_c">
+				<dl class="xld cl bbda">
+					<dt><a href="{$focus['url']}" class="xi2" target="_blank">$focus['subject']</a></dt>
+					<!--{if $focus[image]}-->
+					<dd class="m"><a href="{$focus['url']}" target="_blank"><img src="{$focus['image']}" alt="$focus['subject']" /></a></dd>
+					<!--{/if}-->
+					<dd>$focus['summary']</dd>
+				</dl>
+				<p class="ptn hm"><a href="{$focus['url']}" class="xi2" target="_blank">{lang focus_show} &raquo;</a></p>
+			</div>
 		</div>
-		<hr class="l" />
-		<a href="{$focus['url']}" class="moreinfo" target="_blank">{lang focus_show}</a>
 	</div>
 <!--{/if}-->
 

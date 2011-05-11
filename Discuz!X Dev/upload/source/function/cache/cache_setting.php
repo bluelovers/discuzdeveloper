@@ -379,39 +379,43 @@ function build_cache_setting() {
 		$data['reginput']['email'] = random(6);
 	}
 
-	if(empty($_G['setting']['domain']['app']['default'])) {
-		$_G['setting']['domain']['app']['default'] = '{CURHOST}';
-	}
+	$defaultcurhost = empty($_G['setting']['domain']['app']['default']) ? '{CURHOST}' : $_G['setting']['domain']['app']['default'];
 	$output = array('str'=>array(), 'preg' => array()); //str为二级域名的查找和替换，preg为rewrite和默认域名的查找和替换
 	$_G['domain'] = array();
 	if(is_array($_G['setting']['domain']['app'])) {
 		$apps = $_G['setting']['domain']['app'];
-		$repflag = $apps['portal'] || $apps['forum'] || $apps['group'] || $apps['home'];
+		$repflag = $apps['portal'] || $apps['forum'] || $apps['group'] || $apps['home'] || $apps['default'];
 		foreach($apps as $app => $domain) {
 			if(in_array($app, array('default', 'mobile'))) {
 				continue;
 			}
 			$appphp = "{$app}.php";
 			if(!$domain) {
-				$domain = $apps['default'];
+				$domain = $defaultcurhost;
+			}
+			if($domain != '{CURHOST}') {
+				$domain = 'http://'.$domain.$_G['siteport'].'/';
 			}
 			if($repflag) {
 				$output['str']['search'][$app] = "<a href=\"{$app}.php";
-				$output['str']['replace'][$app] = '<a href="http://'.$domain.$_G['siteport'].$_G['siteroot'].$appphp;
-				$_G['domain']['pregxprw'][$app] = '<a href\="http\:\/\/('.preg_quote($domain.$_G['siteport'].$_G['siteroot'], '/').')'.$appphp;
+				$output['str']['replace'][$app] = '<a href="'.$domain.$appphp;
+				$_G['domain']['pregxprw'][$app] = '<a href\="('.preg_quote($domain, '/').')'.$appphp;
 			} else {
 				$_G['domain']['pregxprw'][$app] = '<a href\="()'.$appphp;
 			}
 		}
 	}
-	if($_G['setting']['rewritestatus'] || $_G['domain']['search']) {
+	if($_G['setting']['rewritestatus'] || $output['str']['search']) {
 		if($_G['setting']['rewritestatus']) {
 			require_once libfile('function/admincp');
 			$output['preg'] = rewritedata(0);
 		}
 		if($repflag) {
+			if($defaultcurhost != '{CURHOST}') {
+				$defaultcurhost = 'http://'.$defaultcurhost.$_G['siteport'].'/';
+			}
 			$output['preg']['search'][] = "/<a href=\"(\w+\.php)/";
-			$output['preg']['replace'][] = '<a href="http://'.$_G['setting']['domain']['app']['default'].$_G['siteport'].$_G['siteroot']."$1";
+			$output['preg']['replace'][] = '<a href="'.$defaultcurhost."$1";
 		}
 	}
 	$data['output'] = $output;
@@ -543,6 +547,9 @@ function get_cachedata_setting_plugin($method = '') {
 									}
 									if($hscript == 'global' && $funcname == 'deletethread') {
 										$data['plugins'][$k.'_deletethread'] = true;
+									}
+									if($hscript == 'global' && $funcname == 'deletepost') {
+										$data['plugins'][$k.'_deletepost'] = true;
 									}
 									$v = explode('_', $funcname);
 									$curscript = $v[0];
@@ -677,7 +684,6 @@ function get_cachedata_mainnav() {
 			$nav['available'] = 0;
 		}
 		$nav['style'] = parsehighlight($nav['highlight']);
-		$nav['url'] = $_G['config']['app']['domain'][$nav['identifier']] ? 'http://'.$_G['config']['app']['domain'][$nav['identifier']] : $nav['url'];
 		$data['navs'][$id]['navname'] = $nav['name'];
 		$data['navs'][$id]['filename'] = $nav['url'];
 		$data['navs'][$id]['available'] = $nav['available'];
@@ -886,7 +892,7 @@ function get_cachedata_topnav() {
 				$nav['extra'] = ' onclick="setHomepage(\''.$_G['siteurl'].'\');"';
 			} elseif($nav['identifier'] == 'setfavorite') {
 				$nav['url'] = $_G['siteurl'];
-				$nav['extra'] = ' onclick="addFavorite(this.href, \''.$_G['setting']['bbname'].'\');return false;"';
+				$nav['extra'] = ' onclick="addFavorite(this.href, \''.addslashes($_G['setting']['bbname']).'\');return false;"';
 			}
 		}
 		$nav['code'] = '<a href="'.$nav['url'].'"'.($nav['title'] ? ' title="'.$nav['title'].'"' : '').($nav['target'] == 1 ? ' target="_blank"' : '').' '.parsehighlight($nav['highlight']).$nav['extra'].'>'.$nav['name'].'</a>';

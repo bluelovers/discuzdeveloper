@@ -634,7 +634,7 @@ var rowtypedata = [
 			}
 			showsetting('forums_cat_display', 'statusnew', $mforum[0]['status'], 'radio');
 			showtablefooter();
-			showtips('setting_seo_forum_tips', 'tips', true, 'setseotips');
+			showtips('setting_seo_forum_tips', 'seo_tips', true, 'setseotips');
 			showtableheader();
 			showsetting('forums_edit_basic_seotitle', 'seotitlenew', htmlspecialchars($mforum[0]['seotitle']), 'text');
 			showsetting('forums_edit_basic_keyword', 'keywordsnew', htmlspecialchars($mforum[0]['keywords']), 'text');
@@ -801,7 +801,7 @@ var rowtypedata = [
 				}
 				showtablefooter();
 				if(!$multiset) {
-					showtips('setting_seo_forum_tips', 'tips', true, 'setseotips');
+					showtips('setting_seo_forum_tips', 'seo_tips', true, 'setseotips');
 				}
 				showtableheader();
 				showsetting('forums_edit_basic_seotitle', 'seotitlenew', htmlspecialchars($forum['seotitle']), 'text');

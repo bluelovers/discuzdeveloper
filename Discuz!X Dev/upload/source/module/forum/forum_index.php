@@ -268,6 +268,7 @@ if($gid && !empty($catlist)) {
 	} else {
 		$nobbname = true;
 	}
+	$_G['fid'] = $gid;
 }
 
 include template('diy:forum/discuz:'.$gid);

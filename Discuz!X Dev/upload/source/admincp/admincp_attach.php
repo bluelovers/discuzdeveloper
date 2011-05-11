@@ -61,8 +61,8 @@ if(!submitcheck('deletesubmit')) {
 		$sql .= is_numeric($inforum) ? " AND t.fid='$inforum'" : '';
 		$sql .= $inforum == 'isgroup' ? ' AND t.isgroup=\'1\'' : ' AND t.isgroup=\'0\'';
 		if($_G['gp_author']) {
-			if($authorid = DB::result_first("SELECT uid ".DB::forum('common_member')." WHERE username='$_G[gp_author]'")) {
-				$sql .= " AND a.uid='$_G[gp_author]'";
+			if($authorid = DB::result_first("SELECT uid FROM ".DB::table('common_member')." WHERE username='$_G[gp_author]'")) {
+				$sql .= " AND a.uid='$authorid'";
 			}
 		}
 		$sql .= $_G['gp_filename'] ? " AND a.filename LIKE '%$_G[gp_filename]%'" : '';

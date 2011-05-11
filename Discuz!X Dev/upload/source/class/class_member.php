@@ -301,6 +301,7 @@ class register_ctl {
 		$bbrulesforce = & $this->setting['bbrulesforce'];
 		$bbrulestxt = & $this->setting['bbrulestxt'];
 		$welcomemsg = & $this->setting['welcomemsg'];
+		$welcomemsgtitle = & $this->setting['welcomemsgtitle'];
 		$welcomemsgtxt = & $this->setting['welcomemsgtxt'];
 		$regname = $this->setting['regname'];
 
@@ -756,15 +757,16 @@ class register_ctl {
 				}
 			}
 
-			if($welcomemsg && !empty($welcomemsgtxt)) {;
+			if($welcomemsg && !empty($welcomemsgtxt)) {
+				$welcomemsgtitle = addslashes(replacesitevar($welcomemsgtitle));
 				$welcomemsgtxt = addslashes(replacesitevar($welcomemsgtxt));
 				if($welcomemsg == 1) {
 					$welcomemsgtxt = nl2br(str_replace(':', '&#58;', $welcomemsgtxt));
 					notification_add($uid, 'system', $welcomemsgtxt, array(), 1);
 				} elseif($welcomemsg == 2) {
-					sendmail_cron($email, $welcomtitle, $welcomemsgtxt);
+					sendmail_cron($email, $welcomemsgtitle, $welcomemsgtxt);
 				} elseif($welcomemsg == 3) {
-					sendmail_cron($email, $welcomtitle, $welcomemsgtxt);
+					sendmail_cron($email, $welcomemsgtitle, $welcomemsgtxt);
 					$welcomemsgtxt = nl2br(str_replace(':', '&#58;', $welcomemsgtxt));
 					notification_add($uid, 'system', $welcomemsgtxt, array(), 1);
 				}

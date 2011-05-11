@@ -102,7 +102,7 @@ class adv_footerbanner {
 		return array(
 			'check' => '
 			if($params[2] != $parameter[\'position\']
-			|| $_G[\'basescript\'] == \'forum\' && $parameter[\'fids\'] && !(in_array($_G[\'fid\'], $parameter[\'fids\']) || CURMODULE == \'index\' && in_array(-1, $parameter[\'fids\']) || defined(\'IN_ARCHIVER\') && in_array(-2, $parameter[\'fids\']))
+			|| $_G[\'basescript\'] == \'forum\' && $parameter[\'fids\'] && !(!defined(\'IN_ARCHIVER\') && (in_array($_G[\'fid\'], $parameter[\'fids\']) || CURMODULE == \'index\' && in_array(-1, $parameter[\'fids\'])) || defined(\'IN_ARCHIVER\') && in_array(-2, $parameter[\'fids\']))
 			|| $_G[\'basescript\'] == \'group\' && $parameter[\'groups\'] && !(in_array($_G[\'grouptypeid\'], $parameter[\'groups\']) || CURMODULE == \'index\' && in_array(-1, $parameter[\'groups\']))
 			|| $_G[\'basescript\'] == \'portal\' && $parameter[\'category\'] && !(!empty($_G[\'catid\']) && in_array($_G[\'catid\'], $parameter[\'category\']) || empty($_G[\'catid\']) && in_array(-1, $parameter[\'category\']))
 			) {

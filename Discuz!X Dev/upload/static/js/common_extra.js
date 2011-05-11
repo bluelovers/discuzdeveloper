@@ -23,11 +23,13 @@ function _relatedlinks(rlinkmsgid) {
 		i++;
 		return '#alink '+(i - 1)+'#';
 	});
+	var relatedid = new Array();
 	msg = msg.replace(/(^|>)([^<]+)(?=<|$)/ig, function($1, $2, $3) {
 		for(var j = 0; j > -1; j++) {
-			if(relatedlink[j]) {
+			if(relatedlink[j] && !relatedid[j]) {
 				var ra = '<a href="'+relatedlink[j]['surl']+'" target="_blank" class="relatedlink">'+relatedlink[j]['sname']+'</a>';
 				$3 = $3.replace(relatedlink[j]['sname'], ra);
+				relatedid[j] = 1;
 			} else {
 				break;
 			}

@@ -18,6 +18,11 @@ include pluginmodule($_G['gp_id'], $pluginkey);
 if(!$op || $op == 'credit') {
 	include template('home/spacecp_plugin');
 } elseif($op == 'profile') {
+	$result = DB::fetch_first("SELECT * FROM ".DB::table('common_setting')." WHERE skey='profilegroup'");
+	$defaultop = '';
+	if(!empty($result['svalue'])) {
+	    $profilegroup = unserialize($result['svalue']);
+	}
 	$operation = 'plugin';
 	include template('home/spacecp_profile');
 }

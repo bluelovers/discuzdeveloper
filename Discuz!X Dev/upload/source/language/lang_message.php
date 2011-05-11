@@ -574,6 +574,7 @@ $lang = array (
   'post_edit_nopermission_threadplign' => '抱歉，您没有权限编辑本帖子或特殊帖功能已关闭',
   'reward_credits_invalid' => '抱歉，悬赏积分设置不合理',
   'reward_credits_fall' => '抱歉，悬赏积分不能减少',
+  'post_edit_thread_replaycredit_nocredit' => '您的积分不足，不能为回帖奖励增加积分',
   'post_edit_thread_ban_del' => '抱歉，编辑帖子时不允许删除帖子',
   'post_edit_reward_already_reply' => '抱歉，您不能删除已经有回复的悬赏',
   'post_edit_thread_already_reply' => '对不起，你不能删除已经有回复的主题，请返回。',

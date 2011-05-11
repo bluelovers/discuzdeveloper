@@ -1176,152 +1176,141 @@ $lang = array (
       0 => '插件',
     ),
   ),
-  106 =>
+  106 => 
   array (
-    'index' =>
-    array (
-      '' => 'action=plugins&operation=config&do=46',
-    ),
-    'text' =>
-    array (
-      0 => NULL,
-    ),
-  ),
-  107 =>
-  array (
-    'index' =>
+    'index' => 
     array (
       '更新缓存' => 'action=tools&operation=updatecache',
     ),
-    'text' =>
+    'text' => 
     array (
       0 => '更新缓存',
     ),
   ),
-  108 =>
+  107 => 
   array (
-    'index' =>
+    'index' => 
     array (
       '更新统计' => 'action=counter',
     ),
-    'text' =>
+    'text' => 
     array (
       0 => '更新统计',
     ),
   ),
-  109 =>
+  108 => 
   array (
-    'index' =>
+    'index' => 
     array (
       '运行记录' => 'action=logs',
     ),
-    'text' =>
+    'text' => 
     array (
       0 => '运行记录',
     ),
   ),
-  110 =>
+  109 => 
   array (
-    'index' =>
+    'index' => 
     array (
       '计划任务' => 'action=misc&operation=cron',
     ),
-    'text' =>
+    'text' => 
     array (
       0 => '计划任务',
     ),
   ),
-  111 =>
+  110 => 
   array (
-    'index' =>
+    'index' => 
     array (
       '文件权限检查' => 'action=tools&operation=fileperms',
     ),
-    'text' =>
+    'text' => 
     array (
       0 => '文件权限检查',
     ),
   ),
-  112 =>
+  111 => 
   array (
-    'index' =>
+    'index' => 
     array (
       '文件校验' => 'action=checktools&operation=filecheck',
     ),
-    'text' =>
+    'text' => 
     array (
       0 => '文件校验',
     ),
   ),
-  113 =>
+  112 => 
   array (
-    'index' =>
+    'index' => 
     array (
       '后台管理团队' => 'action=founder&operation=perm',
     ),
-    'text' =>
+    'text' => 
     array (
       0 => '后台管理团队',
     ),
   ),
-  114 =>
+  113 => 
   array (
-    'index' =>
+    'index' => 
     array (
       '邮件设置' => 'action=setting&operation=mail',
     ),
-    'text' =>
+    'text' => 
     array (
       0 => '邮件设置',
     ),
   ),
-  115 =>
+  114 => 
   array (
-    'index' =>
+    'index' => 
     array (
       'UCenter 设置' => 'action=setting&operation=uc',
     ),
-    'text' =>
+    'text' => 
     array (
       0 => 'UCenter 设置',
     ),
   ),
-  116 =>
+  115 => 
   array (
-    'index' =>
+    'index' => 
     array (
       '数据库' => 'action=db&operation=export',
     ),
-    'text' =>
+    'text' => 
     array (
       0 => '数据库',
     ),
   ),
-  117 =>
+  116 => 
   array (
-    'index' =>
+    'index' => 
     array (
       '帖子分表' => 'action=postsplit&operation=manage',
     ),
-    'text' =>
+    'text' => 
     array (
       0 => '帖子分表',
     ),
   ),
-  118 =>
+  117 => 
   array (
-    'index' =>
+    'index' => 
     array (
       '主题分表' => 'action=threadsplit&operation=manage',
     ),
-    'text' =>
+    'text' => 
     array (
       0 => '主题分表',
     ),
   ),
-  119 =>
+  118 => 
   array (
-    'index' =>
+    'index' => 
     array (
       '扩展中心' => 'action=addons',
       '资源提供商' => 'action=addons',
@@ -1333,9 +1322,9 @@ $lang = array (
       2 => '扩展中心将显示由资源提供商提供各类 Discuz! 插件、风格等扩展资源资源提供商投诉、意见反馈请发电子邮件至 reply@comsenz.com',
     ),
   ),
-  120 =>
+  119 => 
   array (
-    'index' =>
+    'index' => 
     array (
       '管理组' => 'action=admingroup',
       '主题管理权限' => 'action=admingroup&operation=edit&anchor=threadperm',
@@ -1404,9 +1393,9 @@ $lang = array (
       59 => '设置是否允许编辑管理范围内商品主题的商品',
     ),
   ),
-  121 =>
+  120 => 
   array (
-    'index' =>
+    'index' => 
     array (
       '管理组' => 'action=admingroup',
       '帖子管理权限' => 'action=admingroup&operation=edit&anchor=postperm',
@@ -1436,9 +1425,9 @@ $lang = array (
       20 => '设置是否允许管理管理范围内的标签',
     ),
   ),
-  122 =>
+  121 => 
   array (
-    'index' =>
+    'index' => 
     array (
       '管理组' => 'action=admingroup',
       '管理面板权限' => 'action=admingroup&operation=edit&anchor=modcpperm',
@@ -1483,9 +1472,9 @@ $lang = array (
       35 => '设置是否允许查看管理日志',
     ),
   ),
-  123 =>
+  122 => 
   array (
-    'index' =>
+    'index' => 
     array (
       '管理组' => 'action=admingroup',
       '空间管理权限' => 'action=admingroup&operation=edit&anchor=spaceperm',
@@ -1523,9 +1512,9 @@ $lang = array (
       28 => '允许管理表态动作',
     ),
   ),
-  124 =>
+  123 => 
   array (
-    'index' =>
+    'index' => 
     array (
       '管理组' => 'action=admingroup',
       '其他权限' => 'action=admingroup&operation=edit&anchor=otherperm',
@@ -1540,9 +1529,9 @@ $lang = array (
       5 => '设置是否允许查看用户 IP',
     ),
   ),
-  125 =>
+  124 => 
   array (
-    'index' =>
+    'index' => 
     array (
       '管理组' => 'action=admingroup',
       '门户管理权限' => 'action=admingroup&operation=edit&anchor=portalperm',
@@ -1566,23 +1555,23 @@ $lang = array (
       14 => '设置是否允许 DIY 论坛，文章，空间，论坛等页面',
     ),
   ),
-  126 =>
+  125 => 
   array (
-    'index' =>
+    'index' => 
     array (
       '站点广告' => 'action=adv',
       '广告位' => 'action=adv&operation=list',
     ),
-    'text' =>
+    'text' => 
     array (
       0 => '站点广告 &raquo; 广告位',
       1 => 'adv_list_tip',
-      2 => '你可以使用“自定义广告位”在页面的任意位置添加广告位安装新的广告位，需将广告位脚本程序上传到 source/class/adv/ 目录，然后即可在以下列表中使用了',
+      2 => '你可以使用“自定义广告位”在页面的任意位置添加广告位。安装新的广告位，需将广告位脚本程序上传到 source/class/adv/ 目录，然后即可在以下列表中使用了。插件开发人员在设计新的广告位前请务必仔细阅读《Discuz! 技术文库》中的内容。',
     ),
   ),
-  127 =>
+  126 => 
   array (
-    'index' =>
+    'index' => 
     array (
       '相册管理' => 'action=album',
       '最新列表' => 'action=album',
@@ -1594,9 +1583,9 @@ $lang = array (
       2 => '批量相册管理用于删除相册使用。连图片一同删除提醒：点击搜索结果页的删除按钮，将会直接删除相关信息！',
     ),
   ),
-  128 =>
+  127 => 
   array (
-    'index' =>
+    'index' => 
     array (
       '相册管理' => 'action=album',
       '搜索' => 'action=album&search=true',
@@ -1628,13 +1617,13 @@ $lang = array (
       22 => '格式 yyyy-mm-dd',
     ),
   ),
-  129 =>
+  128 => 
   array (
-    'index' =>
+    'index' => 
     array (
       '相册分类' => 'action=albumcategory',
     ),
-    'text' =>
+    'text' => 
     array (
       0 => '相册分类',
       1 => 'system_category_stat',
@@ -1643,13 +1632,13 @@ $lang = array (
       4 => '系统分类必填',
     ),
   ),
-  130 =>
+  129 => 
   array (
-    'index' =>
+    'index' => 
     array (
       '站点公告' => 'action=announce',
     ),
-    'text' =>
+    'text' => 
     array (
       0 => '站点公告',
       1 => 'announce_edit',
@@ -1665,9 +1654,37 @@ $lang = array (
       11 => '文字公告: 直接输入公告内容，支持 Discuz! 代码网址链接: 请输入公告的链接地址如某个主题地址: http://xxx.xxx.xxx',
     ),
   ),
-  131 =>
+  130 => 
   array (
-    'index' =>
+    'index' => 
+    array (
+      '第三方模块' => 'action=blockxml',
+      '搜索' => 'action=blockxml&operation=add',
+    ),
+    'text' => 
+    array (
+      0 => '第三方模块 &raquo; 搜索',
+      1 => 'blockxml_tips',
+      2 => '插件开发人员在设计新的第三方模块前请务必仔细阅读《Discuz! 技术文库》中的内容。',
+      3 => 'blockxml_add',
+      4 => '添加 第三方模块',
+      5 => 'blockxml_xmlurl',
+      6 => '第三方地址',
+      7 => '输入 第三方模块的 URL 地址，第三方返回的内容必须 XML 模块的格式',
+      8 => 'blockxml_clientid',
+      9 => '客户端ID',
+      10 => '此ID由数据源方提供',
+      11 => 'blockxml_signtype',
+      12 => '签名加密方式',
+      13 => '目前支持MD5加密方式，也可以不使用签名，由数据源方提供',
+      14 => 'blockxml_xmlkey',
+      15 => '通信密钥',
+      16 => '从 URL 地址获得数据时的密钥，如果数据源不需要密钥可以为空。此密钥由数据源方提供',
+    ),
+  ),
+  131 => 
+  array (
+    'index' => 
     array (
       '日志管理' => 'action=blog',
       '最新列表' => 'action=blog',
@@ -2705,11 +2722,11 @@ $lang = array (
     array (
       '道具中心' => 'action=magics',
     ),
-    'text' =>
+    'text' => 
     array (
       0 => '道具中心',
       1 => 'magics_tips',
-      2 => '安装新的道具，需将道具脚本程序上传到 source/class/magic/ 目录，然后即可在以下列表中使用了',
+      2 => '安装新的道具，需将道具脚本程序上传到 source/class/magic/ 目录，然后即可在以下列表中使用了。插件开发人员在设计新的道具前请务必仔细阅读《Discuz! 技术文库》中的内容。',
       3 => 'magics_config_open',
       4 => '是否打开道具中心',
       5 => '是否开启道具中心功能',
@@ -4537,11 +4554,11 @@ $lang = array (
       '防灌水设置' => 'action=setting&operation=sec',
       '验证问答设置' => 'action=setting&operation=sec&anchor=secqaa',
     ),
-    'text' =>
+    'text' => 
     array (
       0 => '防灌水设置 &raquo; 验证问答设置',
       1 => 'setting_sec_qaa_tips',
-      2 => '验证问题应该言简意赅，没有歧义，正常人都能够正确作答。请经常更新验证问答的问题及答案以防止被猜测！安装新的验证问答脚本，需将验证问答脚本程序上传到 source/class/secqaa/ 目录，然后即可在以下列表中选择使用了',
+      2 => '验证问题应该言简意赅，没有歧义，正常人都能够正确作答。请经常更新验证问答的问题及答案以防止被猜测！安装新的验证问答脚本，需将验证问答脚本程序上传到 source/class/secqaa/ 目录，然后即可在以下列表中选择使用了。插件开发人员在设计新的验证问答脚本前请务必仔细阅读《Discuz! 技术文库》中的内容。',
       3 => 'setting_sec_secqaa',
       4 => '验证问答设置',
       5 => '建议你设置 10 个以上验证问题及答案，验证问题越多，验证问答防止恶意注册或发布信息的效果越明显。问题支持 HTML 代码，答案长度不超过 50 字节',

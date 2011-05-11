@@ -415,6 +415,7 @@ a.faq { background: url(faq.gif) no-repeat 0 2px; padding:1px; margin-left:10px;
 .diff-changed{ background:#FF9 !important; }
 .diff-added{ background:#CFC !important; }
 
+.verifyimg { max-height: 120px; height: expression(this.height > 120 ? 120 : true); }
 /* calendar */
 #calendar_week .dropmenu{ filter: none; opacity: 1; background: none; margin-left: 0;position:relative; margin-top:0; border:none; text-align:left; text-decoration:underline; }
 .calendar_checked, .calendar_checked a:link, .calendar_checked a:visited{ color:#333; }

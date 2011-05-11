@@ -40,7 +40,7 @@ if ($_G['gp_view'] == 'credit') {
 		$_G['gp_orderby'] = 'all';
 	}
 	if($_G['uid']) {
-		$mycredits = $now_choose == 'all' ? $_G['member']['credits'] : $_G['member']['extcredits'.$now_choose];
+		$mycredits = $now_choose == 'all' ? $_G['member']['credits'] : getuserprofile('extcredits'.$now_choose);
 		$cookie_name = 'space_top_credit_'.$_G['uid'].'_'.$now_choose;
 		if($_G['cookie'][$cookie_name]) {
 			$now_pos = $_G['cookie'][$cookie_name];

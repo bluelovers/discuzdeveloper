@@ -543,7 +543,7 @@ function getblockhtml($blockname,$parameters = array()) {
 			while($value = DB::fetch($query)) {
 				if(!empty($value['appname'])) {
 					$replace = array('appid'=>$value['appid'], 'appname'=>$value['appname']);
-					$parameters['logotype'] = !empty($parameters['logotype']) && in_array($parameters['logotype'], array('icon', 'logo')) ? $parameters['logotype'] : 'icon';
+					$parameters['logotype'] = !empty($parameters['logotype']) && in_array($parameters['logotype'], array('icon', 'logo')) ? $parameters['logotype'] : 'logo';
 					if($parameters['logotype'] == 'icon') {
 						$listclass = 'xl xl1 cl';
 						$replace['icon'] = getmyappiconpath($value['appid'], $value['iconstatus']);

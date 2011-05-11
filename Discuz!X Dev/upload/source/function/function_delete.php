@@ -78,10 +78,15 @@ function deletemember($uids, $delpost = true) {
 	return $numdeleted;
 }
 
-function deletepost($ids, $idtype = 'pid', $credit = false, $posttableid = false) {
+function deletepost($ids, $idtype = 'pid', $credit = false, $posttableid = false, $recycle = false) {
 	global $_G;
+	$recycle = $recycle && $idtype == 'pid' ? true : false;
 	if(!$ids || !in_array($idtype, array('authorid', 'tid', 'pid'))) {
 		return;
+	}
+	if($_G['setting']['plugins'][HOOKTYPE.'_deletepost']) {
+		$hookparam = func_get_args();
+		hookscript('deletepost', 'global', 'funcs', array('param' => $hookparam, 'step' => 'check'), 'deletepost');
 	}
 
 	loadcache('posttableids');
@@ -99,17 +104,19 @@ function deletepost($ids, $idtype = 'pid', $credit = false, $posttableid = false
 	if($credit) {
 		$tuidarray = $ruidarray = array();
 		foreach($posttableids as $id) {
-			$query = DB::query('SELECT tid, pid, first, authorid, replycredit FROM '.DB::table(getposttable($id))." WHERE $idtype IN ($idsstr)");
+			$query = DB::query('SELECT tid, pid, first, authorid, replycredit, invisible FROM '.DB::table(getposttable($id))." WHERE $idtype IN ($idsstr)");
 			while($post = DB::fetch($query)) {
-				if($post['first']) {
-					$tuidarray[] = $post['authorid'];
-				} else {
-					$ruidarray[] = $post['authorid'];
-					if($post['authorid'] > 0 && $post['replycredit'] > 0) {
-						$replycredit_list[$post['authorid']][$post['tid']] += $post['replycredit'];
+				if($post['invisible'] != -1 && $post['invisible'] != -5) {
+					if($post['first']) {
+						$tuidarray[] = $post['authorid'];
+					} else {
+						$ruidarray[] = $post['authorid'];
+						if($post['authorid'] > 0 && $post['replycredit'] > 0) {
+							$replycredit_list[$post['authorid']][$post['tid']] += $post['replycredit'];
+						}
 					}
+					$tids[] = $post['tid'];
 				}
-				$tids[] = $post['tid'];
 			}
 		}
 
@@ -125,13 +132,17 @@ function deletepost($ids, $idtype = 'pid', $credit = false, $posttableid = false
 	}
 
 	foreach($posttableids as $id) {
-		foreach(array(getposttable($id), 'forum_postcomment') as $table) {
-			DB::delete($table, "$idtype IN ($idsstr)");
+		if($recycle) {
+			DB::query("UPDATE ".DB::table(getposttable($id))." SET invisible='-5' WHERE pid IN ($idsstr)");
+		} else {
+			foreach(array(getposttable($id), 'forum_postcomment') as $table) {
+				DB::delete($table, "$idtype IN ($idsstr)");
+			}
+			DB::delete('forum_trade', ($idtype == 'authorid' ? 'sellerid' : $idtype)." IN ($idsstr)");
+			DB::delete('home_feed', "id IN ($idsstr) AND idtype='".($idtype == 'authorid' ? 'uid' : $idtype)."'");
 		}
-		DB::delete('forum_trade', ($idtype == 'authorid' ? 'sellerid' : $idtype)." IN ($idsstr)");
-		DB::delete('home_feed', "id IN ($idsstr) AND idtype='".($idtype == 'authorid' ? 'uid' : $idtype)."'");
 	}
-	if($idtype != 'authorid') {
+	if(!$recycle && $idtype != 'authorid') {
 		foreach(array('forum_postposition', 'forum_poststick') as $table) {
 			DB::delete($table, "$idtype IN ($idsstr)");
 		}
@@ -153,7 +164,12 @@ function deletepost($ids, $idtype = 'pid', $credit = false, $posttableid = false
 			updatemembercount($uid, $uid_credit, true);
 		}
 	}
-	deleteattach($ids, $idtype);
+	if(!$recycle) {
+		deleteattach($ids, $idtype);
+	}
+	if($_G['setting']['plugins'][HOOKTYPE.'_deletepost']) {
+		hookscript('deletepost', 'global', 'funcs', array('param' => $hookparam, 'step' => 'delete'), 'deletepost');
+	}
 	return $count;
 }
 
@@ -211,16 +227,7 @@ function deletethread($tids, $membercount = false, $credit = false, $ponly = fal
 
 	$atids = $fids = $postids = $threadtables = array();
 	foreach($threadtableids as $tableid) {
-		if(!$tableid) {
-			if(!$ponly) {
-				$threadtable = "forum_thread";
-			} else {
-				continue;
-			}
-		} else {
-			$threadtable = "forum_thread_$tableid";
-		}
-		$threadtables[] = $threadtable;
+		$threadtable = !$tableid ? "forum_thread" : "forum_thread_$tableid";
 
 		$query = DB::query("SELECT cover, tid, fid, posttableid FROM ".DB::table($threadtable)." WHERE tid IN ($tids)");
 		while($row = DB::fetch($query)) {
@@ -231,6 +238,9 @@ function deletethread($tids, $membercount = false, $credit = false, $ponly = fal
 				$fids[$row['fid']][] = $tableid;
 			}
 		}
+		if(!$tableid && !$ponly) {
+			$threadtables[] = $threadtable;
+		}
 	}
 
 	if($credit || $membercount) {
@@ -238,9 +248,11 @@ function deletethread($tids, $membercount = false, $credit = false, $ponly = fal
 
 		$postlist = $uidarray = $tuidarray = $ruidarray = array();
 		foreach($postids as $posttableid => $posttabletids) {
-			$query = DB::query('SELECT tid, first, authorid, dateline, replycredit FROM '.DB::table(getposttable($posttableid)).' WHERE tid IN ('.dimplode($posttabletids).')');
+			$query = DB::query('SELECT tid, first, authorid, dateline, replycredit, invisible FROM '.DB::table(getposttable($posttableid)).' WHERE tid IN ('.dimplode($posttabletids).')');
 			while($post = DB::fetch($query)) {
+				if($post['invisible'] != -1 && $post['invisible'] != -5) {
 				$postlist[] = $post;
+				}
 			}
 		}
 		$query = DB::query("SELECT tid, extcreditstype FROM ".DB::table('forum_replycredit')." WHERE tid IN ($tids)");

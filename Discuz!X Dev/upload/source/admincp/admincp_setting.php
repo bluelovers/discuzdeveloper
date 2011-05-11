@@ -425,6 +425,7 @@ if(!submitcheck('settingsubmit')) {
 			array(1, $lang['setting_access_register_welcomemsg_pm']),
 			array(2, $lang['setting_access_register_welcomemsg_email'])
 		)), $welcomemsg, 'mcheckbox');
+		showsetting('setting_access_register_welcomemsgtitle', 'settingnew[welcomemsgtitle]', $setting['welcomemsgtitle'], 'text');
 		showsetting('setting_access_register_welcomemsgtxt', 'settingnew[welcomemsgtxt]', $setting['welcomemsgtxt'], 'textarea');
 		showsetting('setting_access_register_bbrules', 'settingnew[bbrules]', $setting['bbrules'], 'radio', '', 1);
 		showsetting('setting_access_register_bbruleforce', 'settingnew[bbrulesforce]', $setting['bbrulesforce'], 'radio');
@@ -2130,6 +2131,10 @@ EOT;
 				cpmsg('setting_adminipaccess_invalid', '', 'error');
 			}
 		}
+	}
+
+	if(isset($settingnew['welcomemsgtitle'])) {
+		$settingnew['welcomemsgtitle'] = cutstr(trim(dhtmlspecialchars($settingnew['welcomemsgtitle'])), 75);
 	}
 
 	if(isset($settingnew['showsignatures']) && isset($settingnew['showavatars']) && isset($settingnew['showimages'])) {

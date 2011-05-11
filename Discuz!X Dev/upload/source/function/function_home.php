@@ -657,7 +657,7 @@ function getuserdefaultdiy() {
 					'visitor' => array('shownum' => 18),
 					'wall' => array('shownum' => 16),
 					'feed' => array('shownum' => 16),
-					'myapp' => array('shownum' => 16)
+					'myapp' => array('shownum' => 9, 'logotype'=> 'logo'),
 			),
 		'nv' => array(
 			'nvhidden' => 0,
