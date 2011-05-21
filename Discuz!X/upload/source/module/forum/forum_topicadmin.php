@@ -42,7 +42,7 @@ if(!empty($_G['tid'])) {
 		$threadtable = 'forum_thread';
 	}
 
-	$thread = DB::fetch_first("SELECT * FROM ".DB::table($threadtable)." WHERE tid='$_G[tid]' AND fid='$_G[fid]' AND displayorder>='0'");
+	$thread = DB::fetch_first("SELECT * FROM ".DB::table($threadtable)." WHERE tid='$_G[tid]' AND fid='$_G[fid]'".(!$_G['forum_auditstatuson'] ? "  AND displayorder>='0'" : ''));
 	if(!$thread) {
 		showmessage('thread_nonexistence');
 	}
@@ -61,10 +61,6 @@ if(($_G['group']['reasonpm'] == 2 || $_G['group']['reasonpm'] == 3) || !empty($_
 	$sendreasonpm = 0;
 }
 
-$postcredits = $_G['forum']['postcredits'] ? $_G['forum']['postcredits'] : $_G['setting']['creditspolicy']['post'];
-$replycredits = $_G['forum']['replycredits'] ? $_G['forum']['replycredits'] : $_G['setting']['creditspolicy']['reply'];
-$digestcredits = $_G['forum']['digestcredits'] ? $_G['forum']['digestcredits'] : $_G['setting']['creditspolicy']['digest'];
-$postattachcredits = $_G['forum']['postattachcredits'] ? $_G['forum']['postattachcredits'] : $_G['setting']['creditspolicy']['postattach'];
 $_G['gp_handlekey'] = 'mods';
 
 

@@ -41,6 +41,7 @@ class bbcode {
 				"<a href=\"\\1\\2\" target=\"_blank\">\\1\\2</a>",
 				" <img src=\"".STATICURL."image/smiley/comcom/\\1.gif\" class=\"vm\"> "
 			);
+			$this->replace_exp[] = '$this->bb_img(\'\\1\')';
 			$this->search_str = array('[b]', '[/b]','[i]', '[/i]', '[u]', '[/u]');
 			$this->replace_str = array('<b>', '</b>', '<i>','</i>', '<u>', '</u>');
 		}

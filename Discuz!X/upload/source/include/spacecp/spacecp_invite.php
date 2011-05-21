@@ -251,7 +251,7 @@ if($_GET['op'] == 'resend') {
 	$uri = $_SERVER['REQUEST_URI']?$_SERVER['REQUEST_URI']:($_SERVER['PHP_SELF']?$_SERVER['PHP_SELF']:$_SERVER['SCRIPT_NAME']);
 	$uri = substr($uri, 0, strrpos($uri, '/')+1);
 
-	$actives = array('invite'=>' class="active"');
+	$actives = array('invite'=>' class="a"');
 }
 
 $navtitle = lang('core', 'title_invite_friend');

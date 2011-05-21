@@ -25,6 +25,12 @@ if(!empty($_SERVER['QUERY_STRING']) && is_numeric($_SERVER['QUERY_STRING'])) {
 		$_ENV['domainroot'] = substr($_SERVER['HTTP_HOST'], strpos($_SERVER['HTTP_HOST'], '.')+1);
 		if(!empty($_ENV['domain']['app']) && is_array($_ENV['domain']['app']) && in_array($_SERVER['HTTP_HOST'], $_ENV['domain']['app'])) {
 			$_ENV['curapp'] = array_search($_SERVER['HTTP_HOST'], $_ENV['domain']['app']);
+			if($_ENV['curapp'] == 'mobile') {
+				$_ENV['curapp'] = 'forum';
+				if(@$_GET['mobile'] != 'no') {
+					@$_GET['mobile'] = 'yes';
+				}
+			}
 			if($_ENV['curapp'] == 'default' || !isset($_ENV['defaultapp'][$_ENV['curapp'].'.php'])) {
 				$_ENV['curapp'] = '';
 			}
@@ -34,9 +40,6 @@ if(!empty($_SERVER['QUERY_STRING']) && is_numeric($_SERVER['QUERY_STRING'])) {
 			$list = $_ENV['domain']['list'];
 			if(isset($list[$_SERVER['HTTP_HOST']])) {
 				$domain = $list[$_SERVER['HTTP_HOST']];
-				$apphost = $_ENV['domain']['app'][$domain['idtype']] ? $_ENV['domain']['app'][$domain['idtype']] : $_ENV['domain']['app']['default'];
-				$apphost = $apphost ? $apphost.'/' : '';
-				$domainroot = $apphost ? 'http://'.$apphost : '';
 				$id = intval($domain['id']);
 				switch($domain['idtype']) {
 					case 'subarea':

@@ -84,7 +84,7 @@ EOT;
 
 	$field = DB::fetch_first("SELECT * FROM ".DB::table('common_member_profile_setting')." WHERE fieldid='$id'");
 	if(!$field) {
-		cpmsg('undefined_action', '', 'error');
+		cpmsg('profilefield_not_found', '', 'error');
 	}
 
 	if(!submitcheck('editsubmit')) {

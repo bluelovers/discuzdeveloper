@@ -16,19 +16,19 @@ $id = empty($_GET['id']) ? 0 : intval($_GET['id']);
 $aid = empty($_GET['aid']) ? '' : intval($_GET['aid']);
 $attach = DB::fetch_first("SELECT * FROM ".DB::table('portal_attachment')." WHERE attachid='$id'");
 if(empty($attach)) {
-	showmessage("portal_attachment_noexist");
+	showmessage('portal_attachment_noexist');
 }
 
 if($operation == 'delete') {
 	if(!$_G['group']['allowmanagearticle'] && $_G['uid'] != $attach['uid']) {
-		showmessage("portal_attachment_nopermission_delete");
+		showmessage('portal_attachment_nopermission_delete');
 	}
 	if($aid) {
 		DB::query("UPDATE ".DB::table('portal_article_title')." SET pic = '' WHERE aid='$aid'", 'UNBUFFERED');
 	}
 	DB::query("DELETE FROM ".DB::table('portal_attachment')." WHERE attachid='$id'");
 	pic_delete($attach['attachment'], 'portal', $attach['thumb'], $attach['remote']);
-	showmessage("portal_image_noexist");
+	showmessage('portal_image_noexist');
 
 } else {
 	$filename = $_G['setting']['attachdir'].'/portal/'.$attach['attachment'];

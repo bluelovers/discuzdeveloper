@@ -2,7 +2,7 @@
 	[Discuz!] (C)2001-2009 Comsenz Inc.
 	This is NOT a freeware, use is subject to license terms
 
-	$Id: forum_moderate.js 18912 2010-12-08 08:01:45Z monkey $
+	$Id: forum_moderate.js 21562 2011-03-31 08:40:33Z monkey $
 */
 
 function modaction(action, pid, extra, mod) {
@@ -49,11 +49,15 @@ function modthreads(optgroup, operation) {
 
 function pidchecked(obj) {
 	if(obj.checked) {
-		if(BROWSER.ie && !BROWSER.opera) {
+		try {
 			var inp = document.createElement('<input name="topiclist[]" />');
-		} else {
-			var inp = document.createElement('input');
-			inp.name = 'topiclist[]';
+		} catch(e) {
+			try {
+				var inp = document.createElement('input');
+				inp.name = 'topiclist[]';
+			} catch(e) {
+				return;
+			}
 		}
 		inp.id = 'topiclist_' + obj.value;
 		inp.value = obj.value;

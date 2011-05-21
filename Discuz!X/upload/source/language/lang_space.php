@@ -97,11 +97,11 @@ $lang = array(
 	'block3' => '自定义模块3',
 	'block4' => '自定义模块4',
 	'block5' => '自定义模块5',
-	'blockdata' => array('profile' => '个人资料', 'doing' => '记录', 'feed' => '动态',
-				'blog' => '日志', 'album' => '相册', 'friend' => '好友',
-				'visitor' => '最近访客', 'wall' => '留言板', 'group' => '我的'.$_G[setting][navs][3][navname],
-				'share' => '分享', 'thread' => '主题', 'group'=>$_G[setting][navs][3][navname],'music'=>'音乐盒',
-				'statistic' => '统计信息',
+	'blockdata' => array('personalinfo' => '个人资料', 'profile' => '头像', 'doing' => '记录', 'feed' => '动态',
+				'blog' => '日志', 'stickblog' => '置顶日志', 'album' => '相册', 'friend' => '好友',
+				'visitor' => '最近访客', 'wall' => '留言板', 'share' => '分享',
+				'thread' => '主题', 'group'=>$_G[setting][navs][3][navname],'music'=>'音乐盒',
+				'statistic' => '统计信息','myapp' => '应用',
 				'block1'=>'自由模块1', 'block2'=>'自由模块2', 'block3'=>'自由模块3',
 				'block4'=>'自由模块4','block5'=>'自由模块5'),
 
@@ -109,19 +109,19 @@ $lang = array(
 	'blog_li' => '<dl class="bbda cl"><dt><a href="home.php?mod=space&uid={uid}&do=blog&id={blogid}" target="_blank">{subject}</a><span class="xg2 xw0"> {date}</span></dt>',
 	'blog_li_img' => '<dd class="atc"><a href="home.php?mod=space&uid={uid}&do=blog&id={blogid}" target="_blank"><img src="{src}" class="summaryimg" /></a></dd>',
 	'blog_li_ext' => '<dd class="xg1"><a href="home.php?mod=space&uid={uid}&do=blog&id={blogid}" target="_blank">({viewnum})次阅读</a><span class="pipe">|</span><a href="home.php?mod=space&uid={uid}&do=blog&id={blogid}#comment" target="_blank">({replynum})个评论</a></dd>',
-	'album_li' => '<li><div class="c"><a href="home.php?mod=space&uid={uid}&do=album&id={albumid}" target="_blank"><img src="{src}" alt="{albumname}" width="120" /></a></div><p><a href="home.php?mod=space&uid={uid}&do=album&id={albumid}" target="_blank" title="{albumname]}">{albumname}</a></p><span>图片数:({picnum})</span><span>更新 {date}</span></li>',
+	'album_li' => '<li style="width:70px"><div class="c"><a href="home.php?mod=space&uid={uid}&do=album&id={albumid}" target="_blank" title="{albumname}, 更新 {date}"><img src="{src}" alt="{albumname}" width="70" height="70" /></a></div><p><a href="home.php?mod=space&uid={uid}&do=album&id={albumid}" target="_blank" title="{albumname}, 更新 {date}">{albumname}</a></p><span>图片数: {picnum}</span></li>',
 	'doing_li' => '<li>{message}</li><br />{date} {from} 回复({replynum})',
 	'visitor_anonymity' => '<div class="avatar48"><img src="image/magic/hidden.gif" alt="匿名"></div><p>匿名</p>',
-	'visitor_list' => '<a href="home.php?mod=space&uid={uid}" target="_blank"><em class="{class}"></em>{avatar}</a><p><a href="home.php?mod=space&uid={uid}" title="{username}">{username}</a></p>',
+	'visitor_list' => '<a href="home.php?mod=space&uid={uid}" target="_blank" class="avt"><em class="{class}"></em>{avatar}</a><p><a href="home.php?mod=space&uid={uid}" title="{username}">{username}</a></p>',
 	'wall_form' => '<div class="space_wall_post">
 						<form action="home.php?mod=spacecp&ac=comment" id="quickcommentform_{uid}" name="quickcommentform_{uid}" method="post" autocomplete="off" onsubmit="ajaxpost(\'quickcommentform_{uid}\', \'return_commentwall_{uid}\');doane(event);">
-							'.($_G['uid'] ? '<span id="message_face" onclick="showFace(this.id, \'comment_message\');return false;" style="cursor: pointer;"><img src="static/image/common/facelist.gif" alt="facelist" class="mbn vm" /></span>
+							'.($_G['uid'] ? '<span id="message_face" onclick="showFace(this.id, \'comment_message\');return false;" class="cur1"><img src="static/image/common/facelist.gif" alt="facelist" class="mbn vm" /></span>
 							<br /><textarea name="message" id="comment_message" class="pt" rows="3" cols="60" onkeydown="ctrlEnter(event, \'commentsubmit_btn\');" style="width: 90%;"></textarea>
 							<input type="hidden" name="refer" value="home.php?mod=space&uid={uid}" />
 							<input type="hidden" name="id" value="{uid}" />
 							<input type="hidden" name="idtype" value="uid" />
 							<input type="hidden" name="commentsubmit" value="true" />' :
-							'<div class="pt hm">你需要登录后才可以留言 <a href="member.php?mod=logging&action=login" onclick="showWindow(\'login\', this.href)" class="xi2">登录</a> | <a href="member.php?mod='.$_G['setting']['regname'].'" onclick="showWindow(\'register\', this.href)" class="xi2">'.$_G['setting']['reglinkname'].'</a></div>').'
+							'<div class="pt hm">你需要登录后才可以留言 <a href="member.php?mod=logging&action=login" onclick="showWindow(\'login\', this.href)" class="xi2">登录</a> | <a href="member.php?mod='.$_G['setting']['regname'].'" class="xi2">'.$_G['setting']['reglinkname'].'</a></div>').'
 							<p class="ptn"><button '.($_G['uid'] ? 'type="submit"' : 'type="button" onclick="showWindow(\'login\', \'member.php?mod=logging&action=login&guestmessage=yes\')"').' name="commentsubmit_btn" value="true" id="commentsubmit_btn" class="pn"><strong>留言</strong></button></p>
 							<input type="hidden" name="handlekey" value="commentwall_{uid}" />
 							<span id="return_commentwall_{uid}"></span>
@@ -145,12 +145,14 @@ $lang = array(
 				</dt>
 				<dd id="comment_{cid}">{message}</dd>
 				</dl>',
-	'wall_more' => '<dl><dt><span class="y xw0"><a href="home.php?mod=space&uid={uid}&do=wall">&raquo; 查看全部</a></span><dt></dl>',
+	'wall_more' => '<dl><dt><span class="y xw0"><a href="home.php?mod=space&uid={uid}&do=wall">查看全部</a></span><dt></dl>',
 	'wall_edit' => '<a href="home.php?mod=spacecp&ac=comment&op=edit&cid={cid}&handlekey=editcommenthk_{cid}" id="c_{cid}_edit" onclick="showWindow(this.id, this.href, \'get\', 0);">编辑</a> ',
 	'wall_del' => '<a href="home.php?mod=spacecp&ac=comment&op=delete&cid={cid}&handlekey=delcommenthk_{cid}" id="c_{cid}_delete" onclick="showWindow(this.id, this.href, \'get\', 0);">删除</a> ',
 	'wall_reply' => '<a href="home.php?mod=spacecp&ac=comment&op=reply&cid={cid}&handlekey=replycommenthk_{cid}" id="c_{cid}_reply" onclick="showWindow(this.id, this.href, \'get\', 0);">回复</a>',
 	'group_li' => '<li><a href="forum.php?mod=group&fid={groupid}" target="_blank"><img src="{icon}" alt="{name}" /></a><p><a href="forum.php?mod=group&fid={groupid}" target="_blank">{name}</a></p></li>',
 	'poll_li' => '<div class="c z"><img alt="poll" src="static/image/feed/poll.gif" alt="poll" class="t" /><h4 class="h"><a target="_blank" href="forum.php?mod=viewthread&tid={tid}" target="_blank">{subject}</a></h4><div class="mtn xg1">发布时间：{dateline}</div></div>',
+	'myapp_li_icon' => '<li><img src="{icon}" onerror="this.onerror=null;this.src=\'http://appicon.manyou.com/icons/{appid}\'" alt="{appname}" class="vm" /> <a href="userapp.php?mod=app&id={appid}">{appname}</a></li>',
+	'myapp_li_logo' => '<li><a href="userapp.php?mod=app&id={appid}"><img src="http://appicon.manyou.com/logos/{appid}" alt="{appname}" /><p><a href="userapp.php?mod=app&id={appid}">{appname}</a></p></li>',
 	'music_no_content' => '还没有设置音乐盒的内容',
 	'block_profile_diy' => '装扮空间',
 	'block_profile_wall' => '查看留言',
@@ -162,15 +164,36 @@ $lang = array(
 	'block_profile_poke' => '打个招呼',
 	'block_profile_sendmessage' => '发送消息',
 	'block_doing_reply' => '回复',
-	'block_doing_no_content' => '现在还没有记录。',
+	'block_doing_no_content' => '现在还没有记录',
+	'block_doing_no_content_publish' => '，<a href ="home.php?mod=space&uid={uid}&do=doing&view=me&from=space">更新记录</a>',
+	'block_blog_no_content' => '现在还没有日志',
+	'block_blog_no_content_publish' => '，<a href ="home.php?mod=spacecp&ac=blog">发布日志</a>',
+	'block_album_no_content' => '现在还没有相册',
+	'block_album_no_content_publish' => '，<a href ="home.php?mod=spacecp&ac=upload">上传图片</a>',
+	'block_feed_no_content' => '现在还没有动态',
+	'block_thread_no_content' => '现在还没有主题',
+	'block_thread_no_content_publish' => '，<a href ="forum.php?mod=misc&action=nav&special=0&from=home" onclick="showWindow(\'nav\', this.href);return false;">发布主题</a>',
+	'block_friend_no_content' => '现在还没有好友',
+	'block_friend_no_content_publish' => '，<a href ="home.php?mod=spacecp&ac=search">查找好友</a> 或 <a href ="home.php?mod=spacecp&ac=invite">邀请好友</a>',
+	'block_visitor_no_content' => '现在还没有访客',
+	'block_visitor_no_content_publish' => '，<a href ="home.php?mod=space&do=friend&view=online&type=member">去串串门</a>',
+	'block_share_no_content' => '现在还没有分享',
+	'block_wall_no_content' => '现在还没有留言',
+	'block_group_no_content' => '现在还没有群组',
+	'block_group_no_content_publish' => '，<a href ="forum.php?mod=group&action=create">创建自己的群组</a> 或 <a href ="group.php?mod=index">加入群组</a>',
+	'block_group_no_content_join' => '，<a href ="group.php?mod=index">加入群组</a>',
+	'block_myapp_no_content' => '现在还没有应用',
+	'block_myapp_no_content_publish' => '，<a href ="userapp.php?mod=manage&my_suffix=/app/list">我要玩应用</a>',
 	'block_view_noperm' => '无权查看',
+	'block_view_profileinfo_noperm' => '暂无资料项或无权查看',
 	'click_play' => '点击播放',
 	'click_view' => '点击查看',
 	'feed_view_only' => '只看此类动态',
 
 	'export_pm' => '导出短消息',
-	'pm_export_header' => 'Discuz! X 短消息记录(此消息记录为文本格式，不支持重新导入)',
+	'pm_export_header' => 'Discuz! X 短消息记录(此消息记录不支持重新导入)',
 	'pm_export_touser' => '消息对象: {touser}',
+	'pm_export_subject' => '群聊话题: {subject}',
 	'all' => '全部',
 	'manage_post' => '管理帖子',
 	'manage_album' => '管理相册',
@@ -193,6 +216,9 @@ $lang = array(
 	'sb_wall' => '{who}的留言板',
 	'sb_profile' => '{who}的个人资料',
 	'sb_thread' => '{who}的帖子',
+	'doing_you_can' => '你可以更新记录, 让好友们知道你在做什么...',
+	'block_profile_all' => '<p style="text-align: right;"><a href="home.php?mod=space&uid={uid}&do=profile">查看全部个人资料</a></p>',
+	'block_profile_edit' => '<span class="y xw0"><a href="home.php?mod=spacecp&ac=profile">编辑我的资料</a></span>',
 
 	'viewthread_userinfo_hour' => '小时',
 	'viewthread_userinfo_uid' => 'UID',
@@ -209,6 +235,7 @@ $lang = array(
 	'viewthread_userinfo_regtime' => '注册时间',
 	'viewthread_userinfo_lastdate' => '最后登录',
 	'viewthread_userinfo_oltime' => '在线时间',
+
 );
 
 ?>

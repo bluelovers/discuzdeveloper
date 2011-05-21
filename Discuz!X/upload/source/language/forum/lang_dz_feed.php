@@ -9,15 +9,15 @@
 
 $lang = array
 (
-	'feed_thread_pin_title' =>		'{actor} 发表的主题 {subject} 被 {operater} 置顶了',
+	'feed_thread_pin_title' =>		'{actor} 发表的主题 {subject} 被 {operater} 置顶',
 
-	'feed_thread_digest_title' =>		'{actor} 发表的主题 {subject} 被 {operater} 加精了',
+	'feed_thread_digest_title' =>		'{actor} 发表的主题 {subject} 被 {operater} 加精',
 
-	'feed_thread_highlight_title' =>	'{actor} 发表的主题 {subject} 被 {operater} 高亮了',
+	'feed_thread_highlight_title' =>	'{actor} 发表的主题 {subject} 被 {operater} 高亮',
 
-	'feed_thread_del_title' =>		'{actor} 发表的主题 {subject} 被 {operater} 删除了',
+	'feed_thread_del_title' =>		'{actor} 发表的主题 {subject} 被 {operater} 删除',
 
-	'feed_thread_move_title' =>		'{actor} 发表的主题 {subject} 被 {operater} 移动了',
+	'feed_thread_move_title' =>		'{actor} 发表的主题 {subject} 被 {operater} 移动',
 
 	'feed_thread_views_title' =>		'{actor} 发表的主题 {subject} 查看数超过了 {count}',
 
@@ -43,7 +43,7 @@ $lang = array
 
 	'feed_user_posts_title' =>		'{actor} 的发帖数达到 {count}',
 
-	'feed_user_digest_title' =>		'{actor} 的精华贴数达到 {count}',
+	'feed_user_digest_title' =>		'{actor} 的精华帖数达到 {count}',
 
 	'feed_user_medal_title' =>		'{actor} 得到勋章 {medal} 奖励',
 

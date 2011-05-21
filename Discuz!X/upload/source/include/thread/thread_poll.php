@@ -33,7 +33,7 @@ if($count = DB::fetch_first("SELECT MAX(votes) AS max, SUM(votes) AS total FROM 
 	while($options = DB::fetch($query)) {
 		$viewvoteruid[] = $options['voterids'];
 		$voterids .= "\t".$options['voterids'];
-		$option = preg_replace("/\[url=(https?|ftp|gopher|news|telnet|rtsp|mms|callto|bctp|ed2k|thunder|synacast){1}:\/\/([^\[\"']+?)\](.+?)\[\/url\]/i", "<a href=\"\\1://\\2\" target=\"_blank\">\\3</a>", $options['polloption']);
+		$option = preg_replace("/\[url=(https?){1}:\/\/([^\[\"']+?)\](.+?)\[\/url\]/i", "<a href=\"\\1://\\2\" target=\"_blank\">\\3</a>", $options['polloption']);
 		$polloptions[$opts++] = array
 		(
 			'polloptionid'	=> $options['polloptionid'],

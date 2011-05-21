@@ -19,14 +19,14 @@ require_once './source/function/function_home.php';
 
 $discuz = & discuz_core::instance();
 
-$cachelist = array('magic','userapp','usergroups');
+$cachelist = array('magic','userapp','usergroups', 'diytemplatenamehome');
 $discuz->cachelist = $cachelist;
 $discuz->init();
 
 $space = array();
 
 $mod = getgpc('mod');
-if(!in_array($mod, array('space', 'spacecp', 'misc', 'magic', 'editor', 'userapp', 'invite', 'task', 'medal'))) {
+if(!in_array($mod, array('space', 'spacecp', 'misc', 'magic', 'editor', 'invite', 'task', 'medal', 'rss'))) {
 	$mod = 'space';
 	$_GET['do'] = 'home';
 }

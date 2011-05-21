@@ -39,10 +39,11 @@ $lang = array
 	'end' => '末尾',
 
 	'seccode_image_tips' => '输入下图中的字符<br />',
-	'seccode_image_ani_tips' => '输入下面动画图片中最大的字符<br />',
+	'seccode_image_ani_tips' => '请输入下面动画图片中的字符<br />',
 	'seccode_sound_tips' => '输入你听到的字符<br />',
 	'secqaa_tips' => '输入下面问题的答案<br />',
 
+	'fullblankspace' => '　',
 
 	'title_goruptype' => '类',
 	'title_of' => '的',
@@ -159,6 +160,7 @@ $lang = array
 	'title_memcp_videophoto' => '视频认证',
 	'title_memcp_comment' => '评论',
 	'title_memcp_eccredit' => '信用评价',
+	'title_memcp_promotion' => '访问推广',
 	'title_task' => '任务',
 	'title_login' => '登录',
 	'title_ranklist_picture' => '图片排行',
@@ -169,6 +171,7 @@ $lang = array
 	'title_ranklist_activity' => '活动排行',
 	'title_ranklist_forum' => '版块排行',
 	'title_ranklist_group' => '群组排行',
+	'title_ranklist_app' => '应用排行',
 	'title_ranklist_index' => '全部排行',
 	'title_ranklist_index' => '排行榜',
 	'title_search' => '搜索',
@@ -198,6 +201,7 @@ $lang = array
 	'title_userapp_manage' => '{userapp}管理',
 	'faq' => '帮助',
 	'search' => '搜索',
+	'page' => '第{page}页',
 );
 
 ?>

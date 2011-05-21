@@ -34,6 +34,15 @@ $lang = array
 	'articlelist_orderby_dateline' => '按发布时间倒序',
 	'articlelist_orderby_viewnum' => '按查看数倒序',
 	'articlelist_orderby_commentnum' => '按评论数倒序',
+	'articlelist_orderby_click' => '按表态 {clickname} 数倒序',
+	'articlelist_publishdateline' => '文章发布时间',
+	'articlelist_publishdateline_nolimit' => '不限制',
+	'articlelist_publishdateline_hour' => '1小时内',
+	'articlelist_publishdateline_day' => '24小时内',
+	'articlelist_publishdateline_week' => '7天内',
+	'articlelist_publishdateline_month' => '1个月内',
+	'articlelist_keyword' => '标题关键字',
+	'articlelist_keyword_comment' => '设置标题包含的关键字。注意: 留空为不进行任何过滤； 关键字中可使用通配符 *； 匹配多个关键字全部，可用空格或 AND 连接。如 win32 AND unix； 匹配多个关键字其中部分，可用 | 或 OR 连接。如 win32 OR unix',
 );
 
 ?>

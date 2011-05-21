@@ -15,13 +15,16 @@ $lang = array(
   'ranklist_title_member_girl' => '美女排行',
   'ranklist_title_member_boy' => '帅哥排行',
   'ranklist_title_member_friend' => '好友数排行',
+  'ranklist_title_member_invite' => '邀请排行',
   'ranklist_title_member_post' => '发帖数排行',
   'ranklist_title_member_blog' => '日志数排行',
+  'ranklist_title_member_onlinetime' => '在线时间排行',
 
   'ranklist_title_thread_reply' => '帖子回复排行',
   'ranklist_title_thread_view' => '帖子查看排行',
   'ranklist_title_thread_share' => '帖子分享排行',
   'ranklist_title_thread_favorite' => '帖子收藏排行',
+  'ranklist_title_thread_heat' => '帖子热度排行',
 
   'ranklist_title_blog_heat' => '日志人气排行',
   'ranklist_title_blog_reply' => '日志评论排行',
@@ -61,6 +64,9 @@ $lang = array(
   'ranklist_title_group_post' => '群组回复排行',
   'ranklist_title_group_post_30' => '群组最近 30 天发帖排行',
   'ranklist_title_group_post_24' => '群组最近 24 小时发帖排行',
+
+  'ranklist_title_app_today' => '今日应用活跃排行',
+  'ranklist_title_app_all' => '最流行应用',
 );
 
 ?>

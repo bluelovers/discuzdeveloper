@@ -46,7 +46,7 @@ function build_cache_globalstick() {
 		}
 	}
 	$data['global'] = array(
-		'tids'	=> empty($threadarray['global']) ? 0 : implode(',', $threadarray['global']),
+		'tids'	=> empty($threadarray['global']) ? '' : dimplode($threadarray['global']),
 		'count'	=> intval(@count($threadarray['global']))
 	);
 

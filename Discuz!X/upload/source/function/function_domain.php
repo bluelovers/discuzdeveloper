@@ -19,7 +19,7 @@ function domaincheck($domain, $domainroot, $domainlength, $msgtype = 1) {
 	if(strlen($domain) > 30) {
 		$msgtype ? showmessage('two_domain_length_not_more_than_30_characters', '', array(), array('return' => true)) : cpmsg('two_domain_length_not_more_than_30_characters', '', 'error');
 	}
-	if(!preg_match("/^[a-z][a-z0-9]*$/", $domain)) {
+	if(!preg_match("/^[a-z0-9]*$/", $domain)) {
 		$msgtype ? showmessage('only_two_names_from_english_composition_and_figures', '', array(), array('return' => true)) : cpmsg('only_two_names_from_english_composition_and_figures', '', 'error');
 	}
 
@@ -38,7 +38,6 @@ function isholddomain($domain) {
 	global $_G;
 
 	$domain = strtolower($domain);
-	if(preg_match("/^[^a-z]/i", $domain)) return true;
 	$holdmainarr = empty($_G['setting']['holddomain'])?array('www'):explode('|', $_G['setting']['holddomain']);
 	$ishold = false;
 	foreach ($holdmainarr as $value) {

@@ -15,6 +15,7 @@ function build_cache_censor() {
 	$query = DB::query("SELECT find, replacement, extra FROM ".DB::table('common_word'));
 
 	$banned = $mod = array();
+	$bannednum = $modnum = 0;
 	$data = array('filter' => array(), 'banned' => '', 'mod' => '');
 	while($censor = DB::fetch($query)) {
 		if(preg_match('/^\/(.+?)\/$/', $censor['find'], $a)) {
@@ -35,9 +36,21 @@ function build_cache_censor() {
 			switch($censor['replacement']) {
 				case '{BANNED}':
 					$banned[] = $censor['find'];
+					$bannednum ++;
+					if($bannednum == 1000) {
+						$data['banned'][] = '/('.implode('|', $banned).')/i';
+						$banned = array();
+						$bannednum = 0;
+					}
 					break;
 				case '{MOD}':
 					$mod[] = $censor['find'];
+					$modnum ++;
+					if($modnum == 1000) {
+						$data['mod'][] = '/('.implode('|', $mod).')/i';
+						$mod = array();
+						$modnum = 0;
+					}
 					break;
 				default:
 					$data['filter']['find'][] = '/'.$censor['find'].'/i';
@@ -46,12 +59,14 @@ function build_cache_censor() {
 			}
 		}
 	}
+
 	if($banned) {
-		$data['banned'] = '/('.implode('|', $banned).')/i';
+		$data['banned'][] = '/('.implode('|', $banned).')/i';
 	}
 	if($mod) {
-		$data['mod'] = '/('.implode('|', $mod).')/i';
+		$data['mod'][] = '/('.implode('|', $mod).')/i';
 	}
+
 	if(!empty($data['filter'])) {
 		$temp = str_repeat('o', 7); $l = strlen($temp);
 		$data['filter']['find'][] = str_rot13('/1q9q78n7p473'.'o3q1925oo7p'.'5o6sss2sr/v');

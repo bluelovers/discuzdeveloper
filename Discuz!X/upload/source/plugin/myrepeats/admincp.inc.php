@@ -43,7 +43,7 @@ if(!empty($_G['gp_srchuid'])) {
 	}
 } elseif(!empty($_G['gp_srchrepeat'])) {
 	$extra = '&srchrepeat='.rawurlencode(stripslashes($_G['gp_srchrepeat']));
-	$srchadd = "AND mr.username='$srchrepeat'";
+	$srchadd = "AND mr.username='$_G[gp_srchrepeat]'";
 	$searchtext = $Plang['search'].' "'.stripslashes($_G['gp_srchrepeat']).'" '.$Plang['repeats'].'&nbsp;';
 }
 

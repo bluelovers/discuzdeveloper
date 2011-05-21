@@ -15,10 +15,10 @@
 <!--{elseif $post['imagelist'] || $post['attachlist']}-->
 	<div class="pattl">
 		<!--{if $post['imagelist']}-->
-			$post['imagelist']
+			 <!--{echo showattach($post, 1)}-->
 		<!--{/if}-->
 		<!--{if $post['attachlist']}-->
-			$post[attachlist]
+			 <!--{echo showattach($post)}-->
 		<!--{/if}-->
 	</div>
 <!--{/if}-->

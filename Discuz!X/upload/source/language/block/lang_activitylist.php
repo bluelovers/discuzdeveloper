@@ -89,8 +89,10 @@ $lang = array
 	'activitylist_orderby_monthstart' => '按一月内活动开始时间排序',
 	'activitylist_orderby_weekexp' => '按一周内报名截止时间排序',
 	'activitylist_orderby_monthexp' => '按一月内报名截止时间排序',
-	'activitylist_orderby_weekhot' => '按一周内热度排序',
-	'activitylist_orderby_monthhot' => '按一月内热度排序',
+	'activitylist_orderby_weekhot' => '按一周内已参加人数排序',
+	'activitylist_orderby_monthhot' => '按一月内已参加人数排序',
+	'activitylist_orderby_alltimehot' => '按所有未结束活动已参加人数排序',
+	'activitylist_highlight' => '获得高亮值',
 );
 
 ?>

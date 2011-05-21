@@ -16,8 +16,8 @@ $operation = 'list';
 
 shownav('portal', 'topic');
 $searchctrl = '<span style="float: right; padding-right: 40px;">'
-				.'<a href="javascript:;" onclick="$(\'tb_search\').style.display=\'\';$(\'a_search_show\').style.display=\'none\';$(\'a_search_hide\').style.display=\'\';" id="a_search_show">'.cplang('show_search').'</a>'
-				.'<a href="javascript:;" onclick="$(\'tb_search\').style.display=\'none\';$(\'a_search_show\').style.display=\'\';$(\'a_search_hide\').style.display=\'none\';" id="a_search_hide" style="display:none">'.cplang('hide_search').'</a>'
+				.'<a href="javascript:;" onclick="$(\'tb_search\').style.display=\'\';$(\'a_search_show\').style.display=\'none\';$(\'a_search_hide\').style.display=\'\';" id="a_search_show" style="display:none">'.cplang('show_search').'</a>'
+				.'<a href="javascript:;" onclick="$(\'tb_search\').style.display=\'none\';$(\'a_search_show\').style.display=\'\';$(\'a_search_hide\').style.display=\'none\';" id="a_search_hide">'.cplang('hide_search').'</a>'
 				.'</span>';
 showsubmenu('topic',  array(
 		array('list', 'topic', 1),
@@ -83,7 +83,7 @@ if(submitcheck('opsubmit')) {
 
 	$adminscript = ADMINSCRIPT;
 	echo <<<SEARCH
-	<form method="get" autocomplete="off" action="$adminscript" id="tb_search" style="display:none">
+	<form method="get" autocomplete="off" action="$adminscript" id="tb_search">
 		<div style="margin-top:8px;">
 			<table cellspacing="3" cellpadding="3">
 				<tr>

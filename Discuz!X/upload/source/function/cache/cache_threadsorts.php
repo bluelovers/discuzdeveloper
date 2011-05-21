@@ -63,6 +63,9 @@ function build_cache_threadsorts() {
 			if(in_array($data['type'], array('text', 'textarea'))) {
 				$sortlist[$sortid][$optionid]['defaultvalue'] = $data['rules']['defaultvalue'];
 			}
+			if($data['type'] == 'text') {
+				$sortlist[$sortid][$optionid]['profile'] = $data['rules']['profile'];
+			}
 		} elseif($data['type'] == 'image') {
 			$sortlist[$sortid][$optionid]['maxwidth'] = intval($data['rules']['maxwidth']);
 			$sortlist[$sortid][$optionid]['maxheight'] = intval($data['rules']['maxheight']);

@@ -7,6 +7,9 @@
  *      $Id$
  */
 
+define('IN_API', true);
+define('CURSCRIPT', 'api');
+
 require '../../source/class/class_core.php';
 require '../../source/function/function_forum.php';
 

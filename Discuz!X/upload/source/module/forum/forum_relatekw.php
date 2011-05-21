@@ -11,10 +11,6 @@ if(!defined('IN_DISCUZ')) {
 	exit('Access Denied');
 }
 
-if(!$_G['setting']['tagstatus']) {
-	exit;
-}
-
 if($tid = @intval($_GET['tid'])) {
 	$posttable = getposttablebytid($tid);
 	$query = DB::query("SELECT pid, subject, message FROM ".DB::table($posttable)." WHERE tid='$tid' AND first='1'");
@@ -64,7 +60,7 @@ if($data) {
 	if(!$tid) {
 		$_G['inajax'] = 1;
 		include template('forum/relatekw');
-	} elseif($_G['setting']['tagstatus'] && $kws) {
+	} elseif($kws) {
 		loadcache('censor');
 		$posttable = getposttablebytid($_G['tid']);
 		DB::query("UPDATE ".DB::table($posttable)." SET tags='".implode(',', $kws)."' WHERE pid='$pid'");

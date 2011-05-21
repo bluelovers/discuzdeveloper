@@ -12,7 +12,7 @@ if(!defined('IN_DISCUZ')) {
 }
 
 if(!$_G['group']['allowsplitthread']) {
-	showmessage('undefined_action', NULL);
+	showmessage('no_privilege_splitthread');
 }
 
 $posttable = getposttablebytid($_G['tid']);
@@ -74,7 +74,7 @@ if(!submitcheck('modsubmit')) {
 	}
 
 	DB::query("UPDATE ".DB::table($posttable)." SET tid='$newtid' WHERE pid IN ($pids)");
-	DB::query("UPDATE ".DB::table('forum_attachment')." SET tid='$newtid' WHERE pid IN ($pids)");
+	updateattachtid("pid IN ($pids)", $_G['tid'], $newtid);
 
 	$splitauthors = array();
 	$query = DB::query("SELECT pid, tid, authorid, subject, dateline FROM ".DB::table($posttable)." WHERE tid='$newtid' AND invisible='0' GROUP BY authorid ORDER BY dateline");

@@ -11,12 +11,12 @@ if(!defined('IN_DISCUZ')) {
 	exit('Access Denied');
 }
 
-if(empty($_G['setting']['videophoto'])) {
+if(empty($_G['setting']['verify'][7]['available'])) {
 	showmessage('no_open_videophoto');
 }
 
 require_once libfile('function/spacecp');
-ckvideophoto('viewphoto', $space);
+ckvideophoto($space);
 
 $videophoto = getvideophoto($space['videophoto']);
 

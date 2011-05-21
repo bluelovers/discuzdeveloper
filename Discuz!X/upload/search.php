@@ -14,15 +14,10 @@ require './source/class/class_core.php';
 
 $discuz = & discuz_core::instance();
 
-$modarray = array('my', 'user', 'curforum');
-
-$modcachelist = array('register' => array('modreasons', 'stamptypeid', 'fields_required', 'fields_optional'));
+$modarray = array('my', 'user', 'curforum', 'newthread');
 
 $cachelist = $slist = array();
-if(isset($modcachelist[CURMODULE])) {
-	$cachelist = $modcachelist[CURMODULE];
-}
-
+$mod = '';
 $discuz->cachelist = $cachelist;
 $discuz->init();
 
@@ -35,13 +30,15 @@ if(in_array($discuz->var['mod'], $modarray) || !empty($_G['setting']['search'][$
 		}
 	}
 }
-
+if(empty($mod)) {
+	showmessage('search_closed');
+}
 define('CURMODULE', $mod);
 
 
 runhooks();
 
-require_once libfile('function/discuzcode');
+require_once libfile('function/search');
 
 
 $navtitle = lang('core', 'title_search');
@@ -49,13 +46,10 @@ $navtitle = lang('core', 'title_search');
 if($mod == 'curforum') {
 	$mod = 'forum';
 	$_G['gp_srchfid'] = array($_G['gp_srhfid']);
-	$_G['gp_srhfid'] = $_G['gp_srhfid'];
 } elseif($mod == 'forum') {
-	$_G['gp_srchfid'] = array();
 	$_G['gp_srhfid'] = 0;
 }
 
 require DISCUZ_ROOT.'./source/module/search/search_'.$mod.'.php';
-
 
 ?>

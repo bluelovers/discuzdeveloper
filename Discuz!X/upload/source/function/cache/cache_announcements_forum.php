@@ -13,8 +13,8 @@ if(!defined('IN_DISCUZ')) {
 
 function build_cache_announcements_forum() {
 	$data = array();
-	$query = DB::query("SELECT a.id, a.author, m.uid AS authorid, a.subject, a.message, a.type, a.starttime, a.displayorder FROM ".DB::table('forum_announcement')."
-		a LEFT JOIN ".DB::table('common_member')." m ON m.username=a.author WHERE a.type!=2 AND a.groups = '' AND a.starttime<='".TIMESTAMP."' ORDER BY a.displayorder, a.starttime DESC, a.id DESC LIMIT 1");
+	$query = DB::query("SELECT a.id, a.author, m.uid AS authorid, a.subject, a.message, a.type, a.starttime, a.endtime, a.displayorder FROM ".DB::table('forum_announcement')."
+		a LEFT JOIN ".DB::table('common_member')." m ON m.username=a.author WHERE a.type!=2 AND a.groups = '' AND a.starttime<='".TIMESTAMP."' AND (endtime>='".TIMESTAMP."' OR endtime='0') ORDER BY a.displayorder, a.starttime DESC, a.id DESC LIMIT 1");
 
 	if($data = DB::fetch($query)) {
 		$data['authorid'] = intval($data['authorid']);
@@ -24,7 +24,6 @@ function build_cache_announcements_forum() {
 	} else {
 		$data = array();
 	}
-
 	save_syscache('announcements_forum', $data);
 }
 

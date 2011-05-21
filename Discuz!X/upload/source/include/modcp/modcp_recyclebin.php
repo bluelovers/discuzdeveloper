@@ -36,6 +36,7 @@ $postlist = array();
 
 $total = $multipage = '';
 
+$cachekey = 'srchresult_recycle_thread'.$_G['fid'];
 if($_G['fid'] && $_G['forum']['ismoderator'] && $modforums['recyclebins'][$_G['fid']]) {
 
 	$srchupdate = false;
@@ -50,9 +51,14 @@ if($_G['fid'] && $_G['forum']['ismoderator'] && $modforums['recyclebins'][$_G['f
 				}
 			}
 			if($tidarray) {
-				require_once libfile('function/post');
-				($op == 'delete' && $_G['group']['allowclearrecycle']) && deletethreads($tidarray);
-				($op == 'restore') && undeletethreads($tidarray);
+				if($op == 'delete' && $_G['group']['allowclearrecycle']) {
+					require_once libfile('function/delete');
+					deletethread($tidarray);
+				}
+				if($op == 'restore') {
+					require_once libfile('function/post');
+					undeletethreads($tidarray);
+				}
 
 				if($_G['gp_oldop'] == 'search') {
 					$srchupdate = true;
@@ -118,7 +124,7 @@ if($_G['fid'] && $_G['forum']['ismoderator'] && $modforums['recyclebins'][$_G['f
 			$result['count'] = $count;
 			$result['fid'] = $_G['fid'];
 
-			$modsession->set('srchresult_r', $result, true);
+			$modsession->set($cachekey, $result, true);
 
 			DB::free_result($query);
 			unset($result, $tids);
@@ -146,9 +152,9 @@ if($_G['fid'] && $_G['forum']['ismoderator'] && $modforums['recyclebins'][$_G['f
 
 	if($op == 'search') {
 
-		$result = $modsession->get('srchresult_r');
+		$result = $modsession->get($cachekey);
 
-		if($result['fid'] == $_G['fid']) {
+		if($result) {
 
 			if($srchupdate && $result['count'] && $tidarray) {
 				$td = explode(',', $result['tids']);
@@ -158,12 +164,13 @@ if($_G['fid'] && $_G['forum']['ismoderator'] && $modforums['recyclebins'][$_G['f
 						$v = intval($v);
 						if(!in_array($v, $tidarray)) {
 							$newcount ++;
-							$newtids .= $comma.$v; $comma = ',';
+							$newtids .= $comma.$v;
+							$comma = ',';
 						}
 					}
 					$result['count'] = $newcount;
 					$result['tids'] = $newtids;
-					$modsession->set('srchresult_r'.$_G['fid'], $result, true);
+					$modsession->set($cachekey, $result, true);
 				}
 			}
 
@@ -178,9 +185,6 @@ if($_G['fid'] && $_G['forum']['ismoderator'] && $modforums['recyclebins'][$_G['f
 				$query = DB::query("SELECT * FROM ".DB::table('forum_thread')." WHERE tid in($result[tids]) AND fid='$_G[fid]' AND displayorder='-1' ORDER BY lastpost DESC LIMIT $start, $_G[tpp]");
 			}
 
-		} else {
-			$result = array();
-			$modsession->set('srchresult_r', array());
 		}
 
 	}

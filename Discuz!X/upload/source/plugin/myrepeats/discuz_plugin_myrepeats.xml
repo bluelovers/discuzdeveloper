@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="ISO-8859-1"?>
 <root>
 	<item id="Title"><![CDATA[Discuz! Plugin]]></item>
-	<item id="Version"><![CDATA[X1.5]]></item>
+	<item id="Version"><![CDATA[X2]]></item>
 	<item id="Data">
 		<item id="plugin">
 			<item id="available"><![CDATA[1]]></item>
@@ -12,7 +12,7 @@
 			<item id="datatables"><![CDATA[]]></item>
 			<item id="directory"><![CDATA[myrepeats/]]></item>
 			<item id="copyright"><![CDATA[Comsenz Inc.]]></item>
-			<item id="version"><![CDATA[2.2]]></item>
+			<item id="version"><![CDATA[2.3]]></item>
 			<item id="__modules">
 				<item id="0">
 					<item id="name"><![CDATA[memcp]]></item>
@@ -40,7 +40,7 @@
 				</item>
 			</item>
 		</item>
-		<item id="version"><![CDATA[X1.5]]></item>
+		<item id="version"><![CDATA[X2]]></item>
 		<item id="var">
 			<item id="0">
 				<item id="displayorder"><![CDATA[0]]></item>
@@ -56,16 +56,16 @@
 		<item id="uninstallfile"><![CDATA[uninstall.php]]></item>
 		<item id="language">
 			<item id="scriptlang">
-				<item id="login_strike"><![CDATA[ÃÜÂë´íÎó´ÎÊý¹ý¶à£¬ÇëÖØÐÂÉèÖÃÂí¼×ÕË»§ÐÅÏ¢²¢ÔÚ 15 ·ÖÖÓºóÔÙ³¢ÊÔÇÐ»»¡£]]></item>
+				<item id="login_strike"><![CDATA[ÃÜÂë´íÎó´ÎÊý¹ý¶à£¬ÇëÖØÐÂÉèÖÃÂí¼×ÕËºÅÐÅÏ¢²¢ÔÚ 15 ·ÖÖÓºóÔÙ³¢ÊÔÇÐ»»¡£]]></item>
 				<item id="login_succeed"><![CDATA[ÄúÒÑÇÐ»»µ½ {user} {comment}ÕÊºÅ£¬ÏÖÔÚ½«×ªÈëÇÐ»»Ç°Ò³Ãæ¡£]]></item>
 				<item id="login_succeed_rsnonexistence"><![CDATA[ÄúÒÑÇÐ»»µ½ {user} {comment}ÕÊºÅ£¬µ«ÊÇ´ËÕËºÅÉÐÎ´ÉèÖÃ {olduser} ÎªÂí¼×¡£<br /><a href="home.php?mod=spacecp&ac=plugin&id=myrepeats:memcp&username={olduserenc}" target="_blank">[ ÉèÖÃ {olduser} Îª±¾ÕËºÅµÄÂí¼× ]</a><br /><a href="{referer}">[ ×ªÈëÇÐ»»Ç°Ò³Ãæ ]</a>]]></item>
-				<item id="login_activation"><![CDATA[{user} ÕË»§Î´ÔÚ±¾ÂÛÌ³¼¤»î£¬ÏÖÔÚ½«×ªÈëÕÊºÅ¼¤»îÒ³Ãæ¡£]]></item>
-				<item id="login_invalid"><![CDATA[ÕË»§ÇÐ»»Ê§°Ü£¬ÇëÖØÐÂÉèÖÃÕÊºÅÐÅÏ¢£¬Äú»¹¿ÉÒÔ³¢ÊÔ {loginperm} ´Î¡£]]></item>
-				<item id="login_question_empty"><![CDATA[ÇëÖØÐÂÉèÖÃÕË»§µÄ°²È«ÌáÎÊÒÔ¼°ÕýÈ·µÄ´ð°¸¡£]]></item>
+				<item id="login_activation"><![CDATA[{user} ÕËºÅÎ´ÔÚ±¾ÂÛÌ³¼¤»î£¬ÏÖÔÚ½«×ªÈëÕÊºÅ¼¤»îÒ³Ãæ¡£]]></item>
+				<item id="login_invalid"><![CDATA[ÕËºÅÇÐ»»Ê§°Ü£¬ÇëÖØÐÂÉèÖÃÕÊºÅÐÅÏ¢£¬Äú»¹¿ÉÒÔ³¢ÊÔ {loginperm} ´Î¡£]]></item>
+				<item id="login_question_empty"><![CDATA[ÇëÖØÐÂÉèÖÃÕËºÅµÄ°²È«ÌáÎÊÒÔ¼°ÕýÈ·µÄ´ð°¸¡£]]></item>
 				<item id="login_question_invalid"><![CDATA[°²È«ÌáÎÊÑ¡Ôñ´íÎó£¬ÇëÖØÐÂÉèÖÃ¡£]]></item>
-				<item id="user_nonexistence"><![CDATA[ÎÞÐ§µÄÂí¼×ÕË»§ÐÅÏ¢£¬ÇëÖØÐÂÉèÖÃ¡£]]></item>
-				<item id="user_locked"><![CDATA[´ËÂí¼×ÕË»§±»¹ÜÀíÔ±Ëø¶¨£¬ÄúÎÞ·¨ÇÐ»»µ½ {user}£¬ÇëÓë¹ÜÀíÔ±ÁªÏµ¡£]]></item>
-				<item id="switch"><![CDATA[ÇÐ»»Âí¼×]]></item>
+				<item id="user_nonexistence"><![CDATA[ÎÞÐ§µÄÂí¼×ÕËºÅÐÅÏ¢£¬ÇëÖØÐÂÉèÖÃ¡£]]></item>
+				<item id="user_locked"><![CDATA[´ËÂí¼×ÕËºÅ±»¹ÜÀíÔ±Ëø¶¨£¬ÄúÎÞ·¨ÇÐ»»µ½ {user}£¬ÇëÓë¹ÜÀíÔ±ÁªÏµ¡£]]></item>
+				<item id="switch"><![CDATA[Âí¼×]]></item>
 				<item id="memcp"><![CDATA[ÉèÖÃÂí¼×]]></item>
 				<item id="usergroup_disabled"><![CDATA[ÄúËùÔÚÓÃ»§×éÎÞ·¨Ê¹ÓÃ±¾¹¦ÄÜ]]></item>
 				<item id="normal"><![CDATA[Õý³£]]></item>
@@ -104,6 +104,10 @@
 				<item id="security_question_7"><![CDATA[¼ÝÊ»Ö´ÕÕµÄ×îºóËÄÎ»Êý×Ö]]></item>
 				<item id="security_answer"><![CDATA[»Ø´ð]]></item>
 				<item id="delete_check"><![CDATA[É¾?]]></item>
+				<item id="switch_title"><![CDATA[ÇëÊäÈëÃÜÂë]]></item>
+				<item id="switch_tips"><![CDATA[ÄãÊÇÊ×´ÎÇÐ»»µ½´ËÕÊºÅ£¬ÇëÊäÈëÃÜÂë]]></item>
+				<item id="confirm"><![CDATA[È·¶¨]]></item>
+				<item id="select_rrepeats"><![CDATA[Ñ¡ÔñÂí¼×]]></item>				
 			</item>
 		</item>
 	</item>

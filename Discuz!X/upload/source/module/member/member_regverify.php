@@ -21,7 +21,7 @@ if($_G['setting']['regverify'] == 2 && $_G['groupid'] == 8 && submitcheck('verif
 			WHERE uid='$_G[uid]'");
 		showmessage('submit_verify_succeed', 'home.php?mod=spacecp&ac=profile');
 	} else {
-		showmessage('undefined_action', NULL);
+		showmessage('undefined_action');
 	}
 
 }

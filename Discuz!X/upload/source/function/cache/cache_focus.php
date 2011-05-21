@@ -17,6 +17,7 @@ function build_cache_focus() {
 
 	$focus = unserialize($focus);
 	$data['title'] = $focus['title'];
+	$data['cookie'] = intval($focus['cookie']);
 	$data['data'] = array();
 	if(is_array($focus['data'])) foreach($focus['data'] as $k => $v) {
 		if($v['available']) {

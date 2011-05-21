@@ -19,15 +19,18 @@ $siteuniqueid = DB::result_first("SELECT svalue FROM ".DB::table('common_setting
 $stat_hash = md5($siteuniqueid."\t".substr($_G['timestamp'], 0, 6));
 
 if(!checkperm('allowstatdata') && $_G['gp_hash'] != $stat_hash) {
-	showmessage('no_privilege');
+	showmessage('no_privilege_statdata');
 }
 
 $cols = array();
-$cols['login'] = array('login','register','invite','appinvite');
+$cols['login'] = array('login','mobilelogin','connectlogin','register','invite','appinvite');
+if(!$_G['setting']['connect']['allow']) {
+	unset($cols['login'][2]);
+}
 $cols['forum'] = array('thread', 'poll', 'activity', 'reward', 'debate', 'trade', 'post');
 $cols['tgroup'] = array('group', 'groupthread', 'grouppost');
 $cols['home'] = array('doing', 'docomment', 'blog', 'blogcomment', 'pic', 'piccomment', 'share', 'sharecomment');
-$cols['space'] = array('wall','poke', 'click');
+$cols['space'] = array('wall', 'poke', 'click', 'sendpm', 'addfriend', 'friend');
 
 $type = !empty($_GET['types']) ? array() : (empty($_GET['type'])?'all':$_GET['type']);
 

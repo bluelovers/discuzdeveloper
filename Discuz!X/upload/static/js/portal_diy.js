@@ -2,15 +2,15 @@
 	[Discuz!] (C)2001-2009 Comsenz Inc.
 	This is NOT a freeware, use is subject to license terms
 
-	$Id: portal_diy.js 17168 2010-09-25 07:46:33Z zhangguosheng $
+	$Id: portal_diy.js 22076 2011-04-21 06:22:09Z zhangguosheng $
 */
 
 var drag = new Drag();
 drag.extend({
 	'getBlocksTimer' : '',
 	'blocks' : [],
-	'blockDefaultClass' : [{'key':'选择样式','value':''},{'key':'样式1','value':'xbs_1'},{'key':'样式2','value':'xbs xbs_2'},{'key':'样式3','value':'xbs xbs_3'},{'key':'样式4','value':'xbs xbs_4'},{'key':'样式5','value':'xbs xbs_5'},{'key':'样式6','value':'xbs xbs_6'},{'key':'样式7','value':'xbs xbs_7'}],
-	'frameDefaultClass' : [{'key':'选择样式','value':''},{'key':'无边框框架','value':'xfs xfs_nbd'},{'key':'样式1','value':'xfs xfs_1'},{'key':'样式2','value':'xfs xfs_2'},{'key':'样式3','value':'xfs xfs_3'},{'key':'样式4','value':'xfs xfs_4'},{'key':'样式5','value':'xfs xfs_5'}],
+	'blockDefaultClass' : [{'key':'选择样式','value':''},{'key':'无边框且无边距','value':'cl_block_bm'},{'key':'样式1','value':'xbs_1'},{'key':'样式2','value':'xbs xbs_2'},{'key':'样式3','value':'xbs xbs_3'},{'key':'样式4','value':'xbs xbs_4'},{'key':'样式5','value':'xbs xbs_5'},{'key':'样式6','value':'xbs xbs_6'},{'key':'样式7','value':'xbs xbs_7'}],
+	'frameDefaultClass' : [{'key':'选择样式','value':''},{'key':'无边框且无边距','value':'cl_frame_bm'},{'key':'无边框框架','value':'xfs xfs_nbd'},{'key':'样式1','value':'xfs xfs_1'},{'key':'样式2','value':'xfs xfs_2'},{'key':'样式3','value':'xfs xfs_3'},{'key':'样式4','value':'xfs xfs_4'},{'key':'样式5','value':'xfs xfs_5'}],
 	setDefalutMenu : function () {
 		this.addMenu('default','标题','drag.openTitleEdit(event)');
 		this.addMenu('default','样式','drag.openStyleEdit(event)');
@@ -20,6 +20,11 @@ drag.extend({
 		this.addMenu('block', '更新', 'drag.blockForceUpdate(event)');
 		this.addMenu('frame', '导出', 'drag.frameExport(event)');
 		this.addMenu('tab', '导出', 'drag.frameExport(event)');
+	},
+	setSampleMenu : function () {
+		this.addMenu('block', '属性', 'drag.openBlockEdit(event)');
+		this.addMenu('block', '数据', 'drag.openBlockEdit(event,"data")');
+		this.addMenu('block', '更新', 'drag.blockForceUpdate(event)');
 	},
 	openBlockEdit : function (e,op) {
 		e = Util.event(e);
@@ -78,9 +83,9 @@ drag.extend({
 		bgrepeat = this.getRule(selector, 'backgroundRepeat');
 		bgimage = bgimage && bgimage != 'none' ? Util.trimUrl(bgimage) : '';
 
-		fontcolor = this.getRule(selector+' .content', 'color');
-		fontsize = this.getRule(selector+' .content', 'fontSize').replace('px','');
-		var linkSelector = spaceDiy.checkSelector(selector+ ' .content a');
+		fontcolor = this.getRule(selector+' .'+this.contentClass, 'color');
+		fontsize = this.getRule(selector+' .'+this.contentClass, 'fontSize').replace('px','');
+		var linkSelector = spaceDiy.checkSelector(selector+ ' .'+this.contentClass+' a');
 		linkcolor = this.getRule(linkSelector, 'color');
 		linkfontsize = this.getRule(linkSelector, 'fontSize').replace('px','');
 		fontcolor = Util.formatColor(fontcolor);
@@ -113,7 +118,7 @@ drag.extend({
 		marginl = this.getRule(selector, 'marginLeft').replace('px','');
 
 		if (objType == 1) {
-			selector = selector + ' .content';
+			selector = selector + ' .'+this.contentClass;
 			cmargint = this.getRule(selector, 'marginTop').replace('px','');
 			cmarginr = this.getRule(selector, 'marginRight').replace('px','');
 			cmarginb = this.getRule(selector, 'marginBottom').replace('px','');
@@ -136,9 +141,9 @@ drag.extend({
 		var repeatarr = [{'key':'平铺','value':'repeat'},{'key':'不平铺','value':'no-repeat'},{'key':'横向平铺','value':'repeat-x'},{'key':'纵向平铺','value':'repeat-y'}];
 		var stylearr = [{'key':'无样式','value':'none'},{'key':'实线','value':'solid'},{'key':'点线','value':'dotted'},{'key':'虚线','value':'dashed'}];
 		var table = '<table class="tfm">';
-		table += '<tr><th>字体</th><td><input type="text" id="fontsize" class="px p_fre" value="'+fontsize+'" size="2" /> px <input type="text" id="fontcolor" class="px p_fre" value="'+fontcolor+'" size="2" />';
+		table += '<tr><th>字体</th><td><input type="text" id="fontsize" class="px p_fre vm" value="'+fontsize+'" size="2" />px <input type="text" id="fontcolor" class="px p_fre vm" value="'+fontcolor+'" size="2" />';
 		table += getColorPalette(id+'_fontPalette', 'fontcolor' ,fontcolor)+'</td></tr>';
-		table += '<tr><th>链接</th><td><input type="text" id="linkfontsize" class="px p_fre" value="'+linkfontsize+'" size="2" /> px <input type="text" id="linkcolor" class="px p_fre" value="'+linkcolor+'" size="2" />';
+		table += '<tr><th>链接</th><td><input type="text" id="linkfontsize" class="px p_fre vm" value="'+linkfontsize+'" size="2" />px <input type="text" id="linkcolor" class="px p_fre vm" value="'+linkcolor+'" size="2" />';
 		table += getColorPalette(id+'_linkPalette', 'linkcolor' ,linkcolor)+'</td></tr>';
 
 		var ulclass = 'borderul', opchecked = '';
@@ -148,26 +153,26 @@ drag.extend({
 		}
 
 		table += '<tr><th>边框</th><td><ul id="borderul" class="'+ulclass+'">';
-		table += '<li><label>上</label><select class="ps" id="bdtwidth" ><option value="">大小</option>'+this.getOption(widtharr,bdtwidth)+'</select>';
-		table += ' <select class="ps" id="bdtstyle" ><option value="">样式</option>'+this.getOption(stylearr,bdtstyle)+'</select>';
-		table += ' 颜色<input type="text" id="bdtcolor" class="px p_fre" value="'+bdtcolor+'" size="7" />';
+		table += '<li><label>上</label><select class="ps vm" id="bdtwidth" ><option value="">大小</option>'+this.getOption(widtharr,bdtwidth)+'</select>';
+		table += ' <select class="ps vm" id="bdtstyle" ><option value="">样式</option>'+this.getOption(stylearr,bdtstyle)+'</select>';
+		table += ' 颜色 <input type="text" id="bdtcolor" class="px p_fre vm" value="'+bdtcolor+'" size="7" />';
 		table += getColorPalette(id+'_bdtPalette', 'bdtcolor' ,bdtcolor)+'</li>';
 
-		table += '<li class="bordera mtn"><label>右</label><select class="ps" id="bdrwidth" ><option value="">大小</option>'+this.getOption(widtharr,bdrwidth)+'</select>';
-		table += ' <select class="ps" id="bdrstyle" ><option value="">样式</option>'+this.getOption(stylearr,bdrstyle)+'</select>';
-		table += ' 颜色<input type="text" id="bdrcolor" class="px p_fre" value="'+bdrcolor+'" size="7" />';
+		table += '<li class="bordera mtn"><label>右</label><select class="ps vm" id="bdrwidth" ><option value="">大小</option>'+this.getOption(widtharr,bdrwidth)+'</select>';
+		table += ' <select class="ps vm" id="bdrstyle" ><option value="">样式</option>'+this.getOption(stylearr,bdrstyle)+'</select>';
+		table += ' 颜色 <input type="text" id="bdrcolor" class="px p_fre vm" value="'+bdrcolor+'" size="7" />';
 		table += getColorPalette(id+'_bdrPalette', 'bdrcolor' ,bdrcolor)+'</li>';
 
-		table += '<li class="bordera mtn"><label>下</label><select class="ps" id="bdbwidth" ><option value="">大小</option>'+this.getOption(widtharr,bdbwidth)+'</select>';
-		table += ' <select class="ps" id="bdbstyle" ><option value="">样式</option>'+this.getOption(stylearr,bdbstyle)+'</select>';
-		table += ' 颜色<input type="text" id="bdbcolor" class="px p_fre" value="'+bdbcolor+'" size="7" />';
+		table += '<li class="bordera mtn"><label>下</label><select class="ps vm" id="bdbwidth" ><option value="">大小</option>'+this.getOption(widtharr,bdbwidth)+'</select>';
+		table += ' <select class="ps vm" id="bdbstyle" ><option value="">样式</option>'+this.getOption(stylearr,bdbstyle)+'</select>';
+		table += ' 颜色 <input type="text" id="bdbcolor" class="px p_fre vm" value="'+bdbcolor+'" size="7" />';
 		table += getColorPalette(id+'_bdbPalette', 'bdbcolor' ,bdbcolor)+'</li>';
 
-		table += '<li class="bordera mtn"><label>左</label><select class="ps" id="bdlwidth" ><option value="">大小</option>'+this.getOption(widtharr,bdlwidth)+'</select>';
-		table += ' <select class="ps" id="bdlstyle" ><option value="">样式</option>'+this.getOption(stylearr,bdlstyle)+'</select>';
-		table += ' 颜色<input type="text" id="bdlcolor" class="px p_fre" value="'+bdlcolor+'" size="7" />';
+		table += '<li class="bordera mtn"><label>左</label><select class="ps vm" id="bdlwidth" ><option value="">大小</option>'+this.getOption(widtharr,bdlwidth)+'</select>';
+		table += ' <select class="ps vm" id="bdlstyle" ><option value="">样式</option>'+this.getOption(stylearr,bdlstyle)+'</select>';
+		table += ' 颜色 <input type="text" id="bdlcolor" class="px p_fre vm" value="'+bdlcolor+'" size="7" />';
 		table += getColorPalette(id+'_bdlPalette', 'bdlcolor' ,bdlcolor)+'</li>';
-		table += '</ul><p class="ptm"><label><input id="borderop" type="checkbox" value="1" class="pc"'+opchecked+' onclick="$(\'borderul\').className = $(\'borderul\').className == \'borderul\' ? \'borderula\' : \'borderul\'"> 分别设置</label></p></td></tr>';
+		table += '</ul><p class="ptm"><label><input id="borderop" type="checkbox" value="1" class="pc"'+opchecked+' onclick="$(\'borderul\').className = $(\'borderul\').className == \'borderul\' ? \'borderula\' : \'borderul\'">分别设置</label></p></td></tr>';
 
 		bigarr = [];
 		for (k=-20;k<31;k++) {
@@ -181,11 +186,11 @@ drag.extend({
 			opchecked = ' checked="checked"';
 		}
 
-		table += '<tr><th>外边距</th><td><div id="margindiv" class="'+ulclass+'"><span><label>上</label><input type="text" id="margint" class="px p_fre" value="'+margint+'" size="1"/>px </span>';
-		table += '<span class="bordera"><label>右</label><input type="text" id="marginr" class="px p_fre" value="'+marginr+'" size="1" />px </span>';
-		table += '<span class="bordera"><label>下</label><input type="text" id="marginb" class="px p_fre" value="'+marginb+'" size="1" />px </span>';
-		table += '<span class="bordera"><label>左</label><input type="text" id="marginl" class="px p_fre" value="'+marginl+'" size="1" />px </span>';
-		table += '</div><p class="ptm"><label><input id="marginop" type="checkbox" value="1" class="pc"'+opchecked+' onclick="$(\'margindiv\').className = $(\'margindiv\').className == \'borderul\' ? \'borderula\' : \'borderul\'"> 分别设置</label></p></td></tr>';
+		table += '<tr><th>外边距</th><td><div id="margindiv" class="'+ulclass+'"><span><label>上</label> <input type="text" id="margint" class="px p_fre vm" value="'+margint+'" size="1"/>px </span>';
+		table += '<span class="bordera"><label>右</label> <input type="text" id="marginr" class="px p_fre vm" value="'+marginr+'" size="1" />px </span>';
+		table += '<span class="bordera"><label>下</label> <input type="text" id="marginb" class="px p_fre vm" value="'+marginb+'" size="1" />px </span>';
+		table += '<span class="bordera"><label>左</label> <input type="text" id="marginl" class="px p_fre vm" value="'+marginl+'" size="1" />px</span>';
+		table += '</div><p class="ptm"><label><input id="marginop" type="checkbox" value="1" class="pc"'+opchecked+' onclick="$(\'margindiv\').className = $(\'margindiv\').className == \'borderul\' ? \'borderula\' : \'borderul\'">分别设置</label></p></td></tr>';
 
 		if (objType == 1) {
 
@@ -195,17 +200,17 @@ drag.extend({
 				opchecked = ' checked="checked"';
 			}
 
-			table += '<tr><th>内边距</th><td><div id="cmargindiv" class="'+ulclass+'"><span><label>上</label><input class="px p_fre" id="cmargint" value="'+cmargint+'" size="1" />px </span>';
-			table += '<span class="bordera"><label>右</label><input class="px p_fre" id="cmarginr" value="'+cmarginr+'" size="1" />px </span>';
-			table += '<span class="bordera"><label>下</label><input class="px p_fre" id="cmarginb" value="'+cmarginb+'" size="1" />px </span>';
-			table += '<span class="bordera"><label>左</label><input class="px p_fre" id="cmarginl" value="'+cmarginl+'" size="1" />px </span>';
+			table += '<tr><th>内边距</th><td><div id="cmargindiv" class="'+ulclass+'"><span><label>上</label> <input class="px p_fre" id="cmargint" value="'+cmargint+'" size="1" />px </span>';
+			table += '<span class="bordera"><label>右</label> <input class="px p_fre" id="cmarginr" value="'+cmarginr+'" size="1" />px </span>';
+			table += '<span class="bordera"><label>下</label> <input class="px p_fre" id="cmarginb" value="'+cmarginb+'" size="1" />px </span>';
+			table += '<span class="bordera"><label>左</label> <input class="px p_fre" id="cmarginl" value="'+cmarginl+'" size="1" />px </span>';
 			table += '</div><p class="ptm"><label><input id="cmarginop" type="checkbox" value="1" class="pc"'+opchecked+' onclick="$(\'cmargindiv\').className = $(\'cmargindiv\').className == \'borderul\' ? \'borderula\' : \'borderul\'"> 分别设置</label></p></td></tr>';
 		}
-		table += '<tr><th>背景颜色</th><td><input type="text" id="bgcolor" class="px p_fre" value="'+bgcolor+'" size="4" />';
+		table += '<tr><th>背景颜色</th><td><input type="text" id="bgcolor" class="px p_fre vm" value="'+bgcolor+'" size="4" />';
 		table += getColorPalette(id+'_bgcPalette', 'bgcolor' ,bgcolor)+'</td></tr>';
-		table += '<tr><th>背景图片</th><td><input type="text" id="bgimage" class="px p_fre" value="'+bgimage+'" size="25" /> <select class="ps" id="bgrepeat" >'+this.getOption(repeatarr,bgrepeat)+'</select></td></tr>';
+		table += '<tr><th>背景图片</th><td><input type="text" id="bgimage" class="px p_fre vm" value="'+bgimage+'" size="25" /> <select class="ps vm" id="bgrepeat" >'+this.getOption(repeatarr,bgrepeat)+'</select></td></tr>';
 		var classarr = objType == 1 ? this.blockDefaultClass : this.frameDefaultClass;
-		table += '<tr><th>指定class</th><td><input type="text" id="diyClassName" class="px p_fre" value="'+diyClassName+'" size="8" /> <select class="ps" id="bgrepeat" onchange="$(\'diyClassName\').value=this.value;" >'+this.getOption(classarr, diyClassName)+'</select></td></tr>';
+		table += '<tr><th>指定class</th><td><input type="text" id="diyClassName" class="px p_fre" value="'+diyClassName+'" size="8" /> <select class="ps vm" id="bgrepeat" onchange="$(\'diyClassName\').value=this.value;" >'+this.getOption(classarr, diyClassName)+'</select></td></tr>';
 		table += '</table>';
 
 		var wname = objType ? '模块' : '框架';
@@ -238,12 +243,12 @@ drag.extend({
 		if ($('bgcolor').value != '' && bgimage == '') bgimage = 'none';
 		spaceDiy.setStyle(selector, 'background-image', bgimage, random);
 		spaceDiy.setStyle(selector, 'background-repeat', bgrepeat, random);
-		spaceDiy.setStyle(selector+' .content', 'color', $('fontcolor').value, random);
-		spaceDiy.setStyle(selector+' .content', 'font-size', this.formatValue('fontsize'), random);
-		spaceDiy.setStyle(spaceDiy.checkSelector(selector+' .content a'), 'color', $('linkcolor').value, random);
+		spaceDiy.setStyle(selector+' .'+this.contentClass, 'color', $('fontcolor').value, random);
+		spaceDiy.setStyle(selector+' .'+this.contentClass, 'font-size', this.formatValue('fontsize'), random);
+		spaceDiy.setStyle(spaceDiy.checkSelector(selector+' .'+this.contentClass+' a'), 'color', $('linkcolor').value, random);
 		var linkfontsize = parseInt($('linkfontsize').value);
 		linkfontsize = isNaN(linkfontsize) ? '' : linkfontsize+'px';
-		spaceDiy.setStyle(spaceDiy.checkSelector(selector+' .content a'), 'font-size', this.formatValue('linkfontsize'), random);
+		spaceDiy.setStyle(spaceDiy.checkSelector(selector+' .'+this.contentClass+' a'), 'font-size', this.formatValue('linkfontsize'), random);
 
 		if ($('borderop').checked) {
 			var bdtwidth = $('bdtwidth').value,bdrwidth = $('bdrwidth').value,bdbwidth = $('bdbwidth').value,bdlwidth = $('bdlwidth').value;
@@ -254,6 +259,7 @@ drag.extend({
 			bdlstyle = bdbstyle = bdrstyle = bdtstyle = $('bdtstyle').value;
 			bdlcolor = bdbcolor = bdrcolor = bdtcolor = $('bdtcolor').value;
 		}
+		spaceDiy.setStyle(selector, 'border', '', random);
 		spaceDiy.setStyle(selector, 'border-top-width', bdtwidth, random);
 		spaceDiy.setStyle(selector, 'border-right-width', bdrwidth, random);
 		spaceDiy.setStyle(selector, 'border-bottom-width', bdbwidth, random);
@@ -285,7 +291,7 @@ drag.extend({
 			} else {
 				cmarginl = cmarginb = cmarginr = cmargint = this.formatValue('cmargint');
 			}
-			selector = selector + ' .content';
+			selector = selector + ' .'+this.contentClass;
 			spaceDiy.setStyle(selector, 'margin-top', cmargint, random);
 			spaceDiy.setStyle(selector, 'margin-right', cmarginr, random);
 			spaceDiy.setStyle(selector, 'margin-bottom', cmarginb, random);
@@ -339,7 +345,7 @@ drag.extend({
 		var bgrepeat = obj.titles.style && obj.titles.style['background-repeat'] ? obj.titles.style['background-repeat'] : '';
 
 		var common = '<table class="tfm">';
-		common += '<tr><th>背景图片:</th><td><input type="text" id="titleBgImage" class="px p_fre" value="'+bgimage+'" /> <select class="ps" id="titleBgRepeat" >'+this.getOption(repeatarr,bgrepeat)+'</select></td></tr>';
+		common += '<tr><th>背景图片:</th><td><input type="text" id="titleBgImage" class="px p_fre" value="'+bgimage+'" /> <select class="ps vm" id="titleBgRepeat" >'+this.getOption(repeatarr,bgrepeat)+'</select></td></tr>';
 		common += '<tr><th>背景颜色:</th><td><input type="text" id="titleBgColor" class="px p_fre" value="'+bgcolor+'" size="7" />';
 		common += getColorPalette(fid+'bgPalette_0', 'titleBgColor' ,bgcolor)+'</td></tr>';
 		if (obj instanceof Tab) {
@@ -352,10 +358,10 @@ drag.extend({
 		li += '<div id="titleInput_0"><table class="tfm"><tr><th>'+titlename+'标题:</th><td><input type="text" id="titleText_0" class="px p_fre" value="`title`" /></td></tr>';
 		li += '<tr><th>链接:</th><td><input type="text" id="titleLink_0" class="px p_fre" value="`link`" /></td></tr>';
 		li += '<tr><th>图片:</th><td><input type="text" id="titleSrc_0" class="px p_fre" value="`src`" /></td></tr>';
-		li += '<tr><th>位置:</th><td><select id="titleFloat_0" ><option value="" `left`>居左</option><option value="right" `right`>居右</option></select>';
-		li += '&nbsp;&nbsp;偏移量:<input type="text" id="titleMargin_0" class="px p_fre" value="`margin`" size="2" />px</td></tr>';
-		li += '<tr><th>字体:</th><td><select class="ps" id="titleSize_0" ><option value="">大小</option>`size`</select>';
-		li += '&nbsp;&nbsp;颜色:<input type="text" id="titleColor_0" class="px p_fre" value="`color`" size="4" />';
+		li += '<tr><th>位置:</th><td><select id="titleFloat_0" class="ps vm"><option value="" `left`>居左</option><option value="right" `right`>居右</option></select>';
+		li += '&nbsp;&nbsp;偏移量: <input type="text" id="titleMargin_0" class="px p_fre vm" value="`margin`" size="2" />px</td></tr>';
+		li += '<tr><th>字体:</th><td><select class="ps vm" id="titleSize_0" ><option value="">大小</option>`size`</select>';
+		li += '&nbsp;&nbsp;颜色: <input type="text" id="titleColor_0" class="px p_fre vm" value="`color`" size="4" />';
 		li += getColorPalette(fid+'Palette_0', 'titleColor_0' ,'`color`');
 		li += '</td></tr><tr><td colspan="2"><hr class="l"></td></tr></table></div>';
 		var html = '';
@@ -518,7 +524,7 @@ drag.extend({
 		if (ttext || img) {
 			if (tlink) {
 				Util.setStyle(ele, divStyle);
-				html = '<a href='+tlink+' style="'+aStyle+'">'+img+ttext+'</a>';
+				html = '<a href='+tlink+' target="_blank" style="'+aStyle+'">'+img+ttext+'</a>';
 			} else {
 				Util.setStyle(ele, divStyle+';'+aStyle);
 				html = img+ttext;
@@ -557,6 +563,10 @@ drag.extend({
 			this.delFrame(obj);
 		}
 		$(id).parentNode.removeChild($(id));
+		var content = $(id+'_content');
+		if(content) {
+			content.parentNode.removeChild(content);
+		}
 		this.setClose();
 		this.initPosition();
 		this.initChkBlock();
@@ -608,7 +618,7 @@ drag.extend({
 		return true;
 	},
 	stopSlide : function (id) {
-		if (typeof slideshow.entities == 'undefined') return false;
+		if (typeof slideshow == 'undefined' || typeof slideshow.entities == 'undefined') return false;
 		var slidebox = $C('slidebox',$(id));
 		if(slidebox && slidebox.length > 0) {
 			if(slidebox[0].id) {
@@ -631,7 +641,7 @@ drag.extend({
 		if (!bcontent) {
 			bcontent = document.createElement('div');
 			bcontent.id = id+'_content';
-			bcontent.className = 'content';
+			bcontent.className = this.contentClass;
 		}
 		this.stopSlide(id);
 
@@ -645,6 +655,7 @@ drag.extend({
 			bcontent.parentNode.removeChild(bcontent);
 			$(id).innerHTML = obj.childNodes[0].innerHTML;
 			evalscript(s);
+			if(s.indexOf('runslideshow()') != -1) {runslideshow();}
 			drag.initPosition();
 			if (all) {drag.getBlocks();}
 		});
@@ -674,13 +685,15 @@ drag.extend({
 		}
 		doane();
 	},
-	openFrameImport : function () {
-		showWindow('showimport','portal.php?mod=portalcp&ac=diy&op=import&tpl='+document.diyform.template.value, 'get');
+	openFrameImport : function (type) {
+		type = type || 0;
+		showWindow('showimport','portal.php?mod=portalcp&ac=diy&op=import&tpl='+document.diyform.template.value+'&type='+type, 'get');
 	},
 	endBlockForceUpdateBatch : function () {
 		if($('allupdate')) {
-			$('allupdate').innerHTML = '已更新完成。';
+			$('allupdate').innerHTML = '已操作完成。';
 			$('fwin_dialog_submit').style.display = '';
+			$('fwin_dialog_cancel').style.display = 'none';
 		}
 		this.initPosition();
 	},
@@ -706,8 +719,15 @@ drag.extend({
 		}
 		this.blocksLen = this.blocks.length;
 		showDialog('<div id="allupdate" style="width:350px;line-height:28px;">开始更新...</div>','confirm','更新模块数据', '', true, 'drag.endBlockForceUpdateBatch()');
-		$('fwin_dialog_submit').style.display = 'none';
-		setTimeout(function(){drag.getBlocks()},500);
+		var wait = function() {
+			if($('fwin_dialog_submit')) {
+				$('fwin_dialog_submit').style.display = 'none';
+				setTimeout(function(){drag.getBlocks()},500);
+			} else {
+				setTimeout(wait,100);
+			}
+		};
+		wait();
 		doane();
 	},
 	clearAll : function () {
@@ -809,18 +829,32 @@ drag.extend({
 		return str;
 	},
 	setClose : function () {
-		if (!this.isChange) {
-			window.onbeforeunload = function() {
-				return '您的数据已经修改,退出将无法保存您的修改。';
-			};
+		if(this.sampleMode) {
+			return true;
+		} else {
+			if (!this.isChange) {
+				window.onbeforeunload = function() {
+					return '您的数据已经修改,退出将无法保存您的修改。';
+				};
+			}
+			this.isChange = true;
+			spaceDiy.enablePreviewButton();
 		}
-		this.isChange = true;
-		spaceDiy.enablePreviewButton();
 	},
 	clearClose : function () {
 		this.isChange = false;
 		this.isClearClose = true;
 		window.onbeforeunload = function () {};
+	},
+	goonDIY : function () {
+		if ($('prefile').value == '1') {
+			showDialog('<div style="line-height:28px;">按继续按钮将打开暂存数据并DIY，<br />按删除按钮将删除暂存数据。</div>','confirm','是否继续暂存数据的DIY？', function(){location.replace(location.href+'&preview=yes');}, true, 'spaceDiy.cancelDIY()', '', '继续', '删除');
+		} else if (location.search.indexOf('preview=yes') > -1) {
+			spaceDiy.enablePreviewButton();
+		} else {
+			spaceDiy.disablePreviewButton();
+		}
+		setInterval(function(){spaceDiy.save('savecache', 1);},180000);
 	}
 });
 
@@ -831,7 +865,7 @@ spaceDiy.extend({
 		if (optype == 'savecache' && !drag.isChange) {return false;}
 		var tplpre = document.diyform.template.value.split(':');
 		if (!optype) {
-			if (tplpre[0] != 'portal/portal_topic_content' && tplpre[0] != 'portal/list') {
+			if (['portal/portal_topic_content', 'portal/list', 'portal/view'].indexOf(tplpre[0]) == -1) {
 				if (document.diyform.template.value.indexOf(':') > -1 && !document.selectsave) {
 					var schecked = '',dchecked = '';
 					if (document.diyform.savemod.value == '1') {
@@ -877,6 +911,7 @@ spaceDiy.extend({
 			document.diyform.handlekey.value = 'diyform';
 			ajaxpost('diyform','ajaxwaitid','ajaxwaitid','onerror');
 		} else {
+			saveUserdata('diy_advance_mode', '');
 			document.diyform.submit();
 		}
 	},
@@ -901,7 +936,7 @@ spaceDiy.extend({
 		return location.href.replace(/[\?|\&]diy\=yes/g,'').replace(/[\?|\&]preview=yes/,'');
 	},
 	cancel : function () {
-
+		saveUserdata('diy_advance_mode', '');
 		if (drag.isClearClose) {
 			showDialog('<div style="line-height:28px;">是否保留暂存数据？<br />按确定按钮将保留暂存数据，按取消按钮将删除暂存数据。</div>','confirm','保留暂存数据', function(){location.href = spaceDiy.cancelDiyUrl();}, true, function(){window.onunload=function(){spaceDiy.cancelDIY()};location.href = spaceDiy.cancelDiyUrl();});
 		} else {
@@ -917,16 +952,6 @@ spaceDiy.extend({
 			document.diyform.submit();
 		}
 		doane();
-	},
-	goonDIY : function () {
-		if ($('prefile').value == '1') {
-			showDialog('<div style="line-height:28px;">按继续按钮将打开暂存数据并DIY，<br />按删除按钮将删除暂存数据。</div>','confirm','是否继续暂存数据的DIY？', function(){location.replace(location.href+'&preview=yes');}, true, 'spaceDiy.cancelDIY()', '', '继续', '删除');
-		} else if (location.search.indexOf('preview=yes') > -1) {
-			this.enablePreviewButton();
-		} else {
-			this.disablePreviewButton();
-		}
-		setInterval(function(){spaceDiy.save('savecache', 1);},180000);
 	},
 	enablePreviewButton : function () {
 		if ($('preview')){
@@ -1031,8 +1056,7 @@ spaceDiy.extend({
 	}
 });
 
-spaceDiy.goonDIY();
-spaceDiy.init();
+spaceDiy.init(1);
 
 function succeedhandle_diyform (url, message, values) {
 	if (values['rejs'] == '1') {

@@ -153,24 +153,10 @@ if(!empty($searchid)) {
 			}
 
 			if($srchtxt) {
-				if(preg_match("(AND|\+|&|\s)", $srchtxt) && !preg_match("(OR|\|)", $srchtxt)) {
-					$andor = ' AND ';
-					$sqltxtsrch = '1';
-					$srchtxt = preg_replace("/( AND |&| )/is", "+", $srchtxt);
-				} else {
-					$andor = ' OR ';
-					$sqltxtsrch = '0';
-					$srchtxt = preg_replace("/( OR |\|)/is", "+", $srchtxt);
-				}
-				$srchtxt = str_replace('*', '%', addcslashes($srchtxt, '%_'));
-				foreach(explode('+', $srchtxt) as $text) {
-					$text = trim($text);
-					if($text) {
-						$sqltxtsrch .= $andor;
-						$sqltxtsrch .= "tr.subject LIKE '%$text%'";
-					}
-				}
-				$sqlsrch .= " AND ($sqltxtsrch)";
+				require_once libfile('function/search');
+				$srcharr = searchkey($srchtxt, "tr.subject LIKE '%{text}%'", true);
+				$srchtxt = $srcharr[0];
+				$sqlsrch .= $srcharr[1];
 			}
 
 			if($srchuid) {

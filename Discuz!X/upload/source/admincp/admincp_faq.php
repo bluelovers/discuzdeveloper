@@ -22,7 +22,7 @@ if($operation == 'list') {
 		showsubmenu('faq');
 		showformheader('faq&operation=list');
 		showtableheader();
-		echo '<tr><th class="td25"></th><th>'.$lang['display_order'].'</th><th style="width:350px">'.$lang['faq_thread'].'</th><th></th></tr>';
+		echo '<tr><th class="td25"></th><th><strong>'.$lang['display_order'].'</stong></th><th style="width:350px"><strong>'.$lang['faq_thread'].'</strong></th><th></th></tr>';
 
 		$faqparent = $faqsub = array();
 		$faqlists = $faqselect = '';
@@ -105,7 +105,7 @@ EOT;
 
 		$faq = DB::fetch_first("SELECT * FROM ".DB::table('forum_faq')." WHERE id='$id'");
 		if(!$faq) {
-			cpmsg('undefined_action', '', 'error');
+			cpmsg('faq_nonexistence', '', 'error');
 		}
 
 		$query = DB::query("SELECT * FROM ".DB::table('forum_faq')." WHERE fpid='0' ORDER BY displayorder, fpid ");

@@ -17,7 +17,7 @@ $member = DB::fetch_first("SELECT mf.authstr FROM ".DB::table('common_member')."
 	WHERE m.uid='$_G[uid]' AND mf.uid=m.uid AND m.groupid='8'");
 
 if(!$member) {
-	showmessage('undefined_action', NULL);
+	showmessage('member_not_found');
 }
 
 if($_G['setting']['regverify'] == 2) {

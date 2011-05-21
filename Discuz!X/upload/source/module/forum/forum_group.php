@@ -31,17 +31,6 @@ $second = &$_G['cache']['grouptype']['second'];
 $rssauth = $_G['rssauth'];
 $rsshead = $_G['setting']['rssstatus'] ? ('<link rel="alternate" type="application/rss+xml" title="'.$_G['setting']['bbname'].' - '.$navtitle.'" href="'.$_G['siteurl'].'forum.php?mod=rss&fid='.$_G['fid'].'&amp;auth='.$rssauth."\" />\n") : '';
 if($_G['fid']) {
-	$navtitle = $_G['forum']['name'].' - '.$_G['setting']['navs'][3]['navname'];
-	$metakeywords = $_G['forum']['metakeywords'];
-	if(!$metakeywords) {
-		$metakeywords = $_G['forum']['name'];
-	}
-	$metadescription = $_G['forum']['description'];
-	if(!$metadescription) {
-		$metadescription = $_G['forum']['name'];
-	}
-	$_G['seokeywords'] = $_G['setting']['seokeywords']['group'];
-	$_G['seodescription'] = $_G['setting']['seodescription']['group'];
 	if($_G['forum']['status'] != 3) {
 		showmessage('forum_not_group', 'group.php');
 	} elseif($_G['forum']['jointype'] < 0 && !$_G['forum']['ismoderator']) {
@@ -57,6 +46,25 @@ if($_G['fid']) {
 	$groupuser = DB::fetch_first("SELECT * FROM ".DB::table('forum_groupuser')." WHERE fid='$_G[fid]' AND uid='$_G[uid]'");
 	$onlinemember = grouponline($_G['fid'], 1);
 	$groupmanagers = $_G['forum']['moderators'];
+	$nav = get_groupnav($_G['forum']);
+	$groupnav = $nav['nav'];
+
+	$seodata = array('forum' => $_G['forum']['name'], 'first' => $nav['first']['name'], 'second' => $nav['second']['name'], 'gdes' => $_G['forum']['description']);
+	list($navtitle, $metadescription, $metakeywords) = get_seosetting('grouppage', $seodata);
+	if(!$navtitle) {
+		$navtitle = get_title_page($_G['forum']['name'], $_G['page']).' - '.$_G['setting']['navs'][3]['navname'];
+		$nobbname = false;
+	} else {
+		$nobbname = true;
+	}
+	if(!$metakeywords) {
+		$metakeywords = $_G['forum']['name'];
+	}
+	if(!$metadescription) {
+		$metadescription = $_G['forum']['name'];
+	}
+	$_G['seokeywords'] = $_G['setting']['seokeywords']['group'];
+	$_G['seodescription'] = $_G['setting']['seodescription']['group'];
 }
 
 if(in_array($action, array('out', 'viewmember', 'manage', 'index', 'memberlist'))) {
@@ -93,8 +101,6 @@ if(in_array($action, array('index')) && $status != 2) {
 
 }
 
-$groupnav = get_groupnav($_G['forum']);
-
 $showpoll = $showtrade = $showreward = $showactivity = $showdebate = 0;
 if($_G['forum']['allowpostspecial']) {
 	$showpoll = $_G['forum']['allowpostspecial'] & 1;
@@ -116,18 +122,36 @@ if($action == 'index') {
 
 	$newthreadlist = array();
 	if($status != 2) {
+		loadcache('forumstick');
+		$forumstickytids = '';
+		if(isset($_G['cache']['forumstick'][$_G['forum']['fup']])) {
+			$forumstickytids = " OR tid IN (".dimplode($_G['cache']['forumstick'][$_G['forum']['fup']]).")";
+		}
 		require_once libfile('function/feed');
+		$querysticky = DB::query("SELECT * FROM ".DB::table('forum_thread')." WHERE fid='$_G[fid]' AND displayorder='1' $forumstickytids ORDER BY lastpost DESC");
+		while($row = DB::fetch($querysticky)) {
+			$row['dateline'] = dgmdate($row['dateline'], 'd');
+			$row['lastpost'] = dgmdate($row['lastpost'], 'u');
+			$row['lastposterenc'] = rawurlencode($row['lastposter']);
+			$stickythread[$row['tid']] = $row;
+		}
 		$newthreadlist = getgroupcache($_G['fid'], array('dateline'), 0, 10, 0, 1);
-		foreach($newthreadlist['dateline']['data'] as $tid => $thread) {
+		foreach($newthreadlist['dateline']['data'] as $key => $thread) {
+			if(!empty($stickythread) && $stickythread[$thread[tid]]) {
+				unset($newthreadlist['dateline']['data'][$key]);
+				continue;
+			}
 			if($thread['closed'] == 1) {
-				$newthreadlist['dateline']['data'][$tid]['folder'] = 'lock';
-			} elseif(empty($_G['cookie']['oldtopics']) || strpos($_G['cookie']['oldtopics'], 'D'.$tid.'D') === FALSE) {
-				$newthreadlist['dateline']['data'][$tid]['folder'] = 'new';
+				$newthreadlist['dateline']['data'][$key]['folder'] = 'lock';
+			} elseif(empty($_G['cookie']['oldtopics']) || strpos($_G['cookie']['oldtopics'], 'D'.$thread['tid'].'D') === FALSE) {
+				$newthreadlist['dateline']['data'][$key]['folder'] = 'new';
 			} else {
-				$newthreadlist['dateline']['data'][$tid]['folder'] = 'common';
+				$newthreadlist['dateline']['data'][$key]['folder'] = 'common';
 			}
 		}
-
+		if($stickythread) {
+			$newthreadlist['dateline']['data'] = array_merge($stickythread, $newthreadlist['dateline']['data']);
+		}
 		$groupfeedlist = array();
 		if(!IS_ROBOT) {
 			$activityuser = array_keys($groupcache['activityuser']['data']);
@@ -157,7 +181,7 @@ if($action == 'index') {
 	$oparray = array('card', 'address', 'alluser');
 	$op = getgpc('op') && in_array($_G['gp_op'], $oparray) ?  $_G['gp_op'] : 'alluser';
 	$page = intval(getgpc('page')) ? intval($_G['gp_page']) : 1;
-	$perpage = 54;
+	$perpage = 50;
 	$start = ($page - 1) * $perpage;
 
 	$alluserlist = $adminuserlist = array();
@@ -254,27 +278,34 @@ if($action == 'index') {
 	if(!submitcheck('createsubmit')) {
 		$groupselect = get_groupselect(getgpc('fupid'), getgpc('groupid'));
 	} else {
-		$_G['gp_name'] = censor(addslashes(dhtmlspecialchars(cutstr(stripslashes(trim($_G['gp_name'])), 20, ''))));
-		if(empty($_G['gp_name'])) {
+		$name = censor(addslashes(dhtmlspecialchars(cutstr(stripslashes(trim($_G['gp_name'])), 20, ''))));
+		$censormod = censormod($name);
+		if(empty($name)) {
 			showmessage('group_name_empty');
+		} elseif($censormod) {
+			showmessage('group_name_failed');
 		} elseif(empty($_G['gp_fup'])) {
 			showmessage('group_category_empty');
 		}
 		if(empty($_G['cache']['grouptype']['second'][$_G['gp_fup']])) {
 			showmessage('group_category_error');
 		}
-		if(DB::result(DB::query("SELECT fid FROM ".DB::table('forum_forum')." WHERE status='3' AND name='$_G[gp_name]'"), 0)) {
+		if(DB::result(DB::query("SELECT fid FROM ".DB::table('forum_forum')." WHERE status='3' AND name='$name'"), 0)) {
 			showmessage('group_name_exist');
+		}
+		$descriptionnew = dhtmlspecialchars(censor(trim($_G['gp_descriptionnew'])));
+		$censormod = censormod($descriptionnew);
+		if($censormod) {
+			showmessage('group_description_failed');
 		}
 
 		$levelid = DB::result_first("SELECT levelid FROM ".DB::table('forum_grouplevel')." WHERE creditshigher<='0' AND '0'<creditslower LIMIT 1");
 
-		DB::query("INSERT INTO ".DB::table('forum_forum')."(fup, type, name, status, level) VALUES ('$_G[gp_fup]', 'sub', '$_G[gp_name]', '3', '$levelid')");
+		DB::query("INSERT INTO ".DB::table('forum_forum')."(fup, type, name, status, level) VALUES ('$_G[gp_fup]', 'sub', '$name', '3', '$levelid')");
 		$newfid = DB::insert_id();
 		if($newfid) {
 			$jointype = intval($_G['gp_jointype']);
 			$gviewperm = intval($_G['gp_gviewperm']);
-			$descriptionnew = dhtmlspecialchars(censor(trim($_G['gp_descriptionnew'])));
 			DB::query("INSERT INTO ".DB::table('forum_forumfield')."(fid, description, jointype, gviewperm, dateline, founderuid, foundername, membernum) VALUES ('$newfid', '$descriptionnew', '$jointype', '$gviewperm', '".TIMESTAMP."', '$_G[uid]', '$_G[username]', '1')");
 			DB::query("UPDATE ".DB::table('forum_forumfield')." SET groupnum=groupnum+1 WHERE fid='$_G[gp_fup]'");
 			DB::query("INSERT INTO ".DB::table('forum_groupuser')."(fid, uid, username, level, joindateline) VALUES ('$newfid', '$_G[uid]', '$_G[username]', '1', '".TIMESTAMP."')");
@@ -301,7 +332,7 @@ if($action == 'index') {
 		showmessage('group_admin_noallowed');
 	}
 	$page = intval(getgpc('page')) ? intval($_G['gp_page']) : 1;
-	$perpage = 54;
+	$perpage = 50;
 	$start = ($page - 1) * $perpage;
 	$url = 'forum.php?mod=group&action=manage&op='.$_G['gp_op'].'&fid='.$_G['fid'];
 	if($_G['gp_op'] == 'group') {
@@ -335,12 +366,16 @@ if($action == 'index') {
 
 				if(isset($_G['gp_name'])) {
 					$_G['gp_name'] = censor(addslashes(dhtmlspecialchars(cutstr(stripslashes(trim($_G['gp_name'])), 20, ''))));
-					if(empty($_G['gp_name'])) showmessage('group_name_empty');
+					if(empty($_G['gp_name'])) {
+						showmessage('group_name_empty');
+					}
+					$censormod = censormod($_G['gp_name']);
+					if($censormod) {
+						showmessage('group_name_failed');
+					}
 				} elseif(isset($_G['gp_fup']) && empty($_G['gp_fup'])) {
 					showmessage('group_category_empty');
 				}
-
-
 				if(!empty($_G['gp_name']) && $_G['gp_name'] != addslashes($_G['forum']['name'])) {
 					if(DB::result(DB::query("SELECT fid FROM ".DB::table('forum_forum')." WHERE name='$_G[gp_name]'"), 0)) {
 						showmessage('group_name_exist', $url);
@@ -383,6 +418,10 @@ if($action == 'index') {
 				@unlink($_G['forum']['banner']);
 			}
 			$_G['gp_descriptionnew'] = nl2br(dhtmlspecialchars(censor(trim($_G['gp_descriptionnew']))));
+			$censormod = censormod($_G['gp_descriptionnew']);
+			if($censormod) {
+				showmessage('group_description_failed');
+			}
 			$_G['gp_jointypenew'] = intval($_G['gp_jointypenew']);
 			if($_G['gp_jointypenew'] == '-1' && $_G['uid'] != $_G['forum']['founderuid']) {
 				showmessage('group_close_only_founder');
@@ -462,7 +501,7 @@ if($action == 'index') {
 			} else {
 				$start = 0;
 			}
-			$userlist = groupuserlist($_G['fid'], '', $perpage, $start, $_G['gp_srchuser'] ? "AND username='$_G[gp_srchuser]'" : "AND level='4'");
+			$userlist = groupuserlist($_G['fid'], '', $perpage, $start, $_G['gp_srchuser'] ? "AND username like '$_G[gp_srchuser]%'" : "AND level='4'");
 		} else {
 			$muser = getgpc('muid');
 			$targetlevel = $_G['gp_targetlevel'];
@@ -512,7 +551,6 @@ if($action == 'index') {
 					$checkeds[$key][$val] = 'checked';
 				}
 			}
-
 			$query = DB::query("SELECT * FROM ".DB::table('forum_threadclass')." WHERE fid='$_G[fid]' ORDER BY displayorder");
 			while($type = DB::fetch($query)) {
 				$type['enablechecked'] = isset($_G['forum']['threadtypes']['types'][$type['typeid']]) ? ' checked="checked"' : '';
@@ -579,10 +617,11 @@ if($action == 'index') {
 						}
 					}
 				}
+				$threadtypesnew = !empty($threadtypesnew) ? daddslashes(serialize($threadtypesnew)) : '';
 			} else {
 				$threadtypesnew = '';
 			}
-			DB::update('forum_forumfield', array('threadtypes' => daddslashes(serialize($threadtypesnew))), "fid='{$_G['fid']}'");
+			DB::update('forum_forumfield', array('threadtypes' => $threadtypesnew), "fid='{$_G['fid']}'");
 			showmessage('group_threadtype_edit_succeed', $url);
 		}
 	} elseif($_G['gp_op'] == 'demise') {

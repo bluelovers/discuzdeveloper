@@ -23,8 +23,8 @@ if($operation == 'list') {
 
 		shownav('portal', 'albumcategory');
 		showsubmenu('albumcategory',  array(
-					array('list', 'albumcategory', 1)
-				));
+			array('list', 'albumcategory', 1)
+		));
 
 		showformheader('albumcategory');
 		showtableheader();
@@ -118,9 +118,9 @@ SCRIPT;
 
 		shownav('portal', 'albumcategory');
 		showsubmenu('albumcategory',  array(
-					array('list', 'albumcategory', 0),
-					array('delete', 'albumcategory&operation=delete&catid='.$_GET['catid'], 1)
-				));
+			array('list', 'albumcategory', 0),
+			array('delete', 'albumcategory&operation=delete&catid='.$_GET['catid'], 1)
+		));
 
 		showformheader('albumcategory&operation=delete&catid='.$_GET['catid']);
 		showtableheader();

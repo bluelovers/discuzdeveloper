@@ -21,10 +21,6 @@ if($operation == 'list') {
 		$rules[$value['rid']] = $value;
 	}
 	if(!submitcheck('rulesubmit')) {
-		$lowerlimit = array(
-			'rid' => 0,
-			'rulename' => $lang['credits_edit_lowerlimit'],
-		);
 
 		$anchor = in_array($_G['gp_anchor'], array('base', 'policytable', 'edit')) ? $_G['gp_anchor'] : 'base';
 		$current = array($anchor => 1);
@@ -40,10 +36,8 @@ if($operation == 'list') {
 			if($_G['setting']['extcredits'][$i]) {
 				echo "<th class=\"td25\" id=\"policy$i\" ".($_G['setting']['extcredits'][$i] ? '' : 'disabled')." valign=\"top\">".$_G['setting']['extcredits'][$i]['title']."</th>";
 			}
-			$lowerlimit['extcredits'.$i] = $_G['setting']['creditspolicy']['lowerlimit'][$i];
 		}
 		echo '<th class="td25">&nbsp;</th></tr>';
-		array_push($rules, $lowerlimit);
 
 		foreach($rules as $rid => $rule) {
 			$tdarr = array($rule['rulename'], $rule['rid'] ? $lang['setting_credits_policy_cycletype_'.$rule['cycletype']] : 'N/A', $rule['rid'] && $rule['cycletype'] ? $rule['rewardnum'] : 'N/A');
@@ -70,17 +64,6 @@ if($operation == 'list') {
 			}
 			DB::update('common_credit_rule', $rule, array('rid' => $rid));
 		}
-		$lowerlimit['creditspolicy']['lowerlimit'] = array();
-		for($i = 1; $i <= 8; $i++) {
-			if($_G['setting']['extcredits'][$i]) {
-				$lowerlimit['creditspolicy']['lowerlimit'][$i] = (float)$_G['gp_credit'][0][$i];
-			}
-		}
-		$setting = array(
-			'skey' => 'creditspolicy',
-			'svalue' => addslashes(serialize($lowerlimit['creditspolicy']))
-		);
-		DB::insert('common_setting', $setting, 0, true);
 		updatecache(array('setting', 'creditrule'));
 		cpmsg('credits_update_succeed', 'action=credits&operation=list&anchor=policytable', 'succeed');
 	}
@@ -122,8 +105,25 @@ if($operation == 'list') {
 			showtips('forums_edit_tips');
 		}
 		showformheader("credits&operation=edit&rid=$rid&".($fid ? "fid=$fid" : ''));
-
-		showtableheader('', 'nobottom', 'id="edit"');
+		$extra = '';
+		if($fid) {
+			$actives = $checkarr = array();
+			$usecustom = in_array($fid, explode(',', $globalrule['fids'])) ? 1 : 0;
+			$actives[$usecustom] = ' class="checked"';
+			$checkarr[$usecustom] = ' checked';
+			showtableheader('', 'nobottom');
+				$str = <<<EOF
+	<ul onmouseover="altStyle(this);">
+		<li$actives[1]><input type="radio" onclick="$('edit').style.display = '';" $checkarr[1] value="1" name="rule[usecustom]" class="radio">&nbsp;$lang[yes]</li>
+		<li$actives[0]><input type="radio" onclick="$('edit').style.display = 'none';" $checkarr[0] value="0" name="rule[usecustom]" class="radio">&nbsp;$lang[no]</li>
+	</ul>
+EOF;
+			showsetting('setting_credits_use_custom_credit', 'usecustom', $usecustom, $str);
+			showtablefooter();
+			$extra = !$usecustom ? ' style="display:none;" ' : '';
+		}
+		showtips('setting_credits_policy_comment');
+		showtableheader('credits_edit', 'nobottom', 'id="edit"'.$extra);
 		if($rid) {
 			showsetting('setting_credits_policy_cycletype', array('rule[cycletype]', array(
 				array(0, $lang['setting_credits_policy_cycletype_0'], array('cycletimetd' => 'none', 'rewardnumtd' => 'none')),
@@ -148,6 +148,8 @@ if($operation == 'list') {
 				}
 			}
 		}
+		showtablefooter();
+		showtableheader('', 'nobottom');
 		showsubmit('rulesubmit');
 		showtablefooter();
 		showformfooter();
@@ -159,12 +161,10 @@ if($operation == 'list') {
 				$rule['cycletime'] = 0;
 				$rule['rewardnum'] = 1;
 			}
-			$havecredit = false;
+			$havecredit = $rule['usecustom'] ? true : false;
 			for($i = 1; $i <= 8; $i++) {
 				if(!$_G['setting']['extcredits'][$i]) {
 					$rule['extcredits'.$i] = 0;
-				} elseif($fid && is_numeric($rule['extcredits'.$i])) {
-					$havecredit = true;
 				}
 			}
 			foreach($rule as $key => $val) {
@@ -199,6 +199,19 @@ if($operation == 'list') {
 				DB::update('common_credit_rule', $rule, array('rid' => $rid));
 			}
 			updatecache('creditrule');
+		} else {
+			$lowerlimit['creditspolicy']['lowerlimit'] = array();
+			for($i = 1; $i <= 8; $i++) {
+				if($_G['setting']['extcredits'][$i]) {
+					$lowerlimit['creditspolicy']['lowerlimit'][$i] = (float)$rule['extcredits'.$i];
+				}
+			}
+			$setting = array(
+				'skey' => 'creditspolicy',
+				'svalue' => addslashes(serialize($lowerlimit['creditspolicy']))
+			);
+			DB::insert('common_setting', $setting, 0, true);
+			updatecache(array('setting', 'creditrule'));
 		}
 		cpmsg('credits_update_succeed', 'action=credits&operation=list&anchor=policytable', 'succeed');
 	}

@@ -65,6 +65,13 @@ $tablelist = array();
 $cdir = dir($prgdir);
 while(($entry = $cdir->read()) !== false) {
 	if(($entry != '.' && $entry != '..') && is_file($prgdir.$entry)) {
+		if(preg_match("/uc_/", $entry)) {
+			$table_source = str_replace('.php', '', $db_source->tablepre.$entry);
+			$source_exist = $db_source->result_first("SHOW TABLES LIKE '".substr($table_source, strpos($table_source, '.') + 1)."'");
+			if(empty($source_exist)) {
+				continue;
+			}
+		}
 		$tablelist[] = $entry;
 	}
 }

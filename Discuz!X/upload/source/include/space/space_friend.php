@@ -152,10 +152,10 @@ if($_GET['view'] == 'online') {
 	if($_GET['searchkey']) {
 		$wheresql = "AND main.fusername LIKE '%$_GET[searchkey]%'";
 		$theurl .= "&searchkey=$_GET[searchkey]";
-		$_GET['searchkey'] = dhtmlspecialchars($_GET['searchkey']);
 	}
 
 	$count = DB::result(DB::query("SELECT COUNT(*) FROM ".DB::table('home_friend')." main WHERE main.uid='$space[uid]' $wheresql"), 0);
+	$friendnum = DB::result_first("SELECT friends FROM ".DB::table('common_member_count')." WHERE uid = '$_G[uid]' LIMIT 1");
 	if($count) {
 
 		$query = DB::query("SELECT main.fuid AS uid, main.gid, main.num, main.note FROM ".DB::table('home_friend')." main
@@ -167,10 +167,34 @@ if($_GET['view'] == 'online') {
 			$fuids[$value['uid']] = $value['uid'];
 			$list[$value['uid']] = $value;
 		}
+	} elseif(!$friendnum) {
+		if($specialuser_count = DB::result_first("SELECT COUNT(*) FROM ".DB::table('home_specialuser')." WHERE status = 1 AND uid != '$_G[uid]'")) {
+			$query = DB::query("SELECT * FROM ".DB::table('home_specialuser')." WHERE status = 1 AND uid != '$_G[uid]' LIMIT 6");
+			while($value = DB::fetch($query)) {
+				$fuids[$value['uid']] = $value['uid'];
+				$specialuser_list[$value['uid']] = $value;
+			}
+		}
+		if($online_count = DB::result_first("SELECT COUNT(*) FROM ".DB::table("common_session")." WHERE invisible='0' AND uid <> '$_G[uid]' AND uid <> '0'")) {
+			$query = DB::query("SELECT * FROM ".DB::table("common_session")." WHERE invisible='0' AND uid <> '$_G[uid]' AND uid <> '0' ORDER BY lastactivity DESC LIMIT 6");
+			while($value = DB::fetch($query)) {
+				$fuids[$value['uid']] = $value['uid'];
+				$oluids[$value['uid']] = $value['uid'];
+				$online_list[$value['uid']] = $value;
+			}
+
+			$query = DB::query("SELECT cm.*, cmfh.* FROM ".DB::table("common_member").' cm
+				LEFT JOIN '.DB::table("common_member_field_home")." cmfh ON cmfh.uid=cm.uid
+				WHERE cm.uid IN(".dimplode($oluids).")");
+			while($value = DB::fetch($query)) {
+				$online_list[$value['uid']] = array_merge($online_list[$value['uid']], $value);
+			}
+
+		}
 	}
 
 	$diymode = 1;
-	if($space['self'] && $_GET['from'] != 'space') $diymode = 0;
+	if($space['self'] && ($_GET['from'] != 'space' || !$_G['status']['homestatus'])) $diymode = 0;
 	if($diymode) {
 		$theurl .= "&from=space";
 	}
@@ -185,7 +209,6 @@ if($_GET['view'] == 'online') {
 			$maxfriendnum = checkperm('maxfriendnum') + $space['addfriend'];
 		}
 	}
-
 }
 
 if($fuids) {
@@ -202,11 +225,13 @@ if($fuids) {
 		require_once libfile('function/friend');
 		friend_check($fuids);
 	}
-	$query = DB::query("SELECT cm.*, cmfh.* FROM ".DB::table("common_member").' cm LEFT JOIN '.DB::table("common_member_field_home")." cmfh ON cmfh.uid=cm.uid WHERE cm.uid IN(".dimplode($fuids).")");
-	while($value = DB::fetch($query)) {
-		$value['isfriend'] = $value['uid']==$space['uid'] || $_G["home_friend_".$space['uid'].'_'.$value['uid']] ? 1 : 0;
-		if(empty($list[$value['uid']])) $list[$value['uid']] = array();
-		$list[$value['uid']] = array_merge($list[$value['uid']], $value);
+	if($list) {
+		$query = DB::query("SELECT cm.*, cmfh.* FROM ".DB::table("common_member").' cm LEFT JOIN '.DB::table("common_member_field_home")." cmfh ON cmfh.uid=cm.uid WHERE cm.uid IN(".dimplode($fuids).")");
+		while($value = DB::fetch($query)) {
+			$value['isfriend'] = $value['uid']==$space['uid'] || $_G["home_friend_".$space['uid'].'_'.$value['uid']] ? 1 : 0;
+			if(empty($list[$value['uid']])) $list[$value['uid']] = array();
+			$list[$value['uid']] = array_merge($list[$value['uid']], $value);
+		}
 	}
 }
 

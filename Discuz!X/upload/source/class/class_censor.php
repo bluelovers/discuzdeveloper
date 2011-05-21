@@ -46,31 +46,42 @@ class discuz_censor {
 	}
 
 	function check(&$message, $modword = NULL) {
+		$limitnum = 1000;
 		$this->words_found = array();
 		$bbcodes = 'b|i|color|size|font|align|list|indent|email|hide|quote|code|free|table|tr|td|img|swf|attach|payto|float'.($this->bbcodes_display ? '|'.implode('|', array_keys($this->bbcodes_display)) : '');
-		if(!empty($this->censor_words['banned'])) {
-			if(preg_match_all($this->censor_words['banned'], @preg_replace(array("/\[($bbcodes)=?.*\]/iU", "/\[\/($bbcodes)\]/i"), '', $message), $matches)) {
-				$this->words_found = $matches[0];
-				$this->result = DISCUZ_CENSOR_BANNED;
-				$this->words_found = array_unique($this->words_found);
-				$message = $this->highlight($message, $this->censor_words['banned']);
-				return DISCUZ_CENSOR_BANNED;
+		if(is_array($this->censor_words['banned']) && !empty($this->censor_words['banned'])) {
+			foreach($this->censor_words['banned'] as $banned_words) {
+				if(preg_match_all($banned_words, @preg_replace(array("/\[($bbcodes)=?.*\]/iU", "/\[\/($bbcodes)\]/i"), '', $message), $matches)) {
+					$this->words_found = $matches[0];
+					$this->result = DISCUZ_CENSOR_BANNED;
+					$this->words_found = array_unique($this->words_found);
+					$message = $this->highlight($message, $banned_words);
+					return DISCUZ_CENSOR_BANNED;
+				}
 			}
 		}
-		if($this->censor_words['mod']) {
+		if(is_array($this->censor_words['mod']) && !empty($this->censor_words['mod'])) {
 			if($modword !== NULL) {
 				$message = preg_replace($this->censor_words['mod'], $modword, $message);
 			}
-			if(preg_match_all($this->censor_words['mod'], @preg_replace(array("/\[($bbcodes)=?.*\]/iU", "/\[\/($bbcodes)\]/i"), '', $message), $matches)) {
-				$this->words_found = $matches[0];
-				$this->result = DISCUZ_CENSOR_MODERATED;
-				$message = $this->highlight($message, $this->censor_words['mod']);
-				$this->words_found = array_unique($this->words_found);
-				return DISCUZ_CENSOR_MODERATED;
+			foreach($this->censor_words['mod'] as $mod_words) {
+				if(preg_match_all($mod_words, @preg_replace(array("/\[($bbcodes)=?.*\]/iU", "/\[\/($bbcodes)\]/i"), '', $message), $matches)) {
+					$this->words_found = $matches[0];
+					$this->result = DISCUZ_CENSOR_MODERATED;
+					$message = $this->highlight($message, $mod_words);
+					$this->words_found = array_unique($this->words_found);
+					return DISCUZ_CENSOR_MODERATED;
+				}
 			}
 		}
 		if(!empty($this->censor_words['filter'])) {
-			$message = preg_replace($this->censor_words['filter']['find'], $this->censor_words['filter']['replace'], $message);
+			$i = 0;
+			while($find_words = array_slice($this->censor_words['filter']['find'], $i, $limitnum)) {
+				if(empty($find_words)) break;
+				$replace_words = array_slice($this->censor_words['filter']['replace'], $i, $limitnum);
+				$i += $limitnum;
+				$message = preg_replace($find_words, $replace_words, $message);
+			}
 			$this->result = DISCUZ_CENSOR_REPLACED;
 			return DISCUZ_CENSOR_REPLACED;
 		}

@@ -94,6 +94,7 @@ $lang = array
 	'grouptrade_gviewperm_nolimit' => '不限制',
 	'grouptrade_gviewperm_only_member' => '仅成员',
 	'grouptrade_gviewperm_all_member' => '所有人',
+	'grouptrade_highlight' => '获得高亮值',
 );
 
 ?>

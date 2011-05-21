@@ -1,7 +1,7 @@
 <?php
 
 /*
-	[UCenter] (C)2001-2009 Comsenz Inc.
+	[UCenter] (C)2001-2099 Comsenz Inc.
 	This is NOT a freeware, use is subject to license terms
 
 	$Id$
@@ -107,6 +107,9 @@ class template {
 		$template = "<? if(!defined('UC_ROOT')) exit('Access Denied');?>\r\n$template";
 		$template = preg_replace("/(\\\$[a-zA-Z_]\w+\[)([a-zA-Z_]\w+)\]/i", "\\1'\\2']", $template);
 
+		$template = preg_replace("/\<\?(\s{1})/is", "<?php\\1", $template);
+		$template = preg_replace("/\<\?\=(.+?)\?\>/is", "<?php echo \\1;?>", $template);
+
 		$fp = fopen($this->objfile, 'w');
 		fwrite($fp, $template);
 		fclose($fp);
@@ -126,7 +129,7 @@ class template {
 		$k = $this->stripvtag($k);
 		$v = $this->stripvtag($v);
 		$statement = str_replace("\\\"", '"', $statement);
-		return $k ? "<? foreach((array)$arr as $k => $v) {?>$statement<?}?>" : "<? foreach((array)$arr as $v) {?>$statement<? } ?>";
+		return $k ? "<? foreach((array)$arr as $k => $v) {?>$statement<? }?>" : "<? foreach((array)$arr as $v) {?>$statement<? } ?>";
 	}
 
 	function lang($k) {

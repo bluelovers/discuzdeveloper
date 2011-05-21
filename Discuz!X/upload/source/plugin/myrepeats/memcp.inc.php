@@ -22,20 +22,21 @@ if(in_array('', $myrepeatsusergroups)) {
 $singleprem = FALSE;
 $permusers = array();
 if(!in_array($_G['groupid'], $myrepeatsusergroups)) {
-	$query = DB::query("SELECT * FROM ".DB::table('myrepeats')." WHERE username='$_G[username]'");
-	if(!DB::num_rows($query)) {
-		showmessage('myrepeats:usergroup_disabled');
-	} else {
-		$singleprem = TRUE;
-		while($user = DB::fetch($query)) {
-			$permusers[] = $user['uid'];
-		}
-		$query = DB::query("SELECT username FROM ".DB::table('common_member')." WHERE uid IN (".dimplode($permusers).")");
-		$permusers = array();
-		while($user = DB::fetch($query)) {
-			$permusers[] = $user['username'];
-		}
-	}
+	$singleprem = TRUE;
+}
+
+$query = DB::query("SELECT * FROM ".DB::table('myrepeats')." WHERE username='$_G[username]'");
+while($user = DB::fetch($query)) {
+	$permusers[] = $user['uid'];
+}
+$query = DB::query("SELECT username FROM ".DB::table('common_member')." WHERE uid IN (".dimplode($permusers).")");
+$permusers = array();
+while($user = DB::fetch($query)) {
+	$permusers[] = $user['username'];
+}
+
+if(!$permusers && $singleprem) {
+	showmessage('myrepeats:usergroup_disabled');
 }
 
 if($_G['gp_pluginop'] == 'add' && submitcheck('adduser')) {

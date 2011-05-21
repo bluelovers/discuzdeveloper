@@ -15,6 +15,8 @@ $lang = array
 	'groupthread_gtids_comment' => '选择群组分类',
 	'groupthread_uids' => '楼主UID',
 	'groupthread_uids_comment' => '指定主题作者ID，多个ID之间用 , 分割',
+	'groupthread_keyword' => '标题关键字',
+	'groupthread_keyword_comment' => '设置标题包含的关键字。注意: 留空为不进行任何过滤； 关键字中可使用通配符 *； 匹配多个关键字全部，可用空格或 AND 连接。如 win32 AND unix； 匹配多个关键字其中部分，可用 | 或 OR 连接。如 win32 OR unix',
 	'groupthread_startrow' => '起始数据行数',
 	'groupthread_startrow_comment' => '如需设定起始的数据行数，请输入具体数值，0 为从第一行开始，以此类推',
 	'groupthread_items' => '显示数据条数',
@@ -84,6 +86,12 @@ $lang = array
 	'groupthread_orderby_todayviews' => '按当天浏览次数倒序排序',
 	'groupthread_orderby_weekviews' => '按本周浏览次数倒序排序',
 	'groupthread_orderby_monthviews' => '按当月浏览次数倒序排序',
+	'groupthread_postdateline' => '主题发布时间',
+	'groupthread_postdateline_nolimit' => '不限制',
+	'groupthread_postdateline_hour' => '1小时内',
+	'groupthread_postdateline_day' => '24小时内',
+	'groupthread_postdateline_week' => '7天内',
+	'groupthread_postdateline_month' => '1个月内',
 	'groupthread_lastpost' => '最后更新时间',
 	'groupthread_lastpost_nolimit' => '不限制',
 	'groupthread_lastpost_hour' => '1小时内',
@@ -94,7 +102,8 @@ $lang = array
 	'groupthread_gviewperm' => '群组浏览权限',
 	'groupthread_gviewperm_nolimit' => '不限制',
 	'groupthread_gviewperm_only_member' => '仅成员',
-	'groupthread_gviewperm_all_member' => '所有人'
+	'groupthread_gviewperm_all_member' => '所有人',
+	'groupthread_highlight' => '获得高亮值',
 );
 
 ?>

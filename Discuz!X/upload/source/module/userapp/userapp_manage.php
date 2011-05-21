@@ -12,7 +12,7 @@ if(!defined('IN_DISCUZ')) {
 }
 
 if(!checkperm('allowmyop')) {
-	showmessage('no_privilege', '', array(), array('return' => true));
+	showmessage('no_privilege_myop', '', array(), array('return' => true));
 }
 
 $uchUrl = getsiteurl().'userapp.php?mod=manage';
@@ -37,11 +37,10 @@ if(submitcheck('ordersubmit')) {
 	showmessage('do_success', 'userapp.php?mod=manage&ac=menu');
 }
 
-
 $my_prefix = 'http://uchome.manyou.com';
 if(empty($_GET['my_suffix'])) {
 	$appId = intval($_GET['appid']);
-	if ($appId) {
+	if($appId) {
 		$mode = $_GET['mode'];
 		if($mode == 'about') {
 			$my_suffix = '/userapp/about?appId='.$appId;
@@ -49,7 +48,7 @@ if(empty($_GET['my_suffix'])) {
 			$my_suffix = '/userapp/privacy?appId='.$appId;
 		}
 	} else {
-		$my_suffix = '/userapp/list';
+		$my_suffix = $_GET['ac'] == 'menu' ? '/userapp/list' : '/app/list';
 	}
 } else {
 	$my_suffix = $_GET['my_suffix'];
@@ -62,7 +61,8 @@ $myUrl = $my_prefix.urldecode($my_suffix.$delimiter.'my_extra='.$my_extra);
 
 
 $my_userapp = $my_default_userapp = array();
-if($my_suffix == '/userapp/list') {
+
+if($_GET['ac'] == 'menu' && $my_suffix == '/userapp/list') {
 	$_GET['op'] = 'menu';
 	$max_order = 0;
 	if(is_array($_G['cache']['userapp'])) {
@@ -79,14 +79,23 @@ if($my_suffix == '/userapp/list') {
 			if($value['displayorder']>$max_order) $max_order = $value['displayorder'];
 		}
 	}
+	$query = DB::query("SELECT ua.*, my.iconstatus, my.userpanelarea, my.flag FROM ".DB::table('home_userapp')." ua LEFT JOIN ".DB::table('common_myapp')." my USING(appid) WHERE ua.uid='$_G[uid]' AND ua.allowsidenav='0' ORDER BY ua.menuorder DESC");
+	while($value = DB::fetch($query)) {
+		if(!isset($my_userapp[$value['appid']]) && !isset($my_default_userapp[$value['appid']]) && $value['flag'] != -1) {
+			if($value['flag'] == 1) {
+				$my_default_userapp[$value['appid']] = $value;
+			} else {
+				$my_userapp[$value['appid']] = $value;
+			}
+		}
+	}
 }
 
-$timestamp = $_G['timestamp'];
-$hash = $_G['setting']['my_siteid'].'|'.$_G['uid'].'|'.$_G['setting']['my_sitekey'].'|'.$timestamp;
+$hash = $_G['setting']['my_siteid'].'|'.$_G['uid'].'|'.$_G['setting']['my_sitekey'].'|'.$_G['timestamp'];
 $hash = md5($hash);
 $delimiter = strrpos($myUrl, '?') ? '&' : '?';
 
-$url = $myUrl.$delimiter.'s_id='.$_G['setting']['my_siteid'].'&uch_id='.$_G['uid'].'&uch_url='.urlencode($uchUrl).'&my_suffix='.urlencode($my_suffix).'&timestamp='.$timestamp.'&my_sign='.$hash;
+$url = $myUrl.$delimiter.'s_id='.$_G['setting']['my_siteid'].'&uch_id='.$_G['uid'].'&uch_url='.urlencode($uchUrl).'&my_suffix='.urlencode($my_suffix).'&timestamp='.$_G['timestamp'].'&my_sign='.$hash;
 
 $actives = array('view'=> ' class="active"');
 $menunum[$_G['member']['menunum']] = ' selected ';

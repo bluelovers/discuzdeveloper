@@ -86,7 +86,7 @@ function album_update_pic($albumid, $picid=0) {
 		}
 	} else {
 		if($pic['status'] == 0) {
-			$setarr['pic'] = $pic['thumb']?$pic['filepath'].'.thumb.jpg':$pic['filepath'];
+			$setarr['pic'] = $pic['thumb'] ? getimgthumbname($pic['filepath']) : $pic['filepath'];
 		}
 		if($from > 1) {
 			$setarr['picflag'] = $pic['remote'] ? 4:3;
@@ -132,14 +132,6 @@ function pic_save($FILE, $albumid, $title, $iswatermark = true, $catid = 0) {
 		return lang('spacecp', 'not_allow_upload');
 	}
 
-	if(!ckrealname('album', 1)) {
-		return lang('message', 'no_privilege_realname');
-	}
-
-	if(!ckvideophoto('album', array(), 1)) {
-		return lang('message', 'no_privilege_videophoto');
-	}
-
 	if(!cknewuser(1)) {
 		if($_G['setting']['newbiespan'] && $_G['timestamp'] - $_G['member']['regdate'] < $_G['setting']['newbiespan'] * 60) {
 			return lang('message', 'no_privilege_newbiespan', array('newbiespan' => $_G['setting']['newbiespan']));
@@ -159,6 +151,9 @@ function pic_save($FILE, $albumid, $title, $iswatermark = true, $catid = 0) {
 				return lang('message', 'no_privilege_friendnum', array('friendnum' => $_G['setting']['need_friendnum']));
 			}
 		}
+	}
+	if($_G['group']['maximagesize'] && $upload->attach['size'] > $_G['group']['maximagesize']) {
+		return lang('spacecp', 'files_can_not_exceed_size', array('extend' => $upload->attach['ext'], 'size' => sizecount($_G['group']['maximagesize'])));
 	}
 
 	$maxspacesize = checkperm('maxspacesize');
@@ -210,15 +205,16 @@ function pic_save($FILE, $albumid, $title, $iswatermark = true, $catid = 0) {
 		if($ftpresult) {
 			@unlink($_G['setting']['attachdir'].'album/'.$upload->attach['attachment']);
 			if($thumb) {
-				ftpcmd('upload', 'album/'.$upload->attach['attachment'].'.thumb.jpg');
-				@unlink($_G['setting']['attachdir'].'album/'.$upload->attach['attachment'].'.thumb.jpg');
+				$thumbpath = getimgthumbname($upload->attach['attachment']);
+				ftpcmd('upload', 'album/'.$thumbpath);
+				@unlink($_G['setting']['attachdir'].'album/'.$thumbpath);
 			}
 			$pic_remote = 1;
 			$album_picflag = 2;
 		} else {
 			if(getglobal('setting/ftp/mirror')) {
 				@unlink($upload->attach['target']);
-				@unlink($upload->attach['target'].'.thumb.jpg');
+				@unlink(getimgthumbname($upload->attach['target']));
 				return lang('spacecp', 'ftp_upload_file_size');
 			}
 		}
@@ -252,6 +248,9 @@ function pic_save($FILE, $albumid, $title, $iswatermark = true, $catid = 0) {
 	DB::query("UPDATE ".DB::table('common_member_count')." SET attachsize=attachsize+{$upload->attach['size']} WHERE uid='$_G[uid]'");
 
 	include_once libfile('function/stat');
+	if($pic_status) {
+		updatemoderate('picid', $setarr['picid']);
+	}
 	updatestat('pic');
 
 	return $setarr;
@@ -261,7 +260,10 @@ function stream_save($strdata, $albumid = 0, $fileext = 'jpg', $name='', $title=
 	global $_G, $space;
 
 	if($albumid<0) $albumid = 0;
-
+	$allowPicType = array('jpg','jpeg','gif','png');
+	if(!in_array($fileext, $allowPicType)) {
+		return -3;
+	}
 	$setarr = array();
 
 	require_once libfile('class/upload');
@@ -317,15 +319,16 @@ function stream_save($strdata, $albumid = 0, $fileext = 'jpg', $name='', $title=
 				if($ftpresult) {
 					@unlink($_G['setting']['attachdir'].'album/'.$filepath);
 					if($thumb) {
-						ftpcmd('upload', 'album/'.$filepath.'.thumb.jpg');
-						@unlink($_G['setting']['attachdir'].'album/'.$filepath.'.thumb.jpg');
+						$thumbpath = getimgthumbname($filepath);
+						ftpcmd('upload', 'album/'.$thumbpath);
+						@unlink($_G['setting']['attachdir'].'album/'.$thumbpath);
 					}
 					$pic_remote = 1;
 					$album_picflag = 2;
 				} else {
 					if(getglobal('setting/ftp/mirror')) {
 						@unlink($newfilename);
-						@unlink($newfilename.'.thumb.jpg');
+						@unlink(getimgthumbname($newfilename));
 						return -3;
 					}
 				}
@@ -428,7 +431,7 @@ function getalbumpic($uid, $id) {
 
 	$query = DB::query("SELECT filepath, thumb FROM ".DB::table('home_pic')." WHERE albumid='$id' AND uid='$uid' ORDER BY thumb DESC, dateline DESC LIMIT 0,1");
 	if($pic = DB::fetch($query)) {
-		return $pic['filepath'].($pic['thumb']?'.thumb.jpg':'');
+		return $pic['thumb'] ? getimgthumbname($pic['filepath']) : $pic['filepath'];
 	} else {
 		return '';
 	}
@@ -470,9 +473,11 @@ function hot_update($idtype, $id, $hotuser) {
 	$newhot = count($hotusers)+1;
 	if($newhot == $_G['setting']['feedhotmin']) {
 		$tablename = gettablebyidtype($idtype);
-		$query = DB::query("SELECT uid FROM ".DB::table($tablename)." WHERE $idtype='$id'");
-		$item = DB::fetch($query);
-		updatecreditbyaction('hotinfo', $item['uid']);
+		if($tablename) {
+			$query = DB::query("SELECT uid FROM ".DB::table($tablename)." WHERE $idtype='$id'");
+			$item = DB::fetch($query);
+			updatecreditbyaction('hotinfo', $item['uid']);
+		}
 	}
 
 	switch ($idtype) {
@@ -521,14 +526,14 @@ function privacy_update() {
 	DB::update('common_member_field_home', array('privacy'=>addslashes(serialize($space['privacy']))), array('uid'=>$_G['uid']));
 }
 
-function ckrealname($type, $return=0) {
+function ckrealname($return=0) {
 	global $_G;
 
 	$result = true;
-	if($_G['setting']['realname'] && empty($_G['setting']['name_allow'.$type])) {
-
+	if($_G['adminid'] != 1 && $_G['setting']['verify'][6]['available'] && empty($_G['setting']['verify'][6]['viewrealname'])) {
 		space_merge($_G['member'], 'profile');
-		if(empty($_G['member']['realname'])) {
+		space_merge($_G['member'], 'verify');
+		if(empty($_G['member']['realname']) || !$_G['member']['verify6']) {
 			if(empty($return)) showmessage('no_privilege_realname', '', array(), array('return' => true));
 			$result = false;
 		}
@@ -536,25 +541,21 @@ function ckrealname($type, $return=0) {
 	return $result;
 }
 
-function ckvideophoto($type, $tospace=array(), $return=0) {
+function ckvideophoto($tospace=array(), $return=0) {
 	global $_G;
 
-	if(empty($_G['setting']['videophoto']) || $_G['member']['videophotostatus']) {
+	if($_G['adminid'] != 1 && empty($_G['setting']['verify'][7]['available']) || $_G['member']['videophotostatus']) {
 		return true;
 	}
 
 	space_merge($tospace, 'field_home');
 
 	$result = true;
-	if(empty($tospace) || empty($tospace['privacy']['view']['video'.$type])) {
-		if(!checkperm('videophotoignore') && empty($_G['setting']['video_allow'.$type])) {
-			if($type != 'viewphoto' || $type == 'viewphoto' && !checkperm('allowviewvideophoto')) {
-				$result = false;
-			}
+	if(empty($tospace) || empty($tospace['privacy']['view']['videoviewphoto'])) {
+		if(!checkperm('videophotoignore') && empty($_G['setting']['verify'][7]['viewvideophoto']) && !checkperm('allowviewvideophoto')) {
+			$result = false;
 		}
-	} elseif ($tospace['privacy']['view']['video'.$type] == 2) {
-		$result = false;
-	} elseif ($tospace['privacy']['view']['video'.$type] == 3) {
+	} elseif ($tospace['privacy']['view']['videoviewphoto'] == 2) {
 		$result = false;
 	}
 	if($return) {
@@ -606,7 +607,7 @@ function emailcheck_send($uid, $email) {
 	global $_G;
 
 	if($uid && $email) {
-		$hash = authcode("$uid\t$email", 'ENCODE', md5(substr(md5($_G['config']['security']['authkey']), 0, 16)));
+		$hash = authcode("$uid\t$email\t$_G[timestamp]", 'ENCODE', md5(substr(md5($_G['config']['security']['authkey']), 0, 16)));
 		$verifyurl = $_G['siteurl'].'home.php?mod=misc&amp;ac=emailcheck&amp;hash='.urlencode($hash);
 		$mailsubject = lang('email', 'email_verify_subject');
 		$mailmessage = lang('email', 'email_verify_message', array(
@@ -642,6 +643,27 @@ function avatar_file($uid, $size) {
 		$_G[$var] = $dir1.'/'.$dir2.'/'.$dir3.'/'.substr($uid, -2)."_avatar_$size.jpg";
 	}
 	return $_G[$var];
+}
+
+function makepokeaction($iconid) {
+	global $_G;
+	$icons = array(
+		0 => lang('home/template', 'say_hi'),
+		1 => '<img alt="cyx" src="'.STATICURL.'image/poke/cyx.gif" class="vm" /> '.lang('home/template', 'poke_1'),
+		2 => '<img alt="wgs" src="'.STATICURL.'image/poke/wgs.gif" class="vm" /> '.lang('home/template', 'poke_2'),
+		3 => '<img alt="wx" src="'.STATICURL.'image/poke/wx.gif" class="vm" /> '.lang('home/template', 'poke_3'),
+		4 => '<img alt="jy" src="'.STATICURL.'image/poke/jy.gif" class="vm" /> '.lang('home/template', 'poke_4'),
+		5 => '<img alt="pmy" src="'.STATICURL.'image/poke/pmy.gif" class="vm" /> '.lang('home/template', 'poke_5'),
+		6 => '<img alt="yb" src="'.STATICURL.'image/poke/yb.gif" class="vm" /> '.lang('home/template', 'poke_6'),
+		7 => '<img alt="fw" src="'.STATICURL.'image/poke/fw.gif" class="vm" /> '.lang('home/template', 'poke_7'),
+		8 => '<img alt="nyy" src="'.STATICURL.'image/poke/nyy.gif" class="vm" /> '.lang('home/template', 'poke_8'),
+		9 => '<img alt="gyq" src="'.STATICURL.'image/poke/gyq.gif" class="vm" /> '.lang('home/template', 'poke_9'),
+		10 => '<img alt="dyx" src="'.STATICURL.'image/poke/dyx.gif" class="vm" /> '.lang('home/template', 'poke_10'),
+		11 => '<img alt="yw" src="'.STATICURL.'image/poke/yw.gif" class="vm" /> '.lang('home/template', 'poke_11'),
+		12 => '<img alt="ppjb" src="'.STATICURL.'image/poke/ppjb.gif" class="vm" /> '.lang('home/template', 'poke_12'),
+		13 => '<img alt="yyk" src="'.STATICURL.'image/poke/yyk.gif" class="vm" /> '.lang('home/template', 'poke_13')
+	);
+	return isset($icons[$iconid]) ? $icons[$iconid] : $icons[0];
 }
 
 function interval_check($type) {

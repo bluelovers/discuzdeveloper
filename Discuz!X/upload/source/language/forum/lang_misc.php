@@ -10,8 +10,10 @@
 $lang = array
 (
 	'discuz_lang' => 'misc',
-
+	'contact' => '联系方式:',
 	'anonymous' => '匿名',
+	'anonymoususer' => '匿名者',
+	'guestuser' => '游客',
 	'has_expired' => '该信息已经过期',
 	'click_view' => '点击查看',
 	'never_expired' => '永不过期',
@@ -41,7 +43,7 @@ $lang = array
 	'post_trade_name' => '商品名称',
 	'post_trade_price' => '商品价格',
 	'post_trade_quality' => '商品成色',
-	'post_trade_locus' => '商品所在地',
+	'post_trade_locus' => '所在地点',
 	'post_trade_transport_type' => '物流方式',
 	'post_trade_transport_seller' => '卖家承担运费',
 	'post_trade_transport_buyer' => '买家承担运费',
@@ -55,7 +57,7 @@ $lang = array
 	'post_trade_pm_buynum' => '购买数量',
 	'post_trade_pm_wishprice' => '我期望的价格是',
 	'post_trade_pm_reason' => '我议价的理由是',
-
+	'post_deleted' => '无效楼层，该帖已经被删除',
 	'postappend_content' => '补充内容',
 	'payment_unit' => '元',
 
@@ -112,10 +114,15 @@ $lang = array
 	'credit_forum_payment' => '论坛积分充值',
 	'credit_forum_royalty' => '交易手续费',
 
+	'invite_payment' => '购买邀请码',
+	'invite_forum_payment' => '购买邀请码',
+	'invite_forum_payment_unit' => '个',
+	'invite_forum_royalty' => '交易手续费',
+
 	'formulaperm_regdate' => '注册时间',
 	'formulaperm_regday' => '注册天数',
-	'formulaperm_regip' => '注册IP',
-	'formulaperm_lastip' => '最后登录IP',
+	'formulaperm_regip' => '注册 IP',
+	'formulaperm_lastip' => '最后登录 IP',
 	'formulaperm_buyercredit' => '买家信用评价',
 	'formulaperm_sellercredit' => '卖家信用评价',
 	'formulaperm_digestposts' => '精华帖数',
@@ -151,7 +158,7 @@ $lang = array
 	'modcp_logs_action_login' => '登录',
 
 	'uch_selectalbum' => '请选择相册',
-	'uch_noalbum' => '你还没有相册，',
+	'uch_noalbum' => '抱歉，您还没有相册，',
 	'click_here' => '点击这里',
 	'uch_createalbum' => '创建自己的相册吧！',
 
@@ -159,7 +166,7 @@ $lang = array
 	'pm_to' => '收件人',
 	'pm_date' => '日期',
 
-	'share_message' => '你好！我在 {$_G[setting][bbname]} 看到了这篇帖子，认为很有价值，特推荐给你。\\n\\n$thread[subject]\\n地址 [url={$threadurl}]{$threadurl}[/url]\\n\\n希望你能喜欢。',
+	'share_message' => '您好！我在 {$_G[setting][bbname]} 看到了这篇帖子，认为很有价值，特推荐给您。\\n\\n$thread[subject]\\n地址 [url={$threadurl}]{$threadurl}[/url]\\n\\n希望您能喜欢',
 
 	'week_0' => '星期日',
 	'week_1' => '星期一',
@@ -194,7 +201,9 @@ $lang = array
 	'perms_allowbiobbcode' => '自我介绍中使用编辑器代码',
 	'perms_allowbioimgcode' => '自我介绍中使用 [img] 代码',
 	'perms_allowgetattach' => '下载附件',
-	'perms_allowpostattach' => '发布附件',
+	'perms_allowgetimage' => '查看图片',
+	'perms_allowpostattach' => '上传附件',
+	'perms_allowpostimage' => '上传图片',
 	'perms_allowsetattachperm' => '允许设置附件权限',
 	'perms_maxspacesize' => '空间大小',
 	'perms_maxattachsize' => '单个最大附件尺寸',
@@ -254,6 +263,10 @@ $lang = array
 	'perms_allowstatdata' => '查看统计数据报表',
 	'perms_allowstat' => '允许查看趋势统计',
 	'perms_allowpostarticle' => '发表文章',
+	'perms_raterange' => '允许参与评分',
+	'perms_allowsendpm' => '允许发短消息',
+	'perms_maximagesize' => '单张图片最大尺寸',
+	'perms_allowmediacode' => '允许使用多媒体代码',
 
 	'join_topic' => '参与话题',
 	'join_poll' => '参与投票',
@@ -264,6 +277,8 @@ $lang = array
 
 	'lower' => '低于',
 	'higher' => '高于',
+	'report_msg_your' => '您的 ',
+	'report_noreward' => '不奖惩',
 );
 
 ?>

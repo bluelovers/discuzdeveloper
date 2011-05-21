@@ -10,7 +10,7 @@
 $lang = array
 (
 	'member_name' => '会员类任务',
-	'member_desc' => '收藏主题、使用道具，此类任务用来鼓励和引导会员使用论坛的某个功能，活跃论坛的氛围。',
+	'member_desc' => '收藏主题、使用道具，此类任务用来鼓励和引导会员使用论坛的某个功能，活跃论坛的氛围',
 	'member_complete_var_act' => '动作',
 	'member_complete_var_act_favorite' => '收藏主题',
 	'member_complete_var_act_magic' => '使用道具',
@@ -21,8 +21,8 @@ $lang = array
 
 	'task_complete_time_start' => '从申请任务开始计时，',
 	'task_complete_time_limit' => '{value} 小时内，',
-	'task_complete_act_favorite' => '收藏 {value} 个主题。',
-	'task_complete_act_magic' => '使用 {value} 次道具。<br />你可以在帖子页面、日志页面、图片页面等使用道具',
+	'task_complete_act_favorite' => '收藏 {value} 个主题',
+	'task_complete_act_magic' => '使用 {value} 次道具。<br />您可以在帖子页面、日志页面、图片页面等使用道具',
 );
 
 ?>

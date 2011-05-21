@@ -27,6 +27,8 @@ $lang = array
 	'threadlist_tids_comment' => '设置要指定显示的主题 tid ，多个 tid 请用半角逗号“,”隔开。注意: 留空为不进行任何过滤',
 	'threadlist_keyword' => '标题关键字',
 	'threadlist_keyword_comment' => '设置标题包含的关键字。注意: 留空为不进行任何过滤； 关键字中可使用通配符 *； 匹配多个关键字全部，可用空格或 AND 连接。如 win32 AND unix； 匹配多个关键字其中部分，可用 | 或 OR 连接。如 win32 OR unix',
+	'threadlist_tagkeyword' => 'TAG标签',
+	'threadlist_tagkeyword_comment' => 'TAG标签关键字。注意: 留空为不进行任何过滤； 关键字中可使用通配符 *； 匹配多个关键字其中部分，可用 | 或 OR 连接。如 win32 OR unix',
 	'threadlist_typeids' => '主题分类ID',
 	'threadlist_typeids_comment' => '输入主题分类ID，多个 ID 之间用半角逗号“,”隔开。',
 	'threadlist_typeids_all' => '全部的主题分类',
@@ -81,6 +83,12 @@ $lang = array
 	'threadlist_orderby_weekhots' => '按本周累计售出数倒序排序',
 	'threadlist_orderby_monthhots' => '按当月累计售出数倒序排序',
 	'threadlist_lastpost' => '最后更新时间',
+	'threadlist_postdateline' => '主题发布时间',
+	'threadlist_postdateline_nolimit' => '不限制',
+	'threadlist_postdateline_hour' => '1小时内',
+	'threadlist_postdateline_day' => '24小时内',
+	'threadlist_postdateline_week' => '7天内',
+	'threadlist_postdateline_month' => '1个月内',
 	'threadlist_lastpost_nolimit' => '不限制',
 	'threadlist_lastpost_hour' => '1小时内',
 	'threadlist_lastpost_day' => '24小时内',
@@ -97,6 +105,7 @@ $lang = array
 	'threadlist_orderby_monthstart' => '按一月内活动开始时间排序',
 	'threadlist_orderby_weekexp' => '按一周内报名截止时间排序',
 	'threadlist_orderby_monthexp' => '按一月内报名截止时间排序',
+	'threadlist_highlight' => '获得高亮值',
 );
 
 ?>

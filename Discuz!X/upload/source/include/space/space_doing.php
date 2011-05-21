@@ -161,6 +161,7 @@ if($_G['uid']) {
 	} else {
 		$navtitle = lang('core', 'title_me_friend_doing');
 	}
+	$defaultstr = getdefaultdoing();
 } else {
 	$navtitle = lang('core', 'title_newest_doing');
 }

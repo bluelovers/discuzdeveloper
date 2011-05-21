@@ -37,7 +37,7 @@ class seccode {
 	function display() {
 		$this->type == 2 && !extension_loaded('ming') && $this->type = 0;
 		$this->width = $this->width >= 100 && $this->width <= 200 ? $this->width : 150;
-		$this->height = $this->height >= 50 && $this->height <= 80 ? $this->height : 60;
+		$this->height = $this->height >= 30 && $this->height <= 80 ? $this->height : 60;
 		if($this->type < 2 && function_exists('imagecreate') && function_exists('imagecolorset') && function_exists('imagecopyresized') &&
 			function_exists('imagecolorallocate') && function_exists('imagechar') && function_exists('imagecolorsforindex') &&
 			function_exists('imageline') && function_exists('imagecreatefromstring') && (function_exists('imagegif') || function_exists('imagepng') || function_exists('imagejpeg'))) {

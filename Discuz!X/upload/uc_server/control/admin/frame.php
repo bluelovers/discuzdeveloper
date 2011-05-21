@@ -1,7 +1,7 @@
 <?php
 
 /*
-	[UCenter] (C)2001-2009 Comsenz Inc.
+	[UCenter] (C)2001-2099 Comsenz Inc.
 	This is NOT a freeware, use is subject to license terms
 
 	$Id$
@@ -122,7 +122,10 @@ class control extends adminbase {
 		return $this->apps;
 	}
 	function _get_uc_pms() {
-		$pms = $this->db->result_first("SELECT COUNT(*) FROM ".UC_DBTABLEPRE."pms");
+		$pms = 0;
+		for($i = 0; $i < 10; $i++) {
+			$pms += $this->db->result_first("SELECT COUNT(*) FROM ".UC_DBTABLEPRE."pm_messages_".(string)$i);
+		}
 		return $pms;
 	}
 

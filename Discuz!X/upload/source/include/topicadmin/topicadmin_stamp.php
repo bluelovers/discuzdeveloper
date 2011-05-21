@@ -12,7 +12,7 @@ if(!defined('IN_DISCUZ')) {
 }
 
 if(!$_G['group']['allowstampthread']) {
-	showmessage('undefined_action', NULL);
+	showmessage('no_privilege_stampthread');
 }
 
 loadcache('stamps');

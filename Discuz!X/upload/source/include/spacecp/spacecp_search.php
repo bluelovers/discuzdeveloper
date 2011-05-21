@@ -36,7 +36,7 @@ if(!empty($_GET['searchsubmit']) || !empty($_GET['searchmode'])) {
 	} else {
 		foreach (array('uid','username','videophotostatus','avatarstatus') as $value) {
 			if($_GET[$value]) {
-				if($value == 'username') {
+				if($value == 'username' && empty($_GET['precision'])) {
 					$_GET[$value] = stripsearchkey($_GET[$value]);
 					$wherearr[] = "s.$value LIKE '%{$_GET[$value]}%'";
 				} else {
@@ -141,7 +141,7 @@ if(!empty($_GET['searchsubmit']) || !empty($_GET['searchmode'])) {
 
 	foreach ($fields as $fkey => $fvalue) {
 		if(empty($fvalue['choices'])) {
-			$fvalue['html'] = '<input type="text" name="field_'.$fkey.'" value="" class="px" />';
+			$fvalue['html'] = '<input type="text" name="field_'.$fkey.'" class="px" value="" />';
 		} else {
 			$fvalue['html'] = "<select name=\"field_$fkey\"><option value=\"\">---</option>";
 			$optionarr = explode("\n", $fvalue['choices']);
@@ -159,7 +159,7 @@ if(!empty($_GET['searchsubmit']) || !empty($_GET['searchmode'])) {
 
 $navtitle = lang('core', 'title_search_friend');
 
-$actives = array($op=>' class="a"');
+$actives = array($op=>' class="a"', 'search'=>' class="a"');
 include template('home/spacecp_search');
 
 ?>

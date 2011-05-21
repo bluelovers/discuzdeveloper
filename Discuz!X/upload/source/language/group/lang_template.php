@@ -10,7 +10,6 @@
  */
 
 $lang = array (
-
   'credits' => '积分',
   'favorite' => '收藏',
   'group_admin' => '管理{$_G[setting][navs][3][navname]}',
@@ -25,27 +24,24 @@ $lang = array (
   'group_level' => '{$_G[setting][navs][3][navname]}等级',
   'group_member_list' => '成员列表',
   'group_moderator_title' => '群主',
+  'group_perm_all_user' => '所有人',
   'group_perm_member_only' => '仅成员',
   'group_perm_visit' => '浏览权限',
   'group_push_to_forum' => '推荐到版块',
   'home' => '首页',
   'my_buddylist_invite' => '邀请好友',
-
   'close' => '关闭',
   'confirms' => '确定',
   'max_can_select' => '最多可以选择',
   'select_focus_group' => '选择关注的{$_G[setting][navs][3][navname]}',
-
   'choose_please' => '请选择',
   'create' => '创建',
   'group_category' => '所属分类',
   'group_create_new' => '创建新{$_G[setting][navs][3][navname]}',
-  'group_create_notice' => '注：除{$_G[setting][navs][3][navname]}名称和分类暂时不能修改外，其它项目在创建完成后仍可修改。',
+  'group_create_selete_categroy' => '请选择{$_G[setting][navs][3][navname]}分类',
   'group_description' => '{$_G[setting][navs][3][navname]}简介',
   'group_name' => '{$_G[setting][navs][3][navname]}名称',
-  'group_perm_all_user' => '所有人',
   'option_required' => '必选项',
-
   'anonymous' => '匿名',
   'author' => '作者',
   'click_to_readmore' => '点击查看更多话题',
@@ -70,11 +66,9 @@ $lang = array (
   'thread_reward' => '悬赏',
   'thread_trade' => '商品',
   'view_all_threads' => '查看所有主题',
-
   'finished' => '完成',
   'group_choose_friend_to_invite' => '请选择你要邀请的好友',
   'group_invite_list' => '邀请列表',
-
   'attach_img' => '图片附件',
   'attachment' => '附件',
   'forum_viewall' => '全部',
@@ -89,7 +83,6 @@ $lang = array (
   'thread_moved' => '移动',
   'thread_recommend' => '评价指数',
   'time' => '时间',
-
   'delete' => '删除',
   'displayorder' => '顺序',
   'enable' => '启用',
@@ -105,8 +98,7 @@ $lang = array (
   'group_icon' => '{$_G[setting][navs][3][navname]}图标',
   'group_icon_resize' => '自动缩略成 48 X 48 像素大小的图片',
   'group_image' => '{$_G[setting][navs][3][navname]}顶部图片',
-  'group_image_filesize_limit' => '文件小于 $_G[setting][group_imgsizelimit] kb',
-  'group_image_resize' => '自动缩略成 720 X 168 像素大小的图片',
+  'group_image_filesize_limit' => '文件小于 $_G[setting][group_imgsizelimit] KB',
   'group_input_password' => '请输入登录密码',
   'group_level_cannot_do' => '目前你的{$_G[setting][navs][3][navname]}等级不能使用此功能。',
   'group_member_management' => '成员管理',
@@ -144,9 +136,8 @@ $lang = array (
   'threadtype_required_force' => '是否强制用户发表新主题时必须选择分类',
   'threadtype_turn_on' => '启用主题分类',
   'threadtype_turn_on_comment' => '设置是否启用主题分类功能，你需要同时设定相应的分类选项，才能启用本功能',
-  'transfer_group_to' => '将群组转让给',
+  'transfer_group_to' => '将{$_G[setting][navs][3][navname]}转让给',
   'yes' => '是',
-
   'all' => '全部',
   'all_group' => '所有{$_G[setting][navs][3][navname]}',
   'attention_group' => '关注{$_G[setting][navs][3][navname]}',
@@ -167,9 +158,7 @@ $lang = array (
   'no_group_join' => '你还没有加入任何{$_G[setting][navs][3][navname]}，<a href="group.php?mod=index">找喜欢的{$_G[setting][navs][3][navname]}</a>。',
   'no_related_posts' => '还没有相关的帖子。',
   'somebody_group' => '的{$_G[setting][navs][3][navname]}',
-
   'group_do_not_push' => '不推荐',
-
   'copy' => '复制',
   'create_on' => '创建于',
   'group_digest_recommend' => '精华推荐',
@@ -181,12 +170,11 @@ $lang = array (
   'group_member_new' => '新加入',
   'group_member_rank' => '排名',
   'group_url' => '{$_G[setting][navs][3][navname]}地址',
-  'group_url_copy_finished' => '{$_G[setting][navs][3][navname]}地址已经复制到剪贴板',
+  'group_url_copy_finished' => '{$_G[setting][navs][3][navname]}地址复制成功',
   'group_visited' => '浏览过的{$_G[setting][navs][3][navname]}',
   'group_you_have' => '你已有 {$groupnum} 个{$_G[setting][navs][3][navname]}，还能创建 {$allowbuildgroup} 个。',
   'input_search_key_words' => '请输入搜索关键字',
   'posts' => '帖子',
-
   'create_group_message1' => '创建自己的地盘',
   'create_group_message2' => '精心打造{$_G[setting][navs][3][navname]}空间',
   'create_group_message3' => '邀请好友加入我的{$_G[setting][navs][3][navname]}',
@@ -200,7 +188,6 @@ $lang = array (
   'my_group' => '我的{$_G[setting][navs][3][navname]}',
   'personality_setting' => '个性设置',
   'recommend_group' => '推荐{$_G[setting][navs][3][navname]}',
-
   'group_activities' => '活跃度',
   'group_category_no_groups' => '该分类下暂时没有{$_G[setting][navs][3][navname]}',
   'group_category_no_groups_detail' => '返回上级分类重新选择，或者[<b><a href="forum.php?mod=group&action=create&fupid={$curtype[fup]}&groupid=$sgid">创建一个新的{$_G[setting][navs][3][navname]}</a></b>]',

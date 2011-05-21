@@ -16,6 +16,7 @@ $page = empty($_GET['page'])?1:intval($_GET['page']);
 if($page<1) $page=1;
 $id = empty($_GET['id'])?0:intval($_GET['id']);
 $_G['gp_order'] = in_array($_G['gp_order'], array('dateline', 'hot')) ? $_G['gp_order'] : 'dateline';
+$opactives['poll'] = 'class="a"';
 
 if(empty($_GET['view'])) $_GET['view'] = 'we';
 
@@ -48,12 +49,17 @@ $need_count = true;
 
 if($_GET['view'] == 'all') {
 
+	$start = 0;
+	$perpage = 100;
+	$alltype = 'dateline';
 	if($_G['gp_order'] == 'hot') {
 		$wheresql .= " AND t.replies>='$minhot'";
 		$orderactives = array('hot' => ' class="a"');
+		$alltype = 'hot';
 	} else {
 		$orderactives = array('dateline' => ' class="a"');
 	}
+	loadcache('space_poll');
 
 } elseif($_GET['view'] == 'me') {
 
@@ -99,40 +105,71 @@ if($need_count) {
 
 	$wheresql .= " AND t.special='1'";
 
+	$wheresql .= $_G['gp_view'] != 'me' ? " AND t.displayorder>='0'" : '';
 	if($searchkey = stripsearchkey($_GET['searchkey'])) {
 		$wheresql .= " AND t.subject LIKE '%$searchkey%'";
 		$searchkey = dhtmlspecialchars($searchkey);
 	}
 
-	$count = DB::result(DB::query("SELECT COUNT(*) FROM ".DB::table('forum_thread')." t $apply_sql WHERE $wheresql"),0);
-	if($count) {
-		$query = DB::query("SELECT t.* FROM ".DB::table('forum_thread')." t $apply_sql
-			WHERE $wheresql
-			ORDER BY $ordersql LIMIT $start,$perpage");
+	$havecache = false;
+	if($_G['gp_view'] == 'all') {
+
+		$cachetime = $_G['gp_order'] == 'hot' ? 43200 : 3000;
+		if(!empty($_G['cache']['space_poll'][$alltype]) && is_array($_G['cache']['space_poll'][$alltype])) {
+			$pollarr = $_G['cache']['space_poll'][$alltype];
+			if(!empty($pollarr['dateline']) && $pollarr['dateline'] > $_G['timestamp'] - $cachetime) {
+				$list = $pollarr['data'];
+				$hiddennum = $pollarr['hiddennum'];
+				$havecache = true;
+			}
+		}
 	}
+
+	if(!$havecache) {
+		$count = DB::result(DB::query("SELECT COUNT(*) FROM ".DB::table('forum_thread')." t $apply_sql WHERE $wheresql"),0);
+		if($count) {
+			$query = DB::query("SELECT t.* FROM ".DB::table('forum_thread')." t $apply_sql
+				WHERE $wheresql
+				ORDER BY $ordersql LIMIT $start,$perpage");
+
+			loadcache('forums');
+			$tids = array();
+			require_once libfile('function/misc');
+			while($value = DB::fetch($query)) {
+				if(empty($value['author']) && $value['authorid'] != $_G['uid']) {
+					$hiddennum++;
+					continue;
+				}
+				$tids[$value['tid']] = $value['tid'];
+				$list[$value['tid']] = procthread($value);
+			}
+			if($tids) {
+				$query = DB::query("SELECT * FROM ".DB::table('forum_poll')." WHERE tid IN(".dimplode($tids).")");
+				while($value = DB::fetch($query)) {
+					$value['pollpreview'] = explode("\t", trim($value['pollpreview']));
+					$list[$value['tid']]['poll'] = $value;
+				}
+			}
+			if($_G['gp_view'] == 'all') {
+				$_G['cache']['space_poll'][$alltype] = array(
+					'dateline' => $_G['timestamp'],
+					'hiddennum' => $hiddennum,
+					'data' => $list
+				);
+				save_syscache('space_poll', $_G['cache']['space_poll']);
+			}
+
+			if($_G['gp_view'] != 'all') {
+				$multi = multi($count, $perpage, $page, $theurl);
+			}
+
+		}
+	} else {
+		$count = count($list);
+	}
+
 }
 
-if($count) {
-	loadcache('forums');
-	$tids = array();
-	require_once libfile('function/misc');
-	while($value = DB::fetch($query)) {
-		if(empty($value['author']) && $value['authorid'] != $_G['uid']) {
-			$hiddennum++;
-			continue;
-		}
-		$tids[$value['tid']] = $value['tid'];
-		$list[$value['tid']] = procthread($value);
-	}
-	if($tids) {
-		$query = DB::query("SELECT * FROM ".DB::table('forum_poll')." WHERE tid IN(".dimplode($tids).")");
-		while($value = DB::fetch($query)) {
-			$value['pollpreview'] = explode("\t", trim($value['pollpreview']));
-			$list[$value['tid']]['poll'] = $value;
-		}
-	}
-	$multi = multi($count, $perpage, $page, $theurl);
-}
 if($_G['uid']) {
 	$_G['gp_view'] = !$_G['gp_view'] ? 'we' : $_G['gp_view'];
 	$navtitle = lang('core', 'title_'.$_G['gp_view'].'_poll');

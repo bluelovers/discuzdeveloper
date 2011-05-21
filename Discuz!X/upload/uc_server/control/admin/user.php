@@ -1,7 +1,7 @@
 <?php
 
 /*
-	[UCenter] (C)2001-2009 Comsenz Inc.
+	[UCenter] (C)2001-2099 Comsenz Inc.
 	This is NOT a freeware, use is subject to license terms
 
 	$Id$
@@ -322,7 +322,7 @@ class control extends adminbase {
 			return UC_USER_EMAIL_FORMAT_ILLEGAL;
 		} elseif(!$_ENV['user']->check_emailaccess($email)) {
 			return UC_USER_EMAIL_ACCESS_ILLEGAL;
-		} elseif($this->settings['doublee'] && $_ENV['user']->check_emailexists($email)) {
+		} elseif(!$this->settings['doublee'] && $_ENV['user']->check_emailexists($email)) {
 			return UC_USER_EMAIL_EXISTS;
 		} else {
 			return 1;

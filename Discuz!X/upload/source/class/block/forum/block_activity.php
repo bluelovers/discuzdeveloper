@@ -92,8 +92,14 @@ class block_activity {
 					array('monthexp', 'activitylist_orderby_monthexp'),
 					array('weekhot', 'activitylist_orderby_weekhot'),
 					array('monthhot', 'activitylist_orderby_monthhot'),
+					array('alltimehot', 'activitylist_orderby_alltimehot'),
 				),
 				'default' => 'dateline'
+			),
+			'highlight' => array(
+				'title' => 'activitylist_highlight',
+				'type' => 'radio',
+				'default' => 0,
 			),
 			'titlelength' => array(
 				'title' => 'activitylist_titlelength',
@@ -165,6 +171,7 @@ class block_activity {
 		$activitytype = explode("\n", $_G['setting']['activitytype']);
 		$settings['class']['value'][] = array('', 'activitylist_class_all');
 		foreach($activitytype as $item) {
+			$item = trim($item);
 			$settings['class']['value'][] = array($item, $item);
 		}
 		return $settings;
@@ -186,7 +193,7 @@ class block_activity {
 		$items		= !empty($parameter['items']) ? intval($parameter['items']) : 10;
 		$digest		= isset($parameter['digest']) ? $parameter['digest'] : 0;
 		$stick		= isset($parameter['stick']) ? $parameter['stick'] : 0;
-		$orderby	= isset($parameter['orderby']) ? (in_array($parameter['orderby'],array('dateline','weekstart','monthstart','weekexp','monthexp','weekhot','monthhot')) ? $parameter['orderby'] : 'dateline') : 'dateline';
+		$orderby	= isset($parameter['orderby']) ? (in_array($parameter['orderby'],array('dateline','weekstart','monthstart','weekexp','monthexp','weekhot','monthhot','alltimehot')) ? $parameter['orderby'] : 'dateline') : 'dateline';
 		$titlelength	= !empty($parameter['titlelength']) ? intval($parameter['titlelength']) : 40;
 		$summarylength	= !empty($parameter['summarylength']) ? intval($parameter['summarylength']) : 80;
 		$recommend	= !empty($parameter['recommend']) ? 1 : 0;
@@ -195,6 +202,7 @@ class block_activity {
 		$class		= !empty($parameter['class']) ? trim($parameter['class']) : '';
 		$gender		= !empty($parameter['gender']) ? intval($parameter['gender']) : '';
 		$viewmod	= !empty($parameter['viewmod']) ? 1 : 0;
+		$highlight = !empty($parameter['highlight']) ? 1 : 0;
 
 		$fids = array();
 		if(!empty($parameter['fids'])) {
@@ -207,30 +215,10 @@ class block_activity {
 		$bannedids = !empty($parameter['bannedids']) ? explode(',', $parameter['bannedids']) : array();
 
 		require_once libfile('function/post');
+		require_once libfile('function/search');
 
 		$datalist = $list = array();
-		if($keyword) {
-			if(preg_match("(AND|\+|&|\s)", $keyword) && !preg_match("(OR|\|)", $keyword)) {
-				$andor = ' AND ';
-				$keywordsrch = '1';
-				$keyword = preg_replace("/( AND |&| )/is", "+", $keyword);
-			} else {
-				$andor = ' OR ';
-				$keywordsrch = '0';
-				$keyword = preg_replace("/( OR |\|)/is", "+", $keyword);
-			}
-			$keyword = str_replace('*', '%', addcslashes($keyword, '%_'));
-			foreach(explode('+', $keyword) as $text) {
-				$text = trim($text);
-				if($text) {
-					$keywordsrch .= $andor;
-					$keywordsrch .= "t.subject LIKE '%$text%'";
-				}
-			}
-			$keyword = " AND ($keywordsrch)";
-		} else {
-			$keyword = '';
-		}
+		$keyword = $keyword ? searchkey($keyword, "t.subject LIKE '%{text}%'") : '';
 		$sql = ($fids ? ' AND t.fid IN ('.dimplode($fids).')' : '')
 			.$keyword
 			.($tids ? ' AND t.tid IN ('.dimplode($tids).')' : '')
@@ -275,6 +263,9 @@ class block_activity {
 			}
 			$where = ' WHERE a.expiration>='.TIMESTAMP.' AND a.expiration<='.$historytime;
 			$orderby = 'a.applynumber DESC';
+		} elseif($orderby == 'alltimehot') {
+			$where = ' WHERE (a.expiration>='.TIMESTAMP." OR a.expiration='0')";
+			$orderby = 'a.applynumber DESC';
 		} else {
 			$orderby = 't.dateline DESC';
 		}
@@ -286,21 +277,31 @@ class block_activity {
 			$where .= " AND a.class='$class'";
 		}
 		$sqlfrom = " INNER JOIN `".DB::table('forum_thread')."` t ON t.tid=a.tid $sql AND t.displayorder>='0'";
+		$joinmethod = empty($tids) ? 'INNER' : 'LEFT';
 		if($recommend) {
-			$sqlfrom .= " INNER JOIN `".DB::table('forum_forumrecommend')."` fc ON fc.tid=tr.tid";
+			$sqlfrom .= " $joinmethod JOIN `".DB::table('forum_forumrecommend')."` fc ON fc.tid=tr.tid";
 		}
-		$query = DB::query("SELECT a.*, t.tid, t.subject, t.authorid, t.author
+		$sqlfield = $highlight ? ', t.highlight' : '';
+		$query = DB::query("SELECT a.*, t.tid, t.subject, t.authorid, t.author$sqlfield
 			FROM ".DB::table('forum_activity')." a $sqlfrom $where
 			ORDER BY $orderby
 			LIMIT $startrow,$items;"
 			);
 		require_once libfile('block_thread', 'class/block/forum');
 		$bt = new block_thread();
-		$listtids = $aids = array();
+		$listtids = $threadtids = $threads = $aid2tid = $attachtables = array();
 		while($data = DB::fetch($query)) {
 			$data['time'] = dgmdate($data['starttimefrom']);
 			if($data['starttimeto']) {
 				$data['time'] .= ' - '.dgmdate($data['starttimeto']);
+			}
+			if($style['getsummary']) {
+				$threadtids[$data['posttableid']][] = $data['tid'];
+			}
+			if($data['aid']) {
+				$aid2tid[$data['aid']] = $data['tid'];
+				$attachtable = getattachtableid($data['tid']);
+				$attachtables[$attachtable][] = $data['aid'];
 			}
 			$listtids[] = $data['tid'];
 			$list[$data['tid']] = array(
@@ -310,12 +311,11 @@ class block_activity {
 				'url' => 'forum.php?mod=viewthread&tid='.$data['tid'].($viewmod ? '&from=portal' : ''),
 				'pic' => ($data['aid'] ? '' : $_G['style']['imgdir'].'/nophoto.gif'),
 				'picflag' => '0',
-				'summary' => !empty($style['getsummary']) ? $bt->getthread($data['tid'], $summarylength, true) : '',
 				'fields' => array(
 					'fulltitle' => str_replace('\\\'', '&#39;', addslashes($data['subject'])),
 					'time' => $data['time'],
 					'expiration' => $data['expiration'] ? dgmdate($data['expiration']) : 'N/A',
-					'author' => $data['author'] ? $data['author'] : 'Anonymous',
+					'author' => $data['author'] ? $data['author'] : $_G['setting']['anonymoustext'],
 					'authorid' => $data['authorid'] ? $data['authorid'] : 0,
 					'cost' => $data['cost'],
 					'place' => $data['place'],
@@ -325,8 +325,8 @@ class block_activity {
 					'applynumber' => $data['applynumber'],
 				)
 			);
-			if($data['aid']) {
-				$aids[] = $data['aid'];
+			if($highlight && $data['highlight']) {
+				$list[$data['tid']]['fields']['showstyle'] = $bt->getthreadstyle($data['highlight']);
 			}
 		}
 
@@ -336,13 +336,21 @@ class block_activity {
 				$list[$value['tid']]['fields']['applynumber'] = $value['sum'];
 			}
 
-			if($aids) {
-				$query = DB::query("SELECT tid, attachment, remote FROM ".DB::table('forum_attachment')." WHERE aid IN (".dimplode($aids).')');
-				while($value = DB::fetch($query)) {
-					$list[$value['tid']]['pic'] = 'forum/'.$value['attachment'];
-					$list[$value['tid']]['picflag'] = $value['remote'] ? '2' : '1';
+			$threads = $bt->getthread($threadtids, $summarylength, true);
+			if($threads) {
+				foreach($threads as $tid => $var) {
+					$list[$tid]['summary'] = $var;
 				}
 			}
+
+			foreach($attachtables as $tableid => $taids) {
+				$query = DB::query('SELECT aid, attachment, remote FROM '.DB::table('forum_attachment_'.$tableid).' WHERE aid IN ('.dimplode($taids).')');
+				while($avalue = DB::fetch($query)) {
+					$list[$aid2tid[$avalue['aid']]]['pic'] = 'forum/'.$avalue['attachment'];
+					$list[$aid2tid[$avalue['aid']]]['picflag'] = $avalue['remote'] ? '2' : '1';
+				}
+			}
+
 			foreach($listtids as $key => $value) {
 				$datalist[] = $list[$value];
 			}

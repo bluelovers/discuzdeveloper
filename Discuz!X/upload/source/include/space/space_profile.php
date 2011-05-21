@@ -20,7 +20,7 @@ space_merge($space, 'profile');
 space_merge($space, 'status');
 getonlinemember(array($space['uid']));
 
-if($space['videophoto'] && ckvideophoto('viewphoto', $space, 1)) {
+if($space['videophoto'] && ckvideophoto($space, 1)) {
 	$space['videophoto'] = getvideophoto($space['videophoto']);
 } else {
 	$space['videophoto'] = '';
@@ -82,16 +82,22 @@ $space['attachsize'] = formatsize($space['attachsize']);
 $space['timeoffset'] = empty($space['timeoffset']) ? '9999' : $space['timeoffset'];
 
 require_once libfile('function/friend');
-$isfriend = friend_check($space['uid']);
+$isfriend = friend_check($space['uid'], 1);
 
 loadcache('profilesetting');
 include_once libfile('function/profile');
 $profiles = array();
 $privacy = $space['privacy']['profile'] ? $space['privacy']['profile'] : array();
 
-foreach($_G['cache']['profilesetting'] as $fieldid=>$field) {
+if($_G['setting']['verify']['enabled']) {
+	space_merge($space, 'verify');
+}
+foreach($_G['cache']['profilesetting'] as $fieldid => $field) {
+	if(!$field['available'] || in_array($fieldid, array('birthprovince', 'birthdist', 'birthcommunity', 'resideprovince', 'residedist', 'residecommunity'))) {
+			continue;
+	}
 	if(
-		$field['available'] && $field['invisible'] != '1' && strlen($space[$fieldid]) > 0 &&
+		$field['available'] && strlen($space[$fieldid]) > 0 &&
 		(
 			$field['showinthread'] ||
 			$field['showincard'] ||
@@ -99,11 +105,14 @@ foreach($_G['cache']['profilesetting'] as $fieldid=>$field) {
 				$space['self'] || empty($privacy[$fieldid]) || ($isfriend && $privacy[$fieldid] == 1)
 			)
 		) &&
-		(!$_G['inajax'] || $_G['inajax'] && $field['showincard'])
+		(!$_G['inajax'] && $field['invisible'] != '1' || $_G['inajax'] && $field['showincard'])
 	) {
 		$val = profile_show($fieldid, $space);
 		if($val !== false) {
-			if ($val == '')  $val = '&nbsp;';
+			if($fieldid == 'realname' && $_G['uid'] != $space['uid'] && !ckrealname(1)) {
+				continue;
+			}
+			if($val == '')  $val = '-';
 			$profiles[$fieldid] = array('title'=>$field['title'], 'value'=>$val);
 		}
 	}
@@ -118,36 +127,48 @@ if($count) {
 	}
 }
 
+if(!$_G['inajax'] && $_G['setting']['groupstatus']) {
+	$groupcount = DB::result_first("SELECT COUNT(*) FROM ".DB::table('forum_groupuser')." WHERE uid = '{$space['uid']}'");
+	if($groupcount > 0) {
+		$query = DB::query("SELECT fg.fid, ff.name FROM ".DB::table('forum_groupuser')." fg LEFT JOIN ".DB::table('forum_forum')." ff USING(fid) WHERE fg.uid = '{$space['uid']}' LIMIT $groupcount");
+		while ($result = DB::fetch($query)) {
+			$usergrouplist[] = $result;
+		}
+	}
+}
+
 if($space['medals']) {
         loadcache('medals');
         foreach($space['medals'] = explode("\t", $space['medals']) as $key => $medalid) {
                 list($medalid, $medalexpiration) = explode("|", $medalid);
-                if(isset($_G['cache']['medals'][$medalid]) && (!$medalexpiration || $medalexpiration > $timestamp)) {
+                if(isset($_G['cache']['medals'][$medalid]) && (!$medalexpiration || $medalexpiration > TIMESTAMP)) {
                         $space['medals'][$key] = $_G['cache']['medals'][$medalid];
+                        $space['medals'][$key]['medalid'] = $medalid;
                 } else {
                         unset($space['medals'][$key]);
                 }
         }
 }
-
 $upgradecredit = $space['uid'] && $space['group']['type'] == 'member' && $space['group']['creditslower'] != 9999999 ? $space['group']['creditslower'] - $space['credits'] : false;
 $allowupdatedoing = $space['uid'] == $_G['uid'] && checkperm('allowdoing');
 
-if($_G['setting']['verify']['enabled']) {
-	space_merge($space, 'verify');
-}
 dsetcookie('home_diymode', 1);
 
 $navtitle = lang('space', 'sb_profile', array('who' => $space['username']));
 $metakeywords = lang('space', 'sb_profile', array('who' => $space['username']));
 $metadescription = lang('space', 'sb_profile', array('who' => $space['username']));
 
+$showvideophoto = true;
+if($space['videophotostatus'] > 0 && $_G['uid'] != $space['uid'] && !ckvideophoto($space, 1)) {
+	$showvideophoto = false;
+}
+
 if(!$_G['privacy']) {
 	if(!$_G['inajax']) {
 		include_once template("home/space_profile");
 	} else {
+		$_G['gp_do'] = 'card';
 		include_once template("home/space_card");
 	}
 }
-
 ?>

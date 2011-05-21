@@ -12,7 +12,6 @@ if(!defined('IN_DISCUZ')) {
 }
 
 $actionarray = array();
-require_once libfile('function/forum');
 $query = DB::query("SELECT * FROM ".DB::table('forum_threadmod')." WHERE expiration>'0' AND expiration<'$_G[timestamp]' AND status='1'");
 while($expiry = DB::fetch($query)) {
 	switch($expiry['action']) {
@@ -26,12 +25,10 @@ while($expiry = DB::fetch($query)) {
 		case 'CLK':	$actionarray['UEC'][] = $expiry['tid']; break;
 		case 'SPA':	$actionarray['SPD'][] = $expiry['tid']; break;
 	}
-	if(in_array($expiry['action'], array('UES', 'UES'))) {
-		my_thread_log('cron', array('tid' => $expiry['tid']));
-	}
 }
 
 if($actionarray) {
+
 	foreach($actionarray as $action => $tids) {
 
 		$tids = implode(',', $tids);

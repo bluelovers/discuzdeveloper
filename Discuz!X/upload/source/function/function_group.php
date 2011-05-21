@@ -250,7 +250,7 @@ function get_groupnav($forum) {
 		$mod_action = $_G['gp_mod'] == 'forumdisplay' || $_G['gp_mod'] == 'viewthread' ? 'mod=forumdisplay&action=list' : 'mod=group';
 		$groupnav .= ($groupnav ? ' <em>&rsaquo;</em> ' : '').'<a href="forum.php?'.$mod_action.'&fid='.$forum['fid'].'">'.$forum['name'].'</a>';
 	}
-	return $groupnav;
+	return array('nav' => $groupnav, 'first' => $firsttype, 'second' => $secondtype);
 }
 
 function get_viewedgroup() {
@@ -280,6 +280,7 @@ function getgroupthread($fid, $type, $timestamp = 0, $num = 10, $privacy = 0) {
 		$sqladd = $type == 'digest' ? "AND digest>'0' ORDER BY dateline DESC" : "ORDER BY $type DESC";
 		$query = DB::query("SELECT * FROM ".DB::table('forum_thread')." WHERE fid='$fid' AND displayorder>='0' $sqltimeadd $sqladd LIMIT 0, $num");
 		while($thread = DB::fetch($query)) {
+			$groupthreadlist[$thread['tid']]['tid'] = $thread['tid'];
 			$groupthreadlist[$thread['tid']]['subject'] = $thread['subject'];
 			$groupthreadlist[$thread['tid']]['special'] = $thread['special'];
 			$groupthreadlist[$thread['tid']]['closed'] = $thread['closed'];
@@ -309,7 +310,7 @@ function getgroupcache($fid, $typearray = array(), $timestamp = 0, $num = 10, $p
 		}
 	}
 
-	$cachetimearray = array('replies' => 3600, 'views' => 3600, 'dateline' => 0, 'lastpost' => 3600, 'digest' => 86400, 'ranking' => 86400, 'activityuser' => 3600);
+	$cachetimearray = array('replies' => 3600, 'views' => 3600, 'dateline' => 900, 'lastpost' => 3600, 'digest' => 86400, 'ranking' => 86400, 'activityuser' => 3600);
 	$userdataarray = array('activityuser' => 'lastupdate', 'newuserlist' => 'joindateline');
 	foreach($typearray as $type) {
 		if(empty($groupcache[$type]) || (!empty($cachetimearray[$type]) && TIMESTAMP - $groupcache[$type]['dateline'] > $cachetimearray[$type])) {

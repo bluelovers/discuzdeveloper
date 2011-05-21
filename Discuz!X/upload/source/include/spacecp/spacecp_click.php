@@ -54,7 +54,7 @@ if(!$item = DB::fetch($query)) {
 $hash = md5($item['uid']."\t".$item['dateline']);
 if($_GET['op'] == 'add') {
 	if(!checkperm('allowclick') || $_GET['hash'] != $hash) {
-		showmessage('no_privilege');
+		showmessage('no_privilege_click');
 	}
 
 	if($item['uid'] == $_G['uid']) {

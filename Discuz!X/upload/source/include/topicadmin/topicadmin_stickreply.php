@@ -12,10 +12,11 @@ if(!defined('IN_DISCUZ')) {
 }
 
 if(!$_G['group']['allowstickreply']) {
-	showmessage('undefined_action', NULL);
+	showmessage('no_privilege_stickreply');
 }
 
 $topiclist = $_G['gp_topiclist'];
+$modpostsnum = count($topiclist);
 if(empty($topiclist)) {
 	showmessage('admin_stickreply_invalid');
 } elseif(!$_G['tid']) {
@@ -24,14 +25,18 @@ if(empty($topiclist)) {
 $posttable = getposttablebytid($_G['tid']);
 $sticktopiclist = $posts = array();
 foreach($topiclist as $pid) {
-	$post = DB::fetch_first("SELECT p.tid, p.authorid, p.dateline, p.first, t.special FROM ".DB::table($posttable)." p
-		LEFT JOIN ".DB::table('forum_thread')." t USING(tid) WHERE p.pid='$pid'");
-	$posts[]['authorid'] = $post['authorid'];
-	$sqladd = $post['special'] ? "AND first=0" : '';
-	$posttable = getposttablebytid($post['tid']);
-	$curpostnum = DB::result_first("SELECT COUNT(*) FROM ".DB::table($posttable)." WHERE tid='$post[tid]' AND dateline<='$post[dateline]' $sqladd");
-	if(empty($post['first'])) {
-		$sticktopiclist[$pid] = $curpostnum;
+	$position = DB::result_first("SELECT position FROM ".DB::table('forum_postposition')." WHERE pid='$pid'");
+	if($position) {
+		$sticktopiclist[$pid] = $position;
+	} else {
+		$post = DB::fetch_first("SELECT p.tid, p.authorid, p.dateline, p.first, t.special FROM ".DB::table($posttable)." p
+			LEFT JOIN ".DB::table('forum_thread')." t USING(tid) WHERE p.pid='$pid'");
+		$posts[]['authorid'] = $post['authorid'];
+		$posttable = getposttablebytid($post['tid']);
+		$curpostnum = DB::result_first("SELECT COUNT(*) FROM ".DB::table($posttable)." WHERE tid='$post[tid]' AND dateline<='$post[dateline]'");
+		if(empty($post['first'])) {
+			$sticktopiclist[$pid] = $curpostnum;
+		}
 	}
 }
 

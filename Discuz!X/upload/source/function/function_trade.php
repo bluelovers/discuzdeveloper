@@ -56,6 +56,7 @@ function trade_create($trade) {
 	$item_price = floatval($item_price);
 
 	switch($transport) {
+		case 'offline'	: $item_transport = 0; break;
 		case 'seller'	: $item_transport = 1; break;
 		case 'buyer'	: $item_transport = 2; break;
 		case 'virtual'	: $item_transport = 3; break;

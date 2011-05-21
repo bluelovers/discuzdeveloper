@@ -53,10 +53,10 @@ if($activity['ufield']) {
 }
 
 if($activity['aid']) {
-	$attach = DB::fetch_first("SELECT a.*,af.description FROM ".DB::table('forum_attachment')." a LEFT JOIN ".DB::table('forum_attachmentfield')." af USING(aid) WHERE a.aid='$activity[aid]'");
+	$attach = DB::fetch_first("SELECT * FROM ".DB::table(getattachtablebytid($_G['tid']))." WHERE aid='$activity[aid]'");
 	if($attach['isimage']) {
 		$activity['attachurl'] = ($attach['remote'] ? $_G['setting']['ftp']['attachurl'] : $_G['setting']['attachurl']).'forum/'.$attach['attachment'];
-		$activity['thumb'] = $activity['attachurl'].($attach['thumb'] ? '.thumb.jpg' : '');
+		$activity['thumb'] = $attach['thumb'] ? getimgthumbname($activity['attachurl']) : $activity['attachurl'];
 		$activity['width'] = $attach['thumb'] && $_G['setting']['thumbwidth'] < $attach['width'] ? $_G['setting']['thumbwidth'] : $attach['width'];
 	}
 	$skipaids[] = $activity['aid'];
@@ -68,12 +68,12 @@ $noverifiednum = 0;
 $query = DB::query("SELECT aa.username, aa.uid, aa.verified, aa.dateline, aa.message, aa.payment, aa.ufielddata, m.groupid FROM ".DB::table('forum_activityapply')." aa
 	LEFT JOIN ".DB::table('common_member')." m USING(uid)
 	LEFT JOIN ".DB::table('common_member_field_forum')." mf USING(uid)
-	WHERE aa.tid='$_G[tid]' ORDER BY aa.dateline");
+	WHERE aa.tid='$_G[tid]' ORDER BY aa.dateline DESC");
 while($activityapplies = DB::fetch($query)) {
 	$activityapplies['dateline'] = dgmdate($activityapplies['dateline'], 'u');
 	if($activityapplies['verified'] == 1) {
 		$activityapplies['ufielddata'] = unserialize($activityapplies['ufielddata']);
-		if(count($applylist) < 8) {
+		if(count($applylist) < $_G['setting']['activitypp']) {
 			$activityapplies['message'] = preg_replace("/(".lang('forum/misc', 'contact').".*)/", '', $activityapplies['message']);
 			$applylist[] = $activityapplies;
 		}

@@ -22,6 +22,8 @@ $lang = array
 	'couplebanner_position_right' => '右侧',
 	'couplebanner_coupleadid' => '上/下联广告',
 	'couplebanner_coupleadid_comment' => '设置和当前广告配对的上/下联广告',
+	'couplebanner_category' => '投放门户频道',
+	'couplebanner_category_comment' => '设置广告投放的频道分类，当广告投放范围中包含“门户”时有效',
 );
 
 ?>

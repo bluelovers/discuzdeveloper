@@ -42,4 +42,5 @@ $settings = array(
 	),
 
 );
+
 ?>

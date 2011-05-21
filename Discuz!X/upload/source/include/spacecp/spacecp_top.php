@@ -42,7 +42,7 @@ if(submitcheck('friendsubmit')) {
 		DB::insert('home_show', array('uid'=>$fuid, 'username'=>$_POST['fusername'], 'credit'=>$showcredit), 0, true);
 	}
 
-	member_count_update($space['uid'], array('credit'=>(0-$showcredit)));
+	updatemembercount($space['uid'], array($_G['setting']['creditstransextra'][6] => (0-$showcredit)), true, 'RKC', $space['uid']);
 
 	notification_add($fuid, 'credit', 'showcredit', array('credit'=>$showcredit));
 
@@ -76,7 +76,7 @@ if(submitcheck('friendsubmit')) {
 		DB::insert('home_show', array('uid'=>$_G['uid'], 'username'=>$_G['username'], 'unitprice' => $unitprice, 'credit'=>$showcredit, 'note'=>$_POST['note']), 0, true);
 	}
 
-	member_count_update($space['uid'], array('credit'=>(0-$showcredit)));
+	updatemembercount($space['uid'], array($_G['setting']['creditstransextra'][6] => (0-$showcredit)), true, 'RKC', $space['uid']);
 
 	if(ckprivacy('show', 'feed')) {
 		require_once libfile('function/feed');

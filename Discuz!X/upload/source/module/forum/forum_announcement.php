@@ -33,7 +33,6 @@ while($announce = DB::fetch($query)) {
 	$announce['message'] = nl2br(discuzcode($announce['message'], 0, 0, 1, 1, 1, 1, 1));
 	$announcelist[] = $announce;
 }
-
 $annid = isset($_G['gp_id']) ? intval($_G['gp_id']) : 0;
 
 include template('forum/announcement');

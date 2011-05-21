@@ -1,6 +1,5 @@
 <!--{template common/header}-->
 	<div id="pt" class="bm cl">
-		<!--{subtemplate common/simplesearchform}-->
 		<div class="z">
 			<a href="./" class="nvhm" title="{lang home}">$_G[setting][bbname]</a><em>&rsaquo;</em><a href="group.php">$_G[setting][navs][3][navname]</a><!--{if $groupnav}-->$groupnav<!--{elseif $action == 'create'}--><em>&rsaquo;</em>{lang group_create}<!--{/if}-->
 		</div>
@@ -19,7 +18,7 @@
 			<!--{if $action != 'create'}-->
 				<!--{if $_G['forum']['banner']}-->
 					<div id="gh">
-						<img src="$_G[forum][banner]" width="100%" alt="" />
+						<img src="$_G[forum][banner]" alt="" />
 						<div class="bm bmw bw0">
 							<div class="bm_h bw0 cl">
 								<h1 class="xs2">$_G[forum][name]</h1>

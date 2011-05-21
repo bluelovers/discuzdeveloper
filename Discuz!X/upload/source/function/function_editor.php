@@ -359,7 +359,7 @@ function smileycode($smileyid) {
 	global $_G;
 
 	if(!is_array($_G['cache']['smileycodes'])) {
-		loadcache(array('bbcodes_display', 'bbcodes', 'smileycodes', 'smilies', 'smileytypes', 'icons', 'domainwhitelist'));
+		loadcache(array('bbcodes_display', 'bbcodes', 'smileycodes', 'smilies', 'smileytypes', 'domainwhitelist'));
 	}
 	foreach($_G['cache']['smileycodes'] as $id => $code) {
 		if($smileyid == $id) {

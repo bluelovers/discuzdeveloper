@@ -12,14 +12,12 @@ if(!defined('IN_DISCUZ')) {
 }
 
 if($_G['adminid'] != '1') {
-	showmessage('undefined_action', NULL);
+	showmessage('no_privilege_restore');
 }
-
+$archiveid = intval($_G['gp_archiveid']);
 if(!submitcheck('modsubmit')) {
-	$archiveid = intval($_G['gp_archiveid']);
 	include template('forum/topicadmin_action');
 } else {
-	$archiveid = $_G['gp_archiveid'];
 	if(!in_array($archiveid, $threadtableids)) {
 		$archiveid = 0;
 	}

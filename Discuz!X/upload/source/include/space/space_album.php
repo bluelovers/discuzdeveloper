@@ -99,9 +99,20 @@ if($id) {
 
 	$diymode = intval($_G['cookie']['home_diymode']);
 
-	$navtitle = $album['albumname'].' - '.lang('space', 'sb_album', array('who' => $album['username']));
-	$metakeywords = $album['albumname'];
-	$metadescription = $album['albumname'];
+	$seodata = array('album' => $album['albumname'], 'user' => $album['username'], 'depict' => $album['depict']);
+	list($navtitle, $metadescription, $metakeywords) = get_seosetting('album', $seodata);
+	if(empty($navtitle)) {
+		$navtitle = $album['albumname'].' - '.lang('space', 'sb_album', array('who' => $album['username']));
+		$nobbname = false;
+	} else {
+		$nobbname = true;
+	}
+	if(empty($metakeywords)) {
+		$metakeywords = $album['albumname'];
+	}
+	if(empty($metadescription)) {
+		$metadescription = $album['albumname'];
+	}
 
 	include_once template("diy:home/space_album_view");
 
@@ -165,7 +176,7 @@ if($id) {
 		$nextid = $list[$newkeys[3]]['picid'];
 
 		foreach ($newkeys as $nkey) {
-			$piclist[] = $list[$nkey];
+			$piclist[$nkey] = $list[$nkey];
 		}
 	} else {
 		$newkeys = array($nowkey-1, $nowkey, $nowkey+1);
@@ -252,22 +263,7 @@ if($id) {
 	$actives = array('me' =>' class="a"');
 
 	if($album['picnum']) {
-		if($_GET['goto']=='down') {
-			$sequence = empty($_G['cookie']['pic_sequence'])?$album['picnum']:intval($_G['cookie']['pic_sequence']);
-			$sequence++;
-			if($sequence>$album['picnum']) {
-				$sequence = 1;
-			}
-		} elseif($_GET['goto']=='up') {
-			$sequence = empty($_G['cookie']['pic_sequence'])?$album['picnum']:intval($_G['cookie']['pic_sequence']);
-			$sequence--;
-			if($sequence<1) {
-				$sequence = $album['picnum'];
-			}
-		} else {
-			$sequence = 1;
-		}
-		dsetcookie('pic_sequence', $sequence);
+		$sequence = $nowkey + 1;
 	}
 
 	$diymode = intval($_G['cookie']['home_diymode']);

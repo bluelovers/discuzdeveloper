@@ -16,9 +16,12 @@ class membersearch {
 			'uid'=>'member', 'username'=>'member', 'groupid'=>'member',
 			'email'=>'member', 'credits'=>'member', 'regdate'=>'member',
 			'status'=>'member', 'emailstatus'=>'member', 'avatarstatus'=>'member','videophotostatus'=>'member',
+			'conisbind'=>'member','uin' => 'black','sid'=>'session',
 			'extcredits1'=>'count', 'extcredits2'=>'count', 'extcredits3'=>'count', 'extcredits4'=>'count',
 			'extcredits5'=>'count',	'extcredits6'=>'count', 'extcredits7'=>'count', 'extcredits8'=>'count',
-			'posts'=>'count',
+			'posts'=>'count','friends'=>'count',
+			'fid' => 'groupuser', 'level' => 'groupuser',
+			'verify1' => 'verify', 'verify2' => 'verify', 'verify3' => 'verify', 'verify4' => 'verify', 'verify5' => 'verify', 'verify6' => 'verify', 'verify7' => 'verify',
 			'regip'=>'status', 'lastip'=>'status', 'lastvisit'=>'status', 'lastpost' => 'status', 'realname'=>'profile',
 			'birthyear'=>'profile', 'birthmonth'=>'profile', 'birthday'=>'profile', 'gender'=>'profile',
 			'constellation'=>'profile', 'zodiac'=>'profile', 'telephone'=>'profile', 'mobile'=>'profile',
@@ -42,7 +45,8 @@ class membersearch {
 			'status'=>'int', 'emailstatus'=>'int', 'avatarstatus'=>'int','videophotostatus'=>'int',
 			'extcredits1'=>'int', 'extcredits2'=>'int', 'extcredits3'=>'int', 'extcredits4'=>'int',
 			'extcredits5'=>'int', 'extcredits6'=>'int', 'extcredits7'=>'int', 'extcredits8'=>'int',
-			'posts'=>'int', 'birthyear'=>'int', 'birthmonth'=>'int', 'birthday'=>'int', 'gender'=>'int',
+			'posts'=>'int', 'friends'=>'int', 'birthyear'=>'int', 'birthmonth'=>'int', 'birthday'=>'int', 'gender'=>'int',
+			'uin'=>'int', 'sid'=>'noempty'
 			);
 		return $types[$fieldid] ? $types[$fieldid] : 'string';
 	}
@@ -148,6 +152,16 @@ class membersearch {
 
 		$tables = $wheres = array();
 
+		if($condition['verify']) {
+			foreach($condition['verify'] as $key => $value) {
+				$condition[$value] = 1;
+			}
+			unset($condition['verify']);
+		}
+		if($condition['fid']) {
+			$condition['level'] = '1,2,3,4';
+		}
+
 		$fields = membersearch::getfield();
 		foreach ($fields as $key=>$value) {
 			$return = array();
@@ -155,6 +169,8 @@ class membersearch {
 				$return = membersearch::makeset($key, $condition[$key], membersearch::gettype($key));
 			} elseif(isset($condition[$key.'_low']) || isset($condition[$key.'_high'])) {
 				$return = membersearch::makerange($key, $condition[$key.'_low'], $condition[$key.'_high'], membersearch::gettype($key));
+			} elseif(isset($condition[$key.'_noempty'])) {
+				$return = membersearch::makeset($key, $condition[$key.'_noempty'], membersearch::gettype($key));
 			} elseif(isset($condition[$key.'_after']) || isset($condition[$key.'_before'])) {
 				$condition[$key.'_after'] = dmktime($condition[$key.'_after']);
 				$condition[$key.'_before'] = dmktime($condition[$key.'_before']);
@@ -168,7 +184,7 @@ class membersearch {
 		if($tables && $wheres) {
 			$parts = array();
 			$table1 = '';
-			foreach ($tables as $key=>$value) {
+			foreach ($tables as $key => $value) {
 				$value = membersearch::gettable($key);
 				$parts[] = "$value as $key";
 				if(! $table1) {
@@ -178,7 +194,7 @@ class membersearch {
 				}
 			}
 
-			$selectsql = $onlyCount ? 'SELECT COUNT('.$table1.'.uid) as cnt ' : 'SELECT '.$table1.'.uid';
+			$selectsql = $onlyCount ? 'SELECT COUNT(DISTINCT '.$table1.'.uid) as cnt ' : 'SELECT DISTINCT '.$table1.'.uid';
 			return $selectsql.' FROM '.implode(', ', $parts).' WHERE '.implode(' AND ', $wheres);
 		} else {
 			$selectsql = $onlyCount ? 'SELECT COUNT(uid) as cnt ' : 'SELECT uid';
@@ -195,7 +211,7 @@ class membersearch {
 		}
 		$field = $return['table'].'.'.$field;
 
-		$islikesearch = false;
+		$islikesearch = $noempty = false;
 		if(!is_array($condition)) {
 			$condition = explode(',', $condition);
 		}
@@ -203,6 +219,8 @@ class membersearch {
 			$value = trim($value);
 			if($type == 'int') {
 				$value = intval($value);
+			} elseif($type == 'noempty') {
+				$noempty = true;
 			} elseif(!$islikesearch && strexists($value, '*')) {
 				$islikesearch = true;
 			}
@@ -227,6 +245,8 @@ class membersearch {
 				}
 			}
 			$return['where'] = '('.implode(' OR ', $likes).')';
+		} elseif($noempty) {
+			$return['where'] = "$field != ''";
 		} elseif(count($values) > 1) {
 			$return['where'] = "$field IN ('".implode("','", $values)."')";
 		} else {
@@ -235,7 +255,7 @@ class membersearch {
 		return $return;
 	}
 
-	function makerange($field, $range_low='', $range_high='', $type='string') {
+	function makerange($field, $range_low=null, $range_high=null, $type='string') {
 		$return = array();
 
 		$return['table'] = membersearch::getfield($field);
@@ -253,10 +273,10 @@ class membersearch {
 		}
 
 		$wheres = array();
-		if($range_low) {
+		if($range_low !== null) {
 			$wheres[] = "$field >= '$range_low'";
 		}
-		if($range_high && $range_high > $range_low) {
+		if($range_high !== null && $range_high > $range_low) {
 			$wheres[] = "$field <= '$range_high'";
 		}
 		if($wheres) {
@@ -269,8 +289,8 @@ class membersearch {
 
 
 	function gettable($alias) {
-		static $mapping = array('member'=>'member', 'status'=>'member_status', 'profile'=>'member_profile', 'count'=>'member_count');
-		return DB::table('common_'.$mapping[$alias]);
+		static $mapping = array('member'=>'common_member', 'status'=>'common_member_status', 'profile'=>'common_member_profile', 'count'=>'common_member_count', 'session'=>'common_session', 'groupuser' => 'forum_groupuser', 'verify' => 'common_member_verify', 'black'=>'common_uin_black');
+		return DB::table($mapping[$alias]);
 	}
 
 }

@@ -26,7 +26,7 @@ function build_cache_smilies_js() {
 		$squery = DB::query("SELECT id, code, url FROM ".DB::table('common_smiley')." WHERE type='smiley' AND code<>'' AND typeid='$type[typeid]' ORDER BY displayorder");
 		if(DB::num_rows($squery)) {
 			$i = 0;$j = 1;$pre = '';
-			$return_type .= 'smilies_type['.$type['typeid'].'] = [\''.str_replace('\'', '\\\'', $type['name']).'\', \''.str_replace('\'', '\\\'', $type['directory']).'\'];';
+			$return_type .= 'smilies_type[\'_'.$type['typeid'].'\'] = [\''.str_replace('\'', '\\\'', $type['name']).'\', \''.str_replace('\'', '\\\'', $type['directory']).'\'];';
 			$return_datakey .= 'smilies_array['.$type['typeid'].'] = new Array();';
 			while($smiley = DB::fetch($squery)) {
 				if($i >= $spp) {
@@ -43,7 +43,7 @@ function build_cache_smilies_js() {
 					$smiley['lw'] = $l['w'];
 					unset($smiley['id'], $smiley['directory']);
 					$return_data[$j] .= $pre.'[\''.$smileyid.'\', \''.$smiley['code'].'\',\''.str_replace('\'', '\\\'', $smiley['url']).'\',\''.$smiley['w'].'\',\''.$smiley['h'].'\',\''.$smiley['lw'].'\']';
-					if(in_array($smileyid, $fastsmiley[$type['typeid']])) {
+					if(is_array($fastsmiley[$type['typeid']]) && in_array($smileyid, $fastsmiley[$type['typeid']])) {
 						$return_fast .= $fpre.'[\''.$type['typeid'].'\',\''.$j.'\',\''.$i.'\']';
 						$fpre = ',';
 					}

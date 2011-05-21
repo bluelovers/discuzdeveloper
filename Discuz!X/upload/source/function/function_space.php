@@ -11,71 +11,13 @@ if(!defined('IN_DISCUZ')) {
 	exit('Access Denied');
 }
 
-function getuserdefaultdiy() {
-	$defaultdiy = array(
-			'currentlayout' => '1:2:1',
-			'block' => array(
-					'frame`frame1' => array(
-							'attr' => array('name'=>'frame1'),
-							'column`frame1_left' => array(
-									'block`profile' => array('attr' => array('name'=>'profile')),
-									'block`statistic' => array('attr' => array('name'=>'statistic')),
-									'block`album' => array('attr' => array('name'=>'album')),
-									'block`doing' => array('attr' => array('name'=>'doing'))
-							),
-							'column`frame1_center' => array(
-									'block`feed' => array('attr' => array('name'=>'feed')),
-									'block`share' => array('attr' => array('name'=>'share')),
-									'block`blog' => array('attr' => array('name'=>'blog')),
-									'block`thread' => array('attr' => array('name'=>'thread')),
-									'block`wall' => array('attr' => array('name'=>'wall'))
-							),
-							'column`frame1_right' => array(
-									'block`friend' => array('attr' => array('name'=>'friend')),
-									'block`visitor' => array('attr' => array('name'=>'visitor')),
-									'block`group' => array('attr' => array('name'=>'group'))
-							)
-					)
-			),
-			'parameters' => array(
-					'blog' => array('showmessage' => true, 'shownum' => 6),
-					'doing' => array('shownum' => 15),
-					'album' => array('shownum' => 8),
-					'thread' => array('shownum' => 10),
-					'share' => array('shownum' => 10),
-					'friend' => array('shownum' => 18),
-					'group' => array('shownum' => 12),
-					'visitor' => array('shownum' => 18),
-					'wall' => array('shownum' => 16),
-					'feed' => array('shownum' => 16)
-			)
-	);
-	return $defaultdiy;
-}
-
-function getuserdiydata($space) {
-	$userdiy = getuserdefaultdiy();
-	if (!empty($space['blockposition'])) {
-		$blockdata = unserialize($space['blockposition']);
-		foreach ((array)$blockdata as $key => $value) {
-			if ($key == 'parameters') {
-				foreach ((array)$value as $k=>$v) {
-					if (!empty($v)) $userdiy[$key][$k] = $v;
-				}
-			} else {
-				if (!empty($value)) $userdiy[$key] = $value;
-			}
-		}
-	}
-	return $userdiy;
-}
-
 function getblockhtml($blockname,$parameters = array()) {
 	global $_G, $space;
 
 	$parameters = empty($parameters) ? array() : $parameters;
 	$list = array();
-	$sql = $title = $html = $wheresql = $ordersql = $titlemore = $do = $view = $contentclassname = '';
+	$sql = $title = $html = $wheresql = $ordersql = $titlemore = $do = $contentclassname = '';
+	$view = $from = false;
 	$contenttagname = 'div';
 	$shownum = 6;
 
@@ -83,12 +25,70 @@ function getblockhtml($blockname,$parameters = array()) {
 
 	$shownum = empty($parameters['shownum']) ? $shownum : intval($parameters['shownum']);
 	switch ($blockname) {
+		case 'personalinfo':
+			$do = 'profile';
+			space_merge($space, 'profile');
+
+			require_once libfile('function/friend');
+			$isfriend = friend_check($space['uid']);
+			require_once libfile('function/spacecp');
+
+			loadcache('profilesetting');
+			include_once libfile('function/profile');
+			$profiles = array();
+			$privacy = $space['privacy']['profile'] ? $space['privacy']['profile'] : array();
+
+			foreach($_G['cache']['profilesetting'] as $fieldid=>$field) {
+				if(!$field['available'] || in_array($fieldid, array('birthprovince', 'birthdist', 'birthcommunity', 'resideprovince', 'residedist', 'residecommunity'))) {
+					continue;
+				}
+				if(
+					$field['available'] && $field['invisible'] != '1' && strlen($space[$fieldid]) > 0 &&
+					(
+						$field['showinthread'] ||
+						$field['showincard'] ||
+						(
+							$space['self'] || empty($privacy[$fieldid]) || ($isfriend && $privacy[$fieldid] == 1)
+						)
+					)
+				) {
+					$val = profile_show($fieldid, $space);
+					if($val !== false) {
+						if($fieldid == 'realname' && $_G['uid'] != $space['uid'] && !ckrealname(1)) {
+							continue;
+						}
+						if ($val == '')  $val = '';
+						$html .= '<li><em>'.$field['title'].'</em>'.$val.'</li>';
+					}
+				}
+			}
+			$html = $html ? $html : '<li>'.lang('space', 'block_view_profileinfo_noperm').'</li>';
+			$html = '<ul id="pprl" class="mbm pbm bbda cl">'.$html.$more.'</ul>';
+			$more = lang('space', 'block_profile_all', array('uid' => $uid));
+			$html = $html.$more;
+			$titlemore = $space['self'] ? lang('space', 'block_profile_edit') : '';
+			break;
 		case 'profile':
 			$do = $blockname;
 			$managehtml = '';
 			$avatar = empty($parameters['banavatar']) ? 'middle' : $parameters['banavatar'];
-			$html .= "<div class=\"hm\"><p><a href=\"home.php?mod=space&uid=$uid\" target=\"__blank\">".avatar($uid,$avatar).'</a></p>';
-			$html .= "<h2><a href=\"home.php?mod=space&uid=$uid\" target=\"__blank\">".$space['username']."</a></h2>";
+			$html .= "<div class=\"hm\"><p><a href=\"home.php?mod=space&uid=$uid\" target=\"_blank\">".avatar($uid,$avatar).'</a></p>';
+
+			$space['medals'] = DB::result_first("SELECT medals FROM ".DB::table('common_member_field_forum')." WHERE uid='$space[uid]'");
+			$usermedals = $medal_detial = '';
+			if($space['medals']) {
+				loadcache('medals');
+				foreach($space['medals'] = explode("\t", $space['medals']) as $key => $medalid) {
+					list($medalid, $medalexpiration) = explode("|", $medalid);
+					if(isset($_G['cache']['medals'][$medalid]) && (!$medalexpiration || $medalexpiration > TIMESTAMP)) {
+						$usermedals .= '<img src="'.STATICURL.'image/common/'.$_G['cache']['medals'][$medalid]['image'].'" id="md_'.$medalid.'" alt="'.$_G['cache']['medals'][$medalid]['name'].'\'" onmouseover="showTip(this)" tip="<h4>'.$_G['cache']['medals'][$medalid]['name'].'</h4><p>'.$_G['cache']['medals'][$medalid]['description'].'</p>" />&nbsp;';
+					}
+				}
+				if($usermedals) {
+					$usermedals = '<p class="md_ctrl"><a href="home.php?mod=medal">'.$usermedals.'</a></p>';
+				}
+			}
+			$html .= "<h2 class=\"mbn\"><a href=\"home.php?mod=space&uid=$uid\" target=\"_blank\">".$space['username']."</a></h2>$usermedals";
 			$html .= '</div><ul class="xl xl2 cl ul_list">';
 
 			$magicinfo = $showmagicgift = false;
@@ -146,16 +146,16 @@ function getblockhtml($blockname,$parameters = array()) {
 				$html .= '</ul>';
 				if($_G['adminid'] == 1) {
 					$html .= '<ul id="umanageli_menu" class="p_pop" style="width: 80px; display:none;">';
-					$html .= '<li><a href="admin.php?action=threads&users='.$encodeusername.'" target="_blank">'.lang('space', 'manage_post').'</a></li>';
-					$html .= '<li><a href="admin.php?action=doing&searchsubmit=1&users='.$encodeusername.'" target="_blank">'.lang('space', 'manage_doing').'</a></li>';
-					$html .= '<li><a href="admin.php?action=blog&searchsubmit=1&uid='.$uid.'" target="_blank">'.lang('space', 'manage_blog').'</a></li>';
-					$html .= '<li><a href="admin.php?action=feed&searchsubmit=1&uid='.$uid.'" target="_blank">'.lang('space', 'manage_feed').'</a></li>';
-					$html .= '<li><a href="admin.php?action=album&searchsubmit=1&uid='.$uid.'" target="_blank">'.lang('space', 'manage_album').'</a></li>';
-					$html .= '<li><a href="admin.php?action=pic&searchsubmit=1&users='.$encodeusername.'" target="_blank">'.lang('space', 'manage_pic').'</a></li>';
-					$html .= '<li><a href="admin.php?action=comment&searchsubmit=1&authorid='.$uid.'" target="_blank">'.lang('space', 'manage_comment').'</a></li>';
-					$html .= '<li><a href="admin.php?action=share&searchsubmit=1&uid='.$uid.'" target="_blank">'.lang('space', 'manage_share').'</a></li>';
-					$html .= '<li><a href="admin.php?action=threads&operation=group&users='.$encodeusername.'" target="_blank">'.lang('space', 'manage_group_threads').'</a></li>';
-					$html .= '<li><a href="admin.php?action=prune&searchsubmit=1&operation=group&users='.$encodeusername.'" target="_blank">'.lang('space', 'manage_group_prune').'</a></li>';
+					$html .= '<li><a href="forum.php?mod=modcp&action=thread&op=post&searchsubmit=1&do=search&users='.$encodeusername.'" target="_blank">'.lang('space', 'manage_post').'</a></li>';
+					$html .= '<li><a href="admin.php?action=doing&searchsubmit=1&search=true&fromumanage=1&users='.$encodeusername.'" target="_blank">'.lang('space', 'manage_doing').'</a></li>';
+					$html .= '<li><a href="admin.php?action=blog&searchsubmit=1&search=true&fromumanage=1&uid='.$uid.'" target="_blank">'.lang('space', 'manage_blog').'</a></li>';
+					$html .= '<li><a href="admin.php?action=feed&searchsubmit=1&fromumanage=1&uid='.$uid.'" target="_blank">'.lang('space', 'manage_feed').'</a></li>';
+					$html .= '<li><a href="admin.php?action=album&searchsubmit=1&search=true&fromumanage=1&uid='.$uid.'" target="_blank">'.lang('space', 'manage_album').'</a></li>';
+					$html .= '<li><a href="admin.php?action=pic&searchsubmit=1&detail=1&search=true&fromumanage=1&users='.$encodeusername.'" target="_blank">'.lang('space', 'manage_pic').'</a></li>';
+					$html .= '<li><a href="admin.php?action=comment&searchsubmit=1&fromumanage=1&authorid='.$uid.'" target="_blank">'.lang('space', 'manage_comment').'</a></li>';
+					$html .= '<li><a href="admin.php?action=share&searchsubmit=1&search=true&fromumanage=1&uid='.$uid.'" target="_blank">'.lang('space', 'manage_share').'</a></li>';
+					$html .= '<li><a href="admin.php?action=threads&operation=group&searchsubmit=1&detail=1&search=true&fromumanage=1&users='.$encodeusername.'" target="_blank">'.lang('space', 'manage_group_threads').'</a></li>';
+					$html .= '<li><a href="admin.php?action=prune&searchsubmit=1&detail=1&operation=group&fromumanage=1&users='.$encodeusername.'" target="_blank">'.lang('space', 'manage_group_prune').'</a></li>';
 					$html .= '</ul>';
 				}
 			}
@@ -180,7 +180,7 @@ function getblockhtml($blockname,$parameters = array()) {
 					}
 				}
 			}
-			$html = '<div id="pcd">'.$html.'</div>';
+			$html = '<div>'.$html.'</div>';
 			break;
 		case 'statistic':
 			space_merge($space, 'count');
@@ -191,7 +191,7 @@ function getblockhtml($blockname,$parameters = array()) {
 			if(empty($parameters['bancredits'])) {
 				$html .= "<li>".lang('space', 'credits').': <a href="home.php?mod=spacecp&ac=credit">'.($space['credits'] ? $space['credits'] : '--')."</a></li>";
 				foreach($_G['setting']['extcredits'] as $extcreditid => $extcredit) {
-					$html .= "<li>".$extcredit['img'].$extcredit['title'].': <a href="home.php?mod=spacecp&ac=credit">'.($space['extcredits'.$extcreditid] ? $space['extcredits'.$extcreditid] : '--').'</a>';
+					$html .= "<li>".($extcredit['img'] ? $extcredit['img'].' ' : '').$extcredit['title'].': <a href="home.php?mod=spacecp&ac=credit">'.($space['extcredits'.$extcreditid] ? $space['extcredits'.$extcreditid] : '--').'</a>';
 				}
 			}
 			if(empty($parameters['banfriends'])) $html .= "<li>".lang('space', 'friends').': <a href="home.php?mod=space&uid='.$uid.'&do=friend&view=me&from=space">'.($space['friends'] ? $space['friends'] : '--')."</a></li>";
@@ -202,11 +202,13 @@ function getblockhtml($blockname,$parameters = array()) {
 			if(empty($parameters['banalbums'])) $html .= "<li>".lang('space', 'albums').': <a href="home.php?mod=space&uid='.$uid.'&do=album&view=me&from=space">'.($space['albums'] ? $space['albums'] : '--')."</a></li>";
 			if(empty($parameters['bansharings'])) $html .= "<li>".lang('space', 'sharings').': <a href="home.php?mod=space&uid='.$uid.'&do=share&view=me&from=space">'.($space['sharings'] ? $space['sharings'] : '--')."</a></li>";
 			$html .= '</ul>';
-			$html = '<div id="pcd">'.$html.'</div>';
+			$html = '<div>'.$html.'</div>';
 			break;
 
 		case 'doing':
 			$do = $blockname;
+			$view = 'me';
+			$from = 'space';
 			if(ckprivacy('doing', 'view')) {
 				$dolist = array();
 				$sql = "SELECT * FROM ".DB::table('home_doing')." WHERE uid='$uid' ORDER BY dateline DESC LIMIT 0,$shownum";
@@ -227,7 +229,7 @@ function getblockhtml($blockname,$parameters = array()) {
 						$html .= "</li>";
 					}
 				} else {
-					$html .= "<p class=\"emp\">".lang('space', 'block_doing_no_content')."</p>";
+					$html .= "<p class=\"emp\">".lang('space', 'block_doing_no_content').($space['self'] ? lang('space', 'block_doing_no_content_publish', $space) : '')."</p>";
 				}
 			} else {
 				$html .= "<p class=\"emp\">".lang('space', 'block_view_noperm')."</p>";
@@ -235,8 +237,53 @@ function getblockhtml($blockname,$parameters = array()) {
 			$html = '<ul class="xl">'.$html.'</ul>';
 			break;
 
+		case 'stickblog' :
+			space_merge($space, 'profile');
+			$stickblogs = explode(',', $space['stickblogs']);
+			if(!empty($stickblogs)) {
+				$bids = array_slice($stickblogs, 0, $shownum);
+				$bids = dimplode($bids);
+				if(!empty($bids)) {
+					if(!isset($parameters['showmessage'])) $parameters['showmessage'] = 150;
+					$sql = $parameters['showmessage'] > 0 ? "SELECT bf.*, b.* FROM ".DB::table('home_blog')." b
+						LEFT JOIN ".DB::table('home_blogfield')." bf ON bf.blogid=b.blogid
+						WHERE b.blogid IN ($bids)" : "SELECT * FROM ".DB::table('home_blog')."WHERE blogid IN ($bids)";
+					$query = DB::query($sql);
+					while ($value = DB::fetch($query)) {
+						if(ckfriend($value['uid'], $value['friend'], $value['target_ids'])) {
+							if($value['pic']) $value['pic'] = pic_cover_get($value['pic'], $value['picflag']);
+							$value['message'] = $value['friend'] == 4 ? '' : getstr($value['message'], $parameters['showmessage'], 0, 0, 0, -1);
+							$html .= lang('space', 'blog_li', array(
+									'uid' => $value['uid'],
+									'blogid' => $value['blogid'],
+									'subject' => $value['subject'],
+									'date' => dgmdate($value['dateline'],'Y-m-d')));
+							if(!empty($parameters['showmessage'])) {
+								if ($value['pic']) {
+									$html .= lang('space', 'blog_li_img', array(
+											'uid' => $value['uid'],
+											'blogid' => $value['blogid'],
+											'src' => $value['pic']));
+								}
+								$html .= "<dd>$value[message]</dd>";
+							}
+							$html .= lang('space', 'blog_li_ext', array('uid'=>$value['uid'],'blogid'=>$value['blogid'],'viewnum'=>$value['viewnum'],'replynum'=>$value['replynum']));
+							$html .= "</dl>";
+						} else {
+							$html .= '<p>'.lang('space','block_view_noperm').'</p>';
+						}
+					}
+				}
+			}
+			$more = $html ? '<p class="ptm" style="text-align: right;"><a href="home.php?mod=space&uid='.$uid.'&do=blog&view=me&from=space">'.lang('space', 'viewmore').'</a></p>' : '';
+			$contentclassname = ' xld';
+			$html = $html.$more;
+			break;
 		case 'blog':
 			$do = $blockname;
+			$view = 'me';
+			$from = 'space';
+			if(!isset($parameters['showmessage'])) $parameters['showmessage'] = 150;
 			$query = DB::query("SELECT bf.*, b.* FROM ".DB::table('home_blog')." b
 				LEFT JOIN ".DB::table('home_blogfield')." bf ON bf.blogid=b.blogid
 				WHERE b.uid='$uid'
@@ -244,14 +291,13 @@ function getblockhtml($blockname,$parameters = array()) {
 			while ($value = DB::fetch($query)) {
 				if(ckfriend($value['uid'], $value['friend'], $value['target_ids'])) {
 					if($value['pic']) $value['pic'] = pic_cover_get($value['pic'], $value['picflag']);
-					$value['message'] = $value['friend']==4?'':getstr($value['message'], 150, 0, 0, 0, -1);
+					$value['message'] = $value['friend'] == 4 ? '' : getstr($value['message'], $parameters['showmessage'], 0, 0, 0, -1);
 					$html .= lang('space', 'blog_li', array(
 							'uid' => $value['uid'],
 							'blogid' => $value['blogid'],
 							'subject' => $value['subject'],
 							'date' => dgmdate($value['dateline'],'Y-m-d')));
-					if(!isset($parameters['showmessage'])) $parameters['showmessage'] = true;
-					if($parameters['showmessage']) {
+					if(!empty($parameters['showmessage'])) {
 						if ($value['pic']) {
 							$html .= lang('space', 'blog_li_img', array(
 									'uid' => $value['uid'],
@@ -266,12 +312,19 @@ function getblockhtml($blockname,$parameters = array()) {
 					$html .= '<p>'.lang('space','block_view_noperm').'</p>';
 				}
 			}
-			$more = $html ? '<p class="ptm" style="text-align: right;"><a href="home.php?mod=space&uid='.$uid.'&do=blog&view=me&from=space">'.lang('space', 'viewmore').'</a></p>' : '';
+			if($html) {
+				$more = '<p class="ptm" style="text-align: right;"><a href="home.php?mod=space&uid='.$uid.'&do=blog&view=me&from=space">'.lang('space', 'viewmore').'</a></p>';
+			} else {
+				$html = '<p class="emp">'.lang('space','block_blog_no_content').($space['self'] ? lang('space', 'block_blog_no_content_publish', $space) : '').'</p>';
+				$more = '';
+			}
 			$contentclassname = ' xld';
 			$html = $html.$more;
 			break;
 		case 'album':
 			$do = $blockname;
+			$view = 'me';
+			$from = 'space';
 			if(ckprivacy('album', 'view')) {
 				$query = DB::query("SELECT * FROM ".DB::table('home_album')." WHERE uid='$uid' ORDER BY updatetime DESC LIMIT 0,$shownum");
 				while ($value = DB::fetch($query)) {
@@ -287,14 +340,19 @@ function getblockhtml($blockname,$parameters = array()) {
 						));
 					}
 				}
+				if(!$html) {
+					$html = '<p class="emp">'.lang('space','block_album_no_content').($space['self'] ? lang('space', 'block_album_no_content_publish', $space) : '').'</p>';
+				}
 			} else {
 				$html .= '<li>'.lang('space','block_view_noperm').'</li>';
 			}
-			$html = '<ul class="ml mla cl">'.$html.'</ul>';
+			$html = '<ul class="ml cl">'.$html.'</ul>';
 			break;
 
 		case 'feed':
-			$do = $blockname;
+			$do = 'home';
+			$view = 'me';
+			$from = 'space';
 			if(!IS_ROBOT && ckprivacy('feed', 'view')) {
 				require_once libfile('function/feed');
 				$query = DB::query("SELECT * FROM ".DB::table('home_feed')." WHERE uid='$uid' ORDER BY dateline DESC LIMIT 0,$shownum");
@@ -306,10 +364,12 @@ function getblockhtml($blockname,$parameters = array()) {
 			}
 			$contenttagname = 'ul';
 			$contentclassname = ' el';
-			$html = empty($html) ?  '' : $html;
+			$html = !$html ?  '<p class="emp">'.lang('space','block_feed_no_content').'</p>' : $html;
 			break;
 		case 'thread':
 			$do = $blockname;
+			$view = 'me';
+			$from = 'space';
 			if ($_G['setting']['allowviewuserthread'] !== false) {
 				$fidsql = empty($_G['setting']['allowviewuserthread']) ? '' : " AND fid IN({$_G[setting][allowviewuserthread]}) ";
 				$query = DB::query("SELECT * FROM ".DB::table('forum_thread')." WHERE authorid='$uid' $fidsql AND displayorder>='0' ORDER BY tid DESC LIMIT 0,$shownum");
@@ -319,10 +379,12 @@ function getblockhtml($blockname,$parameters = array()) {
 					}
 				}
 			}
-			$html = empty($html) ?  '' : '<ul class="xl">'.$html.'</ul>';
+			$html = !$html ? '<p class="emp">'.lang('space','block_thread_no_content').($space['self'] ? lang('space', 'block_thread_no_content_publish', $space) : '').'</p>' : '<ul class="xl">'.$html.'</ul>';
 			break;
 		case 'friend':
 			$do = $blockname;
+			$view = 'me';
+			$from = 'space';
 			require_once libfile('function/friend');
 
 			$friendlist = array();
@@ -333,13 +395,15 @@ function getblockhtml($blockname,$parameters = array()) {
 
 			foreach ($friendlist as $key => $value) {
 				$classname = $_G['ols'][$value['fuid']]?'gol':'';
-				$html .= '<li><a href="home.php?mod=space&uid='.$value['fuid'].'" target="_blank"><em class="'.$classname.'"></em>'.avatar($value['fuid'],'small').'</a><p><a href="home.php?mod=space&uid='.$value[fuid].'" target="_blank">'.$value['fusername'].'</a></p></li>';
+				$html .= '<li><a href="home.php?mod=space&uid='.$value['fuid'].'" target="_blank" class="avt"><em class="'.$classname.'"></em>'.avatar($value['fuid'],'small').'</a><p><a href="home.php?mod=space&uid='.$value[fuid].'" target="_blank">'.$value['fusername'].'</a></p></li>';
 			}
-			$html = '<ul class="ml mls cl">'.$html.'</ul>';
+			$html = !$html ? '<p class="emp">'.lang('space','block_friend_no_content').($space['self'] ? lang('space', 'block_friend_no_content_publish', $space) : '').'</p>' : '<ul class="ml mls cl">'.$html.'</ul>';
 			break;
 		case 'visitor':
-			$do = 'friend';
-			$view = 'visitor';
+			if($space['self']) {
+				$do = 'friend';
+				$view = 'visitor';
+			}
 			$query = DB::query("SELECT * FROM ".DB::table('home_visitor')." WHERE uid='$uid' ORDER BY dateline DESC LIMIT 0,$shownum");
 
 			$list = $fuids = array();
@@ -364,10 +428,12 @@ function getblockhtml($blockname,$parameters = array()) {
 				$html .= "<span class=\"xg2\">".dgmdate($value['dateline'],'u', '9999', 'Y-m-d')."</span>";
 				$html .= "</li>";
 			}
-			$html = '<ul class="ml mls cl">'.$html.'</ul>';
+			$html = !$html ? '<p class="emp">'.lang('space','block_visitor_no_content').($space['self'] ? lang('space', 'block_visitor_no_content_publish', $space) : '').'</p>' : '<ul class="ml mls cl">'.$html.'</ul>';
 			break;
 		case 'share':
 			$do = $blockname;
+			$view = 'me';
+			$from = 'space';
 			if(!IS_ROBOT && ckprivacy('share', 'view')) {
 				require_once libfile('function/share');
 
@@ -397,7 +463,7 @@ function getblockhtml($blockname,$parameters = array()) {
 					}
 					$html .= '</div></li>';
 				}
-				$html = '<ul class="el">'.$html.'</ul>';
+				$html = !$html ? '<p class="emp">'.lang('space','block_share_no_content').'</p>' : '<ul class="el">'.$html.'</ul>';
 			}
 			break;
 		case 'wall':
@@ -412,7 +478,7 @@ function getblockhtml($blockname,$parameters = array()) {
 					}
 				}
 			}
-			$html = '<div class="xld xlda el" id="comment_ul">';
+
 			foreach ($walllist as $key => $value) {
 				$op = '';
 				if ($value['author']) {
@@ -420,7 +486,7 @@ function getblockhtml($blockname,$parameters = array()) {
 					$author = '<a href="home.php?mod=space&uid='.$value['authorid'].'" id="author_'.$value['cid'].'" target="_blank">'.$value['author'].'</a>';
 				}else {
 					$author_avatar = '<img src="static/image/magic/hidden.gif" alt="hidden" />';
-					$author = lang('space', 'hidden_username');
+					$author = $_G['setting']['anonymoustext'];
 				}
 				if ($value['authorid']==$_G['uid']) {
 					$op .= lang('space', 'wall_edit', array('cid'=>$value['cid']));
@@ -437,14 +503,12 @@ function getblockhtml($blockname,$parameters = array()) {
 
 				$html .= lang('space', 'wall_li', $replacearr);
 			}
-			if(!empty($walllist)) $html .= lang('space', 'wall_more', array('uid'=>$uid));
-			$html .= '</div>';
+			$html = !empty($walllist) ? $html.lang('space', 'wall_more', array('uid'=>$uid)) : '<p class="emp">'.lang('space','block_wall_no_content').'</p>';
+			$html = '<div class="xld xlda el" id="comment_ul">'.$html.'</div>';
 			$html = lang('space','wall_form', array('uid' => $uid, 'FORMHASH'=>FORMHASH)).'<hr class="da mtm m0">'.$html;
 			$titlemore = '<span class="y xw0"><a href="home.php?mod=space&uid='.$uid.'&do=wall">'.lang('space', 'all').'</a></span>';
 			break;
 		case 'group':
-			$do = $blockname;
-			$view = 'groupthread';
 			require_once libfile('function/group');
 			$grouplist = mygrouplist($uid, 'lastupdate', array('f.name', 'ff.icon'), $shownum);
 			if(empty($grouplist)) $grouplist = array();
@@ -452,7 +516,7 @@ function getblockhtml($blockname,$parameters = array()) {
 				$group['groupid'] = $groupid;
 				$html .= lang('space', 'group_li',$group);
 			}
-			$html = '<ul class="ml mls cl">'.$html.'</ul>';
+			$html = !$html ? '<p class="emp">'.lang('space','block_group_no_content').($space['self'] ? lang('space', ($_G['group']['allowbuildgroup'] ? 'block_group_no_content_publish' : 'block_group_no_content_join'), $space) : '').'</p>' : '<ul class="ml mls cl">'.$html.'</ul>';
 			break;
 		case 'music':
 			if(!empty($parameters['mp3list'])) {
@@ -470,6 +534,24 @@ function getblockhtml($blockname,$parameters = array()) {
 				$html = lang('space', 'music_no_content');
 			}
 			$html = '<div class="ml mls cl">'.$html.'</div>';
+			break;
+
+		case 'myapp':
+			$html = '';
+			$listclass = 'ptm ml mls cl';
+			$query = DB::query("SELECT ua.appid, ua.appname, my.iconstatus, my.userpanelarea FROM ".DB::table('home_userapp')." ua LEFT JOIN ".DB::table('common_myapp')." my USING(appid) WHERE ua.uid='$uid' ORDER BY ua.menuorder DESC LIMIT 0,$shownum");
+			while($value = DB::fetch($query)) {
+				if(!empty($value['appname'])) {
+					$replace = array('appid'=>$value['appid'], 'appname'=>$value['appname']);
+					$parameters['logotype'] = !empty($parameters['logotype']) && in_array($parameters['logotype'], array('icon', 'logo')) ? $parameters['logotype'] : 'logo';
+					if($parameters['logotype'] == 'icon') {
+						$listclass = 'xl xl1 cl';
+						$replace['icon'] = getmyappiconpath($value['appid'], $value['iconstatus']);
+					}
+					$html .= lang('space', 'myapp_li_'.$parameters['logotype'], $replace);
+				}
+			}
+			$html = !$html ? '<p class="emp">'.lang('space','block_myapp_no_content').($space['self'] ? lang('space', 'block_myapp_no_content_publish', $space) : '').'</p>' : '<ul class="'.$listclass.'">'.$html.'</ul>';
 			break;
 		default:
 
@@ -500,24 +582,23 @@ function getblockhtml($blockname,$parameters = array()) {
 			break;
 	}
 
-	if($_G['setting']['allowviewuserthread'] === false && $blockname == 'thread') {
-		$html = '';
-	} else {
-		if (isset($parameters['title'])) {
-			if(empty($parameters['title'])) {
-				$title = '';
-			} else {
-				$view = $view === false ? '' : ($view == '' ? '&view=me' : '&view='.$view);
-				$bnamelink = $do ? '<a href="home.php?mod=space&uid='.$uid.'&do='.$do.$view.'">'.stripslashes($parameters['title']).'</a>' : stripslashes($parameters['title']);
-				$title = lang('space', 'block_title', array('bname' => $bnamelink, 'more' => $titlemore));
-			}
+	if (isset($parameters['title'])) {
+		if(empty($parameters['title'])) {
+			$title = '';
 		} else {
-			$view = $view === false ? '' : ($view == '' ? '&view=me' : '&view='.$view);
-			$bnamelink = $do ? '<a href="home.php?mod=space&uid='.$uid.'&do='.$do.$view.'">'.getblockdata($blockname).'</a>' : getblockdata($blockname);
+			$view = $view === false ? '' : '&view='.$view;
+			$from = $from === false ? '' : '&from='.$from;
+			$bnamelink = $do ? '<a href="home.php?mod=space&uid='.$uid.'&do='.$do.$view.$from.'">'.stripslashes($parameters['title']).'</a>' : stripslashes($parameters['title']);
 			$title = lang('space', 'block_title', array('bname' => $bnamelink, 'more' => $titlemore));
 		}
-		$html = $title.'<'.$contenttagname.' id="'.$blockname.'_content" class="content'.$contentclassname.'">'.$html.'</'.$contenttagname.'>';
+	} else {
+		$view = $view === false ? '' : '&view='.$view;
+		$from = $from === false ? '' : '&from='.$from;
+		$bnamelink = $do ? '<a href="home.php?mod=space&uid='.$uid.'&do='.$do.$view.$from.'">'.getblockdata($blockname).'</a>' : getblockdata($blockname);
+		$title = lang('space', 'block_title', array('bname' => $bnamelink, 'more' => $titlemore));
 	}
+	$html = $title.'<'.$contenttagname.' id="'.$blockname.'_content" class="dxb_bc'.$contentclassname.'">'.$html.'</'.$contenttagname.'>';
+
 	return $html;
 }
 
@@ -606,4 +687,16 @@ function getblockdata($blockname = '') {
 	return $r;
 }
 
+function check_ban_block($blockname, $space) {
+	global $_G;
+	$return = true;
+	if($blockname == 'group' && !$_G['setting']['groupstatus']) {
+		$return = false;
+	} elseif($blockname == 'thread' && $_G['setting']['allowviewuserthread'] === false) {
+		$return = false;
+	} elseif($blockname == 'myapp' && (empty($_G['setting']['my_app_status']) || empty($_G['cache']['usergroup_'.$space['groupid']]['allowmyop']))) {
+		$return = false;
+	}
+	return $return;
+}
 ?>

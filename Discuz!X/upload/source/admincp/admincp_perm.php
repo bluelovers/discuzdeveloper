@@ -11,8 +11,8 @@ if(!defined('IN_DISCUZ') || !defined('IN_ADMINCP')) {
 	exit('Access Denied');
 }
 
-array_splice($menu['global'], 3, 0, array(
-	array('setting_cachethread', 'setting_cachethread'),
+array_splice($menu['global'], 4, 0, array(
+	array('setting_memory', 'setting_memory'),
 	array('setting_serveropti', 'setting_serveropti'),
 ));
 
@@ -39,7 +39,11 @@ array_splice($menu['group'], 1, 0, array(
 	array('founder_perm_group_deletegroup', 'group_deletegroup'),
 ));
 
-array_splice($menu['extended'], 6, 0, array(
+array_splice($menu['extended'], 4, 0, array(
+	array('founder_perm_members_confermedal', 'members_confermedal'),
+));
+
+array_splice($menu['extended'], 7, 0, array(
 	array('founder_perm_ec_alipay', 'ec_alipay'),
 	array('founder_perm_ec_tenpay', 'ec_tenpay'),
 	array('founder_perm_ec_credit', 'ec_credit'),

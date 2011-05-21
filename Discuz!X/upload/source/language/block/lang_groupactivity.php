@@ -95,6 +95,7 @@ $lang = array
 	'groupactivity_gviewperm_nolimit' => '不限制',
 	'groupactivity_gviewperm_only_member' => '仅成员',
 	'groupactivity_gviewperm_all_member' => '所有人',
+	'groupactivity_highlight' => '获得高亮值',
 );
 
 ?>

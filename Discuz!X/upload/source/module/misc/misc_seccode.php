@@ -22,7 +22,7 @@ if($_G['gp_action'] == 'update') {
 		$idhash = isset($_G['gp_idhash']) ? $_G['gp_idhash'] : '';
 		$ani = $_G['setting']['seccodedata']['animator'] ? '_ani' : '';
 		if($_G['setting']['seccodedata']['type'] == 2) {
-			$message = '<div id="seccodeswf_'.$idhash.'"></div>'.(extension_loaded('ming') ? "<script type=\"text/javascript\" reload=\"1\">\n$('seccodeswf_$idhash').innerHTML='".lang('core', 'seccode_image'.$ani.'_tips')."' + AC_FL_RunContent(
+			$message = '<span id="seccodeswf_'.$idhash.'"></span>'.(extension_loaded('ming') ? "<script type=\"text/javascript\" reload=\"1\">\n$('seccodeswf_$idhash').innerHTML='".lang('core', 'seccode_image'.$ani.'_tips')."' + AC_FL_RunContent(
 				'width', '".$_G['setting']['seccodedata']['width']."', 'height', '".$_G['setting']['seccodedata']['height']."', 'src', 'misc.php?mod=seccode&update=$rand&idhash=$idhash',
 				'quality', 'high', 'wmode', 'transparent', 'bgcolor', '#ffffff',
 				'align', 'middle', 'menu', 'false', 'allowScriptAccess', 'sameDomain');\n</script>" :

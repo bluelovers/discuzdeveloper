@@ -90,7 +90,8 @@ if(!$operation) {
 		if(submitcheck('undelsubmit')) {
 			$threadsundel = undeletethreads($threadlist);
 		} elseif(submitcheck('delsubmit')) {
-			$threadsdel = deletethreads($threadlist);
+			require_once libfile('function/delete');
+			$threadsdel = deletethread($threadlist, true, true);
 		}
 
 		cpmsg('recyclebin_succeed', 'action=recyclebin', 'succeed', array('threadsdel' => $threadsdel, 'threadsundel' => $threadsundel));
@@ -114,7 +115,7 @@ if(!$operation) {
 		require_once libfile('function/forumlist');
 
 		$forumselect = '<select name="inforum"><option value="">&nbsp;&nbsp;> '.$lang['select'].'</option>'.
-			'<option value="">&nbsp;</option>'.forumselect(FALSE, 0, 0, TRUE).'</select>';
+			'<option value="">&nbsp;</option><option value="groupthread">'.$lang['group_thread'].'</option>'.forumselect(FALSE, 0, 0, TRUE).'</select>';
 
 		if($inforum) {
 			$forumselect = preg_replace("/(\<option value=\"$inforum\")(\>)/", "\\1 selected=\"selected\" \\2", $forumselect);
@@ -153,7 +154,11 @@ EOT;
 		if(submitcheck('searchsubmit')) {
 
 			$sql = '';
-			$sql .= $inforum			? " AND t.fid='$inforum'" : '';
+			if($inforum == 'groupthread') {
+				$sql .= " AND t.isgroup='1'";
+			} else {
+				$sql .= $inforum			? " AND t.fid='$inforum'" : '';
+			}
 			$sql .= $authors != ''		? " AND t.author IN ('".str_replace(',', '\',\'', str_replace(' ', '', $authors))."')" : '';
 			$sql .= $admins != ''		? " AND tm.username IN ('".str_replace(',', '\',\'', str_replace(' ', '', $admins))."')" : '';
 			$sql .= $pstarttime != ''	? " AND t.dateline>='".strtotime($pstarttime)."'" : '';
@@ -203,9 +208,13 @@ EOT;
 				$thread['dateline'] = dgmdate($thread['dateline']);
 				if($thread['attachment']) {
 					require_once libfile('function/attachment');
-					$queryattach = DB::query("SELECT aid, filename, filetype, filesize FROM ".DB::table('forum_attachment')." WHERE tid='$thread[tid]'");
+					$queryattach = DB::query("SELECT aid, filename, filesize, attachment, isimage, remote FROM ".DB::table(getattachtablebytid($thread['tid']))." WHERE tid='$thread[tid]'");
 					while($attach = DB::fetch($queryattach)) {
-						$thread['message'] .= "<br /><br />$lang[attachment]: ".attachtype(fileext($thread['filename'])."\t".$attach['filetype'])." $attach[filename] (".sizecount($attach['filesize']).")";
+						$_G['setting']['attachurl'] = $attach['remote'] ? $_G['setting']['ftp']['attachurl'] : $_G['setting']['attachurl'];
+						$attach['url'] = $attach['isimage']
+							? " $attach[filename] (".sizecount($attach['filesize']).")<br /><br /><img src=\"".$_G['setting']['attachurl']."forum/$attach[attachment]\" onload=\"if(this.width > 400) {this.resized=true; this.width=400;}\">"
+							 : "<a href=\"".$_G['setting']['attachurl']."forum/$attach[attachment]\" target=\"_blank\">$attach[filename]</a> (".sizecount($attach['filesize']).")";
+						$thread['message'] .= "<br /><br />$lang[attachment]: ".attachtype(fileext($attach['filename'])."\t").$attach['url'];
 					}
 				}
 
@@ -234,14 +243,18 @@ EOT;
 			}
 		}
 
-		$threadsdel = deletethreads($moderation['delete']);
+		require_once libfile('function/delete');
+		$threadsdel = deletethread($moderation['delete']);
 		$threadsundel = undeletethreads($moderation['undelete']);
-
-		$cpmsg = cplang('recyclebin_succeed', array('threadsdel' => $threadsdel, 'threadsundel' => $threadsundel));
+		if($threadsdel) {
+			$cpmsg = cplang('recyclebin_succeed', array('threadsdel' => $threadsdel, 'threadsundel' => $threadsundel));
+		} else {
+			$cpmsg = cplang('recyclebin_nothread');
+		}
 
 ?>
-<script type="text/JavaScript">alert('<?=$cpmsg?>');parent.$('rbsearchform').searchsubmit.click();</script>
-<?
+<script type="text/JavaScript">alert('<?php echo $cpmsg;?>');parent.$('rbsearchform').searchsubmit.click();</script>
+<?php
 
 	}
 
@@ -267,13 +280,18 @@ EOT;
 		$deletetids = array();
 		$timestamp = TIMESTAMP;
 		$query = DB::query("SELECT tm.tid FROM ".DB::table('forum_threadmod')." tm, ".DB::table('forum_thread')." t
-			WHERE tm.action='DEL' AND tm.dateline<'$timestamp-$_G[gp_days]*86400' AND t.tid=tm.tid AND t.displayorder='-1'");
+			WHERE tm.action='DEL' AND tm.dateline<$timestamp-".(intval($_G['gp_days']) * 86400)." AND t.tid=tm.tid AND t.displayorder='-1'");
 		while($thread = DB::fetch($query)) {
 			$deletetids[] = $thread['tid'];
 		}
-		$threadsdel = deletethreads($deletetids);
+		require_once libfile('function/delete');
+		$threadsdel = deletethread($deletetids);
 		$threadsundel = 0;
-		cpmsg('recyclebin_succeed', 'action=recyclebin&operation=clean', 'succeed', array('threadsdel' => $threadsdel, 'threadsundel' => $threadsundel));
+		if($threadsdel) {
+			cpmsg('recyclebin_succeed', 'action=recyclebin&operation=clean', 'succeed', array('threadsdel' => $threadsdel, 'threadsundel' => $threadsundel));
+		} else {
+			cpmsg('recyclebin_nothread', 'action=recyclebin&operation=clean', 'error');
+		}
 
 	}
 }

@@ -88,6 +88,7 @@ $lang = array
 	'tradelist_orderby_monthstart' => '按一月内活动开始时间排序',
 	'tradelist_orderby_weekexp' => '按一周内报名截止时间排序',
 	'tradelist_orderby_monthexp' => '按一月内报名截止时间排序',
+	'tradelist_highlight' => '获得高亮值',
 );
 
 ?>

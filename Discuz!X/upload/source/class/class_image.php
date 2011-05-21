@@ -55,6 +55,9 @@ class image {
 		$this->param['thumbwidth'] = $thumbwidth;
 		$this->param['thumbheight'] = $thumbheight;
 		$this->param['thumbtype'] = $thumbtype;
+		if($thumbwidth < 100 && $thumbheight < 100) {
+			$this->param['thumbquality'] = 100;
+		}
 
 		$return = !$this->libmethod ? $this->Thumb_GD() : $this->Thumb_IM();
 		$return = !$nosuffix ? $return : 0;
@@ -106,7 +109,7 @@ class image {
 			}
 		}
 		if($method == 'thumb') {
-			$target = empty($target) ?  $source.(!$nosuffix ? '.thumb.jpg' : '') : $_G['setting']['attachdir'].'./'.$target;
+			$target = empty($target) ? (!$nosuffix ? getimgthumbname($source) : $source) : $_G['setting']['attachdir'].'./'.$target;
 		} elseif($method == 'watermask') {
 			$target = empty($target) ?  $source : $_G['setting']['attachdir'].'./'.$target;
 		}
@@ -267,7 +270,7 @@ class image {
 				break;
 			case 'fixwr':
 			case 2:
-				if(!($this->imginfo['width'] < $this->param['thumbwidth'] || $this->imginfo['height'] < $this->param['thumbheight'])) {
+				if(!($this->imginfo['width'] <= $this->param['thumbwidth'] || $this->imginfo['height'] <= $this->param['thumbheight'])) {
 					list($startx, $starty, $cutw, $cuth) = $this->sizevalue(1);
 					$dst_photo = imagecreatetruecolor($cutw, $cuth);
 					imagecopymerge($dst_photo, $attach_photo, 0, 0, $startx, $starty, $cutw, $cuth, 100);
@@ -308,7 +311,7 @@ class image {
 				break;
 			case 'fixwr':
 			case 2:
-				if(!($this->imginfo['width'] < $this->param['thumbwidth'] || $this->imginfo['height'] < $this->param['thumbheight'])) {
+				if(!($this->imginfo['width'] <= $this->param['thumbwidth'] || $this->imginfo['height'] <= $this->param['thumbheight'])) {
 					list($startx, $starty, $cutw, $cuth) = $this->sizevalue(1);
 					$exec_str = $this->param['imageimpath'].'/convert -quality '.intval($this->param['thumbquality']).' -crop '.$cutw.'x'.$cuth.'+'.$startx.'+'.$starty.' '.$this->source.' '.$this->target;
 					$return = $this->exec($exec_str);

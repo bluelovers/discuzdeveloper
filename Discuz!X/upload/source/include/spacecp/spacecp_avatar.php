@@ -23,7 +23,7 @@ if(empty($space['avatarstatus']) && uc_check_avatar($_G['uid'], 'middle')) {
 
 	updatecreditbyaction('setavatar');
 
-	if($_G['setting']['my_app_status']) manyoulog('user', $_G['uid'], 'update');
+	manyoulog('user', $_G['uid'], 'update');
 }
 $actives = array('avatar' =>' class="a"');
 include template("home/spacecp_avatar");

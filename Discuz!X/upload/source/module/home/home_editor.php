@@ -21,7 +21,7 @@ if(empty($_GET['op'])) {
 ?>
 <html>
 <head>
-<meta http-equiv="Content-Type" content="text/html;charset=<?=$_GET['charset']?>" />
+<meta http-equiv="Content-Type" content="text/html;charset=<?php echo $_GET['charset'];?>" />
 <title>Editor</title>
 <script type="text/javascript" src="static/js/common.js"></script>
 <script type="text/javascript" src="static/js/home.js"></script>
@@ -143,7 +143,7 @@ function fontsize(size,obj){format('fontsize',size);obj.parentNode.style.display
 
 <div class="toobar">
 <div class="icons tble">
-<a href="javascript:;" class="icoSwitchMdi" title="<?=lang('home/editor', 'editor_switch_media')?>" onClick="changeEditType(true);return false;"></a>
+<a href="javascript:;" class="icoSwitchMdi" title="<?php echo lang('home/editor', 'editor_switch_media');?>" onClick="changeEditType(true);return false;"></a>
 </div>
 </div>
 </td></tr></table>
@@ -160,33 +160,33 @@ function fontsize(size,obj){format('fontsize',size);obj.parentNode.style.display
 
 <div class="toobar">
 <div class="icons tble">
-<a href="javascript:;" class="icoCut" title="<?=lang('home/editor', 'editor_cut')?>" onClick="format('Cut');return false;"></a>
-<a href="javascript:;" class="icoCpy" title="<?=lang('home/editor', 'editor_copy')?>" onClick="format('Copy');return false;"></a>
-<a href="javascript:;" class="icoPse" title="<?=lang('home/editor', 'editor_paste')?>" onClick="format('Paste');return false;"></a>
+<a href="javascript:;" class="icoCut" title="<?php echo lang('home/editor', 'editor_cut');?>" onClick="format('Cut');return false;"></a>
+<a href="javascript:;" class="icoCpy" title="<?php echo lang('home/editor', 'editor_copy');?>" onClick="format('Copy');return false;"></a>
+<a href="javascript:;" class="icoPse" title="<?php echo lang('home/editor', 'editor_paste');?>" onClick="format('Paste');return false;"></a>
 <div class="sepline"></div>
-<a href="javascript:;" class="icoFfm" id="imgFontface" title="<?=lang('home/editor', 'editor_font')?>" onClick="fGetEv(event);fDisplayElement('fontface','');return false;"></a>
-<a href="javascript:;" class="icoFsz" id="imgFontsize" title="<?=lang('home/editor', 'editor_fontsize')?>" onClick="fGetEv(event);fDisplayElement('fontsize','');return false;"></a>
-<a href="javascript:;" class="icoWgt" onClick="format('Bold');return false;" title="<?=lang('home/editor', 'editor_fontbold')?>"></a>
-<a href="javascript:;" class="icoIta" title="<?=lang('home/editor', 'editor_fontitalic')?>" onClick="format('Italic');return false;"></a>
-<a href="javascript:;" class="icoUln" onClick="format('Underline');return false;" title="<?=lang('home/editor', 'editor_fontunderline')?>"></a>
-<a href="javascript:;" class="icoFcl" title="<?=lang('home/editor', 'editor_funtcolor')?>" onClick="foreColor(event);return false;" id="imgFontColor"></a>
-<a href="javascript:;" class="icoAgn" id="imgAlign" onClick="fGetEv(event);fDisplayElement('divAlign','');return false;" title="<?=lang('home/editor', 'editor_align')?>"></a>
-<a href="javascript:;" class="icoLst" id="imgList" onClick="fGetEv(event);fDisplayElement('divList','');return false;"title="<?=lang('home/editor', 'editor_list')?>"></a>
-<a href="javascript:;" class="icoOdt" id="imgInOut" onClick="fGetEv(event);fDisplayElement('divInOut','');return false;" title="<?=lang('home/editor', 'editor_indent')?>"></a>
+<a href="javascript:;" class="icoFfm" id="imgFontface" title="<?php echo lang('home/editor', 'editor_font');?>" onClick="fGetEv(event);fDisplayElement('fontface','');return false;"></a>
+<a href="javascript:;" class="icoFsz" id="imgFontsize" title="<?php echo lang('home/editor', 'editor_fontsize');?>" onClick="fGetEv(event);fDisplayElement('fontsize','');return false;"></a>
+<a href="javascript:;" class="icoWgt" onClick="format('Bold');return false;" title="<?php echo lang('home/editor', 'editor_fontbold');?>"></a>
+<a href="javascript:;" class="icoIta" title="<?php echo lang('home/editor', 'editor_fontitalic');?>" onClick="format('Italic');return false;"></a>
+<a href="javascript:;" class="icoUln" onClick="format('Underline');return false;" title="<?php echo lang('home/editor', 'editor_fontunderline');?>"></a>
+<a href="javascript:;" class="icoFcl" title="<?php echo lang('home/editor', 'editor_funtcolor');?>" onClick="foreColor(event);return false;" id="imgFontColor"></a>
+<a href="javascript:;" class="icoAgn" id="imgAlign" onClick="fGetEv(event);fDisplayElement('divAlign','');return false;" title="<?php echo lang('home/editor', 'editor_align');?>"></a>
+<a href="javascript:;" class="icoLst" id="imgList" onClick="fGetEv(event);fDisplayElement('divList','');return false;"title="<?php echo lang('home/editor', 'editor_list');?>"></a>
+<a href="javascript:;" class="icoOdt" id="imgInOut" onClick="fGetEv(event);fDisplayElement('divInOut','');return false;" title="<?php echo lang('home/editor', 'editor_indent');?>"></a>
 <div class="sepline"></div>
-<a href="javascript:;" class="icoUrl" id="icoUrl" onClick="createLink(event, 1);return false;" title="<?=lang('home/editor', 'editor_hyperlink')?>"></a>
-<a href="javascript:;" class="icoMoveUrl" onClick="clearLink();return false;" title="<?=lang('home/editor', 'editor_remove_link')?>"></a>
-<a href="javascript:;" class="icoImg" id="icoImg" onClick="createImg(event, 1);return false;" title="<?=lang('home/editor', 'editor_link_image')?>"></a>
-<a href="javascript:;" class="icoSwf" id="icoSwf" onClick="createFlash(event, 1);return false;" title="<?=lang('home/editor', 'editor_link_flash')?>"></a>
-<a href="javascript:;" class="icoFace" id="faceBox" onClick="faceBox(event);return false;" title="<?=lang('home/editor', 'editor_insert_smiley')?>"></a>
+<a href="javascript:;" class="icoUrl" id="icoUrl" onClick="createLink(event, 1);return false;" title="<?php echo lang('home/editor', 'editor_hyperlink');?>"></a>
+<a href="javascript:;" class="icoMoveUrl" onClick="clearLink();return false;" title="<?php echo lang('home/editor', 'editor_remove_link');?>"></a>
+<a href="javascript:;" class="icoImg" id="icoImg" onClick="createImg(event, 1);return false;" title="<?php echo lang('home/editor', 'editor_link_image');?>"></a>
+<a href="javascript:;" class="icoSwf" id="icoSwf" onClick="createFlash(event, 1);return false;" title="<?php echo lang('home/editor', 'editor_link_flash');?>"></a>
+<a href="javascript:;" class="icoFace" id="faceBox" onClick="faceBox(event);return false;" title="<?php echo lang('home/editor', 'editor_insert_smiley');?>"></a>
 <?php if($doodle) { ?>
-<a href="javascript:;" class="icoDoodle" id="doodleBox" onClick="doodleBox(event, this.id);return false;" title="<?=lang('home/editor', 'editor_doodle')?>"></a>
+<a href="javascript:;" class="icoDoodle" id="doodleBox" onClick="doodleBox(event, this.id);return false;" title="<?php echo lang('home/editor', 'editor_doodle');?>"></a>
 <?php }?>
 <?php if($isportal) {?>
-<a href="javascript:;" class="icoPage" id="newPage" onClick="pageBreak();return false;" title="<?=lang('home/editor', 'editor_pagebreak')?>"></a>
-<a href="javascript:;" class="icoDown" id="newPage" onClick="parent.downRemoteFile();return false;" title="<?=lang('home/editor', 'editor_download_remote')?>"></a>
+<a href="javascript:;" class="icoPage" id="icoPage" onClick="pageBreak(event, 1);return false;" title="<?php echo lang('home/editor', 'editor_pagebreak');?>"></a>
+<a href="javascript:;" class="icoDown" id="icoDown" onClick="parent.downRemoteFile();return false;" title="<?php echo lang('home/editor', 'editor_download_remote');?>"></a>
 <?php }?>
-<a href="javascript:;" class="icoRenew" onClick="renewContent();return false;" title="<?=lang('home/editor', 'editor_restore')?>"></a>
+<a href="javascript:;" class="icoRenew" onClick="renewContent();return false;" title="<?php echo lang('home/editor', 'editor_restore');?>"></a>
 <?php if($allowhtml) {?>
 <input type="checkbox" value="1" name="switchMode" id="switchMode" style="float:left;margin-top:6px!important;margin-top:2px" onClick="setMode(this.checked)" onMouseOver="fSetModeTip(this)" onMouseOut="fHideTip()">
 <?php } else {?>
@@ -195,13 +195,13 @@ function fontsize(size,obj){format('fontsize',size);obj.parentNode.style.display
 
 </div>
 <div class="icons tbri">
-<a href="javascript:;" class="icoSwitchTxt" title="<?=lang('home/editor', 'editor_switch_text')?>" onClick="changeEditType(false, event);return false;"></a>
+<a href="javascript:;" class="icoSwitchTxt" title="<?php echo lang('home/editor', 'editor_switch_text');?>" onClick="changeEditType(false, event);return false;"></a>
 </div>
 </div>
 
 <div class="toobar" style="display:none" id="dvHtmlLnk">
 <div class="icons tble">
-<a href="javascript:;" class="icoSwitchMdi" title="<?=lang('home/editor', 'editor_switch_media')?>" onClick="changeEditType(true, event);return false;"></a>
+<a href="javascript:;" class="icoSwitchMdi" title="<?php echo lang('home/editor', 'editor_switch_media');?>" onClick="changeEditType(true, event);return false;"></a>
 </div>
 </div>
 </td>
@@ -210,71 +210,76 @@ function fontsize(size,obj){format('fontsize',size);obj.parentNode.style.display
 
 <div style="width:100px;height:100px;position:absolute;display:none;top:-500px;left:-500px" ID="dvPortrait"></div>
 <div id="fontface" class="eMenu" style="z-index:99;display:none;top:35px;left:2px;width:110px;height:265px">
-<a href="javascript:;" onClick="fontname(this)" class="n" style="font:normal 12px '<?=lang('home/editor', 'editor_font_song')?>';"><?=lang('home/editor', 'editor_font_song')?></a>
-<a href="javascript:;" onClick="fontname(this)" class="n" style="font:normal 12px '<?=lang('home/editor', 'editor_font_hei')?>';"><?=lang('home/editor', 'editor_font_hei')?></a>
-<a href="javascript:;" onClick="fontname(this)" class="n" style="font:normal 12px '<?=lang('home/editor', 'editor_font_kai')?>';"><?=lang('home/editor', 'editor_font_kai')?></a>
-<a href="javascript:;" onClick="fontname(this)" class="n" style="font:normal 12px '<?=lang('home/editor', 'editor_font_li')?>';"><?=lang('home/editor', 'editor_font_li')?></a>
-<a href="javascript:;" onClick="fontname(this)" class="n" style="font:normal 12px '<?=lang('home/editor', 'editor_font_you')?>';"><?=lang('home/editor', 'editor_font_you')?></a>
-<a href="javascript:;" onClick="fontname(this)" class="n" style="font:normal 12px Arial;">Arial</a>
-<a href="javascript:;" onClick="fontname(this)" class="n" style="font:normal 12px 'Arial Narrow';">Arial Narrow</a>
-<a href="javascript:;" onClick="fontname(this)" class="n" style="font:normal 12px 'Arial Black';">Arial Black</a>
-<a href="javascript:;" onClick="fontname(this)" class="n" style="font:normal 12px 'Comic Sans MS';">Comic Sans MS</a>
-<a href="javascript:;" onClick="fontname(this)" class="n" style="font:normal 12px Courier;">Courier</a>
-<a href="javascript:;" onClick="fontname(this)" class="n" style="font:normal 12px System;">System</a>
-<a href="javascript:;" onClick="fontname(this)" class="n" style="font:normal 12px 'Times New Roman';">Times New Roman</a>
-<a href="javascript:;" onClick="fontname(this)" class="n" style="font:normal 12px Verdana;">Verdana</a>
+<a href="javascript:;" onClick="fontname(this);return false;" class="n" style="font:normal 12px '<?php echo lang('home/editor', 'editor_font_song');?>';"><?php echo lang('home/editor', 'editor_font_song');?></a>
+<a href="javascript:;" onClick="fontname(this);return false;" class="n" style="font:normal 12px '<?php echo lang('home/editor', 'editor_font_hei');?>';"><?php echo lang('home/editor', 'editor_font_hei');?></a>
+<a href="javascript:;" onClick="fontname(this);return false;" class="n" style="font:normal 12px '<?php echo lang('home/editor', 'editor_font_kai');?>';"><?php echo lang('home/editor', 'editor_font_kai');?></a>
+<a href="javascript:;" onClick="fontname(this);return false;" class="n" style="font:normal 12px '<?php echo lang('home/editor', 'editor_font_li');?>';"><?php echo lang('home/editor', 'editor_font_li');?></a>
+<a href="javascript:;" onClick="fontname(this);return false;" class="n" style="font:normal 12px '<?php echo lang('home/editor', 'editor_font_you');?>';"><?php echo lang('home/editor', 'editor_font_you');?></a>
+<a href="javascript:;" onClick="fontname(this);return false;" class="n" style="font:normal 12px Arial;">Arial</a>
+<a href="javascript:;" onClick="fontname(this);return false;" class="n" style="font:normal 12px 'Arial Narrow';">Arial Narrow</a>
+<a href="javascript:;" onClick="fontname(this);return false;" class="n" style="font:normal 12px 'Arial Black';">Arial Black</a>
+<a href="javascript:;" onClick="fontname(this);return false;" class="n" style="font:normal 12px 'Comic Sans MS';">Comic Sans MS</a>
+<a href="javascript:;" onClick="fontname(this);return false;" class="n" style="font:normal 12px Courier;">Courier</a>
+<a href="javascript:;" onClick="fontname(this);return false;" class="n" style="font:normal 12px System;">System</a>
+<a href="javascript:;" onClick="fontname(this);return false;" class="n" style="font:normal 12px 'Times New Roman';">Times New Roman</a>
+<a href="javascript:;" onClick="fontname(this);return false;" class="n" style="font:normal 12px Verdana;">Verdana</a>
 </div>
 <div id="fontsize" class="eMenu" style="display:none;top:35px;left:26px;width:125px;height:120px">
-<a href="javascript:;" onClick="fontsize(1,this)" class="n" style="font-size:xx-small;line-height:120%;"><?=lang('home/editor', 'editor_fontsize_xxsmall')?></a>
-<a href="javascript:;" onClick="fontsize(2,this)" class="n" style="font-size:x-small;line-height:120%;"><?=lang('home/editor', 'editor_fontsize_xsmall')?></a>
-<a href="javascript:;" onClick="fontsize(3,this)" class="n" style="font-size:small;line-height:120%;"><?=lang('home/editor', 'editor_fontsize_small')?></a>
-<a href="javascript:;" onClick="fontsize(4,this)" class="n" style="font-size:medium;line-height:120%;"><?=lang('home/editor', 'editor_fontsize_medium')?></a>
-<a href="javascript:;" onClick="fontsize(5,this)" class="n" style="font-size:large;line-height:120%;"><?=lang('home/editor', 'editor_fontsize_large')?></a>
+<a href="javascript:;" onClick="fontsize(1,this);return false;" class="n" style="font-size:xx-small;line-height:120%;"><?php echo lang('home/editor', 'editor_fontsize_xxsmall');?></a>
+<a href="javascript:;" onClick="fontsize(2,this);return false;" class="n" style="font-size:x-small;line-height:120%;"><?php echo lang('home/editor', 'editor_fontsize_xsmall');?></a>
+<a href="javascript:;" onClick="fontsize(3,this);return false;" class="n" style="font-size:small;line-height:120%;"><?php echo lang('home/editor', 'editor_fontsize_small');?></a>
+<a href="javascript:;" onClick="fontsize(4,this);return false;" class="n" style="font-size:medium;line-height:120%;"><?php echo lang('home/editor', 'editor_fontsize_medium');?></a>
+<a href="javascript:;" onClick="fontsize(5,this);return false;" class="n" style="font-size:large;line-height:120%;"><?php echo lang('home/editor', 'editor_fontsize_large');?></a>
 </div>
 
-<div id="divList" class="eMenu" style="display:none;top:35px;left:26px;width:64px;height:40px;"><a href="javascript:;" onClick="format('Insertorderedlist');fHide(this.parentNode)" class="n"><?=lang('home/editor', 'editor_list_order')?></a><a href="javascript:;" onClick="format('Insertunorderedlist');fHide(this.parentNode)" class="n"><?=lang('home/editor', 'editor_list_unorder')?></a></div>
-<div id="divAlign" class="eMenu" style="display:none;top:35px;left:26px;width:64px;height:60px;"><a href="javascript:;" onClick="format('Justifyleft');fHide(this.parentNode)" class="n"><?=lang('home/editor', 'editor_align_left')?></a><a href="javascript:;" onClick="format('Justifycenter');fHide(this.parentNode)" class="n"><?=lang('home/editor', 'editor_align_center')?></a><a href="javascript:;" onClick="format('Justifyright');fHide(this.parentNode)" class="n"><?=lang('home/editor', 'editor_align_right')?></a></div>
-<div id="divInOut" class="eMenu" style="display:none;top:35px;left:26px;width:64px;height:40px;"><a href="javascript:;" onClick="format('Indent');fHide(this.parentNode)" class="n"><?=lang('home/editor', 'editor_indent_inc')?></a><a href="javascript:;" onClick="format('Outdent');fHide(this.parentNode)" class="n"><?=lang('home/editor', 'editor_indent_dec')?></a></div>
+<div id="divList" class="eMenu" style="display:none;top:35px;left:26px;width:64px;height:40px;"><a href="javascript:;" onClick="format('Insertorderedlist');fHide(this.parentNode);return false;" class="n"><?php echo lang('home/editor', 'editor_list_order');?></a><a href="javascript:;" onClick="format('Insertunorderedlist');fHide(this.parentNode);return false;" class="n"><?php echo lang('home/editor', 'editor_list_unorder');?></a></div>
+<div id="divAlign" class="eMenu" style="display:none;top:35px;left:26px;width:64px;height:60px;"><a href="javascript:;" onClick="format('Justifyleft');fHide(this.parentNode);return false;" class="n"><?php echo lang('home/editor', 'editor_align_left');?></a><a href="javascript:;" onClick="format('Justifycenter');fHide(this.parentNode);return false;" class="n"><?php echo lang('home/editor', 'editor_align_center');?></a><a href="javascript:;" onClick="format('Justifyright');fHide(this.parentNode);return false;" class="n"><?php echo lang('home/editor', 'editor_align_right');?></a></div>
+<div id="divInOut" class="eMenu" style="display:none;top:35px;left:26px;width:64px;height:40px;"><a href="javascript:;" onClick="format('Indent');fHide(this.parentNode);return false;" class="n"><?php echo lang('home/editor', 'editor_indent_inc');?></a><a href="javascript:;" onClick="format('Outdent');fHide(this.parentNode);return false;" class="n"><?php echo lang('home/editor', 'editor_indent_dec');?></a></div>
 
 <div id="dvForeColor" class="eMenu" style="display:none;top:35px;left:26px;width:90px;">
-<a href="javascript:;" onClick="format(gSetColorType,'#800000')" class="n cs fRd1"><b class="cb"></b><span><?=lang('home/editor', 'editor_color_darkred')?></span></a>
-<a href="javascript:;" onClick="format(gSetColorType,'#800080')" class="n cs fRd2"><b class="cb"></b><span><?=lang('home/editor', 'editor_color_purple')?></span></a>
-<a href="javascript:;" onClick="format(gSetColorType,'#F00000')" class="n cs fRd3"><b class="cb"></b><span><?=lang('home/editor', 'editor_color_red')?></span></a>
-<a href="javascript:;" onClick="format(gSetColorType,'#F000F0')" class="n cs fRd4"><b class="cb"></b><span><?=lang('home/editor', 'editor_color_pink')?></span></a>
-<a href="javascript:;" onClick="format(gSetColorType,'#000080')" class="n cs fBu1"><b class="cb"></b><span><?=lang('home/editor', 'editor_color_darkblue')?></span></a>
-<a href="javascript:;" onClick="format(gSetColorType,'#0000F0')" class="n cs fBu2"><b class="cb"></b><span><?=lang('home/editor', 'editor_color_blue')?></span></a>
-<a href="javascript:;" onClick="format(gSetColorType,'#00F0F0')" class="n cs fBu3"><b class="cb"></b><span><?=lang('home/editor', 'editor_color_lakeblue')?></span></a>
-<a href="javascript:;" onClick="format(gSetColorType,'#008080')" class="n cs fGn1"><b class="cb"></b><span><?=lang('home/editor', 'editor_color_greenblue')?></span></a>
-<a href="javascript:;" onClick="format(gSetColorType,'#008000')" class="n cs fGn2"><b class="cb"></b><span><?=lang('home/editor', 'editor_color_green')?></span></a>
-<a href="javascript:;" onClick="format(gSetColorType,'#808000')" class="n cs fGn3"><b class="cb"></b><span><?=lang('home/editor', 'editor_color_olives')?></span></a>
-<a href="javascript:;" onClick="format(gSetColorType,'#00F000')" class="n cs fGn4"><b class="cb"></b><span><?=lang('home/editor', 'editor_color_lightgreen')?></span></a>
-<a href="javascript:;" onClick="format(gSetColorType,'#F0C000')" class="n cs fYl1"><b class="cb"></b><span><?=lang('home/editor', 'editor_color_orange')?></span></a>
-<a href="javascript:;" onClick="format(gSetColorType,'#000000')" class="n cs fBk1"><b class="cb"></b><span><?=lang('home/editor', 'editor_color_black')?></span></a>
-<a href="javascript:;" onClick="format(gSetColorType,'#808080')" class="n cs fBk2"><b class="cb"></b><span><?=lang('home/editor', 'editor_color_grey')?></span></a>
-<a href="javascript:;" onClick="format(gSetColorType,'#C0C0C0')" class="n cs fBk3"><b class="cb"></b><span><?=lang('home/editor', 'editor_color_silver')?></span></a>
-<a href="javascript:;" onClick="format(gSetColorType,'#FFFFFF')" class="n cs fWt0"><b class="cb"></b><span><?=lang('home/editor', 'editor_color_white')?></span></a>
+<a href="javascript:;" onClick="format(gSetColorType,'#800000');return false;" class="n cs fRd1"><b class="cb"></b><span><?php echo lang('home/editor', 'editor_color_darkred');?></span></a>
+<a href="javascript:;" onClick="format(gSetColorType,'#800080');return false;" class="n cs fRd2"><b class="cb"></b><span><?php echo lang('home/editor', 'editor_color_purple');?></span></a>
+<a href="javascript:;" onClick="format(gSetColorType,'#F00000');return false;" class="n cs fRd3"><b class="cb"></b><span><?php echo lang('home/editor', 'editor_color_red');?></span></a>
+<a href="javascript:;" onClick="format(gSetColorType,'#F000F0');return false;" class="n cs fRd4"><b class="cb"></b><span><?php echo lang('home/editor', 'editor_color_pink');?></span></a>
+<a href="javascript:;" onClick="format(gSetColorType,'#000080');return false;" class="n cs fBu1"><b class="cb"></b><span><?php echo lang('home/editor', 'editor_color_darkblue');?></span></a>
+<a href="javascript:;" onClick="format(gSetColorType,'#0000F0');return false;" class="n cs fBu2"><b class="cb"></b><span><?php echo lang('home/editor', 'editor_color_blue');?></span></a>
+<a href="javascript:;" onClick="format(gSetColorType,'#00F0F0');return false;" class="n cs fBu3"><b class="cb"></b><span><?php echo lang('home/editor', 'editor_color_lakeblue');?></span></a>
+<a href="javascript:;" onClick="format(gSetColorType,'#008080');return false;" class="n cs fGn1"><b class="cb"></b><span><?php echo lang('home/editor', 'editor_color_greenblue');?></span></a>
+<a href="javascript:;" onClick="format(gSetColorType,'#008000');return false;" class="n cs fGn2"><b class="cb"></b><span><?php echo lang('home/editor', 'editor_color_green');?></span></a>
+<a href="javascript:;" onClick="format(gSetColorType,'#808000');return false;" class="n cs fGn3"><b class="cb"></b><span><?php echo lang('home/editor', 'editor_color_olives');?></span></a>
+<a href="javascript:;" onClick="format(gSetColorType,'#00F000');return false;" class="n cs fGn4"><b class="cb"></b><span><?php echo lang('home/editor', 'editor_color_lightgreen');?></span></a>
+<a href="javascript:;" onClick="format(gSetColorType,'#F0C000');return false;" class="n cs fYl1"><b class="cb"></b><span><?php echo lang('home/editor', 'editor_color_orange');?></span></a>
+<a href="javascript:;" onClick="format(gSetColorType,'#000000');return false;" class="n cs fBk1"><b class="cb"></b><span><?php echo lang('home/editor', 'editor_color_black');?></span></a>
+<a href="javascript:;" onClick="format(gSetColorType,'#808080');return false;" class="n cs fBk2"><b class="cb"></b><span><?php echo lang('home/editor', 'editor_color_grey');?></span></a>
+<a href="javascript:;" onClick="format(gSetColorType,'#C0C0C0');return false;" class="n cs fBk3"><b class="cb"></b><span><?php echo lang('home/editor', 'editor_color_silver');?></span></a>
+<a href="javascript:;" onClick="format(gSetColorType,'#FFFFFF');return false;" class="n cs fWt0"><b class="cb"></b><span><?php echo lang('home/editor', 'editor_color_white');?></span></a>
 </div>
 
 <div id="editFaceBox" class="eMenu" style="display:none;top:35px;left:26px;width:165px;"></div>
 
 <div id="createUrl" class="eMenu" style="display:none;top:35px;left:26px;width:300px;font-size:12px">
-	<?=lang('home/editor', 'editor_prompt_textlink')?>:<br/>
-	<input type="text" id="insertUrl" name="url" value="http://" onfocus="checkURL(this, 1);" onblur="checkURL(this, 0);" class="t_input" style="width: 190px;"> <input type="button" onclick="createLink();" name="createURL" value="<?=lang('home/editor', 'editor_ok')?>" class="submit" /> <a href="javascript:;" onclick="fHide($('createUrl'));"><?=lang('home/editor', 'editor_cancel')?></a>
+	<?php echo lang('home/editor', 'editor_prompt_textlink');?>:<br/>
+	<input type="text" id="insertUrl" name="url" value="http://" onfocus="checkURL(this, 1);" onblur="checkURL(this, 0);" class="t_input" style="width: 190px;"> <input type="button" onclick="createLink();" name="createURL" value="<?php echo lang('home/editor', 'editor_ok');?>" class="submit" /> <a href="javascript:;" onclick="fHide($('createUrl'));return false;"><?php echo lang('home/editor', 'editor_cancel');?></a>
 </div>
 <div id="createImg" class="eMenu" style="display:none;top:35px;left:26px;width:300px;font-size:12px">
-	<?=lang('home/editor', 'editor_prompt_imagelink')?>:<br/>
-	<input type="text" id="imgUrl" name="imgUrl" value="http://" onfocus="checkURL(this, 1);" onblur="checkURL(this, 0);" class="t_input" style="width: 190px;" /> <input type="button" onclick="createImg();" name="createURL" value="<?=lang('home/editor', 'editor_ok')?>" class="submit" /> <a href="javascript:;" onclick="fHide($('createImg'));"><?=lang('home/editor', 'editor_cancel')?></a>
+	<?php echo lang('home/editor', 'editor_prompt_imagelink');?>:<br/>
+	<input type="text" id="imgUrl" name="imgUrl" value="http://" onfocus="checkURL(this, 1);" onblur="checkURL(this, 0);" class="t_input" style="width: 190px;" /> <input type="button" onclick="createImg();" name="createURL" value="<?php echo lang('home/editor', 'editor_ok');?>" class="submit" /> <a href="javascript:;" onclick="fHide($('createImg'));return false;"><?php echo lang('home/editor', 'editor_cancel');?></a>
 </div>
 <div id="createSwf" class="eMenu" style="display:none;top:35px;left:26px;width:400px;font-size:12px">
-	<?=lang('home/editor', 'editor_prompt_videolink')?>:<br/>
+	<?php echo lang('home/editor', 'editor_prompt_videolink');?>:<br/>
 	<select name="vtype" id="vtype">
-		<option value="0"><?=lang('home/editor', 'editor_prompt_video_flash')?></option>
-		<option value="1"><?=lang('home/editor', 'editor_prompt_video_media')?></option>
-		<option value="2"><?=lang('home/editor', 'editor_prompt_video_real')?></option>
+		<option value="0"><?php echo lang('home/editor', 'editor_prompt_video_flash');?></option>
+		<option value="1"><?php echo lang('home/editor', 'editor_prompt_video_media');?></option>
+		<option value="2"><?php echo lang('home/editor', 'editor_prompt_video_real');?></option>
+		<option value="3"><?php echo lang('home/editor', 'editor_prompt_mp3');?></option>
 	</select>
 	<input type="text" id="videoUrl" name="videoUrl" value="http://" onfocus="checkURL(this, 1);" onblur="checkURL(this, 0);" class="t_input" style="width: 200px;" />
-	<input type="button" onclick="createFlash();" name="createURL" value="<?=lang('home/editor', 'editor_ok')?>" class="submit" />
-	<a href="javascript:;" onclick="fHide($('createSwf'));"><?=lang('home/editor', 'editor_cancel')?></a>
+	<input type="button" onclick="createFlash();" name="createURL" value="<?php echo lang('home/editor', 'editor_ok');?>" class="submit" />
+	<a href="javascript:;" onclick="fHide($('createSwf'));return false;"><?php echo lang('home/editor', 'editor_cancel');?></a>
+</div>
+<div id="createPage" class="eMenu" style="display:none;top:35px;left:26px;width:300px;font-size:12px">
+	<?php echo lang('home/editor', 'editor_prompt_pagetitle');?>:<br/>
+	<input type="text" id="pageTitle" name="pageTitle" value="" class="t_input" style="width: 190px;" /> <input type="button" onclick="pageBreak();" name="createURL" value="<?php echo lang('home/editor', 'editor_ok');?>" class="submit" /> <a href="javascript:;" onclick="fHide($('createPage'));return false;"><?php echo lang('home/editor', 'editor_cancel');?></a>
 </div>
 
 </td></tr>
@@ -320,7 +325,7 @@ function fontsize(size,obj){format('fontsize',size);obj.parentNode.style.display
 <!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.0 Transitional//EN">
 <HTML>
 <HEAD>
-<meta http-equiv="Content-Type" content="text/html;charset=<?=$_GET['charset']?>" />
+<meta http-equiv="Content-Type" content="text/html;charset=<?php echo $_GET['charset'];?>" />
 <title>New Document</title>
 <style>
 body { margin: 0; padding: 0; word-wrap: break-word; font-size:14px; line-height:1.8em; font-family: Tahoma, Arial, Helvetica, snas-serif; }
@@ -330,4 +335,4 @@ body { margin: 0; padding: 0; word-wrap: break-word; font-size:14px; line-height
 <body>
 </body>
 </html>
-<?}?>
+<?php }?>

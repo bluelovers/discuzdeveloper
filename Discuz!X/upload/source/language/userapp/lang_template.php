@@ -10,10 +10,8 @@
  */
 
 $lang = array (
-
   'no_maxthon2_message' => '本页面暂时不支持遨游2浏览器, 请你使用IE或Firefox, 我们对由此给你带来的不便深表歉意',
   'page_loading' => '页面加载中...',
-
   'add_app' => '添加新$_G[setting][navs][5][navname]',
   'app_index' => '应用首页',
   'boy_like' => '男孩喜欢',
@@ -26,7 +24,6 @@ $lang = array (
   'today_active_app' => '今日活跃$_G[setting][navs][5][navname]',
   'what_everybody_playing' => '大家在玩什么',
   'what_friend_playing' => '好友在玩什么',
-
   'all' => '全部',
   'app_add' => '添加$_G[setting][navs][5][navname]',
   'app_management' => '管理$_G[setting][navs][5][navname]',
@@ -47,7 +44,6 @@ $lang = array (
 								<li>你可以管理你已经添加的应用，可以设置某个应用的权限、移除某个应用；</li>
 								<li>如果你要管理你的空间、日志、相册等隐私，请到你的空间隐私设置；</li>
 								<li>默认应用只能进行相关设置与移除，但移除后仍然会显示在你的右侧菜单中。</li></ol>',
-
   'open' => '展开',
 );
 

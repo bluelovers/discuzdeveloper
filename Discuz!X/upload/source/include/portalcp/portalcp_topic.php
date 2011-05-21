@@ -60,7 +60,7 @@ if (empty($tpls)) showmessage('topic_has_on_template', dreferer());
 if(submitcheck('editsubmit')) {
 	include_once libfile('function/portalcp');
 	if(is_numeric($topicid = updatetopic($topic))){
-		showmessage('do_success', 'portal.php?mod=topic&diy=yes&quickforward=1&topicid='.$topicid);
+		showmessage('do_success', 'portal.php?mod=topic&topicid='.$topicid);
 	} else {
 		showmessage($topicid, dreferer());
 	}

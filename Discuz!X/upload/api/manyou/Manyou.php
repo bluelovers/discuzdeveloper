@@ -13,7 +13,7 @@ class Manyou {
 
 	var $siteId;
 	var $siteKey;
-	var $myVersion = '0.2';
+	var $myVersion = '0.3';
 
 	var $timezone;
 	var $version;
@@ -158,10 +158,22 @@ EOT;
 		}
 
 		$params = stripslashes($params);
-		$sign = $this->_generateSign($module, $method, $params, $this->siteKey);
+		$siteKey = $this->siteKey;
+		if ($request['ptnId']) {
+			$siteKey = md5($this->siteId . $this->siteKey . $request['ptnId'] . $request['ptnMethods']);
+		}
+		$sign = $this->_generateSign($module, $method, $params, $siteKey);
 
 		if ($sign != $request['sign']) {
 			return new ErrorResponse('10', 'Error Sign');
+		}
+
+		if ($request['ptnId']) {
+			if ($allowMethods = explode(',', $request['ptnMethods'])) {
+				if (!in_array(ManyouHelper::getMethodCode($module, $method), $allowMethods)) {
+					return new ErrorResponse('13', 'Method Not Allowed');
+				}
+			}
 		}
 
 		$params = unserialize($params);
@@ -268,7 +280,7 @@ EOT;
 		return new ErrorResponse('2', 'Method not implemented.');
 	}
 
-	function onUserApplicationAdd($uId, $appId, $appName, $privacy, $allowSideNav, $allowFeed, $allowProfileLink,  $defaultBoxType, $defaultMYML, $defaultProfileLink, $version, $displayMethod, $displayOrder = null, $userPanelArea = null, $canvasTitle = null,  $isFullscreen = null , $displayUserPanel = null) {
+	function onUserApplicationAdd($uId, $appId, $appName, $privacy, $allowSideNav, $allowFeed, $allowProfileLink,  $defaultBoxType, $defaultMYML, $defaultProfileLink, $version, $displayMethod, $displayOrder = null, $userPanelArea = null, $canvasTitle = null,  $isFullscreen = null , $displayUserPanel = null, $additionalStatus = null) {
 		return new ErrorResponse('2', 'Method not implemented.');
 	}
 
@@ -316,7 +328,7 @@ EOT;
 		return new ErrorResponse('2', 'Method not implemented.');
 	}
 
-	function onApplicationUpdate($appId, $appName, $version, $displayMethod, $displayOrder = null, $userPanelArea = null, $canvasTitle = null,  $isFullscreen = null, $displayUserPanel = null) {
+	function onApplicationUpdate($appId, $appName, $version, $displayMethod, $displayOrder = null, $userPanelArea = null, $canvasTitle = null,  $isFullscreen = null, $displayUserPanel = null, $additionalStatus = null) {
 		return new ErrorResponse('2', 'Method not implemented.');
 	}
 
@@ -432,6 +444,10 @@ EOT;
 		return new ErrorResponse('2', 'Method not implemented.');
 	}
 
+	function onSearchRecyclePosts($pIds) {
+		return new ErrorResponse('2', 'Method not implemented.');
+	}
+
 	function onSearchGetUpdatedThreads($num, $lastThreadIds = array(), $lastForumIds = array(), $lastUserIds = array()) {
 		return new ErrorResponse('2', 'Method not implemented.');
 	}
@@ -441,6 +457,10 @@ EOT;
 	}
 
 	function onSearchGetThreads($tIds) {
+		return new ErrorResponse('2', 'Method not implemented.');
+	}
+
+	function onSearchRecycleThreads($tIds) {
 		return new ErrorResponse('2', 'Method not implemented.');
 	}
 
@@ -456,11 +476,47 @@ EOT;
 		return new ErrorResponse('2', 'Method not implemented.');
 	}
 
+	function onSearchSetConfig($data = array()) {
+		return new ErrorResponse('2', 'Method not implemented.');
+	}
+
+	function onSearchGetConfig($data = array()) {
+		return new ErrorResponse('2', 'Method not implemented.');
+	}
+
+	function onSearchSetHotWords($hotWords = array()) {
+		return new ErrorResponse('2', 'Method not implemented.');
+	}
+
 	function onCommonSetConfig($data = array()) {
 		return new ErrorResponse('2', 'Method not implemented.');
 	}
 
 	function onCommonGetNav($type = '') {
+		return new ErrorResponse('2', 'Method not implemented.');
+	}
+
+	function onCloudGetApps($appName = '') {
+		return new ErrorResponse('2', 'Method not implemented.');
+	}
+
+	function onCloudSetApp($app) {
+		return new ErrorResponse('2', 'Method not implemented.');
+	}
+
+	function onCloudOpenCloud() {
+		return new ErrorResponse('2', 'Method not implemented.');
+	}
+
+	function onCloudGetStats() {
+		return new ErrorResponse('2', 'Method not implemented.');
+	}
+
+	function onConnectSetConfig($data = array()) {
+		return new ErrorResponse('2', 'Method not implemented.');
+	}
+
+	function onUnionAddAdvs($advs = array()) {
 		return new ErrorResponse('2', 'Method not implemented.');
 	}
 
@@ -511,6 +567,32 @@ class Response {
 }
 
 class SearchHelper {
+
+	function getTables($table) {
+		if ($table == 'post') {
+			$settingKey = 'posttable_info';
+			$tableName = 'forum_post';
+		} elseif ($table == 'thread') {
+			$settingKey = 'threadtable_info';
+			$tableName = 'forum_thread';
+		} else {
+			return false;
+		}
+
+		global $_G;
+
+		$infos = unserialize($_G['setting'][$settingKey]);
+		if ($infos) {
+			$tables = array();
+			foreach($infos as $id => $row) {
+				$suffix = $id ? "_$id" : '';
+				$tables[] = $tableName . $suffix;
+			}
+		} else {
+			$tables = array($tableName);
+		}
+		return $tables;
+	}
 
 	function _convertForum($row) {
 		$result = array();
@@ -669,6 +751,23 @@ class SearchHelper {
 		return $userGroups;
 	}
 
+	function getGuestPerm($gfIds = array()) {
+		$perm = SearchHelper::getUserGroupPermissions(array(7));
+		$guestPerm = $perm[7];
+		if ($gfIds) {
+			$sql = 'SELECT fid, gviewperm FROM ' . DB::table('forum_forumfield') . ' WHERE fid IN (' . implode(',', $gfIds) . ')';
+			$query = DB::query($sql);
+			while ($row = DB::fetch($query)) {
+				if ($row['gviewperm'] == 1) {
+					$guestPerm['allowForumIds'][] = $row['fid'];
+				} else {
+					$guestPerm['forbidForumIds'][] = $row['fid'];
+				}
+			}
+
+		}
+		return $guestPerm;
+	}
 
 	function convertThread($row) {
 		$result = array();
@@ -687,7 +786,7 @@ class SearchHelper {
 					'displayorder'	=> 'stickLevel',
 					'highlight'	=> 'isHighlight',
 					'digest'	=> 'digestLevel',
-					'rate'	=> 'isRated',
+					'rate'	=> 'rate',
 					'attachment'	=> 'isAttached',
 					'moderated'	=> 'isModerated',
 					'closed'	=> 'isClosed',
@@ -700,7 +799,8 @@ class SearchHelper {
 					'isgroup' => 'isGroup',
 					'posttableid' => 'postTableId',
 					'favtimes'  => 'favoriteTimes',
-					'sharetimes'=> 'shareTimes'
+					'sharetimes'=> 'shareTimes',
+					'icon'  => 'icon',
 					);
 		$map2 = array(
 					'dateline'	=> 'createdTime',
@@ -764,7 +864,7 @@ class SearchHelper {
 					}
 				}
 
-				if (in_array($k, array('highlight', 'rate', 'attachment', 'moderated', 'closed', 'isgroup'))) {
+				if (in_array($k, array('highlight', 'moderated', 'closed', 'isgroup'))) {
 					$v = $v ? true : false;
 				}
 				$result[$map[$k]] = $v;
@@ -981,6 +1081,444 @@ class SearchHelper {
 			}
 		}
 		return $result;
+	}
+
+	function convertPoll($row) {
+		$map = array('polloptionid' => 'id',
+				'tid' => null,
+				'votes' => 'votes',
+				'displayorder' => 'displayOrder',
+				'polloption' => 'label',
+				'voterids' => 'voterIds',
+				);
+		$result = array();
+		foreach($row as $k => $v) {
+			$field = $map[$k];
+			if ($field !== null) {
+				$result[$field] = $v;
+			}
+		}
+		return $result;
+	}
+
+	function getPollInfo($tIds) {
+		$sql = 'SELECT * FROM ' . DB::table('forum_polloption') . ' WHERE tid IN (' . implode(',', $tIds) . ')';
+		$result = array();
+		$query = DB::query($sql);
+		while($row = DB::fetch($query)) {
+			$result[$row['tid']][$row['polloptionid']] = self::convertPoll($row);
+		}
+		return $result;
+
+	}
+
+	function allowSearchForum() {
+		$query = DB::query("UPDATE " . DB::table('common_usergroup_field') .  " SET allowsearch = allowsearch | 2 WHERE groupid < 20 AND groupid NOT IN (5, 6)");
+		updatecache('usergroups');
+	}
+
+}
+
+class ManyouHelper {
+
+	function getMethodCode($module, $method) {
+		$methods = array(
+				'Search.getUserGroupPermissions' => 10,
+				'Search.getUpdatedPosts' => 11,
+				'Search.removePostLogs' => 12,
+				'Search.getPosts' => 13,
+				'Search.getNewPosts' => 14,
+				'Search.getAllPosts' => 15,
+				'Search.removePosts' => 16,
+				'Search.getUpdatedThreads' => 17,
+				'Search.removeThreadLogs' => 18,
+				'Search.getThreads' => '1a',
+				'Search.getNewThreads' => '1b',
+				'Search.getAllThreads' => '1c',
+				'Search.getForums' => '1d',
+				'Search.recycleThreads' => '1e',
+				'Search.recycleThreads' => '1f',
+				'Search.setConfig' => '20',
+				'Search.getConfig' => '21',
+				'Search.setHotWords' => '22',
+
+				'Cloud.getApps' => '30',
+				'Cloud.setApp' => '31',
+				'Cloud.openCloud' => '32',
+				'Cloud.getStatus' => '33',
+				'Connect.setConfig' => '34',
+				'Union.addAdvs' => '35',
+
+				'Common.setConfig' => '40',
+				'Common.getNav' => '41',
+				'Site.getUpdatedUsers' => '42',
+				'Site.getUpdatedFriends' => '43',
+				'Site.getAllUsers' => '44',
+				'Site.getStat' => '45',
+
+				'Users.getInfo' => '50',
+				'Users.getFriendInfo' => '51',
+				'Users.getExtraInfo' => '52',
+				'Friends.get' => '53',
+				'Friends.areFriends' => '54',
+				'Application.update' => '55',
+				'Application.remove' => '56',
+				'Application.setFlag' => '57',
+				'UserApplication.add' => '58',
+				'UserApplication.remove' => '5a',
+				'UserApplication.update' => '5b',
+				'UserApplication.getInstalled' => '5c',
+				'UserApplication.get' => '5d',
+				'Feed.publishTemplatizedAction' => '5e',
+				'Notifications.send' => '5f',
+				'Notifications.get' => '60',
+				'Profile.setMYML' => '61',
+				'Profile.setActionLink' => '62',
+				'Request.send' => '63',
+				'NewsFeed.get' => '64',
+				'VideoAuth.setAuthStatus' => '65',
+				'VideoAuth.auth' => '66',
+
+				'Credit.get' => '70',
+				'Credit.update' => '71',
+				'MiniBlog.post' => '72',
+				'MiniBlog.get' => '73',
+				'Photo.createAlbum' => '74',
+				'Photo.updateAlbum' => '75',
+				'Photo.removeAlbum' => '76',
+				'Photo.getAlbums' => '77',
+				'Photo.upload' => '78',
+				'Photo.get' => '7a',
+				'Photo.update' => '7b',
+				'Photo.remove' => '7c',
+				'ImbotMsn.setBindStatus' => '7d',
+				);
+		return $methods[$module . '.' . $method];
+	}
+}
+
+class Cloud_Client {
+
+	var $cloudApiIp = '';
+
+	var $sId = 0;
+
+	var $sKey = '';
+
+	var $url = '';
+
+	var $format = '';
+
+	var $ts = 0;
+
+	var $debug = false;
+
+	var $errno = 0;
+
+	var $errmsg = '';
+
+	function Cloud_Client($sId = 0, $sKey = '') {
+
+			$this->sId = intval($sId);
+			$this->sKey = $sKey;
+			$this->url = 'http://api.discuz.qq.com/site.php';
+			$this->format = 'php';
+			$this->ts = time();
+	}
+
+	function _callMethod($method, $args) {
+		$this->errno = 0;
+		$this->errmsg = '';
+		$url = $this->url;
+
+		$params = array();
+		$params['sId'] = $this->sId;
+		$params['method'] = $method;
+		$params['format'] = strtoupper($this->format);
+
+		$params['sig'] = $this->_generateSig($params, $method, $args);
+			$params['ts'] = $this->ts;
+
+		$data = $this->_createPostString($params, $args, true);
+		list($errno, $result) = $this->_postRequest($url, $data);
+		if ($this->debug) {
+			$this->_message('receive data ' . htmlspecialchars($result) . "\n\n");
+		}
+
+		if (!$errno && $result) {
+			$result = @unserialize($result);
+			if(is_array($result) && array_key_exists('result', $result)) {
+				if ($result['errCode']) {
+					$this->errno = $result['errCode'];
+					$this->errmsg = $result['errMessage'];
+					return false;
+				} else {
+					return $result['result'];
+				}
+			} else {
+				return $this->_unknowErrorMessage();
+			}
+		} else {
+			return $this->_unknowErrorMessage();
+		}
+	}
+
+	function _unknowErrorMessage() {
+		$this->errno = 1;
+		$this->errmsg = 'An unknown error occurred. May be DNS Error. ';
+		return false;
+	}
+
+	function _generateSig(&$params, $method, $args) {
+		$str = $this->_createPostString($params, $args, true);
+		if ($this->debug) {
+			$this->_message('sig string: ' . $str . '|' . $this->sKey . '|' . $this->ts . "\n\n");
+		}
+
+		return md5(sprintf('%s|%s|%s', $str, $this->sKey, $this->ts));
+	}
+
+	function _createPostString($params, $args, $isEncode = false) {
+		ksort($params);
+		$str = '';
+		foreach ($params as $k=>$v) {
+			$str .= $k . '=' . $v . '&';
+		}
+
+		ksort($args);
+		$str .= $this->_buildArrayQuery($args, 'args', $isEncode);
+		return $str;
+	}
+
+	function _postRequest($url, $data, $ip = '') {
+		if ($this->debug) {
+			$this->_message('post params: ' . $data. "\n\n");
+		}
+
+		$ip = $this->cloudApiIp;
+
+		$result = $this->_fsockopen($url, 4096, $data, '', false, $ip, 5);
+		return array(0, $result);
+	}
+
+	function _fsockopen($url, $limit = 0, $post = '', $cookie = '', $bysocket = FALSE, $ip = '', $timeout = 15, $block = TRUE) {
+		return dfsockopen($url, $limit, $post, $cookie, $bysocket, $ip, $timeout, $block);
+	}
+
+	function _message($msg) {
+		echo $msg;
+	}
+
+	function _buildArrayQuery($data, $key = '', $isEncode = false) {
+		require_once libfile('function/cloud');
+		return buildArrayQuery($data, $key, $isEncode);
+	}
+
+	function register($sName, $sSiteKey, $sUrl, $sCharset,
+					  $sTimeZone, $sUCenterUrl, $sLanguage,
+					  $sProductType, $sProductVersion,
+					  $sTimestamp, $sApiVersion, $sSiteUid) {
+
+		return $this->_callMethod('site.register', array('sName' => $sName,
+														 'sSiteKey' => $sSiteKey,
+														 'sUrl' => $sUrl,
+														 'sCharset' => $sCharset,
+														 'sTimeZone' => $sTimeZone,
+														 'sUCenterUrl' => $sUCenterUrl,
+														 'sLanguage' => $sLanguage,
+														 'sProductType' => $sProductType,
+														 'sProductVersion' => $sProductVersion,
+														 'sTimestamp' => $sTimestamp,
+														 'sApiVersion' => $sApiVersion,
+														 'sSiteUid' => $sSiteUid
+												   )
+								  );
+	}
+
+	function sync($sName, $sSiteKey, $sUrl, $sCharset,
+				  $sTimeZone, $sUCenterUrl, $sLanguage,
+				  $sProductType, $sProductVersion,
+				  $sTimestamp, $sApiVersion, $sSiteUid) {
+
+		return $this->_callMethod('site.sync', array('sId' => $this->sId,
+													 'sName' => $sName,
+													 'sSiteKey' => $sSiteKey,
+													 'sUrl' => $sUrl,
+													 'sCharset' => $sCharset,
+													 'sTimeZone' => $sTimeZone,
+													 'sUCenterUrl' => $sUCenterUrl,
+													 'sLanguage' => $sLanguage,
+													 'sProductType' => $sProductType,
+													 'sProductVersion' => $sProductVersion,
+													 'sTimestamp' => $sTimestamp,
+													 'sApiVersion' => $sApiVersion,
+													 'sSiteUid' => $sSiteUid
+													 )
+								  );
+	}
+
+	function resetKey() {
+
+		return $this->_callMethod('site.resetKey', array('sId' => $this->sId));
+	}
+
+	function resume($sUrl, $sCharset, $sProductType, $sProductVersion) {
+
+		return $this->_callMethod('site.resume', array(
+																			   'sUrl' => $sUrl,
+																			   'sCharset' => $sCharset,
+																			   'sProductType' => $sProductType,
+																			   'sProductVersion' => $sProductVersion
+																			   )
+												 );
+	}
+
+	function QQGroupMiniportal($topic, $normal, $gIds = array()) {
+
+		return $this->_callMethod('qqgroup.miniportal', array('topic' => $topic, 'normal' => $normal, 'gIds' => $gIds));
+	}
+
+	function connectSync($qzoneLikeQQ, $mblogQQ) {
+
+		return $this->_callMethod('connect.sync', array('qzoneLikeQQ' => $qzoneLikeQQ, 'mblogFollowQQ' => $mblogQQ));
+	}
+
+}
+
+class Discuz_Cloud_Client {
+
+	var $debug = false;
+
+	var $errno = 0;
+
+	var $errmsg = '';
+
+	var $Client = null;
+
+	var $my_status = false;
+	var $cloud_status = false;
+
+	var $siteId = '';
+	var $siteKey = '';
+	var $siteName = '';
+	var $uniqueId = '';
+	var $siteUrl = '';
+	var $charset = '';
+	var $timeZone = 0;
+	var $UCenterUrl = '';
+	var $language = '';
+	var $productType = '';
+	var $productVersion = '';
+	var $timestamp = 0;
+	var $apiVersion = '';
+	var $siteUid = 0;
+
+	function Discuz_Cloud_Client($debug = false) {
+
+		if(!defined('IN_DISCUZ')) {
+			exit('Access Denied');
+		}
+
+		global $_G;
+
+		$this->my_status = !empty($_G['setting']['my_app_status']) ? $_G['setting']['my_app_status'] : '';
+		$this->cloud_status = !empty($_G['setting']['cloud_status']) ? $_G['setting']['cloud_status'] : '';
+
+		$this->siteId = !empty($_G['setting']['my_siteid']) ? $_G['setting']['my_siteid'] : '';
+		$this->siteKey = !empty($_G['setting']['my_sitekey']) ? $_G['setting']['my_sitekey'] : '';
+		$this->siteName = !empty($_G['setting']['bbname']) ? $_G['setting']['bbname'] : '';
+		$this->uniqueId = $siteuniqueid = DB::result_first("SELECT svalue FROM ".DB::table('common_setting')." WHERE skey='siteuniqueid'");
+		$this->siteUrl = $_G['siteurl'];
+		$this->charset = CHARSET;
+		$this->timeZone = !empty($_G['setting']['timeoffset']) ? $_G['setting']['timeoffset'] : '';
+		$this->UCenterUrl = !empty($_G['setting']['ucenterurl']) ? $_G['setting']['ucenterurl'] : '';
+		$this->language = $_G['config']['output']['language'] ? $_G['config']['output']['language'] : 'zh_CN';
+		$this->productType = 'DISCUZX';
+		$this->productVersion = !empty($_G['setting']['version']) ? $_G['setting']['version'] : '';
+		$this->timestamp = TIMESTAMP;
+		$this->apiVersion = '0.3';
+		$this->siteUid = $_G['uid'];
+
+		$this->Client = new Cloud_Client($this->siteId, $this->siteKey);
+
+		if ($debug) {
+			$this->Client->debug = true;
+			$this->debug = true;
+		}
+
+		if ($_G['setting']['cloud_api_ip']) {
+			$this->setCloudIp($_G['setting']['cloud_api_ip']);
+		}
+
+	}
+
+	function register() {
+
+		$data = $this->Client->register($this->siteName, $this->uniqueId, $this->siteUrl, $this->charset,
+										$this->timeZone, $this->UCenterUrl, $this->language,
+										$this->productType, $this->productVersion,
+										$this->timestamp, $this->apiVersion, $this->siteUid);
+
+		$this->errno = $this->Client->errno;
+		$this->errmsg = $this->Client->errmsg;
+
+		return $data;
+	}
+
+	function sync() {
+
+		$data = $this->Client->sync($this->siteName, $this->uniqueId, $this->siteUrl, $this->charset,
+									$this->timeZone, $this->UCenterUrl, $this->language,
+									$this->productType, $this->productVersion,
+									$this->timestamp, $this->apiVersion, $this->siteUid);
+
+		$this->errno = $this->Client->errno;
+		$this->errmsg = $this->Client->errmsg;
+
+		return $data;
+	}
+
+	function resetKey() {
+
+		$data = $this->Client->resetKey();
+
+		$this->errno = $this->Client->errno;
+		$this->errmsg = $this->Client->errmsg;
+
+		return $data;
+	}
+
+	function resume() {
+
+		$data = $this->Client->resume($this->siteUrl, 'UTF-8', $this->productType, $this->productVersion);
+
+		$this->errno = $this->Client->errno;
+		$this->errmsg = $this->Client->errmsg;
+
+		return $data;
+	}
+
+	function setCloudIp($ip) {
+		$this->Client->cloudApiIp = $ip;
+	}
+
+	function QQGroupMiniportal($topic, $normal, $gIds = array()) {
+
+		$data = $this->Client->QQGroupMiniportal($topic, $normal, $gIds);
+
+		$this->errno = $this->Client->errno;
+		$this->errmsg = $this->Client->errmsg;
+
+		return $data;
+	}
+
+	function connectSync($qzoneQQ, $mblogQQ) {
+		$data = $this->Client->connectSync($qzoneQQ, $mblogQQ);
+
+		$this->errno = $this->Client->errno;
+		$this->errmsg = $this->Client->errmsg;
+
+		return $data;
 	}
 
 }

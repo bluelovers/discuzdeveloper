@@ -407,7 +407,11 @@ EOT;
 
 		require_once libfile('function/importdata');
 		$renamed = import_smilies();
-		cpmsg($renamed ? 'smilies_import_succeed_renamed' : 'smilies_import_succeed', 'action=smilies', 'succeed');
+		if($renamed) {
+			cpmsg('smilies_import_succeed_renamed', 'action=smilies', 'succeed');
+		} else {
+			cpmsg('smilies_import_succeed', 'action=smilies', 'succeed');
+		}
 
 	}
 

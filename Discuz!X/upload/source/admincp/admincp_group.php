@@ -101,12 +101,12 @@ if($operation == 'setting') {
 ?>
 <script type="text/JavaScript">
 var rowtypedata = [
-	[[1,'<input type="text" class="txt" name="newcatorder[]" value="0" />', 'td25'], [3, '<input name="newcat[]" value="<?=$lang[groups_type_level_1]?>" size="20" type="text" class="txt" />']],
-	[[1,'<input type="text" class="txt" name="neworder[{1}][]" value="0" />', 'td25'], [3, '<div class="board"><input name="newforum[{1}][]" value="<?=$lang[groups_type_sub_new]?>" size="20" type="text" class="txt" /></div>']],
-	[[1,'<input type="text" class="txt" name="neworder[{1}][]" value="0" />', 'td25'], [3, '<div class="childboard"><input name="newforum[{1}][]" value="<?=$lang[groups_type_sub_new]?>" size="20" type="text" class="txt" /></div>']],
+	[[1,'<input type="text" class="txt" name="newcatorder[]" value="0" />', 'td25'], [3, '<input name="newcat[]" value="<?php echo $lang[groups_type_level_1];?>" size="20" type="text" class="txt" />']],
+	[[1,'<input type="text" class="txt" name="neworder[{1}][]" value="0" />', 'td25'], [3, '<div class="board"><input name="newforum[{1}][]" value="<?php echo $lang[groups_type_sub_new];?>" size="20" type="text" class="txt" /></div>']],
+	[[1,'<input type="text" class="txt" name="neworder[{1}][]" value="0" />', 'td25'], [3, '<div class="childboard"><input name="newforum[{1}][]" value="<?php echo $lang[groups_type_sub_new];?>" size="20" type="text" class="txt" /></div>']],
 ];
 </script>
-<?
+<?php
 		showformheader('group&operation=type');
 		showtableheader('');
 		showsubtitle(array('display_order', 'groups_type_name', 'groups_type_count', 'groups_type_operation'));
@@ -259,11 +259,28 @@ var rowtypedata = [
 
 		shownav('group', 'nav_group_manage');
 		showsubmenu('nav_group_manage');
-		showformheader("group&operation=deletegroup");
+		showformheader("group&operation=managetype");
 		showtableheader(cplang('groups_search_result', array('groupnum' => $groupnum)).' <a href="javascript:history.go(-1);" class="act lightlink normal">'.cplang('research').'</a>');
 		showsubtitle(array('', 'groups_manage_name', 'groups_manage_postcount', 'groups_manage_threadcount', 'groups_manage_membercount', 'groups_manage_founder', ''));
 		echo $groups;
-		showsubmit('submit', 'submit', '<input type="checkbox" name="chkall" onclick="checkAll(\'prefix\', this.form, \'fidarray\')" class="checkbox">'.cplang('del'), '', $multipage);
+		showtablerow('', array('class="td25"'), array('<input name="chkall" id="chkall" type="checkbox" class="checkbox" onclick="checkAll(\'prefix\', this.form, \'fidarray\')" /><label for="chkall">'.cplang('select_all').'</label>'));
+		showtablefooter();
+		showtableheader('operation', 'notop');
+		showtablerow('', array('class="td25"', 'class="td24"', 'class="rowform" style="width:auto;"'), array(
+			'<input class="radio" type="radio" name="optype" value="delete" >',
+			cplang('founder_perm_group_deletegroup'), cplang('founder_perm_group_deletegroupcomments')));
+		require_once libfile('function/group');
+		$groupselect = get_groupselect(0, $group['fup'], 0);
+		showtablerow('', array('class="td25"', 'class="td24"', 'class="rowform" style="width:auto;"'), array(
+			'<input class="radio" type="radio" name="optype" value="changetype" >',
+			cplang('group_changetype'),
+			'<select name="newtypeid"><option value="">'.cplang('group_mergetype_selecttype').'</option>'.$groupselect.'</select>'));
+		showtablerow('', array('class="td25"', 'class="td24"', 'class="rowform" style="width:auto;"'), array(
+			'<input class="radio" type="radio" name="optype" value="mergegroup" >',
+			cplang('group_mergegroup'),
+			'<input type="text" name="targetgroup" class="text" value="">&nbsp;&nbsp;'.cplang('groups_mergegroup_id')
+		));
+		showsubmit('submit', 'submit', '', '', $multipage);
 		showtablefooter();
 		showformfooter();
 
@@ -284,28 +301,8 @@ var rowtypedata = [
 		while($thread = DB::fetch($query)) {
 			$tids[] = $thread['tid'];
 		}
-		$tids = implode(',', $tids);
-
-		if($tids) {
-			$query = DB::query("SELECT attachment, thumb, remote, aid FROM ".DB::table('forum_attachment')." WHERE tid IN ($tids)");
-			while($attach = DB::fetch($query)) {
-				dunlink($attach);
-			}
-
-			require_once libfile('function/delete');
-			foreach(array('forum_thread', 'forum_threadmod', 'forum_relatedthread', 'forum_post', 'forum_poll',
-				'forum_polloption', 'forum_trade', 'forum_activity', 'forum_activityapply', 'forum_debate',
-				'forum_debatepost', 'forum_attachment', 'forum_typeoptionvar', 'forum_forumrecommend', 'forum_postposition') as $value) {
-				if($value == 'forum_post') {
-					deletepost("tid IN ($tids)");
-					continue;
-				}
-				DB::query("DELETE FROM ".DB::table($value)." WHERE tid IN ($tids)", 'UNBUFFERED');
-				if($value == 'attachments') {
-					DB::query("DELETE FROM ".DB::table('forum_attachmentfield')." WHERE tid IN ($tids)", 'UNBUFFERED');
-				}
-			}
-		}
+		require_once libfile('function/delete');
+		deletethread($tids);
 
 		if($currow + $pp > $total) {
 			DB::query("DELETE FROM ".DB::table('forum_forum')." WHERE fid='$fid'");
@@ -463,51 +460,185 @@ var rowtypedata = [
 
 		cpmsg('group_edit_succeed', 'action=group&operation=editgroup&fid='.$fid, 'succeed');
 	}
-} elseif($operation == 'deletegroup') {
+} elseif($operation == 'managetype') {
 	$fidarray = $_G['gp_fidarray'];
+	$optype = $_G['gp_optype'];
+	$newtypeid = intval($_G['gp_newtypeid']);
+	$targetgroup = intval($_G['gp_targetgroup']);
 	if(submitcheck('confirmed', 1)){
 		$fidarray = explode(',', $fidarray);
-		delete_groupimg($fidarray);
-		require_once libfile('function/post');
-		$tids = $nums = array();
-		$pp = 100;
-		$start = intval($_G['gp_start']);
-		$query = DB::query("SELECT fup FROM ".DB::table('forum_forum')." WHERE fid IN(".dimplode($fidarray).")");
-		while($fup = DB::fetch($query)) {
-			$nums[$fup['fup']] ++;
-		}
-		foreach($nums as $fup => $num) {
-			DB::query("UPDATE ".DB::table('forum_forumfield')." SET groupnum = groupnum+'-$num' WHERE fid='$fup'");
-		}
-		$query = DB::query("SELECT tid FROM ".DB::table('forum_thread')." WHERE fid IN(".dimplode($fidarray).") ORDER BY tid LIMIT $start, $pp");
-		while($thread = DB::fetch($query)) {
-			$tids[] = $thread['tid'];
-		}
-		require_once libfile('function/delete');
-		if($tids) {
-			$tids = implode(',', $tids);
-			deletepost("tid IN($tids)");
-			cpmsg('group_thread_removing', 'action=group&operation=deletegroup&submit=yes&confirmed=yes&fidarray='.$_G['gp_fidarray'].'&start='.($start + $pp));
-		}
-		foreach(array('forum_thread', 'forum_post', 'forum_forumrecommend') as $value) {
-			DB::query("DELETE FROM ".DB::table($value)." WHERE fid IN(".dimplode($fidarray).")", 'UNBUFFERED');
-		}
-		DB::query("DELETE FROM ".DB::table('forum_forum')." WHERE fid IN(".dimplode($fidarray).")");
-		DB::query("DELETE FROM ".DB::table('forum_forumfield')." WHERE fid IN(".dimplode($fidarray).")");
-		DB::query("DELETE FROM ".DB::table('forum_groupuser')." WHERE fid IN(".dimplode($fidarray).")");
-		DB::query("UPDATE ".DB::table('common_member_field_forum')." SET groups=''");
+		if($optype == 'delete') {
+			delete_groupimg($fidarray);
+			require_once libfile('function/post');
+			$tids = $nums = array();
+			$pp = 100;
+			$start = intval($_G['gp_start']);
+			$query = DB::query("SELECT fup FROM ".DB::table('forum_forum')." WHERE fid IN(".dimplode($fidarray).")");
+			while($fup = DB::fetch($query)) {
+				$nums[$fup['fup']] ++;
+			}
+			foreach($nums as $fup => $num) {
+				DB::query("UPDATE ".DB::table('forum_forumfield')." SET groupnum = groupnum+'-$num' WHERE fid='$fup'");
+			}
+			$query = DB::query("SELECT tid FROM ".DB::table('forum_thread')." WHERE fid IN(".dimplode($fidarray).") ORDER BY tid LIMIT $start, $pp");
+			while($thread = DB::fetch($query)) {
+				$tids[] = $thread['tid'];
+			}
+			require_once libfile('function/delete');
+			if($tids) {
+				deletepost($tids, 'tid');
+				deletethread($tids);
+				cpmsg('group_thread_removing', 'action=group&operation=managetype&optype=delete&submit=yes&confirmed=yes&fidarray='.$_G['gp_fidarray'].'&start='.($start + $pp));
+			}
+			loadcache('posttable_info');
+			if(!empty($_G['cache']['posttable_info']) && is_array($_G['cache']['posttable_info'])) {
+				foreach($_G['cache']['posttable_info'] as $key => $value) {
+					DB::query("DELETE FROM ".DB::table(getposttable($key))." WHERE fid IN(".dimplode($fidarray).")", 'UNBUFFERED');
+				}
+			}
+			loadcache('threadtableids');
+			$threadtableids = !empty($_G['cache']['threadtableids']) ? $_G['cache']['threadtableids'] : array('0');
+			foreach($threadtableids as $tableid) {
+				if(!$tableid) {
+					$threadtable = "forum_thread";
+				} else {
+					$threadtable = "forum_thread_$tableid";
+				}
+				DB::query("DELETE FROM ".DB::table($threadtable)." WHERE fid IN(".dimplode($fidarray).")", 'UNBUFFERED');
+			}
+			DB::query("DELETE FROM ".DB::table('forum_forumrecommend')." WHERE fid IN(".dimplode($fidarray).")", 'UNBUFFERED');
+			DB::query("DELETE FROM ".DB::table('forum_forum')." WHERE fid IN(".dimplode($fidarray).")");
+			DB::query("DELETE FROM ".DB::table('forum_forumfield')." WHERE fid IN(".dimplode($fidarray).")");
+			DB::query("DELETE FROM ".DB::table('forum_groupuser')." WHERE fid IN(".dimplode($fidarray).")");
+			DB::query("DELETE FROM ".DB::table('forum_groupcreditslog')." WHERE fid IN(".dimplode($fidarray).")");
+			DB::query("DELETE FROM ".DB::table('forum_groupfield')." WHERE fid IN(".dimplode($fidarray).")");
+			DB::query("UPDATE ".DB::table('common_member_field_forum')." SET groups=''");
 
-		deletedomain($fidarray, 'group');
-		updatecache('grouptype');
-		cpmsg('group_delete_succeed', 'action=group&operation=manage', 'succeed');
+			require_once libfile('function/delete');
+			deletedomain($fidarray, 'group');
+			updatecache('grouptype');
+			cpmsg('group_delete_succeed', 'action=group&operation=manage', 'succeed');
+		} elseif($optype == 'changetype') {
+			DB::query("UPDATE ".DB::table('forum_forum')." SET fup='$newtypeid' WHERE fid IN (".dimplode($fidarray).")");
+			DB::query("UPDATE ".DB::table('forum_forumfield')." SET groupnum=groupnum+'".count($fidarray)."' WHERE fid='$newtypeid'");
+			$fups = array();
+			$query = DB::query("SELECT fup FROM ".DB::table('forum_forum')." WHERE fid IN(".dimplode($fidarray).")");
+			while($fup = DB::fetch($query)) {
+				$fups[$fup['fup']] ++;
+			}
+			foreach($fups as $fup => $num) {
+				DB::query("UPDATE ".DB::table('forum_forumfield')." SET groupnum=groupnum+'-$num' WHERE fid='$fup'");
+			}
+			updatecache('grouptype');
+			cpmsg('group_changetype_succeed', 'action=group&operation=manage', 'succeed');
+
+		} elseif($optype == 'mergegroup') {
+			$start = intval($_G['gp_start']) ? $_G['gp_start'] : 0;
+			$threadtables = array('0');
+			$query_a = DB::query("SELECT threadtableid FROM ".DB::table('forum_forum_threadtable')." WHERE fid='$targetgroup'");
+			while($data = DB::fetch($query_a)) {
+				$threadtables[] = $data['threadtableid'];
+			}
+
+			if($fidarray[$start]) {
+				$sourcefid = $fidarray[$start];
+				if(empty($start)) {
+					$nums = array();
+					$query = DB::query("SELECT fup FROM ".DB::table('forum_forum')." WHERE fid IN(".dimplode($fidarray).")");
+					while($fup = DB::fetch($query)) {
+						$nums[$fup['fup']] ++;
+					}
+					foreach($nums as $fup => $num) {
+						DB::query("UPDATE ".DB::table('forum_forumfield')." SET groupnum = groupnum+'-$num' WHERE fid='$fup'");
+					}
+				}
+				foreach($threadtables as $tableid) {
+					$threadtable = $tableid ? "forum_thread_$tableid" : 'forum_thread';
+					DB::query("UPDATE ".DB::table($threadtable)." SET fid='$targetgroup' WHERE fid='$sourcefid'");
+				}
+				updatepost(array('fid' => $targetgroup), "fid='$sourcefid'");
+
+				$targetusers = $newgroupusers = array();
+				$query = DB::query("SELECT uid FROM ".DB::table('forum_groupuser')." WHERE fid='$targetgroup'");
+				while($row = DB::fetch($query)) {
+					$targetusers[$row['uid']] = $row['uid'];
+				}
+				$adduser = 0;
+				$query = DB::query("SELECT uid, username FROM ".DB::table('forum_groupuser')." WHERE fid='$sourcefid'");
+				while($row = DB::fetch($query)) {
+					if(empty($targetusers[$row['uid']])) {
+						$newgroupusers[$row[uid]] = daddslashes($row['username']);
+						$adduser ++;
+					}
+				}
+				if($adduser) {
+					foreach($newgroupusers as $newuid => $newusername) {
+						DB::query("INSERT INTO ".DB::table('forum_groupuser')." (fid, uid, username, level, joindateline) VALUES('$targetgroup', '$newuid', '$newusername', '4', '".TIMESTAMP."')");
+					}
+					DB::query("UPDATE ".DB::table('forum_forumfield')." SET membernum=membernum+'$adduser' WHERE fid='$targetgroup'");
+				}
+				DB::query("DELETE FROM ".DB::table('forum_forum')." WHERE fid='$sourcefid'");
+				DB::query("DELETE FROM ".DB::table('forum_groupuser')." WHERE fid='$sourcefid'");
+				DB::query("DELETE FROM ".DB::table('forum_groupcreditslog')." WHERE fid='$sourcefid'");
+				DB::query("DELETE FROM ".DB::table('forum_groupfield')." WHERE fid='$sourcefid'");
+				$start ++;
+				cpmsg('group_merge_continue', 'action=group&operation=managetype&optype='.$optype.'&submit=yes&confirmed=yes&targetgroup='.$targetgroup.'&fidarray='.$_G['gp_fidarray'].'&start='.$start, '', array('m' => $start, 'n' => count($fidarray)-$start));
+			}
+			$threads = $posts = 0;
+			$archive = 0;
+			foreach($threadtables as $tableid) {
+				$threadtable = $tableid ? "forum_thread_$tableid" : 'forum_thread';
+				$data = DB::fetch_first("SELECT COUNT(*) AS threads, SUM(replies)+COUNT(*) AS posts FROM ".DB::table($threadtable)." WHERE fid='$targetgroup' AND displayorder>='0'");
+				$threads += $data['threads'];
+				$posts += $data['posts'];
+				if($data['threads'] > 0 && $tableid != 0) {
+					$archive = 1;
+				}
+			}
+			DB::update('forum_forum', array('archive' => $archive), "fid='$targetgroup'");
+			DB::query("UPDATE ".DB::table('forum_forum')." SET threads='$threads', posts='$posts' WHERE fid='$targetgroup'");
+
+			DB::query("UPDATE ".DB::table('common_member_field_forum')." SET groups=''");
+			delete_groupimg($fidarray);
+			DB::query("DELETE FROM ".DB::table('forum_forumfield')." WHERE fid IN(".dimplode($fidarray).")");
+			require_once libfile('function/delete');
+			deletedomain($fidarray, 'group');
+			updatecache('grouptype');
+			cpmsg('group_mergegroup_succeed', 'action=group&operation=manage', 'succeed');
+		}
+	}
+	if(empty($optype) || !in_array($optype, array('delete', 'changetype', 'mergegroup'))) {
+		cpmsg('group_optype_no_choice', '', 'error');
+	}
+	if($optype == 'changetype' && empty($newtypeid)) {
+		cpmsg('group_newtypeid_no_choice', '', 'error');
+	}
+	if($optype == 'mergegroup' && empty($targetgroup)) {
+		cpmsg('group_targetgroup_no_choice', '', 'error');
 	}
 	if($fidarray) {
+		$targetid = 0;
+		$targetname = '';
+		if($newtypeid) {
+			$targetid = $newtypeid;
+		} elseif($targetgroup) {
+			if(in_array($targetgroup, $fidarray)) {
+				cpmsg('group_targetgroup_repeat', '', 'error');
+			}
+			$targetid = $targetgroup;
+		}
+		if($targetid) {
+			$targetname = DB::result_first("SELECT name FROM ".DB::table('forum_forum')." WHERE fid='$targetid'");
+			if(empty($targetname)) {
+				cpmsg('group_targetid_error');
+			}
+		}
 		if(is_array($fidarray)) {
 			$fidarray = implode(',', $fidarray);
 		}
-		cpmsg('group_delete_confirm', 'action=group&operation=deletegroup&submit=yes', 'form', array(), '<input type="hidden" name="fidarray" value="'.$fidarray.'">');
+		cpmsg('group_'.$optype.'_confirm', 'action=group&operation=managetype&optype='.$optype.'&submit=yes', 'form', array('targetname' => $targetname), '<input type="hidden" name="fidarray" value="'.$fidarray.'"><input type="hidden" name="newtypeid" value="'.$newtypeid.'"><input type="hidden" name="targetgroup" value="'.$targetgroup.'">');
 	} else {
-		cpmsg('group_delete_no_choice', '', 'error');
+		cpmsg('group_group_no_choice', '', 'error');
 	}
 } elseif($operation == 'userperm') {
 	$group_userperm = unserialize($_G['setting']['group_userperm']) ? unserialize($_G['setting']['group_userperm']) : array();
@@ -522,9 +653,6 @@ var rowtypedata = [
 		 	array('allowbumpthread', cplang('admingroup_edit_bump_thread'), '1'),
 		 	array('allowhighlightthread', cplang('admingroup_edit_highlight_thread'), '1'),
 		 	array('allowstampthread', cplang('admingroup_edit_stamp_thread'), '1'),
-		 	array('allowclosethread', cplang('admingroup_edit_close_thread'), '1'),
-		 	array('allowmergethread', cplang('admingroup_edit_merge_thread'), '1'),
-		 	array('allowsplitthread', cplang('admingroup_edit_split_thread'), '1'),
 		 	array('allowrepairthread', cplang('admingroup_edit_repair_thread'), '1'),
 		 	array('allowrefund', cplang('admingroup_edit_refund'), '1'),
 		 	array('alloweditpoll', cplang('admingroup_edit_edit_poll'), '1'),
@@ -616,10 +744,10 @@ EOT;
 
 			showformheader('group&operation=level');
 			showtableheader('group_level', 'fixpadding', 'id="grouplevel"');
-			showsubtitle(array('', 'group_level_title', 'group_level_creditsrange', ''));
+			showsubtitle(array('del', 'group_level_title', 'group_level_creditsrange', ''));
 			echo $grouplevels;
 			echo '<tr><td>&nbsp;</td><td colspan="8"><div><a href="###" onclick="addrow(this, 0)" class="addtr">'.$lang['group_level_add'].'</a></div></td></tr>';
-			showsubmit('grouplevelsubmit');
+			showsubmit('grouplevelsubmit', 'submit');
 			showtablefooter();
 			showformfooter();
 		} else {

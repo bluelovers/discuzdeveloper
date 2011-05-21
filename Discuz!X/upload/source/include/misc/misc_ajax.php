@@ -146,23 +146,28 @@ if($op == 'comment') {
 } elseif($op == 'deluserapp') {
 
 	if(empty($_G['uid'])) {
-		showmessage('no_privilege');
+		showmessage('no_privilege_guest');
 	}
 	$hash = trim($_GET['hash']);
 	$query = DB::query("SELECT * FROM ".DB::table('common_myinvite')." WHERE hash='$hash' AND touid='$_G[uid]'");
 	if($value = DB::fetch($query)) {
 		DB::query("DELETE FROM ".DB::table('common_myinvite')." WHERE hash='$hash' AND touid='$_G[uid]'");
 
-		$myinvitenum = getcount('common_myinvite', array('touid'=>$_G['uid']));
-
-		space_merge($space, 'status');
-		$changenum = $myinvitenum - $space['myinvitations'];
-		member_status_update($_G['uid'], array('myinvitations'=>$changenum));
-
 		showmessage('do_success');
 	} else {
-		showmessage('no_privilege');
+		showmessage('no_privilege_deluserapp');
 	}
+} elseif($op == 'delnotice') {
+
+	if(empty($_G['uid'])) {
+		showmessage('no_privilege_guest');
+	}
+	$id = intval($_G['gp_id']);
+	if($id) {
+		DB::query("DELETE FROM ".DB::table('home_notification')." WHERE id='$id' AND uid='$_G[uid]'");
+	}
+	showmessage('do_success');
+
 } elseif($op == 'getreward') {
 	$reward = '';
 	if($_G['cookie']['reward_log']) {
@@ -184,18 +189,24 @@ if($op == 'comment') {
 	$showlevel = $showlevel >= 1 && $showlevel <= 4 ? $showlevel : 4;
 	$values = array(intval($_GET['pid']), intval($_GET['cid']), intval($_GET['did']), intval($_GET['coid']));
 	$level = 1;
-	$containertype = substr($container, 0, 5);
 	if($values[0]) {
 		$level++;
-	} else if($_G['uid']) {
-		space_merge($_G['member'], 'profile');
+	} else if($_G['uid'] && !empty($_GET['showdefault'])) {
 
+		space_merge($_G['member'], 'profile');
+		$containertype = substr($container, 0, 5);
 		$district = array();
 		if($containertype == 'birth') {
 			if(!empty($_G['member']['birthprovince'])) {
 				$district[] = $_G['member']['birthprovince'];
 				if(!empty($_G['member']['birthcity'])) {
 					$district[] = $_G['member']['birthcity'];
+				}
+				if(!empty($_G['member']['birthdist'])) {
+					$district[] = $_G['member']['birthdist'];
+				}
+				if(!empty($_G['member']['birthcommunity'])) {
+					$district[] = $_G['member']['birthcommunity'];
 				}
 			}
 		} else {
@@ -229,9 +240,6 @@ if($op == 'comment') {
 	}
 	if($values[3]) {
 		$level++;
-	}
-	if($containertype == 'birth' && $level > 2) {
-		$level = 2;
 	}
 	$showlevel = $level;
 	$elems = array();

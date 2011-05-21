@@ -12,7 +12,7 @@ if(!defined('IN_DISCUZ')) {
 }
 
 if(!$_G['group']['allowviewip']) {
-	showmessage('undefined_action', NULL);
+	showmessage('no_privilege_viewip');
 }
 
 $pid = $_G['gp_pid'];

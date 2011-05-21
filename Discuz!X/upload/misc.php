@@ -15,16 +15,17 @@ require './source/class/class_core.php';
 
 $discuz = & discuz_core::instance();
 
-$modarray = array('seccode', 'secqaa', 'initsys', 'invite', 'faq', 'report', 'swfupload', 'manyou', 'stat', 'ranklist');
+$discuz->reject_robot();
+$modarray = array('seccode', 'secqaa', 'initsys', 'invite', 'faq', 'report', 'swfupload', 'manyou', 'stat', 'ranklist', 'buyinvitecode', 'tag', 'diyhelp', 'mobile');
 
 $modcachelist = array(
-	'ranklist' => array('forums'),
+	'ranklist' => array('forums', 'diytemplatename'),
 );
 
 $mod = getgpc('mod');
 $mod = (empty($mod) || !in_array($mod, $modarray)) ? 'error' : $mod;
 
-if(in_array($mod, array('seccode', 'secqaa', 'initsys', 'faq', 'swfupload'))) {
+if(in_array($mod, array('seccode', 'secqaa', 'initsys', 'faq', 'swfupload', 'mobile'))) {
 	define('ALLOWGUEST', 1);
 }
 
@@ -52,6 +53,8 @@ switch ($mod) {
 $discuz->init();
 
 define('CURMODULE', $mod);
+runhooks();
+
 require DISCUZ_ROOT.'./source/module/misc/misc_'.$mod.'.php';
 
 ?>

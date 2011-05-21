@@ -11,7 +11,7 @@ if(!defined('IN_DISCUZ')) {
 	exit('Access Denied');
 }
 
-function updatestat($type, $primary=0) {
+function updatestat($type, $primary=0, $num=1) {
 	global $_G;
 
 	if(empty($_G['uid']) || empty($_G['setting']['updatestat'])) return false;
@@ -29,11 +29,12 @@ function updatestat($type, $primary=0) {
 			DB::insert('common_statuser', $setarr);
 		}
 	}
+	$num = abs(intval($num));
 	if(getcount('common_stat', array('daytime'=>$nowdaytime))) {
-		DB::query("UPDATE ".DB::table('common_stat')." SET `$type`=`$type`+1 WHERE daytime='$nowdaytime'");
+		DB::query("UPDATE ".DB::table('common_stat')." SET `$type`=`$type`+$num WHERE daytime='$nowdaytime'");
 	} else {
 		DB::query("DELETE FROM ".DB::table('common_statuser')." WHERE daytime != '$nowdaytime'");
-		DB::insert('common_stat', array('daytime'=>$nowdaytime, $type=>'1'));
+		DB::insert('common_stat', array('daytime'=>$nowdaytime, $type=>$num));
 	}
 }
 

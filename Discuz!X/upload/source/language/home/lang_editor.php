@@ -24,7 +24,7 @@ $lang = array(
 	'editor_hyperlink' => '超链接',
 	'editor_remove_link' => '移除链接',
 	'editor_link_image' => '引用图片',
-	'editor_link_flash' => '引用视频FLASH',
+	'editor_link_flash' => '引用视频FLASH或MP3音乐',
 	'editor_insert_smiley' => '插入表情',
 	'editor_doodle' => '涂鸦',
 	'editor_pagebreak' => '插入分页标志',
@@ -67,11 +67,13 @@ $lang = array(
 	'editor_ok' => '确定',
 	'editor_cancel' => '取消',
 	'editor_prompt_textlink' => '请输入选定文字链接地址',
-	'editor_prompt_imagelink' => '请输入图片URL地址',
-	'editor_prompt_videolink' => '请输入视频URL地址',
-	'editor_prompt_video_flash' => 'Flash动画',
-	'editor_prompt_video_media' => 'Media视频',
-	'editor_prompt_video_real' => 'Real视频',
+	'editor_prompt_imagelink' => '请输入图片 URL 地址',
+	'editor_prompt_pagetitle' => '请输入分页标题',
+	'editor_prompt_videolink' => '请输入视频 URL 地址',
+	'editor_prompt_video_flash' => 'Flash 动画',
+	'editor_prompt_video_media' => 'Media 视频',
+	'editor_prompt_video_real' => 'Real 视频',
+	'editor_prompt_mp3' => 'mp3 音乐',
 );
 
 ?>

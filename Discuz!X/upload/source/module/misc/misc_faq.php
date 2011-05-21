@@ -44,7 +44,7 @@ if($_G['gp_action'] == 'faq') {
 		}
 
 	} else {
-		showmessage("faq_content_empty", 'misc.php?mod=faq');
+		showmessage('faq_content_empty', 'misc.php?mod=faq');
 	}
 
 } elseif($_G['gp_action'] == 'search') {

@@ -12,7 +12,7 @@ if(!defined('IN_DISCUZ')) {
 }
 
 if(!$_G['group']['allowmergethread']) {
-	showmessage('undefined_action', NULL);
+	showmessage('no_privilege_mergethread');
 }
 
 if(!submitcheck('modsubmit')) {
@@ -55,7 +55,7 @@ if(!submitcheck('modsubmit')) {
 	DB::query("UPDATE ".DB::table($posttable)." SET tid='$_G[tid]' WHERE tid='$othertid'");
 	$postsmerged = DB::affected_rows();
 
-	DB::query("UPDATE ".DB::table('forum_attachment')." SET tid='$_G[tid]' WHERE tid='$othertid'");
+	updateattachtid("tid='$othertid'", $othertid, $_G['tid']);
 	DB::query("DELETE FROM ".DB::table('forum_thread')." WHERE tid='$othertid'");
 	DB::query("DELETE FROM ".DB::table('forum_threadmod')." WHERE tid='$othertid'");
 

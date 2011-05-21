@@ -20,12 +20,7 @@ function build_cache_forumstick() {
 	if($forumstickthreads) {
 		foreach($forumstickthreads as $forumstickthread) {
 			foreach($forumstickthread['forums'] as $fid) {
-				$forumstickcached[$fid][] = $forumstickthread;
-			}
-		}
-		foreach($forumstickcached as $fid => $threadlist) {
-			foreach($forumstickcached[$fid] as $k => $v) {
-				unset($forumstickcached[$fid][$k]['forums']);
+				$forumstickcached[$fid][] = $forumstickthread['tid'];
 			}
 		}
 		$data = $forumstickcached;

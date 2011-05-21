@@ -1,17 +1,17 @@
 中文版授权协议 适用于中文用户
 
-版权所有 (c) 2001-2010，康盛创想(北京)科技有限公司
+版权所有 (c) 2001-2011，北京康盛新创科技有限责任公司
 保留所有权利。
 
 感谢您选择 Discuz! 论坛产品。希望我们的努力能为您提供一个高效快速和强大的社区论坛解决方案。
 
 Discuz! 英文全称为 Crossday Discuz! Board，中文全称为 Crossday Discuz! Board 论坛系统软件，以下简称 Discuz! 。
 
-康盛创想(北京)科技有限公司为 Discuz! 产品的开发商，依法独立拥有 Discuz! 产品著作权（中国国家版权局著作权登记号 2008SR11708）。康盛创想(北京)科技有限公司网址为 http://www.comsenz.com，Discuz! 官方网站网址为 http://www.discuz.com， Discuz! 官方讨论区网址为 http://www.discuz.net。
+北京康盛新创科技有限责任公司为 Discuz! 产品的开发商，依法独立拥有 Discuz! 产品著作权（中国国家版权局著作权登记号 2008SR11708）。康盛创想(北京)科技有限公司网址为 http://www.comsenz.com，Discuz! 官方网站网址为 http://www.discuz.com， Discuz! 官方讨论区网址为 http://www.discuz.net。
 
 Discuz! 著作权已在中华人民共和国国家版权局注册，著作权受到法律和国际公约保护。使用者：无论个人或组织、盈利与否、用途如何（包括以学习和研究为目的），均需仔细阅读本协议，在理解、同意、并遵守本协议的全部条款后，方可开始使用 Discuz! 软件。
 
-本授权协议适用且仅适用于 Discuz! X1.5 版本，康盛创想(北京)科技有限公司拥有对本授权协议的最终解释权。
+本授权协议适用且仅适用于 Discuz! X1.5 及以上版本，康盛创想(北京)科技有限公司拥有对本授权协议的最终解释权。
 
 I 协议许可的权利
     1. 您可以在完全遵守本最终用户授权协议的基础上，将本软件应用于非商业用途，而不必支付软件版权授权费用。
@@ -39,7 +39,7 @@ III 有限担保和免责声明
 
 English Version of EULA, for non-Chinese-Speaking Users Only
 
-Copyright (c) 2001-2009, Comsenz Inc.
+Copyright (c) 2001-2011, Comsenz Inc.
 All Rights Reserved.
 
 IMPORTANT: THIS SOFTWARE END USER LICENSE AGREEMENT("EULA") IS A LEGAL AGREEMENT BETWEEN YOU AND Comsenz Inc.. READ IT CAREFULLY BEFORE COMPLETING THE INSTALLATION PROCESS AND USING THE SOFTWARE. IT PROVIDES A LICENSE TO USE THE SOFTWARE AND CONTAINS WARRANTY INFORMATION AND LIABILITY DISCLAIMERS. BY INSTALLING AND USING THE SOFTWARE, YOU ARE CONFIRMING YOUR ACCEPTANCE OF THE SOFTWARE AND AGREEING TO BECOME BOUND BY THE TERMS OF THIS AGREEMENT. IF YOU DO NOT AGREE TO BE BOUND BY THESE TERMS, PLEASE DO NOT INSTALL OR USE THE SOFTWARE. YOU MUST ASSUME THE ENTIRE RISK OF USING THIS PROGRAM. ANY LIABILITY OF Comsenz Inc. WILL BE LIMITED EXCLUSIVELY TO PRODUCT REPLACEMENT OR REFUND OF PURCHASE PRICE BEFORE FIRST INSTALLATION.

@@ -12,7 +12,7 @@ if(!defined('IN_DISCUZ')) {
 }
 
 if(!$_G['group']['allowwarnpost']) {
-	showmessage('undefined_action', NULL);
+	showmessage('no_privilege_warnpost');
 }
 
 $topiclist = $_G['gp_topiclist'];
@@ -105,8 +105,6 @@ if(!submitcheck('modsubmit')) {
 	'modtids'	=> 0,
 	'modlog'	=> $thread
 	);
-
-	procreportlog('', $pids);
 
 }
 

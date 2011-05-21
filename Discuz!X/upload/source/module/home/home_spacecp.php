@@ -17,10 +17,17 @@ require_once libfile('function/magic');
 $acs = array('space', 'doing', 'upload', 'comment', 'blog', 'album', 'relatekw', 'common', 'class',
 	'swfupload', 'poke', 'friend', 'eccredit', 'favorite',
 	'avatar', 'profile', 'theme', 'feed', 'privacy', 'pm', 'share', 'invite','sendmail',
-	'credit', 'usergroup', 'domain', 'click','magic', 'top', 'videophoto', 'index', 'plugin', 'search');
+	'credit', 'usergroup', 'domain', 'click','magic', 'top', 'videophoto', 'index', 'plugin', 'search', 'promotion');
 
 $ac = (empty($_GET['ac']) || !in_array($_GET['ac'], $acs))?'profile':$_GET['ac'];
 $op = empty($_GET['op'])?'':$_GET['op'];
+$_G['mnid'] = 'mn_common';
+
+if(in_array($ac, array('privacy'))) {
+	if(!$_G['setting']['homestatus']) {
+		showmessage('home_status_off');
+	}
+}
 
 if(empty($_G['uid'])) {
 	if($_SERVER['REQUEST_METHOD'] == 'GET') {

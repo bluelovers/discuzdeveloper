@@ -12,7 +12,7 @@ if(!defined('IN_DISCUZ')) {
 }
 
 if(!$_G['group']['allowstamplist']) {
-	showmessage('undefined_action', NULL);
+	showmessage('no_privilege_stamplist');
 }
 
 loadcache('stamps');

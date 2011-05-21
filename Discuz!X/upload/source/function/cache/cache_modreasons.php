@@ -12,14 +12,13 @@ if(!defined('IN_DISCUZ')) {
 }
 
 function build_cache_modreasons() {
-	$data = array();
-	$query = DB::query("SELECT svalue FROM ".DB::table('common_setting')." WHERE skey='modreasons'");
-
-	$modreasons = DB::result($query, 0);
-	$modreasons = str_replace(array("\r\n", "\r"), array("\n", "\n"), $modreasons);
-	$data = explode("\n", trim($modreasons));
-
-	save_syscache('modreasons', $data);
+	foreach(array('modreasons', 'userreasons') AS $key) {
+		$data = array();
+		$reasons = DB::result_first("SELECT svalue FROM ".DB::table('common_setting')." WHERE skey='$key'");
+		$reasons = str_replace(array("\r\n", "\r"), array("\n", "\n"), $reasons);
+		$data = explode("\n", trim($reasons));
+		save_syscache($key, $data);
+	}
 }
 
 ?>

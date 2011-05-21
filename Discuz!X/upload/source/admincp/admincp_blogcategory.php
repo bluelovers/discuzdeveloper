@@ -23,8 +23,8 @@ if($operation == 'list') {
 
 		shownav('portal', 'blogcategory');
 		showsubmenu('blogcategory',  array(
-					array('list', 'blogcategory', 1)
-				));
+			array('list', 'blogcategory', 1)
+		));
 
 		showformheader('blogcategory');
 		showtableheader();
@@ -118,9 +118,9 @@ SCRIPT;
 
 		shownav('portal', 'blogcategory');
 		showsubmenu('blogcategory',  array(
-					array('list', 'blogcategory', 0),
-					array('delete', 'blogcategory&operation=delete&catid='.$_GET['catid'], 1)
-				));
+			array('list', 'blogcategory', 0),
+			array('delete', 'blogcategory&operation=delete&catid='.$_GET['catid'], 1)
+		));
 
 		showformheader('blogcategory&operation=delete&catid='.$_GET['catid']);
 		showtableheader();

@@ -11,6 +11,7 @@ define('IN_ADMINCP', TRUE);
 define('NOROBOT', TRUE);
 define('ADMINSCRIPT', basename(__FILE__));
 define('CURSCRIPT', 'admin');
+define('HOOKTYPE', 'hookscript');
 define('APPTYPEID', 0);
 
 
@@ -31,12 +32,12 @@ $admincp->init();
 
 $admincp_actions_founder = array('templates', 'db', 'founder', 'postsplit', 'threadsplit');
 $admincp_actions_normal = array('index', 'setting', 'members', 'profilefields', 'admingroup', 'usergroups',
-	'forums', 'threadtypes', 'threads', 'moderate', 'attach', 'smilies', 'recyclebin', 'prune',
+	'forums', 'threadtypes', 'threads', 'moderate', 'attach', 'smilies', 'recyclebin', 'recyclebinpost', 'prune',
 	'styles', 'addons', 'plugins', 'tasks', 'magics', 'medals', 'google', 'announce', 'faq', 'ec',
 	'tradelog', 'jswizard', 'project', 'counter', 'misc', 'adv', 'logs', 'tools', 'portalperm',
-	'checktools', 'search', 'upgrade', 'article', 'block', 'blockstyle', 'portalcategory', 'blogcategory', 'albumcategory', 'topic', 'credits',
+	'checktools', 'search', 'upgrade', 'article', 'block', 'blockstyle', 'blockxml', 'portalcategory', 'blogcategory', 'albumcategory', 'topic', 'credits',
 	'doing', 'group', 'blog', 'feed', 'album', 'pic', 'comment', 'share', 'click', 'specialuser', 'postsplit', 'threadsplit', 'report',
-	'district', 'diytemplate', 'verify', 'nav', 'domain');
+	'district', 'diytemplate', 'verify', 'nav', 'domain', 'postcomment', 'tag', 'connect', 'card');
 
 $action = getgpc('action');
 $operation = getgpc('operation');

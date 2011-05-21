@@ -15,32 +15,25 @@ require './source/class/class_core.php';
 $discuz = & discuz_core::instance();
 
 $modarray = array('activate', 'clearcookies', 'emailverify', 'getpasswd',
-					'groupexpiry', 'logging', 'lostpasswd',
-					'register', 'regverify', 'switchstatus');
+	'groupexpiry', 'logging', 'lostpasswd',
+	'register', 'regverify', 'switchstatus', 'connect');
 
 
 $mod = !in_array($discuz->var['mod'], $modarray) ? 'register' : $discuz->var['mod'];
 
 define('CURMODULE', $mod);
 
-$modcachelist = array('register' => array('modreasons', 'stamptypeid', 'fields_required', 'fields_optional', 'fields_register', 'ipctrl'));
-
-$cachelist = array();
-if(isset($modcachelist[CURMODULE])) {
-	$cachelist = $modcachelist[CURMODULE];
-}
-
-$discuz->cachelist = $cachelist;
 $discuz->init();
-if($mod == 'register' && $discuz->var['mod'] != $_G['setting']['regname']) {
+if($mod == 'register' && $discuz->var['mod'] != $_G['setting']['regname'] && !defined('IN_CONNECT')) {
 	showmessage('undefined_action');
 }
 
 
+require libfile('function/member');
+require libfile('class/member');
 runhooks();
 
-require libfile('function/member');
-require DISCUZ_ROOT.'./source/module/member/member_'.$mod.'.php';
 
+require DISCUZ_ROOT.'./source/module/member/member_'.$mod.'.php';
 
 ?>

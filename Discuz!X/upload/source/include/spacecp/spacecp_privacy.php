@@ -18,7 +18,7 @@ if(submitcheck('privacysubmit')) {
 
 	if($operation == 'base') {
 		$space['privacy']['view'] = array();
-		$viewtype = array('index', 'friend', 'wall', 'doing', 'blog', 'album', 'share', 'home', 'videoviewphoto', 'videofriend', 'videopoke', 'videowall', 'videocomment');
+		$viewtype = array('index', 'friend', 'wall', 'doing', 'blog', 'album', 'share', 'home', 'videoviewphoto');
 		foreach ($_POST['privacy']['view'] as $key => $value) {
 			if(in_array($key, $viewtype)) {
 				$space['privacy']['view'][$key] = intval($value);
@@ -36,7 +36,7 @@ if(submitcheck('privacysubmit')) {
 	}
 	privacy_update();
 
-	if($_G['setting']['my_app_status']) manyoulog('user', $_G['uid'], 'update');
+	manyoulog('user', $_G['uid'], 'update');
 	showmessage('do_success', 'home.php?mod=spacecp&ac=privacy&op='.$operation);
 
 } elseif(submitcheck('privacy2submit')) {

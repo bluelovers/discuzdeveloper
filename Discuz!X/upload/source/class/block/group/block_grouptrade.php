@@ -82,6 +82,11 @@ class block_grouptrade {
 				),
 				'default' => '-1'
 			),
+			'highlight' => array(
+				'title' => 'grouptrade_highlight',
+				'type' => 'radio',
+				'default' => 0,
+			),
 			'titlelength' => array(
 				'title' => 'grouptrade_titlelength',
 				'type' => 'text',
@@ -180,6 +185,7 @@ class block_grouptrade {
 		$summarylength	= !empty($parameter['summarylength']) ? intval($parameter['summarylength']) : 80;
 		$recommend	= !empty($parameter['recommend']) ? 1 : 0;
 		$keyword	= !empty($parameter['keyword']) ? $parameter['keyword'] : '';
+		$highlight = !empty($parameter['highlight']) ? 1 : 0;
 
 		$bannedids = !empty($parameter['bannedids']) ? explode(',', $parameter['bannedids']) : array();
 		$gviewperm = isset($parameter['gviewperm']) ? intval($parameter['gviewperm']) : -1;
@@ -199,29 +205,10 @@ class block_grouptrade {
 		}
 
 		require_once libfile('function/post');
-		$datalist = $list = array();
-		if($keyword) {
-			if(preg_match("(AND|\+|&|\s)", $keyword) && !preg_match("(OR|\|)", $keyword)) {
-				$andor = ' AND ';
-				$keywordsrch = '1';
-				$keyword = preg_replace("/( AND |&| )/is", "+", $keyword);
-			} else {
-				$andor = ' OR ';
-				$keywordsrch = '0';
-				$keyword = preg_replace("/( OR |\|)/is", "+", $keyword);
-			}
-			$keyword = str_replace('*', '%', addcslashes($keyword, '%_'));
-			foreach(explode('+', $keyword) as $text) {
-				$text = trim($text);
-				if($text) {
-					$keywordsrch .= $andor;
-					$keywordsrch .= "tr.subject LIKE '%$text%'";
-				}
-			}
-			$keyword = " AND ($keywordsrch)";
-		} else {
-			$keyword = '';
-		}
+		require_once libfile('function/search');
+
+		$datalist = $list = $listpids = $threadpids = $aid2pid = $attachtables = array();
+		$keyword = $keyword ? searchkey($keyword, "tr.subject LIKE '%{text}%'") : '';
 		$sql = ($fids ? ' AND t.fid IN ('.dimplode($fids).')' : '')
 			.($tids ? ' AND t.tid IN ('.dimplode($tids).')' : '')
 			.($digest ? ' AND t.digest IN ('.dimplode($digest).')' : '')
@@ -257,8 +244,9 @@ class block_grouptrade {
 		$where .= ($bannedids ? ' AND tr.pid NOT IN ('.dimplode($bannedids).')' : '');
 		$where = "$sql AND t.displayorder>='0' $where";
 		$sqlfrom = " INNER JOIN `".DB::table('forum_thread')."` t ON t.tid=tr.tid ";
+		$joinmethod = empty($tids) ? 'INNER' : 'LEFT';
 		if($recommend) {
-			$sqlfrom .= " INNER JOIN `".DB::table('forum_forumrecommend')."` fc ON fc.tid=tr.tid";
+			$sqlfrom .= " $joinmethod JOIN `".DB::table('forum_forumrecommend')."` fc ON fc.tid=tr.tid";
 		}
 
 		$sqlfield = '';
@@ -266,6 +254,7 @@ class block_grouptrade {
 			$sqlfield = ', f.name groupname';
 			$sqlfrom .= ' LEFT JOIN '.DB::table('forum_forum').' f ON t.fid=f.fid LEFT JOIN '.DB::table('forum_forumfield').' ff ON f.fid = ff.fid';
 		}
+		$sqlfield = $highlight ? ', t.highlight' : '';
 
 		$query = DB::query("SELECT tr.pid, tr.tid, tr.aid, tr.price, tr.credit, tr.subject, tr.totalitems, tr.seller, tr.sellerid$sqlfield
 			FROM ".DB::table('forum_trade')." tr $sqlfrom
@@ -276,30 +265,56 @@ class block_grouptrade {
 		require_once libfile('block_thread', 'class/block/forum');
 		$bt = new block_thread();
 		while($data = DB::fetch($query)) {
-			$one = array(
+			if($style['getsummary']) {
+				$threadpids[$data['posttableid']][] = $data['pid'];
+			}
+			if($data['aid']) {
+				$aid2pid[$data['aid']] = $data['pid'];
+				$attachtable = getattachtableid($data['tid']);
+				$attachtables[$attachtable][] = $data['aid'];
+			}
+			$listpids[] = $data['pid'];
+			$list[$data['pid']] = array(
 				'id' => $data['pid'],
 				'idtype' => 'pid',
 				'title' => cutstr(str_replace('\\\'', '&#39;', addslashes($data['subject'])), $titlelength, ''),
 				'url' => 'forum.php?mod=viewthread&do=tradeinfo&tid='.$data['tid'].'&pid='.$data['pid'],
-				'pic' => ($data['aid'] ? getforumimg($data['aid']) : $_G['style']['imgdir'].'/nophoto.gif'),
+				'pic' => ($data['aid'] ? '' : $_G['style']['imgdir'].'/nophoto.gif'),
 				'picflag' => '0',
-				'summary' => !empty($style['getsummary']) ? $bt->getthread($data['tid'], $summarylength, true) : '',
 				'fields' => array(
 					'fulltitle' => str_replace('\\\'', '&#39;', addslashes($data['subject'])),
 					'totalitems' => $data['totalitems'],
-					'author' => $data['seller'] ? $data['seller'] : 'Anonymous',
+					'author' => $data['seller'] ? $data['seller'] : $_G['setting']['anonymoustext'],
 					'authorid' => $data['sellerid'] ? $data['sellerid'] : 0,
 					'price' => ($data['price'] > 0 ? '&yen; '.$data['price'] : '').($data['credit'] > 0 ? ($data['price'] > 0 ? lang('block/grouptrade', 'grouptrade_price_add') : '').$data['credit'].' '.$_G['setting']['extcredits'][$_G['setting']['creditstransextra'][5]]['unit'].$_G['setting']['extcredits'][$_G['setting']['creditstransextra'][5]]['title'] : ''),
 				)
 			);
-			if($data['aid']) {
-				$pic = DB::fetch_first("SELECT attachment, remote FROM ".DB::table('forum_attachment')." WHERE aid='$data[aid]'");
-				$one['pic'] = 'forum/'.$pic['attachment'];
-				$one['picflag'] = $pic['remote'] ? '2' : '1';
+			if($highlight && $data['highlight']) {
+				$list[$data['tid']]['fields']['showstyle'] = $bt->getthreadstyle($data['highlight']);
 			}
-			$list[] = $one;
 		}
-		return array('html' => '', 'data' => $list);
+		if(!empty($listpids)) {
+			foreach($threadpids as $key => $var) {
+				$posttable = $key == 0 ? 'forum_post' : 'forum_post_'.$key;
+				$query = DB::query("SELECT pid, message FROM ".DB::table($posttable)." WHERE pid IN  (".dimplode($var).")");
+				while($result = DB::fetch($query)) {
+					$list[$result['pid']]['summary'] = messagecutstr($result['message'], $messagelength);
+				}
+			}
+
+			foreach($attachtables as $tableid => $taids) {
+				$query = DB::query('SELECT aid, attachment, remote FROM '.DB::table('forum_attachment_'.$tableid).' WHERE aid IN ('.dimplode($taids).')');
+				while($avalue = DB::fetch($query)) {
+					$list[$aid2pid[$avalue['aid']]]['pic'] = 'forum/'.$avalue['attachment'];
+					$list[$aid2pid[$avalue['aid']]]['picflag'] = $avalue['remote'] ? '2' : '1';
+				}
+			}
+
+			foreach($listpids as $key => $value) {
+				$datalist[] = $list[$value];
+			}
+		}
+		return array('html' => '', 'data' => $datalist);
 	}
 }
 

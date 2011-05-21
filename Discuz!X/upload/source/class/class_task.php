@@ -47,7 +47,7 @@ class task {
 			case 'new':
 			default:
 				$todaytimestamp = TIMESTAMP - (TIMESTAMP + $_G['setting']['timeoffset'] * 3600) % 86400 + $_G['setting']['timeoffset'] * 3600;
-				$sql = "(mt.taskid IS NULL OR (ABS(mt.status)='1' AND t.period>0))";
+				$sql = "'$_G[timestamp]' > starttime AND (mt.taskid IS NULL OR (ABS(mt.status)='1' AND t.period>0))";
 				break;
 		}
 
@@ -84,7 +84,7 @@ class task {
 			$csc = explode("\t", $task['csc']);
 			$task['csc'] = floatval($csc[0]);
 			$task['lastupdate'] = intval($csc[1]);
-			if(!$updated && $item == 'doing' && $task['csc'] < 100 && TIMESTAMP - $task['lastupdate'] > 60) {
+			if(!$updated && $item == 'doing' && $task['csc'] < 100) {
 				$updated = TRUE;
 				require_once libfile('task/'.$task['scriptname'], 'class');
 				$taskclassname = 'task_'.$task['scriptname'];
@@ -93,7 +93,7 @@ class task {
 				if(method_exists($taskclass, 'csc')) {
 					$result = $taskclass->csc($task);
 				} else {
-					showmessage('undefined_action');
+					showmessage('task_not_found', '', array('taskclassname' => $taskclassname));
 				}
 				if($result === TRUE) {
 					$task['csc'] = '100';
@@ -141,7 +141,6 @@ class task {
 		}
 
 		if($endtaskids) {
-			DB::query("UPDATE ".DB::table('common_task')." SET available='1' WHERE taskid IN (".dimplode($endtaskids).")", 'UNBUFFERED');
 		}
 
 		return $tasklist;
@@ -214,7 +213,7 @@ class task {
 			$csc = explode("\t", $this->task['csc']);
 			$this->task['csc'] = floatval($csc[0]);
 			$this->task['lastupdate'] = intval($csc[1]);
-			if($this->task['csc'] < 100 && TIMESTAMP - $this->task['lastupdate'] > 60) {
+			if($this->task['csc'] < 100) {
 				if(method_exists($taskclass, 'csc')) {
 					$result = $taskclass->csc($this->task);
 				}
@@ -350,7 +349,7 @@ class task {
 		if(!($this->task = DB::fetch_first("SELECT t.*, mt.dateline AS applytime, mt.status FROM ".DB::table('common_task')." t, ".DB::table('common_mytask')." mt WHERE mt.uid='$_G[uid]' AND mt.taskid=t.taskid AND t.taskid='$id' AND t.available='2'"))) {
 			showmessage('task_nonexistence');
 		} elseif($this->task['status'] != 0) {
-			showmessage('undefined_action');
+			showmessage('task_not_underway');
 		} elseif($this->task['tasklimits'] && $this->task['achievers'] >= $this->task['tasklimits']) {
 			return -1;
 		}
@@ -361,23 +360,27 @@ class task {
 		if(method_exists($taskclass, 'csc')) {
 			$result = $taskclass->csc($this->task);
 		} else {
-			showmessage('undefined_action');
+			showmessage('task_not_found', '', array('taskclassname' => $taskclassname));
 		}
 
 		if($result === TRUE) {
 
 			if($this->task['reward']) {
 				$rewards = $this->reward();
+				$notification = $this->task['reward'];
 				if($this->task['reward'] == 'magic') {
 					$rewardtext = DB::result_first("SELECT name FROM ".DB::table('common_magic')." WHERE magicid='".$this->task['prize']."'");
 				} elseif($this->task['reward'] == 'medal') {
 					$rewardtext = DB::result_first("SELECT name FROM ".DB::table('forum_medal')." WHERE medalid='".$this->task['prize']."'");
+					if(!$this->task['bonus']) {
+						$notification = 'medal_forever';
+					}
 				} elseif($this->task['reward'] == 'group') {
 					$rewardtext = DB::result_first("SELECT grouptitle FROM ".DB::table('common_usergroup')." WHERE groupid='".$this->task['prize']."'");
 				} elseif($this->task['reward'] == 'invite') {
 					$rewardtext = $this->task['prize'];
 				}
-				notification_add($_G[uid], 'task', 'task_reward_'.$this->task['reward'], array(
+				notification_add($_G[uid], 'task', 'task_reward_'.$notification, array(
 					'taskid' => $this->task['taskid'],
 					'name' => $this->task['name'],
 					'creditbonus' => $_G['setting']['extcredits'][$this->task['prize']]['title'].' '.$this->task['bonus'].' '.$_G['setting']['extcredits'][$this->task['prize']]['unit'],
@@ -442,7 +445,7 @@ class task {
 		} elseif(!($this->task = DB::fetch_first("SELECT t.taskid, mt.status FROM ".DB::table('common_task')." t LEFT JOIN ".DB::table('common_mytask')." mt ON mt.taskid=t.taskid AND mt.uid='$_G[uid]' WHERE t.taskid='$id' AND t.available='2'"))) {
 			showmessage('task_nonexistence');
 		} elseif($this->task['status'] != '0') {
-			showmessage('undefined_action');
+			showmessage('task_not_underway');
 		}
 
 		DB::query("DELETE FROM ".DB::table('common_mytask')." WHERE uid='$_G[uid]' AND taskid='$id'", 'UNBUFFERED');
@@ -459,6 +462,23 @@ class task {
 			$parterlist[] = $parter;
 		}
 		return $parterlist;
+	}
+
+	function delete($id) {
+		global $_G;
+
+		if(!($this->task = DB::fetch_first("SELECT * FROM ".DB::table('common_task')." WHERE taskid='$id' AND available='2'")) ||
+			!DB::result_first("SELECT COUNT(*) FROM ".DB::table('common_mytask')." WHERE uid='$_G[uid]' AND taskid='$id'")) {
+			showmessage('task_nonexistence');
+		}
+
+		if(method_exists($taskclass, 'delete')) {
+			$taskclass->delete($this->task);
+		}
+
+		DB::delete('common_mytask', "uid='$_G[uid]' AND taskid='$id'");
+		DB::query("UPDATE ".DB::table('common_task')." SET applicants=applicants+'-1' WHERE taskid='$id'", 'UNBUFFERED');
+		return true;
 	}
 
 	function reward() {

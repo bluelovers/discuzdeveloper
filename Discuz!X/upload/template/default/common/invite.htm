@@ -32,7 +32,7 @@
 						<p>{lang invite_orderby_friend}</p>
 						<p class="mtn">
 							<select class="ps" onchange="clearlist=1;getUser(1, this.value)">
-								<option value="0">{lang invite_all_friend}</option>
+								<option value="-1">{lang invite_all_friend}</option>
 								<!--{loop $friendgrouplist $groupid $group}-->
 									<option value="$groupid">$group</option>
 								<!--{/loop}-->
@@ -77,6 +77,7 @@
 					<!--{/if}-->
 					var listObj = $('friends');
 					listObj.onscroll = function() {
+						clearlist = 0;
 						if(this.scrollTop >= (this.scrollHeight/5-5)) {
 							page++;
 							gid = isUndefined(gid) ? -1 : parseInt(gid);
@@ -99,11 +100,11 @@
 				} else {
 					scriptNode.onload = selector;
 				}
-				$('append_parent').appendChild(scriptNode);				
+				$('append_parent').appendChild(scriptNode);
 			</script>
 			<form method="post" autocomplete="off" name="invite" id="inviteform" action="misc.php?mod=invite&action=$_G[gp_action]&id=$_G[gp_id]">
 				<input type="hidden" name="formhash" value="{FORMHASH}" />
-				<input type="hidden" name="referer" value="$_G['referer']" />
+				<input type="hidden" name="referer" value="{echo dreferer()}" />
 				<!--{if !empty($_G['inajax'])}--><input type="hidden" name="handlekey" value="$_G['gp_handlekey']" /><!--{/if}-->
 				<p class="o pns{if empty($_G['inajax'])} mtw{/if}"><button type="submit" class="pn pnc" name="invitesubmit" value="yes"><strong>{lang invite_send}</strong></button></p>
 			</form>

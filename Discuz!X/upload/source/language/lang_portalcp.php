@@ -9,12 +9,14 @@
 
 $lang = array(
 	'block_diy_nopreview' => '<p>此模块内容包含js代码，不能立即预览，请点击保存后查看</p>',
+	'block_diy_summary_html_tag' => '自定义内容错误，HTML标签：',
+	'block_diy_summary_not_closed' => ' 不匹配',
 	'block_all_category' => '全部分类',
 	'block_first_category' => '顶级分类',
 	'block_all_forum' => '全部版块',
 	'block_all_group' => '全部用户组',
 	'block_all_type' => '全部分类',
-	'file_size_limit' => '文件不能大于 {size} kb，请返回．',
+	'file_size_limit' => '文件不能大于 {size} KB，请返回．',
 	'set_to_conver' => '设为封面',
 	'insert_small_image' => '插入小图',
 	'insert_large_image' => '插入大图',
@@ -26,12 +28,12 @@ $lang = array(
 	'article_noallowed' => '你没有权限对指定的文章进行操作',
 	'article_publish_noallowed' => '你没有权限进行文章发布操作',
 	'article_publish' => '发布文章',
-	'article_manage' => '管理文章',
+	'article_manage' => '文章管理',
 	'article_tag' => '标签',
 	'select_category' => '选择分类',
 	'blockstyle_diy' => '自定义模板',
 
-	'article_pushplus_info' => '<p><center><i><a href="{url}" class="xg1 xs1">本文内容由 {author} 提供</a></i><center></p>',
+	'article_pushplus_info' => '<p><center><i><a href="{url}" class="xg1 xs1">本文内容由 {author} 提供</a></i></center></p>',
 
 	'diytemplate_name_null' => '[未填写]',
 	'portal/index' => '门户首页',
@@ -76,5 +78,12 @@ $lang = array(
 	'ranklist/thread' => '帖子排行榜页',
 	'ranklist/member' => '用户排行榜页',
 	'other_page' => '非DIY模块',
+	'upload' => '上传',
+	'remote' => '远程',
+	'portal_index' => '门户首页',
+	'portal_topic_blue' => '蓝色调专题',
+	'portal_topic_green' => '绿色调专题',
+	'portal_topic_grey' => '灰色调专题',
+	'portal_topic_red' => '红色调专题',
 
 );

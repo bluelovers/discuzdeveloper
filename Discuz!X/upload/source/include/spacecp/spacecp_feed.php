@@ -49,7 +49,7 @@ if($_GET['op'] == 'delete') {
 		if(deletefeeds(array($feedid))) {
 			showmessage('do_success', dreferer(), array('feedid' => $feedid));
 		} else {
-			showmessage('no_privilege');
+			showmessage('no_privilege_feed_del');
 		}
 	}
 } elseif($_GET['op'] == 'ignore') {

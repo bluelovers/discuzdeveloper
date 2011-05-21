@@ -16,14 +16,9 @@ $id = empty($_GET['id'])?0:intval($_GET['id']);
 
 if(submitcheck('addsubmit')) {
 
-	$add_doing = 1;
 	if(!checkperm('allowdoing')) {
-		showmessage('no_privilege');
+		showmessage('no_privilege_doing');
 	}
-
-	ckrealname('doing');
-
-	ckvideophoto('doing');
 
 	cknewuser();
 
@@ -49,17 +44,16 @@ if(submitcheck('addsubmit')) {
 		$doing_status = 0;
 	}
 
-	if($add_doing) {
-		$setarr = array(
-			'uid' => $_G['uid'],
-			'username' => $_G['username'],
-			'dateline' => $_G['timestamp'],
-			'message' => $message,
-			'ip' => $_G['clientip'],
-			'status' => $doing_status,
-		);
-		$newdoid = DB::insert('home_doing', $setarr, 1);
-	}
+
+	$setarr = array(
+		'uid' => $_G['uid'],
+		'username' => $_G['username'],
+		'dateline' => $_G['timestamp'],
+		'message' => $message,
+		'ip' => $_G['clientip'],
+		'status' => $doing_status,
+	);
+	$newdoid = DB::insert('home_doing', $setarr, 1);
 
 	$setarr = array('recentnote'=>$message, 'spacenote'=>$message);
 	$credit = $experience = 0;
@@ -74,7 +68,7 @@ if(submitcheck('addsubmit')) {
 		DB::update('common_member_field_forum', array('sightml'=>$signhtml), "uid='$_G[uid]'");
 	}
 
-	if($add_doing && ckprivacy('doing', 'feed') && $doing_status == '0') {
+	if(ckprivacy('doing', 'feed') && $doing_status == '0') {
 		$feedarr = array(
 			'appid' => '',
 			'icon' => 'doing',
@@ -90,6 +84,10 @@ if(submitcheck('addsubmit')) {
 		);
 		DB::insert('home_feed', $feedarr);
 	}
+	if($doing_status == '1') {
+		updatemoderate('doid', $newdoid);
+		manage_addnotify('verifydoing');
+	}
 
 	require_once libfile('function/stat');
 	updatestat('doing');
@@ -103,11 +101,8 @@ if(submitcheck('addsubmit')) {
 } elseif (submitcheck('commentsubmit')) {
 
 	if(!checkperm('allowdoing')) {
-		showmessage('no_privilege');
+		showmessage('no_privilege_doing_comment');
 	}
-
-	ckrealname('doing');
-
 	cknewuser();
 
 	$waittime = interval_check('post');
@@ -196,7 +191,7 @@ if($_GET['op'] == 'delete') {
 			deletedoings(array($doid));
 		}
 
-		header('location: '.dreferer());
+		dheader('location: '.dreferer());
 		exit();
 	}
 

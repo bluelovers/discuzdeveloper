@@ -34,7 +34,7 @@ if(!empty($_G['setting']['magicstatus'])) {
 		}
 
 		if(!empty($autosupply)) {
-			DB::query("UPDATE ".DB::table('common_magic')." SET num=num+'$magic[supplynum]' WHERE magicid='$id'");
+			DB::query("UPDATE ".DB::table('common_magic')." SET num='$magic[supplynum]' WHERE magicid='$id'");
 		}
 	}
 }
