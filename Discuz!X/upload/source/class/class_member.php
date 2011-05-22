@@ -468,6 +468,8 @@ class register_ctl {
 						showmessage('profile_passwd_illegal');
 					}
 					$password = $_G['gp_password'];
+				} else {
+					$password = md5(random(10));
 				}
 			}
 
