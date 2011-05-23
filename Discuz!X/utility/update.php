@@ -990,8 +990,8 @@ if($_GET['step'] == 'start') {
 				$sql = implode("\r\n", $data);
 				runquery($sql);
 			}
-			DB::query("UPDATE  `pre_common_block_style` SET name = replace(`name`, 'X1.5', '内置')");
-			DB::query("UPDATE  `pre_common_block_style` SET name = replace(`name`, 'X2.0', '内置')");
+			DB::query("UPDATE ".DB::table('common_block_style')." SET name = replace(`name`, 'X1.5', '内置')");
+			DB::query("UPDATE ".DB::table('common_block_style')." SET name = replace(`name`, 'X2.0', '内置')");
 		}
 		show_msg("模块模板升级完毕", "$theurl?step=data&op=$nextop");
 	} elseif($_GET['op'] == 'block_script') {

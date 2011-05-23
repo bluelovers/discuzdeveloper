@@ -12,7 +12,8 @@ function connect_output_javascript($jsurl) {
 }
 
 function connect_output_php($url, $postData = '') {
-	$response = dfsockopen($url, 0, $postData);
+	global $_G;
+	$response = dfsockopen($url, 0, $postData, '', false, $_G['setting']['cloud_api_ip']);
 	$result = (array) unserialize($response);
 
 	return $result;

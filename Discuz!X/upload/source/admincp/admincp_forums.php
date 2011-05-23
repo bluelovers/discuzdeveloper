@@ -1410,6 +1410,7 @@ EOT;
 			$forumcolumnsnew = $_G['gp_forumcolumnsnew'] > 1 ? intval($_G['gp_forumcolumnsnew']) : 0;
 			$threadcachesnew = max(0, min(100, intval($_G['gp_threadcachesnew'])));
 			$subforumsindexnew = $_G['gp_subforumsindexnew'] == -1 ? 0 : ($_G['gp_subforumsindexnew'] == 0 ? 2 : 1);
+			$_G['gp_simplenew'] = isset($_G['gp_simplenew']) ? $_G['gp_simplenew'] : 0;
 			$simplenew = bindec(sprintf('%02d', decbin($_G['gp_defaultorderfieldnew'])).$_G['gp_defaultordernew'].sprintf('%02d', decbin($subforumsindexnew)).'00'.$_G['gp_simplenew']);
 			$allowglobalsticknew = $_G['gp_allowglobalsticknew'] ? 1 : 0;
 

@@ -624,6 +624,7 @@ $lang = array (
   'post_reward_error_message' => '抱歉，请输入悬赏价格',
   'post_reward_message' => '天后如果您仍未设置最佳答案，版主有权代为您选择',
   'post_reward_resolved' => '已解决的悬赏',
+  'reward_cant_fall' => '不能降低悬赏积分',
   'reward_price' => '悬赏价格',
   'reward_price_bound' => '售价超出范围',
   'reward_price_max' => '不能高于',

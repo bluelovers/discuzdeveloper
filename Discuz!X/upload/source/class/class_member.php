@@ -84,6 +84,9 @@ class logging_ctl {
 			}
 			$_G['uid'] = $_G['member']['uid'] = 0;
 			$_G['username'] = $_G['member']['username'] = $_G['member']['password'] = '';
+			if(!$_G['gp_password'] || $_G['gp_password'] != addslashes($_G['gp_password'])) {
+				showmessage('profile_passwd_illegal');
+			}
 			$result = userlogin($_G['gp_username'], $_G['gp_password'], $_G['gp_questionid'], $_G['gp_answer'], $this->setting['autoidselect'] ? 'auto' : $_G['gp_loginfield']);
 			$uid = $result['ucresult']['uid'];
 

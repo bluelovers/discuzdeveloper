@@ -205,7 +205,7 @@ function discuzcode($message, $smileyoff, $bbcodeoff, $htmlon = 0, $allowsmilies
 				"/\[img=(\d{1,4})[x|\,](\d{1,4})\]\s*([^\[\<\r\n]+?)\s*\[\/img\]/ies"
 			), $allowimgcode ? array(
 				"bbcodeurl('\\1', '<img $attrsrc=\"{url}\" onload=\"thumbImg(this)\" alt=\"\" />')",
-				"parseimg('\\1', '\\2', '\\3', $lazyload)"
+				"parseimg('\\1', '\\2', '\\3', ".intval($lazyload).")"
 			) : array(
 				(!defined('IN_MOBILE') ? "bbcodeurl('\\1', '<a href=\"{url}\" target=\"_blank\">{url}</a>')" : "bbcodeurl('\\1', '<a href=\"{url}\" target=\"_blank\">[$viewimg]</a>')"),
 				(!defined('IN_MOBILE') ? "bbcodeurl('\\3', '<a href=\"{url}\" target=\"_blank\">{url}</a>')" : "bbcodeurl('\\3', '<a href=\"{url}\" target=\"_blank\">[$viewimg]</a>')"),
