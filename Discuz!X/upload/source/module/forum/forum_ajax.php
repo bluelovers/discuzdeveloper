@@ -426,7 +426,6 @@ if($_G['gp_action'] == 'checkusername') {
 		}
 		if(!empty($aids)) {
 			require_once libfile('function/post');
-			ftpupload($aids);
 		}
 		$_G['gp_message'] = str_replace($imagereplace['oldimageurl'], $imagereplace['newimageurl'], $_G['gp_message']);
 		$_G['gp_message'] = addcslashes($_G['gp_message'], '/"');

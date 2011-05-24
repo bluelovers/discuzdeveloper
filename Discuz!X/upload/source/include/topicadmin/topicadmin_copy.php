@@ -25,7 +25,7 @@ if(!submitcheck('modsubmit')) {
 	$modaction = 'CPY';
 	$reason = checkreasonpm();
 	$copyto = $_G['gp_copyto'];
-	$toforum = DB::fetch_first("SELECT f.fid, f.name, f.modnewposts, ff.threadsorts FROM ".DB::table('forum_forum')." f
+	$toforum = DB::fetch_first("SELECT f.fid, f.name, f.modnewposts, ff.threadsorts FROM ".DB::table('forum_forum')." f 
 								LEFT JOIN ".DB::table('forum_forumfield')." ff USING(fid)
 								WHERE f.fid='$copyto' AND f.status='1' AND f.type<>'group'");
 	if(!$toforum) {

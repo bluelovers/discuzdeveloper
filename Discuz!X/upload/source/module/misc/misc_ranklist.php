@@ -405,7 +405,7 @@ function getranklist_member_invite($num, $orderby) {
 	}
 
 	$invite = $invitearray = $inviteuidarray = $invitefieldarray = array();
-	$sql = "SELECT count(*) AS invitenum ,uid FROM ".DB::table('common_invite')."
+	$sql = "SELECT count(*) AS invitenum ,uid FROM ".DB::table('common_invite')." 
 		WHERE status='2' $dateline  GROUP BY uid
 		ORDER BY invitenum DESC LIMIT 0, $num";
 	$query = DB::query($sql);

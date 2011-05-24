@@ -1626,7 +1626,7 @@ body { background: #FFF none !important; }
 .picrank { position: absolute; margin: 14px 0 0 8px !important; }
 
 /* æ∫º€≈≈√˚ by Pony */
-.bid { margin: 4px 0 0 4px; }
+.bid { margin: 2px -4px -2px 2px; zoom: 1; }
 .biduser { width: 780px; background: url({IMGDIR}/avatar_blank.gif); }
 	.biduser li { float: left; margin: 0 4px 4px 0; }
 	.biduser a { display: block; }

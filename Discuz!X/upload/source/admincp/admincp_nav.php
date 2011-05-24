@@ -276,8 +276,8 @@ EOT;
 				array(0, cplang('misc_customnav_url_open_default')),
 				array(1, cplang('misc_customnav_url_open_blank'))
 			), TRUE), $nav['target'], 'mradio');
-			showsetting('misc_customnav_logo', 'logonew', $nav['logo'], 'filetext', '', 0, cplang('misc_customnav_logo_comment').$logohtml);
 			if(!$nav['parentid']) {
+				showsetting('misc_customnav_logo', 'logonew', $nav['logo'], 'filetext', '', 0, cplang('misc_customnav_logo_comment').$logohtml);
 				showsetting('misc_customnav_level', array('levelnew', array(
 					array(0, cplang('nolimit')),
 					array(1, cplang('member')),

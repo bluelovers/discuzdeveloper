@@ -84,7 +84,7 @@ function setcssbackground(&$data, $code) {
 					$css .= strtoupper($codes[$i]).' ';
 					$codevalue = strtoupper($codes[$i]);
 				} elseif(preg_match('/^http:\/\//i', $codes[$i])) {
-					$css .= 'url(\"'.$codes[$i].'\") ';
+					$css .= 'url("'.$codes[$i].'") ';
 				} else {
 					$css .= 'url("'.$data['styleimgdir'].'/'.$codes[$i].'") ';
 				}

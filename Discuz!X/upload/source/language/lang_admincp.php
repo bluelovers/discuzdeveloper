@@ -2090,7 +2090,7 @@ $lang = array
 	'forums_edit_comment' => '编辑本版块设置',
 	'forums_edit_inherited' => '继承上级版块设置',
 	'forums_edit_newinherited' => '继承指定版块设置',
-	'forums_edit_tips' => '<li>以下设置没有继承性，即仅对当前版块有效，不会对下级子版块产生影响。</li><li>策略中积分项设置为 <strong>“0”</strong> 时，代表该条策略在该版块中不加分</li>',
+	'forums_edit_tips' => '<li>以下设置没有继承性，即仅对当前版块有效，不会对下级子版块产生影响。</li>',
 	'forums_edit_switch' => '切换版块 / 批量编辑',
 	'forums_multiedit' => '批量编辑所选版块',
 

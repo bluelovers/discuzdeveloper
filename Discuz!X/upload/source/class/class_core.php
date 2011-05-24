@@ -618,7 +618,7 @@ class discuz_core {
 			}
 		}
 
-		if(strpos($this->var['setting']['domain']['defaultindex'], CURSCRIPT) === false && CURSCRIPT != 'forum' && !$_GET['mod']) {
+		if(strpos($this->var['setting']['domain']['defaultindex'], CURSCRIPT) !== false && CURSCRIPT != 'forum' && !$_GET['mod']) {
 			if($this->var['setting']['domain']['app']['mobile']) {
 				$mobileurl = 'http://'.$this->var['setting']['domain']['app']['mobile'];
 			} else {

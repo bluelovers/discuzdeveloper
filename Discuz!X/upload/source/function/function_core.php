@@ -1150,7 +1150,7 @@ function output_replace($content) {
 	}
 	if(!empty($_G['setting']['output']['preg']['search'])) {
 		if(empty($_G['setting']['domain']['app']['default'])) {
-			$_G['setting']['output']['preg']['search'] = str_replace('\{CURHOST\}', preg_quote($_G['siteurl']), $_G['setting']['output']['preg']['search']);
+			$_G['setting']['output']['preg']['search'] = str_replace('\{CURHOST\}', preg_quote($_G['siteurl'], '/'), $_G['setting']['output']['preg']['search']);
 			$_G['setting']['output']['preg']['replace'] = str_replace('{CURHOST}', $_G['siteurl'], $_G['setting']['output']['preg']['replace']);
 		}
 

@@ -233,6 +233,7 @@ if(!submitcheck('modsubmit') && !$_G['gp_fast']) {
 			require_once libfile('function/delete');
 			$deletes = deletepost($pids, 'pid', false, $posttable);
 		}
+		$deletes += count($recyclebinpids);
 		updatemodworks('DLP', count($moderation['delete']));
 		updatemoderate('pid', $moderation['delete'], 2);
 	}

@@ -569,7 +569,7 @@ function getblockhtml($blockname,$parameters = array()) {
 					}
 					$_G['cache']['smilies']['loaded'] = 1;
 				}
-				$parameters['content'] = preg_replace($_G['cache']['smilies']['searcharray'], $_G['cache']['smilies']['replacearray'], censor(trim($parameters['content'])));
+				$parameters['content'] = preg_replace($_G['cache']['smilies']['searcharray'], $_G['cache']['smilies']['replacearray'], trim($parameters['content']));
 			}
 			if ($_G['space_group']['allowspacediybbcode'] || $_G['space_group']['allowspacediyimgcode'] || $_G['space_group']['allowspacediyhtml'] ){
 				$parameters['content'] = discuzcode($parameters['content'], 1, 0, 1, 0, $_G['space_group']['allowspacediybbcode'], $_G['space_group']['allowspacediyimgcode'], $_G['space_group']['allowspacediyhtml']);

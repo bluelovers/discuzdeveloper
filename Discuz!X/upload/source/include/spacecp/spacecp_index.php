@@ -142,7 +142,7 @@ if (submitcheck('blocksubmit')) {
 		$blockdata['parameters'][$blockname]['title'] = $title;
 
 		if (in_array($blockname, array('block1', 'block2', 'block3', 'block4', 'block5'))) {
-			$content = getstr($_POST['content'],1000,1,0,0,1);
+			$content = censor(getstr($_POST['content'],1000,1,0,0,1));
 			$blockdata['parameters'][$blockname]['content'] = stripslashes($content);
 		} elseif($blockname == 'profile') {
 			$blockdata['parameters'][$blockname]['banavatar'] = in_array($_G['gp_avatar'], array('big', 'middle', 'small')) ? $_G['gp_avatar'] : 'middle';
