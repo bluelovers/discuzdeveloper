@@ -797,7 +797,7 @@ EOT;
 				if(!preg_match("/^".preg_quote(STATICURL, '/')."/i", $navicon) && !(($valueparse = parse_url($navicon)) && isset($valueparse['host']))) {
 					$navicon = $_G['setting']['attachurl'].'common/'.$nav['icon'].'?'.random(6);
 				}
-				$naviconhtml = '<br /><label><input type="checkbox" class="checkbox" name="deleteicon" value="yes" /> '.$lang['delete'].'</label><br /><img src="'.$navicon.'" width="16" height="16" />';
+				$naviconhtml = '<br /><label><input type="checkbox" class="checkbox" name="deleteicon" value="yes" /> '.$lang['delete'].'</label><br /><img src="'.$navicon.'" width="40" height="40" />';
 			}
 			shownav('global', 'misc_customnav');
 			showsubmenu('nav_setting_customnav', $navdata);
@@ -808,7 +808,7 @@ EOT;
 			showsetting('misc_customnav_name', 'namenew', $nav['name'], 'text');
 			showsetting('misc_customnav_title', 'titlenew', $nav['title'], 'text');
 			showsetting('misc_customnav_url', 'urlnew', $nav['url'], 'text', $nav['type'] == '0');
-			showsetting('misc_customnav_icon', 'iconnew', $nav['icon'], 'filetext', '', 0, cplang('misc_customnav_icon_comment').$naviconhtml);
+			showsetting('misc_customnav_icon', 'iconnew', $nav['icon'], 'filetext', '', 0, cplang('misc_mynav_icon_comment').$naviconhtml);
 			showsetting('misc_customnav_url_open', array('targetnew', array(
 				array(0, cplang('misc_customnav_url_open_default')),
 				array(1, cplang('misc_customnav_url_open_blank'))

@@ -75,7 +75,7 @@ if($_G['gp_goto'] == 'findpost') {
 	}
 
 	$ordertype = !isset($_GET['ordertype']) && getstatus($thread['status'], 4) ? 1 : $ordertype;
-	$curpostnum = DB::result_first("SELECT count(*) FROM ".DB::table($thread['posttable'])." WHERE tid='$tid' AND dateline<='$post[dateline]'");
+	$curpostnum = DB::result_first("SELECT COUNT(*) FROM ".DB::table($thread['posttable'])." WHERE tid='$tid' AND invisible='0' AND dateline<='$post[dateline]'");
 
 	if($ordertype != 1) {
 		$page = ceil($curpostnum / $_G['ppp']);

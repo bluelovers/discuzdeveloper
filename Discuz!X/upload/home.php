@@ -31,6 +31,10 @@ if(!in_array($mod, array('space', 'spacecp', 'misc', 'magic', 'editor', 'invite'
 	$_GET['do'] = 'home';
 }
 
+if($mod == 'space' && ((empty($_GET['do']) || $_GET['do'] == 'index') && ($_G['inajax'] || !$_G['setting']['homestatus']))) {
+	$_GET['do'] = 'profile';
+}
+
 define('CURMODULE', $mod);
 runhooks();
 

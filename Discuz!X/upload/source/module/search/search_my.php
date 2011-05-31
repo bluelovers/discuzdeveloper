@@ -13,35 +13,17 @@ if(!defined('IN_DISCUZ')) {
 
 define('NOROBOT', TRUE);
 
-function my_http_build_query ($data, $key = '', $isEncode = true) {
-	$ret = array();
-	foreach ($data as $k => $v) {
-		if ($isEncode) {
-			$k = urlencode($k);
-		}
-
-		if ($key) {
-			$k = $key . "[" . $k . "]";
-		}
-
-		if (is_array($v)) {
-			array_push($ret, my_http_build_query($v, $k, $isEncode));
-		} else {
-			if ($isEncode) {
-				$v = urlencode($v);
-			}
-			array_push($ret, $k . "=" . $v);
-		}
-	}
-
-	return join('&', $ret);
-}
-
 if (!$_G['setting']['my_siteid']) {
 	dheader('Location: index.php');
 }
 
 require_once DISCUZ_ROOT . './api/manyou/Manyou.php';
+require_once libfile('function/cloud');
+
+if (getcloudappstatus('connect')) {
+	require_once libfile('function/connect');
+	connect_merge_member();
+}
 
 $my_forums = SearchHelper::getForums();
 
@@ -54,9 +36,7 @@ foreach($_extgroupids as $v) {
 }
 $my_extgroupids_str = implode(',', $my_extgroupids);
 
-$params = array('sId' => $_G['setting']['my_siteid'],
-				'ts' => time(),
-				'cuId' => $_G['uid'],
+$params = array(
 				'cuName' => $_G['username'],
 				'gId' => $_G['groupid'],
 				'agId' => $_G['adminid'],
@@ -80,8 +60,10 @@ foreach($groupIds as $k => $v) {
 		$params['ugSign' . $v] = $value;
 	}
 }
-
-$params['sign'] = md5(implode('|', $params) . '|' . $_G['setting']['my_sitekey']);
+$params['charset'] = $_G['charset'];
+if ($_G['member']['conopenid']) {
+	$params['openid'] = $_G['member']['conopenid'];
+}
 
 $extra = array('q', 'fId', 'author', 'scope', 'source', 'module', 'isAdv');
 foreach($extra as $v) {
@@ -89,14 +71,14 @@ foreach($extra as $v) {
 		$params[$v] = $_GET[$v];
 	}
 }
-$params['charset'] = $_G['charset'];
 $mySearchData = unserialize($_G['setting']['my_search_data']);
 if ($mySearchData['domain']) {
 	$domain = $mySearchData['domain'];
 } else {
 	$domain = 'search.discuz.qq.com';
 }
-$url = 'http://' . $domain . '/f/discuz?' . my_http_build_query($params);
+
+$url = 'http://' . $domain . '/f/discuz?' . generateSiteSignUrl($params, true, true);
 
 dheader('Location: ' . $url);
 

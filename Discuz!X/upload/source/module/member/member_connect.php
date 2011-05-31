@@ -45,7 +45,7 @@ if($_G['gp_action'] == 'login') {
 	$ctl_obj->setting = $_G['setting'];
 
 	if($_G['setting']['regconnect']) {
-		$ctl_obj->setting['regstatus'] = 1;
+		$ctl_obj->setting['regstatus'] = $ctl_obj->setting['regstatus'] ? $ctl_obj->setting['regstatus'] : 1;
 	}
 
 	$_G['setting']['regclosed'] = $_G['setting']['regconnect'] && !$_G['setting']['regstatus'];
@@ -63,6 +63,7 @@ if($_G['gp_action'] == 'login') {
 		$ctl_obj->setting['sitemessage']['register'] = array();
 		$ctl_obj->setting['regconnect'] = false;
 	}
+
 	if($_G['setting']['connect']['register_regverify']) {
 		$ctl_obj->setting['regverify'] = 0;
 	}

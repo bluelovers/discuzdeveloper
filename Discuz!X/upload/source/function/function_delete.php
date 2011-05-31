@@ -87,7 +87,7 @@ function deletepost($ids, $idtype = 'pid', $credit = false, $posttableid = false
 		hookscript('deletepost', 'global', 'funcs', array('param' => $hookparam, 'step' => 'check'), 'deletepost');
 	}
 	if(!$ids || !in_array($idtype, array('authorid', 'tid', 'pid'))) {
-		return;
+		return 0;
 	}
 
 	loadcache('posttableids');
@@ -209,7 +209,7 @@ function deletethread($tids, $membercount = false, $credit = false, $ponly = fal
 		hookscript('deletethread', 'global', 'funcs', array('param' => $hookparam, 'step' => 'check'), 'deletethread');
 	}
 	if(!$tids) {
-		return;
+		return 0;
 	}
 	require_once libfile('function/forum');
 	foreach($tids as $tid) {

@@ -20,7 +20,8 @@ if($isfounder) {
 	if ($cloudstatus == 'cloud') {
 		$menu['cloud'] = array(
 			array('menu_cloud_applist', 'cloud_applist'),
-			array('menu_cloud_siteinfo', 'cloud_siteinfo')
+			array('menu_cloud_siteinfo', 'cloud_siteinfo'),
+			array('menu_cloud_doctor', 'cloud_doctor')
 		);
 		$apps = unserialize($_G['setting']['cloud_apps']);
 		if(is_array($apps) && $apps) {
@@ -39,7 +40,8 @@ if($isfounder) {
 		}
 
 		$menu['cloud'] = array(
-			array($menuitem, 'cloud_open')
+			array($menuitem, 'cloud_open'),
+			array('menu_cloud_doctor', 'cloud_doctor')
 		);
 	}
 }

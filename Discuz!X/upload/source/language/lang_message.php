@@ -78,7 +78,7 @@ $lang = array (
   'search_id_invalid' => '抱歉，您指定的搜索不存在或已过期',
   'search_ctrl' => '抱歉，您在 {searchctrl} 秒内只能进行一次搜索',
   'search_toomany' => '抱歉，站点设置每分钟系统最多响应搜索请求 {maxspm} 次，请稍候再试',
-  'no_privilege_myop' => '抱歉，您目前没有权限使用此应用，<a href="home.php?mod=spacecp&ac=usergroup">点击这里查看权限</a>',
+  'no_privilege_myop' => '抱歉，您目前没有权限使用此应用，<a href="home.php?mod=spacecp&ac=usergroup" target="_blank">点击这里查看权限</a>',
   'do_success' => '操作成功 ',
   'no_privilege_guest' => '抱歉，游客没有权限进行此操作',
   'forum_nonexistence' => '抱歉，指定的版块不存在',
@@ -137,7 +137,7 @@ $lang = array (
   'album_does_not_exist' => '抱歉，指定的相册不存在',
   'operating_too_fast' => '抱歉，两次发布操作太快，请等待 {waittime} 秒再试',
   'content_is_too_short' => '抱歉，输入的内容不能少于 2 个字符',
-  'no_privilege_comment' => '抱歉，您目前没有权限进行评论，<a href="home.php?mod=spacecp&ac=usergroup">点击这里查看权限</a>',
+  'no_privilege_comment' => '抱歉，您目前没有权限进行评论，<a href="home.php?mod=spacecp&ac=usergroup" target="_blank">点击这里查看权限</a>',
   'action_closed' => '抱歉，站点尚未开启此功能或此功能已被管理员禁止',
   'credits_addfunds_order_invalid' => '抱歉，当前订单号无效，请重新提交',
   'credits_transaction_amount_invalid' => '抱歉，您要转账或兑换的积分数量输入有误',
@@ -149,7 +149,7 @@ $lang = array (
   'eccredit_nofound' => '指定的评价不存在或已被删除',
   'non_normal_operation' => '非正常操作',
   'you_have_friends' => '你们已成为好友',
-  'no_privilege_addfriend' => '抱歉，您目前没有权限添加好友，<a href="home.php?mod=spacecp&ac=usergroup">点击这里查看权限</a>',
+  'no_privilege_addfriend' => '抱歉，您目前没有权限添加好友，<a href="home.php?mod=spacecp&ac=usergroup" target="_blank">点击这里查看权限</a>',
   'enough_of_the_number_of_friends_with_magic' => '抱歉，您当前的好友数目达到系统限制，<a id="a_magic_friendnum2" href="magic.php?mid=friendnum" onclick="ajaxmenu(event, this.id, 1)">请使用好友增容卡增容</a>',
   'enough_of_the_number_of_friends' => '抱歉，您当前的好友数目达到系统限制，请先删除部分好友',
   'specified_user_is_not_your_friend' => '抱歉，指定的用户还不是您的好友',
@@ -166,7 +166,7 @@ $lang = array (
   'message_can_not_send_2' => '两次发送短消息太快，请稍候再发送',
   'message_can_not_send_9' => '收件人为空或对方屏蔽了您的短消息',
   'pm_report_error_nopm' => '抱歉，您指定的短消息不存在',
-  'no_privilege_sendpm' => '抱歉，您目前没有权限发短消息，<a href="home.php?mod=spacecp&ac=usergroup">点击这里查看权限</a>',
+  'no_privilege_sendpm' => '抱歉，您目前没有权限发短消息，<a href="home.php?mod=spacecp&ac=usergroup" target="_blank">点击这里查看权限</a>',
   'profile_email_illegal' => 'Email 地址无效',
   'profile_email_domain_illegal' => '抱歉，Email 包含不可使用的邮箱域名',
   'profile_email_duplicate' => '该 Email 地址已被注册',
@@ -276,8 +276,8 @@ $lang = array (
   'attachment_yetpay' => '您已购买过此附件，无需重复购买，现在将开始附件下载',
   'attachment_buyall' => '本帖所有附件购买成功 ',
   'attachment_buy' => '附件购买成功，开始下载“{filename}”',
-  'no_privilege_postimage' => '抱歉，您目前没有权限上传图片，<a href="home.php?mod=spacecp&ac=usergroup">点击这里查看权限</a>',
-  'no_privilege_postattach' => '抱歉，您目前没有权限上传附件，<a href="home.php?mod=spacecp&ac=usergroup">点击这里查看权限</a>',
+  'no_privilege_postimage' => '抱歉，您目前没有权限上传图片，<a href="home.php?mod=spacecp&ac=usergroup" target="_blank">点击这里查看权限</a>',
+  'no_privilege_postattach' => '抱歉，您目前没有权限上传附件，<a href="home.php?mod=spacecp&ac=usergroup" target="_blank">点击这里查看权限</a>',
   'thread_closed' => '该帖子已被关闭，不能评论！',
   'postcomment_error' => '抱歉，您不能点评此帖或帖子尚未找到',
   'postappend_only_yourself' => '只能在自己的帖子后补充内容',
@@ -339,7 +339,7 @@ $lang = array (
   'debate_umpire_nofound_winner' => '抱歉，您没有填写获胜方',
   'debate_umpire_nofound_point' => '抱歉，您没填写您的观点',
   'debate_umpire_comment_succeed' => '评判成功 ',
-  'no_privilege_recommend' => '抱歉，您目前没有权限评价此主题，<a href="home.php?mod=spacecp&ac=usergroup">点击这里查看权限</a>',
+  'no_privilege_recommend' => '抱歉，您目前没有权限评价此主题，<a href="home.php?mod=spacecp&ac=usergroup" target="_blank">点击这里查看权限</a>',
   'recommend_self_disallow' => '评价指数 <strong id="recommentc" class="xi1 xs2">{recommendc}</strong><br />您不能评价自己的帖子',
   'recommend_duplicate' => '评价指数 <strong id="recommentc" class="xi1 xs2">{recommendc}</strong><br />您已评价过本主题',
   'recommend_outoftimes' => '评价指数 <strong id="recommentc" class="xi1 xs2">{recommendc}</strong><br />今日评价机会已用完',
@@ -489,7 +489,7 @@ $lang = array (
   'password_is_not_passed' => '抱歉，您输入的网站登录密码不正确',
 
   'not_open_updatestat' => '站点尚未开启趋势统计功能',
-  'no_privilege_statdata' => '抱歉，您目前没有权限查看统计数据报表，<a href="home.php?mod=spacecp&ac=usergroup">点击这里查看权限</a>',
+  'no_privilege_statdata' => '抱歉，您目前没有权限查看统计数据报表，<a href="home.php?mod=spacecp&ac=usergroup" target="_blank">点击这里查看权限</a>',
   'start_time_end_time_is_equal_to' => '开始日期不能等于结束日期',
 
   'modcp_ann_nofound' => '抱歉，该公告已删除或您没有权限编辑它',
@@ -607,7 +607,7 @@ $lang = array (
 
   'no_authority_to_add_log' => '您目前没有权限添加日志',
   'no_authority_operation_of_the_log' => '抱歉，您没有权限操作该日志',
-  'no_privilege_blog' => '抱歉，您目前没有权限发表日志，<a href="home.php?mod=spacecp&ac=usergroup">点击这里查看权限</a>',
+  'no_privilege_blog' => '抱歉，您目前没有权限发表日志，<a href="home.php?mod=spacecp&ac=usergroup" target="_blank">点击这里查看权限</a>',
   'blog_choose_system_category' => '抱歉，请选择系统分类',
   'that_should_at_least_write_things' => '至少应该写一点东西',
   'failed_to_delete_operation' => '抱歉，删除失败，请检查操作',
@@ -619,7 +619,7 @@ $lang = array (
 
   'click_error' => '抱歉，您尚未进行正常的表态操作',
   'click_item_error' => '要表态的对象不存在',
-  'no_privilege_click' => '抱歉，您目前没有权限进行表态，<a href="home.php?mod=spacecp&ac=usergroup">点击这里查看权限</a>',
+  'no_privilege_click' => '抱歉，您目前没有权限进行表态，<a href="home.php?mod=spacecp&ac=usergroup" target="_blank">点击这里查看权限</a>',
   'click_no_self' => '您不能给自己表态',
   'click_have' => '您已表过态',
   'click_success' => '表态成功 ',
@@ -650,8 +650,8 @@ $lang = array (
   'credits_exchange_balance_insufficient' => '抱歉，兑换后{title}不足 {minbalance}',
   'credits_transaction_succeed' => '积分操作成功 ',
 
-  'no_privilege_doing' => '抱歉，您目前没有权限发表记录，<a href="home.php?mod=spacecp&ac=usergroup">点击这里查看权限</a>',
-  'no_privilege_doing_comment' => '抱歉，您目前没有权限评论记录，<a href="home.php?mod=spacecp&ac=usergroup">点击这里查看权限</a>',
+  'no_privilege_doing' => '抱歉，您目前没有权限发表记录，<a href="home.php?mod=spacecp&ac=usergroup" target="_blank">点击这里查看权限</a>',
+  'no_privilege_doing_comment' => '抱歉，您目前没有权限评论记录，<a href="home.php?mod=spacecp&ac=usergroup" target="_blank">点击这里查看权限</a>',
   'docomment_error' => '抱歉，请正确指定要评论的记录',
 
   'no_privilege_spacedomain' => '抱歉，您没有权限设置空间域名',
@@ -665,7 +665,7 @@ $lang = array (
 
   'favorite_delete_succeed' => '收藏删除成功 ',
   'favorite_does_not_exist' => '抱歉，您指定的收藏不存在',
-  'no_privilege' => '抱歉，您目前没有权限进行此操作<a href="home.php?mod=spacecp&ac=usergroup">点击这里查看权限</a>',
+  'no_privilege' => '抱歉，您目前没有权限进行此操作，<a href="home.php?mod=spacecp&ac=usergroup" target="_blank">点击这里查看权限</a>',
   'favorite_cannot_favorite' => '抱歉，您指定的信息无法收藏',
   'favorite_repeat' => '抱歉，您已收藏，请勿重复收藏',
   'favorite_do_success' => '信息收藏成功 ',
@@ -730,10 +730,11 @@ $lang = array (
   'pm_emport_banned_export' => '抱歉，没有用于导出的短消息记录',
 
   'not_to_their_own_greeted' => '不能向自己打招呼',
-  'no_privilege_poke' => '抱歉，您目前没有权限打招呼，<a href="home.php?mod=spacecp&ac=usergroup">点击这里查看权限</a>',
+  'no_privilege_poke' => '抱歉，您目前没有权限打招呼，<a href="home.php?mod=spacecp&ac=usergroup" target="_blank">点击这里查看权限</a>',
   'poke_success' => '已发送，{username}下次访问时会收到通知',
   'has_been_hailed_overlooked' => '招呼已忽略',
 
+  'profile_passwd_empty' => '请设置新密码',
   'profile_passwd_wrong' => '原密码不正确，您不能修改密码或 Email 或安全提问',
   'profile_email_verify' => '确认 Email 已发送，请用邮件中提供的方法激活您的帐号。如果您尚未收到我们发送的系统邮件，请点击密码安全中的“重新接收验证邮件”，或尝试更换另外一个地址',
   'profile_succeed' => '个人资料保存成功 ',
@@ -744,7 +745,7 @@ $lang = array (
   'email_input' => '抱歉，您尚未设置邮箱，请在<a href="home.php?mod=spacecp&ac=profile&op=password">联系方式</a>中准确填写您的邮箱',
 
   'no_privilege_edithot_share' => '抱歉，您没有权限调整此分享的热度',
-  'no_privilege_share' => '抱歉，您目前没有权限发布分享，<a href="home.php?mod=spacecp&ac=usergroup">点击这里查看权限</a>',
+  'no_privilege_share' => '抱歉，您目前没有权限发布分享，<a href="home.php?mod=spacecp&ac=usergroup" target="_blank">点击这里查看权限</a>',
   'blog_does_not_exist' => '抱歉，指定的日志不存在',
   'moderate_blog_not_share' => '抱歉，您不能分享尚未通过审核的日志',
   'logs_can_not_share' => '抱歉，指定的日志因隐私设置不能够被分享',
@@ -764,11 +765,12 @@ $lang = array (
   'showcredit_do_success' => '上榜积分增加成功，赶快查看自己的最新排名吧',
 
   'upload_images_completed' => '图片上传成功 ',
-  'no_privilege_upload' => '抱歉，您目前没有权限上传图片，<a href="home.php?mod=spacecp&ac=usergroup">点击这里查看权限</a>',
+  'no_privilege_upload' => '抱歉，您目前没有权限上传图片，<a href="home.php?mod=spacecp&ac=usergroup" target="_blank">点击这里查看权限</a>',
 
   'usergroups_span_invalid' => '抱歉，您至少需要支付 {minspan} 天的积分价格',
   'usergroups_join_succeed' => '您已加入用户组 {group}',
   'usergroups_exit_succeed' => '您已退出用户组 {group}',
+  'usergroup_switch_not_allow' => '您当前的用户组未到期，无法切换到其他用户组',
   'usergroups_switch_succeed' => '您已切换到用户组 {group}',
 
   'no_privilege_banpost' => '抱歉，您没有权限屏蔽主题',

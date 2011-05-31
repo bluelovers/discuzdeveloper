@@ -77,21 +77,20 @@ if(!empty($_SERVER['QUERY_STRING']) && is_numeric($_SERVER['QUERY_STRING'])) {
 				$jump = true;
 				$domain = DB::fetch_first("SELECT * FROM ".DB::table('common_domain')." WHERE domain='$_ENV[prefixdomain]' AND domainroot='$_ENV[domainroot]' LIMIT 1");
 				$apphost = $_ENV['domain']['app'][$domain['idtype']] ? $_ENV['domain']['app'][$domain['idtype']] : $_ENV['domain']['app']['default'];
-				$apphost = $apphost ? $apphost.'/' : '';
-				$domainroot = $apphost ? 'http://'.$apphost : '';
+				$apphost = $apphost ? 'http://'.$apphost.'/' : '';
 				switch($domain['idtype']) {
 					case 'home':
 						if($_G['setting']['rewritestatus'] && in_array('home_space', $_G['setting']['rewritestatus'])) {
 							$url = rewriteoutput('home_space', 1, $apphost, $domain['id']);
 						} else {
-							$url = $domainroot.'home.php?mod=space&uid='.$domain['id'];
+							$url = $apphost.'home.php?mod=space&uid='.$domain['id'];
 						}
 						break;
 					case 'group':
 						if($_G['setting']['rewritestatus'] && in_array('group_group', $_G['setting']['rewritestatus'])) {
 							$url = rewriteoutput('group_group', 1, $apphost, $domain['id']);
 						} else {
-							$url = $domainroot.'forum.php?mod=group&fid='.$domain['id'].'&page=1';
+							$url = $apphost.'forum.php?mod=group&fid='.$domain['id'].'&page=1';
 						}
 						break;
 				}

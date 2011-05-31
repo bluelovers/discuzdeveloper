@@ -356,7 +356,7 @@ $lang = array (
 
   'plugins_validator_enable_confirm' => '<h4 class="infotitle3">此插件不是原版插件你确定要开启吗？</h4>',
   'plugins_enable_succeed' => '插件已启用',
-  'plugins_conflict' => '插件已启用</h4><br />友情提示：您刚刚启用的插件与某些插件存在共用嵌入点，如遇到运行不正常的情况请及时联系插件作者。<a href="javascript:;" onclick="display(\'conflict\')">[点击查看]</a><br /><div id="conflict" style="display:none"><br />{plugins}<br /></div><br />',
+  'plugins_conflict' => '插件已启用</h4><br />友情提示：您刚启用的插件与某些插件存在共用的嵌入点。虽然共用嵌入点属于正常情况，但是如果您遇到插件运行不正常的情况请及时联系插件作者。<a href="javascript:;" onclick="display(\'conflict\')">[点击查看]</a><br /><div id="conflict" style="display:none"><br />{plugins}<br /></div><br />',
   'plugins_disable_succeed' => '插件已关闭',
   'plugins_import_var_invalid' => '插件的钩子名称不合法，无法导入',
   'plugins_import_identifier_duplicated' => '您要导入的插件({plugin_name})已经安装',

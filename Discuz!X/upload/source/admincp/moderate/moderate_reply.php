@@ -176,7 +176,7 @@ if(!submitcheck('modsubmit') && !$_G['gp_fast']) {
 			$sqlwhere .= " AND t.isgroup='1'";
 		}
 		if(!empty($_G['gp_dateline']) && $_G['gp_dateline'] != 'all') {
-			$sqlwhere .= " AND p.dateline>'{$_G['gp_dateline']}";
+			$sqlwhere .= " AND p.dateline>'{$_G['gp_dateline']}'";
 		}
 		if(!empty($_G['gp_username'])) {
 			$sqlwhere .= " AND p.author='{$_G['gp_username']}'";

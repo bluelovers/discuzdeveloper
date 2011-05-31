@@ -12,6 +12,10 @@ if(!defined('IN_DISCUZ')) {
 }
 
 require_once libfile('function/threadsort');
+
+threadsort_checkoption($sortid);
+$forum_optionlist = getsortedoptionlist();
+
 loadcache(array('threadsort_option_'.$sortid, 'threadsort_template_'.$sortid));
 $sqlarr = array();
 foreach($_G['cache']['threadsort_option_'.$sortid] AS $key => $val) {
@@ -25,5 +29,7 @@ if($sqlarr) {
 	unset($member_profile_sql);
 }
 threadsort_optiondata($pid, $sortid, $_G['cache']['threadsort_option_'.$sortid], $_G['cache']['threadsort_template_'.$sortid]);
+
+
 
 ?>

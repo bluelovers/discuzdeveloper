@@ -12,7 +12,7 @@
 			<item id="datatables"><![CDATA[]]></item>
 			<item id="directory"><![CDATA[qqconnect/]]></item>
 			<item id="copyright"><![CDATA[Comsenz Inc.]]></item>
-			<item id="version"><![CDATA[1.0]]></item>
+			<item id="version"><![CDATA[1.01]]></item>
 			<item id="__modules">
 				<item id="1">
 					<item id="name"><![CDATA[connect]]></item>
@@ -163,7 +163,7 @@
 				<item id="connect_spacecp_qzone_to_friend"><![CDATA[分享给好友]]></item>
 				<item id="connect_spacecp_qzone_reason_default"><![CDATA[可以在这里输入分享原因或详细内容]]></item>
 				<item id="connect_spacecp_qzone_space"><![CDATA[　]]></item>
-				<item id="connect_spacecp_qzone_subject_is_empty"><![CDATA[分享标题不能为空]]></item>
+				<item id="connect_spacecp_qzone_subject_is_empty"><![CDATA[请输入分享标题]]></item>
 				<item id="connect_spacecp_qzone_subject_is_long"><![CDATA[分享标题超过了长度限制]]></item>
 				<item id="connect_spacecp_qzone_reason_is_long"><![CDATA[分享理由超过了长度限制]]></item>
 				<item id="connect_share_unauthorized"><![CDATA[独乐乐不如众乐乐，马上完善授权，您将可以把本站精彩内容分享到QQ空间、腾讯微博和腾讯朋友，跟大家分享每个精彩瞬间。]]></item>

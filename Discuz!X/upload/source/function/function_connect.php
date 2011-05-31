@@ -7,15 +7,17 @@
  *      $Id$
  */
 
+require_once libfile('function/cloud');
+
 function connect_output_javascript($jsurl) {
 	return '<script type="text/javascript">_attachEvent(window, \'load\', function () { appendscript(\''.$jsurl.'\', \'\', 1, \'utf-8\') }, document);</script>';
 }
 
 function connect_output_php($url, $postData = '') {
 	global $_G;
+
 	$response = dfsockopen($url, 0, $postData, '', false, $_G['setting']['cloud_api_ip']);
 	$result = (array) unserialize($response);
-
 	return $result;
 }
 
@@ -39,7 +41,7 @@ function connect_user_bind_js($params) {
 	$params = array_merge($other_params, $params);
 	$params['sig'] = connect_get_sig($params, connect_get_sig_key());
 
-	$jsurl .= '?'.http_build_query($params);
+	$jsurl .= '?'.cloud_http_build_query($params, '', '&');
 
 	dsetcookie('connect_js_name');
 	dsetcookie('connect_js_params');
@@ -64,13 +66,14 @@ function connect_user_unbind() {
 	$params = array_merge($sig_params, $params);
 	$params['response_type'] = 'php';
 
-	$response = connect_output_php($api_url.'?', http_build_query($params));
+	$response = connect_output_php($api_url.'?', cloud_http_build_query($params, '', '&'));
 	return $response;
 }
 
 function connect_user_bind_params() {
 	global $_G;
 
+	connect_merge_member();
 	getuserprofile('birthyear');
 	getuserprofile('birthmonth');
 	getuserprofile('birthday');
@@ -128,8 +131,8 @@ function connect_feed_resend_js() {
 	$params = unserialize(base64_decode($_G['cookie']['connect_js_params']));
 	$params['sig'] = connect_get_sig($params, connect_get_sig_key());
 
-    $jsurl = $_G['connect']['discuz_new_feed_url'];
-    $jsurl .= '?' . http_build_query($params);
+	$jsurl = $_G['connect']['discuz_new_feed_url'];
+	$jsurl .= '?' . cloud_http_build_query($params, '', '&');
 
 	dsetcookie('connect_js_name');
 	dsetcookie('connect_js_params');
@@ -155,7 +158,7 @@ function connect_feed_remove($tid) {
 	);
 	$params['sig'] = connect_get_sig($params, connect_get_sig_key());
 
-	return sprintf('%s&%s', $_G['connect']['discuz_remove_feed_url'], http_build_query($params));
+	return sprintf('%s&%s', $_G['connect']['discuz_remove_feed_url'], cloud_http_build_query($params, '', '&'));
 }
 
 function connect_params($params, & $connect_params) {
@@ -219,9 +222,8 @@ function connect_get_request_token() {
 
 	$api_url = $_G['connect']['api_url'].'/oauth/requestToken';
 
-	$extra = array (
-		'oauth_callback' => urlencode($_G['connect']['callback_url'] . '&referer=' . urlencode($_G['gp_referer']))
-	);
+	$extra = array();
+	$extra['oauth_callback'] = urlencode($_G['connect']['callback_url'] . '&referer=' . urlencode($_G['gp_referer']));
 	$sig_params = connect_get_oauth_signature_params($extra);
 	$sig_params['oauth_signature'] = connect_get_oauth_signature($api_url, $sig_params, 'POST');
 
@@ -238,7 +240,7 @@ function connect_get_request_token() {
 	}
 	$params = array_merge($sig_params, $params);
 
-	$response = connect_output_php($api_url.'?', http_build_query($params));
+	$response = connect_output_php($api_url.'?', cloud_http_build_query($params, '', '&'));
 	return $response;
 }
 
@@ -247,10 +249,9 @@ function connect_get_access_token($request_token, $verify_code) {
 
 	$api_url = $_G['connect']['api_url'].'/oauth/accessToken';
 
-	$extra = array (
-		'oauth_token' => $request_token,
-		'oauth_verifier' => $verify_code,
-	);
+	$extra = array();
+	$extra['oauth_token'] = $request_token;
+	$extra['oauth_verifier'] = $verify_code;
 	$sig_params = connect_get_oauth_signature_params($extra);
 	$oauth_token_secret = $_G['cookie']['con_request_token_secret'];
 	$sig_params['oauth_signature'] = connect_get_oauth_signature($api_url, $sig_params, 'POST', $oauth_token_secret);
@@ -263,7 +264,8 @@ function connect_get_access_token($request_token, $verify_code) {
 	dsetcookie('con_request_token');
 	dsetcookie('con_request_token_secret');
 
-	$response = connect_output_php($api_url.'?', http_build_query($params));
+
+	$response = connect_output_php($api_url.'?', cloud_http_build_query($params, '', '&'));
 	return $response;
 }
 
@@ -278,7 +280,7 @@ function connect_get_oauth_signature($url, $params, $method = 'POST', $oauth_tok
 
 	$url = urlencode($url);
 
-	$param_str = urlencode(http_build_query($params));
+	$param_str = urlencode(cloud_http_build_query($params, '', '&'));
 
 	$base_string = $method.'&'.$url.'&'.$param_str;
 
@@ -396,6 +398,11 @@ function connect_auth_field($is_user_info, $is_feed) {
 	} elseif (!$is_user_info && $is_feed) {
 		return 3;
 	}
+}
+
+function connect_errlog($errno, $error) {
+	global $_G;
+	writelog('errorlog', $_G['timestamp']."\t[QQConnect]".$errno." ".$error);
 }
 
 define('X_BOARDURL', $_G['setting']['discuzurl']);

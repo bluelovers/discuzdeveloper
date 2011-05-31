@@ -30,9 +30,6 @@ $_G['forum_dtype'] = $_G['forum_checkoption'] = $_G['forum_optionlist'] = $tagar
 
 
 if($sortid) {
-	require_once libfile('function/threadsort');
-	threadsort_checkoption($sortid);
-	$forum_optionlist = getsortedoptionlist();
 	require_once libfile('post/threadsorts', 'include');
 }
 

@@ -53,6 +53,11 @@ if(submitcheck('connectsubmit')) {
 
 			$response = connect_user_unbind();
 			if (!isset($response['status']) || $response['status'] !== 0) {
+				if(!isset($response['status'])) {
+					connect_errlog('100', lang('connect', 'connect_errlog_server_no_response'));
+				} else {
+					connect_errlog($response['status'], $response['result']);
+				}
 				showmessage('qqconnect:connect_config_unbind_busy', $referer);
 			}
 

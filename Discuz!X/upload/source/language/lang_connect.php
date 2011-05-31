@@ -35,6 +35,11 @@ $lang = array
 	'weibo_reason_is_long' => '微博内容超过了长度限制',
 	'weibo_account_not_signup' => '抱歉，您还未开通微博账号，无法分享内容，<a href=http://t.qq.com/reg/index.php target=_blank>点击这里马上开通</a>。',
 	'user_unauthorized' => '抱歉，您未授权分享主题到QQ空间、腾讯微博和腾讯朋友。',
+
+	'connect_errlog_server_no_response' => '服务器无响应',
+	'connect_errlog_access_token_incomplete' => '接口返回的AccessToken数据不完整',
+	'connect_errlog_request_token_not_authorized' => '用户TmpToken未授权或返回的数据不完整',
+	'connect_errlog_sig_incorrect' => 'URL签名不正确',
 );
 
 ?>

@@ -378,7 +378,7 @@ if(!submitcheck('settingsubmit')) {
 		showsetting('setting_access_register_status', array('settingnew[regstatus]', array(
 			array('open', $lang['setting_access_register_open']),
 			array('invite', $lang['setting_access_register_invite'], 'showinvite'),
-			$_G['setting']['connect']['allow'] ? array('connect', $lang['setting_access_register_connect'], 'showconnect') : array(),
+			$_G['setting']['connect']['allow'] ? array('connect', $lang['setting_access_register_connect']) : array(),
 		)), $regstatus, 'mcheckbox');
 
 		showtagheader('tbody', 'showinvite', in_array('invite', $regstatus), 'sub');
@@ -2697,7 +2697,7 @@ EOT;
 		$enabledgroup = true;
 		if(!empty($settingnew['profilegroupnew'])) {
 			foreach($settingnew['profilegroupnew'] as $key => $value) {
-				$temp[$value['displayorder']] = $key;
+				$temp[$key] = $value['displayorder'];
 				$profilegroup[$key]['available'] = !empty($value['available']) ? 1 : 0;
 				$profilegroup[$key]['displayorder'] = $value['displayorder'];
 				$profilegroup[$key]['title'] = $value['title'];
@@ -2705,7 +2705,7 @@ EOT;
 					$enabledgroup = false;
 				}
 			}
-			ksort($temp);
+			asort($temp);
 		} else {
 			if(!empty($settingnew['profile'])) {
 				$prokey = $settingnew['profile']['type'];
@@ -2713,14 +2713,14 @@ EOT;
 				$profilegroup[$prokey] = $settingnew['profile'];
 			}
 			foreach($profilegroup as $key => $value) {
-				$temp[$value['displayorder']] = $key;
+				$temp[$key] = $value['displayorder'];
 				if($enabledgroup && $value['available']) {
 					$enabledgroup = false;
 				}
 			}
-			ksort($temp);
+			asort($temp);
 		}
-		foreach($temp as $key) {
+		foreach($temp as $key => $value) {
 			if($enabledgroup) {
 				$profilegroup[$key]['available'] = 1;
 			}

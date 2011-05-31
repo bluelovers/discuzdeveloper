@@ -1642,8 +1642,16 @@ function censor($message, $modword = NULL, $return = FALSE) {
 				} elseif($_G['group']['allowposturl'] == 2) {
 					$message = str_replace('[url]'.$urllist[0][$key].'[/url]', $urllist[0][$key], $message);
 					$message = preg_replace(
-						array("@\[url=".preg_quote($urllist[0][$key],'@')."\](.*?)\[/url\]@i", "@href=('|\")".preg_quote($urllist[0][$key],'@')."\\1@i"),
-						array('\\1', ''),
+						array(
+							"@\[url=".preg_quote($urllist[0][$key],'@')."\](.*?)\[/url\]@i",
+							"@href=('|\")".preg_quote($urllist[0][$key],'@')."\\1@i",
+							"@\[url\](.*?".preg_quote($urllist[0][$key],'@').".*?)\[/url\]@i",
+						),
+						array(
+							'\\1',
+							'',
+							'\\1',
+						),
 						$message);
 				}
 			}

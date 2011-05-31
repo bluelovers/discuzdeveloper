@@ -1926,7 +1926,7 @@ EOF;
 
 		if($_G['gp_clearavatar']) {
 			DB::query("UPDATE ".DB::table('common_member')." SET avatarstatus='0' WHERE uid='{$_G['gp_uid']}'");
-			uc_user_deleteavatar($member['uid']);
+			uc_user_deleteavatar($member['muid']);
 		}
 
 		$creditsnew = intval($creditsnew);
@@ -3007,9 +3007,6 @@ function notifymembers($operation, $variable) {
 				sendmail("$member[username] <$member[email]>", $subject, $message.$addmsg);
 			}
 			$continue = TRUE;
-		}
-		if($pmuids) {
-
 		}
 	}
 

@@ -22,6 +22,10 @@ if($_G['gp_hash']) {
 if($uid && isemail($email) && $time > TIMESTAMP - 86400) {
 	$memberarr = DB::fetch_first("SELECT * FROM ".DB::table('common_member')." WHERE uid='$uid'");
 	$setarr = array('email'=>addslashes($email), 'emailstatus'=>'1');
+	if($_G['setting']['regverify'] == 1 && $memberarr['groupid'] == 8) {
+		$groupid = DB::result(DB::query("SELECT groupid FROM ".DB::table('common_usergroup')." WHERE type='member' AND $memberarr[credits]>=creditshigher AND $memberarr[credits]<creditslower LIMIT 1"), 0);
+		$setarr['groupid'] = $groupid;
+	}
 	updatecreditbyaction('realemail', $uid);
 	DB::update('common_member', $setarr, array('uid' => $uid));
 

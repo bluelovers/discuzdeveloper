@@ -26,9 +26,6 @@ $dos = array('index', 'doing', 'blog', 'album', 'friend', 'wall',
 	'thread', 'trade', 'poll', 'activity', 'debate', 'reward', 'profile', 'plugin');
 
 $do = (!empty($_GET['do']) && in_array($_GET['do'], $dos))?$_GET['do']:'index';
-if($do == 'index' && ($_G['inajax'] || !$_G['setting']['homestatus'])) {
-	$do = 'profile';
-}
 
 if(in_array($do, array('home', 'doing', 'blog', 'album', 'share', 'wall'))) {
 	if(!$_G['setting']['homestatus']) {

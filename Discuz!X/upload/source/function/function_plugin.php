@@ -75,7 +75,7 @@ function plugininstall($pluginarray, $installtype = '') {
 	return true;
 }
 
-function pluginupgrade($pluginarray) {
+function pluginupgrade($pluginarray, $installtype) {
 	if(!$pluginarray || !$pluginarray['plugin']['identifier']) {
 		return false;
 	}
@@ -123,6 +123,7 @@ function pluginupgrade($pluginarray) {
 	if(!empty($plugin['modules']['system'])) {
 		$pluginarray['plugin']['modules']['system'] = $plugin['modules']['system'];
 	}
+	$plugin['modules']['extra']['installtype'] = $installtype;
 	$pluginarray['plugin']['modules']['extra'] = $plugin['modules']['extra'];
 	if(!empty($pluginarray['intro']) || $langexists) {
 		if(!empty($pluginarray['intro'])) {

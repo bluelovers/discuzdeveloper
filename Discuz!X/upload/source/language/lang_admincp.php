@@ -2493,6 +2493,7 @@ $lang = array
 
 	'misc_customnav_icon' => '导航图标',
 	'misc_customnav_icon_comment' => '图标大小 16x16。URL 中可用“{STATICURL}”代表站点静态文件 static/ 目录，可在 config/config_global.php 中修改',
+	'misc_mynav_icon_comment' => '图标大小 40x40。URL 中可用“{STATICURL}”代表站点静态文件 static/ 目录，可在 config/config_global.php 中修改',
 	'misc_customnav_allowsub' => '显示副导航',
 	'misc_customnav_subname' => '副导航名称',
 	'misc_customnav_suburl' => '副导航链接',
@@ -4448,6 +4449,7 @@ $lang = array
 	'plugins_config_uninstall' => '卸载',
 	'plugins_config_upgrade' => '升级',
 	'plugins_config_delete' => '卸载',
+	'plugins_config_upgrade_other' => '你确定要把 {pluginname} {version} 插件升级到以下版本吗？',
 	'plugins_config_uninstallplugin' => '卸载此插件',
 	'plugins_edit' => '设计插件',
 	'plugins_edit_available' => ' (插件已启用)',

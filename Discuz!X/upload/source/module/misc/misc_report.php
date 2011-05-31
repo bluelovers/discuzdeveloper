@@ -17,14 +17,15 @@ $rtype = $_G['gp_rtype'];
 $rid = intval($_G['gp_rid']);
 $tid = intval($_G['gp_tid']);
 $fid = intval($_G['gp_fid']);
+$uid = intval($_G['gp_uid']);
 $default_url = array(
 	'user' => 'home.php?mod=space&uid=',
 	'post' => 'forum.php?mod=redirect&goto=findpost&ptid='.$tid.'&pid=',
 	'thread' => 'forum.php?mod=viewthread&tid=',
 	'group' => 'forum.php?mod=group&fid=',
-	'album' => 'home.php?mod=space&do=album&id=',
-	'blog' => 'home.php?mod=space&do=blog&id=',
-	'pic' => 'home.php?mod=space&do=album&picid='
+	'album' => 'home.php?mod=space&do=album&uid='.$uid.'&id=',
+	'blog' => 'home.php?mod=space&do=blog&uid='.$uid.'&id=',
+	'pic' => 'home.php?mod=space&do=album&uid='.$uid.'&picid='
 );
 $url = '';
 if($rid && !empty($default_url[$rtype])) {

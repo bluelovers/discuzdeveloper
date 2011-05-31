@@ -318,7 +318,7 @@ function build_cache_setting() {
 	require_once DISCUZ_ROOT.'./uc_client/client.php';
 	$ucapparray = uc_app_ls();
 	$data['allowsynlogin'] = isset($ucapparray[UC_APPID]['synlogin']) ? $ucapparray[UC_APPID]['synlogin'] : 1;
-	$appnamearray = array('UCHOME','XSPACE','DISCUZ','SUPESITE','SUPEV','ECSHOP','ECMALL');
+	$appnamearray = array('UCHOME','XSPACE','DISCUZ','SUPESITE','SUPEV','ECSHOP','ECMALL','OTHER');
 	$data['ucapp'] = $data['ucappopen'] = array();
 	$data['uchomeurl'] = '';
 	$data['discuzurl'] = $_G['siteurl'];
@@ -716,7 +716,7 @@ function get_cachedata_mainnav() {
 		}
 		if($nav['identifier'] == 6 && $nav['type'] == 0) {
 			if(!empty($_G['setting']['plugins']['jsmenu'])) {
-				$onmouseover .= "showMenu({'ctrlid':this.id,'menuid':'plugin_menu'})";
+				$onmouseover .= "showMenu({'ctrlid':this.id,'ctrlclass':'hover','menuid':'plugin_menu'})";
 			} else {
 				$data['navs'][$id]['available'] = 0;
 				continue;

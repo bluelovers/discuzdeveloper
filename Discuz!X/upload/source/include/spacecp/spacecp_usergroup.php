@@ -113,6 +113,9 @@ if(in_array($do, array('buy', 'exit'))) {
 	if(!in_array($groupid, $extgroupids)) {
 		showmessage('usergroup_not_found');
 	}
+	if($_G['groupid'] == 4 && $_G['member']['groupexpiry'] > 0 && $_G['member']['groupexpiry'] > TIMESTAMP) {
+		showmessage('usergroup_switch_not_allow');
+	}
 	$group = DB::fetch_first("SELECT * FROM ".DB::table('common_usergroup')." WHERE groupid='$groupid'");
 	if(submitcheck('groupsubmit')) {
 		$groupterms = unserialize(DB::result_first("SELECT groupterms FROM ".DB::table('common_member_field_forum')." WHERE uid='$_G[uid]'"));

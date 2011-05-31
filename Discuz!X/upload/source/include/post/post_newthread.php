@@ -70,9 +70,7 @@ if(!submitcheck('topicsubmit', 0, $seccodecheck, $secqaacheck)) {
 		$tmp = array_keys($_G['forum']['threadsorts']['types']);
 		$sortid = $tmp[0];
 
-		require_once libfile('function/threadsort');
-		threadsort_checkoption($sortid);
-		$forum_optionlist = getsortedoptionlist();
+		require_once libfile('post/threadsorts', 'include');
 	}
 
 	if($special == 2 && $_G['group']['allowposttrade']) {

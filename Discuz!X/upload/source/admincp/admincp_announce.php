@@ -109,7 +109,7 @@ if(empty($operation)) {
 
 		$newstarttime = $_G['gp_newstarttime'] ? strtotime($_G['gp_newstarttime']) : 0;
 		$newendtime = $_G['gp_newendtime'] ? strtotime($_G['gp_newendtime']) : 0;
-		if($newstarttime > $newendtime) {
+		if($newendtime && $newstarttime > $newendtime) {
 			cpmsg('announce_time_invalid', '', 'error');
 		}
 		$newsubject = trim($_G['gp_newsubject']);
@@ -207,7 +207,7 @@ if(empty($operation)) {
 		}
 		$subjectnew = trim($_G['gp_newsubject']);
 		$messagenew = trim($_G['gp_messagenew']);
-		if(!$starttimenew || ($endtimenew && $endtimenew <= TIMESTAMP) || $starttimenew > $endtimenew) {
+		if(!$starttimenew || ($endtimenew && $endtimenew <= TIMESTAMP) || $endtimenew && $starttimenew > $endtimenew) {
 			cpmsg('announce_time_invalid', '', 'error');
 		} elseif(!$subjectnew || !$messagenew) {
 			cpmsg('announce_invalid', '', 'error');

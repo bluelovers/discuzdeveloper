@@ -59,7 +59,7 @@ function checkcloudstatus($showMessage = true) {
 	return $res;
 }
 
-function generateSiteSignUrl($params = array(), $isEncode = true) {
+function generateSiteSignUrl($params = array(), $isEncode = true, $isCamelCase = false) {
 	global $_G;
 
 	$ts = TIMESTAMP;
@@ -73,8 +73,13 @@ function generateSiteSignUrl($params = array(), $isEncode = true) {
 
 	unset($params['sig'], $params['ts']);
 
-	$params['s_id'] = $sId;
-	$params['s_site_uid'] = $uid;
+	if ($isCamelCase) {
+		$params['sId'] = $sId;
+		$params['sSiteUid'] = $uid;
+	} else {
+		$params['s_id'] = $sId;
+		$params['s_site_uid'] = $uid;
+	}
 
 	ksort($params);
 
@@ -344,7 +349,7 @@ function buildArrayQuery($data, $key = '', $isEncode = false) {
 function cloud_http_build_query($data, $numeric_prefix='', $arg_separator='', $prefix='') {
 	$render = array();
 	if (empty($arg_separator)) {
-		$arg_separator = ini_get('arg_separator.output');
+		$arg_separator = @ini_get('arg_separator.output');
 		empty($arg_separator) && $arg_separator = '&';
 	}
 	foreach ((array) $data as $key => $val) {

@@ -200,6 +200,20 @@ class My extends Manyou {
 		return $result;
 	}
 
+	function onUsersGetFormHash($uId, $userAgent) {
+		global $_G;
+		$uId = intval($uId);
+		if (!$uId) {
+			return false;
+		}
+		$sql = sprintf('SELECT * FROM %s WHERE uid = %s', DB::table('common_member'), $uId);
+		$member = DB::fetch_first($sql);
+		$_G['username'] = $member['username'];
+		$_G['uid'] = $member['uid'];
+		$_G['authkey'] = md5($_G['config']['security']['authkey'] . $userAgent);
+		return formhash();
+	}
+
 	function onFriendsGet($uIds, $friendNum = MY_FRIEND_NUM_LIMIT) {
 		$result = array();
 		if ($uIds) {

@@ -279,7 +279,7 @@ function get_index_announcements() {
 	if($_G['cache']['announcements']) {
 		$readapmids = !empty($_G['cookie']['readapmid']) ? explode('D', $_G['cookie']['readapmid']) : array();
 		foreach($_G['cache']['announcements'] as $announcement) {
-			if($announcement['endtime'] > TIMESTAMP && (empty($announcement['groups']) || in_array($_G['member']['groupid'], $announcement['groups']))) {
+			if(!$announcement['endtime'] || $announcement['endtime'] > TIMESTAMP && (empty($announcement['groups']) || in_array($_G['member']['groupid'], $announcement['groups']))) {
 				if(empty($announcement['type'])) {
 					$announcements .= '<li><span><a href="forum.php?mod=announcement&id='.$announcement['id'].'" target="_blank" class="xi2">'.$announcement['subject'].
 						'</a></span><em>('.dgmdate($announcement['starttime'], 'd').')</em></li>';

@@ -225,10 +225,6 @@ if(!submitcheck('editsubmit')) {
 
 	if($sortid) {
 		require_once libfile('post/threadsorts', 'include');
-		threadsort_checkoption($sortid);
-		$forum_optionlist = getsortedoptionlist();
-		loadcache(array('threadsort_option_'.$sortid, 'threadsort_template_'.$sortid));
-		threadsort_optiondata($pid, $sortid, $_G['cache']['threadsort_option_'.$sortid], $_G['cache']['threadsort_template_'.$sortid]);
 		foreach($_G['forum_optionlist'] as $option) {
 			if($option['type'] == 'image') {
 				foreach($imgattachs['used'] as $k => $sortattach) {

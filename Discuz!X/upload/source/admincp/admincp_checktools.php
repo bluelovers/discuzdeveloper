@@ -46,7 +46,7 @@ if($operation == 'filecheck') {
 		checkfiles('data/threadcache/', '\.htm', 0);
 		checkfiles('template/', '');
 		checkfiles('api/', '');
-		checkfiles('source/', '', 1, 'discuzfiles.md5');
+		checkfiles('source/', '', 1, 'discuzfiles.md5,plugin');
 		checkfiles('static/', '');
 		checkfiles('archiver/', '');
 		checkfiles('uc_client/', '\.php|\.htm', 0);

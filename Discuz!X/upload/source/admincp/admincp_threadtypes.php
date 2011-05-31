@@ -123,7 +123,7 @@ var rowtypedata = [
 			foreach($_G['gp_namenew'] as $typeid => $val) {
 				$_G['gp_descriptionnew'] = is_array($_G['gp_descriptionnew']) ? $_G['gp_descriptionnew'] : array();
 				DB::update('forum_threadtype', array(
-					'name' => trim(strip_tags($_G['gp_namenew'][$typeid])),
+					'name' => trim($_G['gp_namenew'][$typeid]),
 					'description' => dhtmlspecialchars(trim($_G['gp_descriptionnew'][$typeid])),
 					'displayorder' => intval($_G['gp_displayordernew'][$typeid]),
 					'special' => 1,

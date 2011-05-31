@@ -40,7 +40,7 @@ function build_cache_globalstick() {
 	foreach(array_unique($fuparray) as $gid) {
 		if(!empty($threadarray[$gid])) {
 			$data['categories'][$gid] = array(
-				'tids'	=> implode(',', $threadarray[$gid]),
+				'tids'	=> dimplode($threadarray[$gid]),
 				'count'	=> intval(@count($threadarray[$gid]))
 			);
 		}

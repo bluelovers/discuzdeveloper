@@ -512,12 +512,6 @@ class discuz_core {
 		dsetcookie('lastact', $lastact, 86400);
 		setglobal('currenturl_encode', base64_encode('http://'.$_SERVER['HTTP_HOST'].$_SERVER['REQUEST_URI']));
 
-		if($this->var['setting']['magicstatus'] && !$this->var['group']['allowmagics']) {
-			$this->var['setting']['magicstatus'] = false;
-			$this->var['setting']['magics'] = array();
-			unset($this->var['setting']['spacenavs']['magic']);
-		}
-
 		if((!empty($this->var['gp_fromuid']) || !empty($this->var['gp_fromuser'])) && ($this->var['setting']['creditspolicy']['promotion_visit'] || $this->var['setting']['creditspolicy']['promotion_register'])) {
 			require_once libfile('misc/promotion', 'include');
 		}
