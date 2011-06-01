@@ -65,7 +65,7 @@ if(!$operation) {
 				$intro = '<div id="pluginmore'.$plugin['pluginid'].'" style="display:none;margin:0 5px 0 50px"'.(!$plugin['available'] ? ' class="light"' : '').'>'.
 					$lang['copyright'].': '.($plugin['copyright'] ? '<a href="http://addons.discuz.com/?id='.$plugin['identifier'].'" target="_blank" class="'.(!$plugin['available'] ? 'light' : 'normalfont').'">'.dhtmlspecialchars($plugin['copyright']).'</a>' : '').'<br />'.
 					(!empty($plugin['modules']['extra']['intro']) ? ($plugin['copyright'] ? '<br />' : '').$plugin['modules']['extra']['intro'].'<br />' : '').nl2br($plugin['description']).
-				'</div>';
+					'</div>';
 			}
 			$outputsubmit = $hookexists !== FALSE && $plugin['available'] || $outputsubmit;
 			showtablerow('class="hover"', array(), array(
@@ -275,9 +275,11 @@ if(!$operation) {
 							}
 						}
 						$file = $entrydir.'/'.$f;
-						showtablerow('class="hover"', array('class="bold" width="40%"', '', 'align="right"'), array(
-							'<img src="http://addons.discuz.com/logo/'.$entry.'.png" onerror="this.src=\'http://addons.discuz.com/images/logo.png\';this.onerror=null" width="40" height="40" class="vmiddle" style="margin:0 5px 0 30px" />'.$entry.'/',
-							$entrytitle.' '.$entryversion.($filemtime > TIMESTAMP - 86400 ? ' <font color="red">New!</font>' : '').'<br />'.$entrycopyright,
+						showtablerow('class="hover"', array('width="40%"', '', 'align="right"'), array(
+							'<img src="http://addons.discuz.com/logo/'.$entry.'.png" onerror="this.src=\'http://addons.discuz.com/images/logo.png\';this.onerror=null" width="40" height="40" align="left" style="margin:0 5px 0 30px" />'.
+							$entrytitle.' '.$entryversion.($filemtime > TIMESTAMP - 86400 ? ' <font color="red">New!</font>' : '').'<br />'.
+							'<span class="sml">'.$entry.'</span>',
+							$entrycopyright,
 							'<a href="'.ADMINSCRIPT.'?action=plugins&operation=import&dir='.$entry.'&validator=yes" class="bold act">'.$lang['plugins_config_install'].'</a>'
 						));
 						break;
