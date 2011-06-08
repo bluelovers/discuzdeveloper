@@ -1,6 +1,6 @@
 <!--{if ($_G['forum']['threadtypes'] && $_G['forum']['threadtypes']['listable']) || $_G['forum']['threadsorts']}-->
 	<ul id="thread_types" class="ttp bm cl">
-		<li id="ttp_all" {if !$_G['gp_typeid'] && !$_G['gp_sortid']}class="xw1 a"{/if}><a href="forum.php?mod=forumdisplay&fid=$_G[fid]{if $_G['forum']['threadsorts']['defaultshow']}&sortall=1{/if}{if $_G['gp_archiveid']}&archiveid={$_G['gp_archiveid']}{/if}">{lang forum_viewall}</a></li>
+		<li id="ttp_all" {if !$_G['gp_typeid'] && !$_G['gp_sortid']}class="xw1 a"{/if}><a href="forum.php?mod=forumdisplay&fid=$_G[fid]{if $_G['forum']['threadsorts']['defaultshow']}&filter=sortall&sortall=1{/if}{if $_G['gp_archiveid']}&archiveid={$_G['gp_archiveid']}{/if}">{lang forum_viewall}</a></li>
 		<!--{if $_G['forum']['threadtypes']}-->
 			<!--{loop $_G['forum']['threadtypes']['types'] $id $name}-->
 				<!--{if $_G['gp_typeid'] == $id}-->

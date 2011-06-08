@@ -38,7 +38,7 @@ class connect extends server {
 		}
 
 		$users = array();
-		$query = DB::query("SELECT m.uid, m.email, m.username, m.conisqzoneavatar, m.conisregister, m.conuin, mp.gender, mp.birthyear, mp.birthmonth, mp.birthday, 0 AS showemail
+		$query = DB::query("SELECT m.uid, m.email, m.username, m.conisqzoneavatar, m.conisregister, m.conuin, mp.gender, mp.birthyear, mp.birthmonth, mp.birthday
 			FROM ".DB::table('common_member')." m
 			LEFT JOIN ".DB::table('common_member_profile')." mp USING(uid) WHERE m.conuin IN (".dimplode($uins).")");
 		while($user = DB::fetch($query)) {

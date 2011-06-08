@@ -31,7 +31,7 @@ function gettypetemplate($option, $optionvalue, $optionid) {
 			$showoption[$option['identifier']]['value'] .= '</div>';
 
 		} else {
-			$showoption[$option['identifier']]['value'] = '<input type="text" name="typeoption['.$option['identifier'].']" id="typeoption_'.$option['identifier'].'" class="px" tabindex="1" style="width:'.$option['inputsize'].'px;" onBlur="checkoption(\''.$option['identifier'].'\', \''.$option['required'].'\', \''.$option['type'].'\', \''.intval($option['maxnum']).'\', \''.intval($option['minnum']).'\', \''.intval($option['maxlength']).'\')" value="'.$optionvalue['value'].'" '.$optionvalue['unchangeable'].' />';
+			$showoption[$option['identifier']]['value'] = '<input type="text" name="typeoption['.$option['identifier'].']" id="typeoption_'.$option['identifier'].'" class="px" tabindex="1" style="width:'.$option['inputsize'].'px;" onBlur="checkoption(\''.$option['identifier'].'\', \''.$option['required'].'\', \''.$option['type'].'\', \''.intval($option['maxnum']).'\', \''.intval($option['minnum']).'\', \''.intval($option['maxlength']).'\')" value="'.($optionvalue['value'] ? $optionvalue['value'] : $option['defaultvalue']).'" '.$optionvalue['unchangeable'].' />';
 		}
 	} elseif(in_array($option['type'], array('radio', 'checkbox', 'select'))) {
 		if($option['type'] == 'select') {
@@ -626,6 +626,7 @@ function optionlistxml($input, $pre = '') {
 			if(is_bool($value)) {
 				$value = ($value == true) ? 'true' : 'false';
 			}
+			$value = str_replace("\r\n", '<br>', $value);
 			if(htmlspecialchars($value) != $value) {
 				$str .= "<$key><![CDATA[$value]]></$key>";
 			} else {

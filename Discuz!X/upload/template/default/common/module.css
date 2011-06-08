@@ -732,12 +732,18 @@ i.pstatus { display: block; margin-bottom: -30px; font-size: 12px; text-align: c
 	/* 帖子左侧用户组升级提示细微调整 Last Modify Pony */
 	.pls .tip_4 { margin-left: -5px; }
 
-	.locked { margin: 10px 0; padding: 8px 8px 8px 24px; border: 1px dashed #FF9A9A; background: {WRAPBG} url({IMGDIR}/locked.gif) no-repeat 6px 50%; font-size: 12px; }
+	/*
+		Name:			mod_thread_attr
+		Level:			Function
+		Explain:		帖子中类似“游客，如果您要查看本帖隐藏内容请”等地方的样式
+		Last Modify:	Pony 11060209
+	*/
+	.locked { overflow: hidden; margin: 10px 0; padding: 8px 8px 8px 24px; border: 1px dashed #FF9A9A; background: {WRAPBG} url({IMGDIR}/locked.gif) no-repeat 6px 50%; font-size: 12px; zoom: 1; }
 		.locked:hover { background: #F7F7F7 url({IMGDIR}/locked.gif) no-repeat 6px 50%; }
 		.locked strong { color: {NOTICETEXT}; }
 		.locked a { color: {HIGHLIGHTLINK}; }
-	.viewpay { margin: 0 6px; padding: 1px 0 1px 24px; background: url({IMGDIR}/viewpay.gif) no-repeat 6px 60%; color: {HIGHLIGHTLINK}; font-weight: 700; }
-	.showhide { border: 1px dashed #FF9A9A; margin: 8px 0; padding: 10px; }
+	.viewpay { overflow: hidden; margin: 0 6px; padding: 1px 0 1px 24px; background: url({IMGDIR}/viewpay.gif) no-repeat 6px 60%; color: {HIGHLIGHTLINK}; font-weight: 700; zoom: 1; }
+	.showhide { overflow: hidden; border: 1px dashed #FF9A9A; margin: 8px 0; padding: 10px; zoom: 1; }
 		.showhide h4 { margin-bottom: 10px; color: #F66; font-size: 12px; text-align: center; }
 
 	/*

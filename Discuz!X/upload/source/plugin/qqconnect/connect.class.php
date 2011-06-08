@@ -369,7 +369,7 @@ class plugin_qqconnect_forum extends plugin_qqconnect {
 		if(!$this->allow) {
 			return;
 		}
-		if($_G['setting']['connect']['turl_allow'] || $_G['setting']['connect']['like_allow']) {
+		if($_G['setting']['connect']['like_allow'] && $_G['setting']['connect']['like_url'] || $_G['setting']['connect']['turl_allow'] && $_G['setting']['connect']['turl_code']) {
 			return tpl_index_status_extra();
 		}
 	}

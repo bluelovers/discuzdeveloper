@@ -18,7 +18,7 @@ function block_script($blockclass, $script) {
 	$var = "blockscript_{$dirname}_{$script}";
 	$script = 'block_'.$script;
 	if(!isset($_G[$var]) || $xmlid) {
-		if(@include libfile($script, 'class/block/'.$dirname)) {
+		if(@include_once libfile($script, 'class/block/'.$dirname)) {
 			$_G[$var] = $xmlid ?  new $script($xmlid) : new $script();
 		} else {
 			$_G[$var] = false;

@@ -162,7 +162,7 @@ if($op == 'init') {
 			if($current_connect_member['conuinsecret'] && $current_connect_member['conuin'] != $conuin) {
 				showmessage('qqconnect:connect_register_bind_already', $referer);
 			}
-			if(empty($connect_member['conuinsecret']) || empty($connect_member['conopenid'])) {
+			if(empty($connect_member['conuinsecret']) || empty($connect_member['conopenid']) || $connect_member['conuinsecret'] != $conuinsecret) {
 				DB::query("UPDATE ".DB::table('common_member_connect')." SET conuin='$conuin', conuinsecret='$conuinsecret', conopenid='$conopenid', conispublishfeed='$conispublishfeed', conispublisht='$conispublisht', conisregister='0', conisfeed='$user_auth_fields' WHERE uid='$_G[uid]'");
 			} else {
 				DB::query("UPDATE ".DB::table('common_member_connect')." SET conispublishfeed='$conispublishfeed', conispublisht='$conispublisht', conisregister='0', conisfeed='$user_auth_fields' WHERE uid='$_G[uid]'");
@@ -190,7 +190,7 @@ if($op == 'init') {
 	} else {
 
 		if($connect_member) {
-			if(empty($connect_member['conuinsecret']) || empty($connect_member['conopenid'])) {
+			if(empty($connect_member['conuinsecret']) || empty($connect_member['conopenid']) || $connect_member['conuinsecret'] != $conuinsecret) {
 				DB::query("UPDATE ".DB::table('common_member_connect')." SET conuin='$conuin', conuinsecret='$conuinsecret', conopenid='$conopenid', conispublishfeed='$conispublishfeed', conispublisht='$conispublisht', conisfeed='$user_auth_fields' WHERE uid='$connect_member[uid]'");
 			} else {
 				DB::query("UPDATE ".DB::table('common_member_connect')." SET conisfeed='$user_auth_fields' WHERE uid='$connect_member[uid]'");

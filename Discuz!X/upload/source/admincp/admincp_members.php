@@ -1584,6 +1584,7 @@ EOF;
 				$membercount['posts'] = 0;
 			}
 			if(in_array('blog', $_G['gp_clear'])) {
+				DB::query("DELETE FROM ".DB::table('common_moderate')." WHERE id IN (SELECT blogid FROM ".DB::table('home_blog')." WHERE uid='$member[uid]') AND idtype='blogid'");
 				DB::query("DELETE FROM ".DB::table('home_blog')." WHERE uid='$member[uid]'");
 				DB::query("DELETE FROM ".DB::table('home_blogfield')." WHERE uid='$member[uid]'");
 				DB::query("DELETE FROM ".DB::table('home_feed')." WHERE uid='$member[uid]' AND idtype='blogid'");
@@ -1591,16 +1592,21 @@ EOF;
 			}
 			if(in_array('album', $_G['gp_clear'])) {
 				DB::query("DELETE FROM ".DB::table('home_album')." WHERE uid='$member[uid]'");
-				$query = DB::query("SELECT filepath, thumb, remote FROM ".DB::table('home_pic')." WHERE uid='$member[uid]'");
+				$picids = array();
+				$query = DB::query("SELECT picid, filepath, thumb, remote FROM ".DB::table('home_pic')." WHERE uid='$member[uid]'");
 				while ($value = DB::fetch($query)) {
+					$picids[] = $value['picid'];
 					deletepicfiles($value);
 				}
-
+				if(!empty($picids)) {
+					DB::query("DELETE FROM ".DB::table('common_moderate')." WHERE id IN (".dimplode($picids).") AND idtype='picid'");
+				}
 				DB::query("DELETE FROM ".DB::table('home_pic')." WHERE uid='$member[uid]'");
 				DB::query("DELETE FROM ".DB::table('home_feed')." WHERE uid='$member[uid]' AND idtype='albumid'");
 				$membercount['albums'] = 0;
 			}
 			if(in_array('share', $_G['gp_clear'])) {
+				DB::query("DELETE FROM ".DB::table('common_moderate')." WHERE id IN (SELECT sid FROM ".DB::table('home_share')." WHERE uid='$member[uid]') AND idtype='sid'");
 				DB::query("DELETE FROM ".DB::table('home_share')." WHERE uid='$member[uid]'");
 				DB::query("DELETE FROM ".DB::table('home_feed')." WHERE uid='$member[uid]' AND idtype='sid'");
 				$membercount['sharings'] = 0;
@@ -1612,7 +1618,7 @@ EOF;
 				while ($value = DB::fetch($query)) {
 					$doids[$value['doid']] = $value['doid'];
 				}
-
+				DB::query("DELETE FROM ".DB::table('common_moderate')." WHERE id IN (SELECT doid FROM ".DB::table('home_doing')." WHERE uid='$member[uid]') AND idtype='doid'");
 				DB::query("DELETE FROM ".DB::table('home_doing')." WHERE uid='$member[uid]'");
 				DB::update('common_member_field_home', array('recentnote' => '', 'spacenote' => ''), "uid='$member[uid]'");
 
@@ -1622,6 +1628,17 @@ EOF;
 				$membercount['doings'] = 0;
 			}
 			if(in_array('comment', $_G['gp_clear'])) {
+				$delcids = array();
+				$query = DB::query("SELECT cid, idtype FROM ".DB::table('home_comment')." WHERE uid='$member[uid]' OR authorid='$member[uid]' OR (id='$member[uid]' AND idtype='uid')");
+				while($value = DB::fetch($query)) {
+					$key = $value['idtype'].'_cid';
+					$delcids[$key] = $value['cid'];
+				}
+				if(!empty($delcids)) {
+					foreach($delcids as $key => $ids) {
+						DB::query("DELETE FROM ".DB::table('common_moderate')." WHERE id IN (".dimplode($ids).") AND idtype='$key'");
+					}
+				}
 				DB::query("DELETE FROM ".DB::table('home_comment')." WHERE uid='$member[uid]' OR authorid='$member[uid]' OR (id='$member[uid]' AND idtype='uid')");
 			}
 			if(in_array('postcomment', $_G['gp_clear'])) {

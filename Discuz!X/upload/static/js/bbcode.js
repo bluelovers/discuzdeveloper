@@ -225,7 +225,7 @@ function ptag(options, text, tagname) {
 	}
 	align = in_array(align, ['left', 'center', 'right']) ? align : 'left';
 	style = getoptionvalue('style', options);
-
+	style = preg_replace(['line-height\\\s?:\\\s?(\\\d{1,3})px', 'text-indent\\\s?:\\\s?(\\\d{1,3})em', 'text-align\\\s?:\\\s?(left|center|right)'], '', style);
 	if(lineHeight === null && textIndent === null) {
 		return '[align=' + align + ']' + (style ? '<span style="' + style + '">' : '') + text + (style ? '</span>' : '') + '[/align]';
 	} else {
